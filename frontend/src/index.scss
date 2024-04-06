@@ -1,0 +1,13 @@
+$baseBg: rgb(253, 229, 210);
+
+body, html {
+    margin: 0;
+
+    font-family: "Fira Sans", sans-serif;
+
+    background-color: $baseBg;
+}
+
+button {
+    cursor: pointer;
+}
