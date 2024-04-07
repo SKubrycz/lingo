@@ -4,8 +4,8 @@ function StartHome() {
 
     return (
         <article className='home-start'>
-            <p>Begin your learning journey today!</p>
-            <button>Start learning</button>
+            <p>Naucz się już teraz!</p>
+            <button>Rozpocznij naukę</button>
         </article>
     );
 }
