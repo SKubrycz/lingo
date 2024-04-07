@@ -54,7 +54,7 @@ function MainHome() {
     return (
         <main className='home-main'>
             <h1 ref={helloRef}>LOGO</h1>
-            <h3>An app that will teach you language in a convenient and easy way!</h3>
+            <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>
                 {state.hours < 10 ? 0 : ''}{state.hours}:
                 {state.minutes < 10 ? 0 : ''}{state.minutes}:
