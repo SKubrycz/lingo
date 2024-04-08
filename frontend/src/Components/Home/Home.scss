@@ -33,7 +33,7 @@ $fontColor: adjust-color($blackness: 60%, $color: $baseColor);
 
     z-index: 3;
 
-    div:not(.home-navbar-logo) {
+    div:not(.home-navbar-logo), a {
         padding: 15px;
 
         transition: background-color .3s;
