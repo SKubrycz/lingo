@@ -1,12 +1,11 @@
-$baseColor: rgb(230, 92, 0);
-$baseBg: rgb(253, 229, 210);
-$fontColor: adjust-color($blackness: 60%, $color: $baseColor);
+@import 'utilities/variables';
 
 body, html {
     margin: 0;
 
     font-family: "Fira Sans", sans-serif;
-
+    
+    color: $fontColor;
     background-color: $baseBg;
 }
 
