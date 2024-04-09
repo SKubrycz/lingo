@@ -1,17 +1,7 @@
-$baseColor: rgb(230, 92, 0);
-$baseBg: rgb(253, 229, 210);
-$baseBgPlus: adjust-color($lightness: -10%, $color: $baseBg);
-$fontColor: adjust-color($blackness: 60%, $color: $baseColor);
+@import '../../utilities/variables';
 
-.home-wrapper {
-    width: 100%;
+@import '../../assets/global';
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    color: $fontColor;
-}
 
 .home-navbar {
     width: inherit;
@@ -33,7 +23,7 @@ $fontColor: adjust-color($blackness: 60%, $color: $baseColor);
 
     z-index: 3;
 
-    div:not(.home-navbar-logo), a {
+    div, a:not(.home-navbar-logo) {
         padding: 15px;
 
         transition: background-color .3s;

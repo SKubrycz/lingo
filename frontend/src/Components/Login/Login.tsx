@@ -1,4 +1,6 @@
 
+import './Login.scss';
+
 
 function Login() {
 
