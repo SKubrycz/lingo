@@ -1,1 +1,69 @@
 @import '../../utilities/variables';
+
+.main-login-wrapper {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: $fontColor;
+}
+
+.main-login {
+    width: 33%;
+
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    background-color: $baseBgPlus;
+}
+
+.login-form {
+    width: 66%;
+
+    margin: 1.5em;
+
+    display: flex;
+    flex-direction: column;
+    
+    input:not(input[type=submit]) {
+        margin: .5em 0;
+        padding: .5em 0;
+
+        border: none;
+        border-bottom: 2px solid $fontColor;
+
+        outline: none;
+
+        background-color: transparent;
+
+        &::placeholder {
+            color: $fontGrayish;
+        }
+    }
+
+    input[type=submit] {
+        margin: 1em 0;
+        padding: .5em;
+
+        border: none;
+        border-radius: 5px;
+
+        font-size: 18px;
+
+        color: $baseBg;
+        background-color: $baseColor;
+
+        transition: background-color .3s;
+
+        &:hover {
+            background-color: adjust-color($color: $baseColor, $blackness: 10%);
+        }
+    }
+}
