@@ -1,3 +1,4 @@
+import NavLogin from './NavLogin';
 
 import './Login.scss';
 
@@ -7,6 +8,7 @@ function Login() {
     return (
         <>
             <div className='wrapper'>
+                <NavLogin></NavLogin>
                 <div className='main-login-wrapper'>
                     <main className='main-login'>
                         <h2>Zaloguj się</h2>

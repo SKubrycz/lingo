@@ -82,7 +82,7 @@
 
         font-size: 20px;
 
-        color: adjust-color($color: $baseColor, $lightness: 50%);
+        color: $lightBaseColor;
         background-color: $baseColor;
 
         transition-property: transform, background-color;

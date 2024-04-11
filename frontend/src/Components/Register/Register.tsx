@@ -1,4 +1,6 @@
 
+import NavRegister from './NavRegister';
+
 import './Register.scss';
 
 function Register() {
@@ -6,6 +8,7 @@ function Register() {
     return (
         <>
             <div className='wrapper'>
+                <NavRegister></NavRegister>
                 <main className='main-register-wrapper'>
                     <div className='main-register'>
                         <h2>Zarejestruj się już teraz!</h2>
@@ -18,6 +21,7 @@ function Register() {
                             <input type='password' placeholder='Hasło'></input>
                             {/* <label>Hasło ponownie</label> */}
                             <input type='password' placeholder='Hasło ponownie'></input>
+                            <input type='submit' value='Zarejestruj'></input>
                         </form>
                     </div>
                 </main>
