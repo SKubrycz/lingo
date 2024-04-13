@@ -1,3 +1,25 @@
 @import '../../utilities/variables';
 
 @import '../../assets/global';
+
+.main-about-wrapper {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: $fontColor;
+}
+
+.main-about {
+    width: 33%;
+
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    background-color: $baseBgPlus;
+}
