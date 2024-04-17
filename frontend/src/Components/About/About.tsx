@@ -8,8 +8,10 @@ function About() {
 
     return (
         <>
-            <NavAbout></NavAbout>
-            <MainAbout></MainAbout>
+            <div className='wrapper'>
+                <NavAbout></NavAbout>
+                <MainAbout></MainAbout>
+            </div>
         </>
     );
 }
