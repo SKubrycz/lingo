@@ -8,9 +8,9 @@ function MainLogin() {
                 <h2>Zaloguj się</h2>
                 <form className='login-form'>
                     {/* <label>Nazwa użytkownika</label> */}
-                    <input type='login' name='login' placeholder='Nazwa użytkownika'></input>
+                    <input type='login' name='login' placeholder='Nazwa użytkownika' autoComplete='username'></input>
                     {/* <label>Hasło</label> */}
-                    <input type='password' name='password' placeholder='Hasło'></input>
+                    <input type='password' name='password' placeholder='Hasło' autoComplete='current-password'></input>
                     <input type='submit' name='submit' value='Zaloguj'></input>
                 </form>
             </main>
