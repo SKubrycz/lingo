@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';  
+import { useNavigate } from 'react-router-dom';
 
 import { useReducer } from 'react';
 
@@ -46,26 +47,25 @@ function MainLogin() {
         password: '',
     });
 
-    const handleLoginData = async (route: string, sentData: Object) => {
-        await axios.post(route, sentData
-        ).then(() => {
-            console.log('posted Login');
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        handleLoginData('/login', loginData);
-      };
+
+        try {
+            await axios.post('http://localhost:8000/login', loginData);
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (
         <div className='main-login-wrapper'>
             <main className='main-login'>
                 <h2>Zaloguj się</h2>
-                <form className='login-form' method='post' onSubmit={() => handleSubmit}>
+                <form className='login-form' method='post' onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         type='login' 
                         name='login' 
