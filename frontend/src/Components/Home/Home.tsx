@@ -6,6 +6,7 @@ import MainHome from './MainHome';
 import './Home.scss';
 
 function Home() {
+  
   return (
     <div className='wrapper'>
       <NavHome></NavHome>

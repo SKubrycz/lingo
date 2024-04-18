@@ -38,6 +38,8 @@ button {
 
     z-index: 3;
 
+    animation: fromTop .3s 1;
+
     div, a:not(.navbar-logo) {
         padding: 15px;
 
@@ -73,5 +75,14 @@ button {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes fromTop {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0%);
     }
 }
