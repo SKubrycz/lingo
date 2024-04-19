@@ -54,7 +54,7 @@ function MainLogin() {
 
         try {
             await axios.post('http://localhost:8000/login', loginData);
-            navigate('/');
+            navigate('/', { state: 'Zalogowano pomyślnie' });
         } catch (error) {
             console.log(error);
         }
