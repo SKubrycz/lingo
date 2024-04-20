@@ -52,12 +52,12 @@ function MainLogin() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        try {
-            await axios.post('http://localhost:8000/login', loginData);
-            navigate('/', { state: 'Zalogowano pomyślnie' });
-        } catch (error) {
-            console.log(error);
-        }
+        await axios.post('http://localhost:8000/login', loginData)
+            .then(() => {
+                navigate('/', { state: 'Zalogowano pomyślnie' });
+            }).catch((error) => {
+                console.log(error);
+            })
     };
 
 
