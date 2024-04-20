@@ -21,7 +21,14 @@ app.post('/login', (req, res) => {
 
     console.log(`posted in /login: ${login}, ${password}`);
 
-    res.json(200);
+    res.status(200).send('Logged in');
+});
+
+app.post('/register', (req, res) => {
+    const { email, login, password, passwordAgain } = req.body;
+
+    console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}`);
+    res.status(200).send('Registered')
 });
 
 
