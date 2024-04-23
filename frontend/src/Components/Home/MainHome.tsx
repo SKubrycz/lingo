@@ -33,6 +33,8 @@ function MainHome() {
         hours: 0,
     });
 
+
+    const homeStateRef = useRef<HTMLDivElement>(null);
     const helloRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
@@ -57,7 +59,7 @@ function MainHome() {
 
     return (
         <main className='home-main'>
-            <div style={{position: 'absolute', top: '50%', left: '50%'}}>{location.state}</div>
+            <div ref={homeStateRef} className='home-state-info'>{location.state}</div>
             <h1 ref={helloRef}>LOGO</h1>
             <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>
