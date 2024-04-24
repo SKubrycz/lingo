@@ -6,3 +6,5 @@ $fontColor: adjust-color($blackness: 60%, $color: $baseColor);
 $fontGrayish: adjust-color($saturation: -70%, $lightness: 30%, $color: $fontColor);
 
 $lightBaseColor: adjust-color($color: $baseColor, $lightness: 50%);
+
+$alertColor: adjust-color($color: $baseColor, $saturation: -30%, $lightness: 25%, $alpha: -0.3);
