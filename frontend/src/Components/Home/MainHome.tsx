@@ -34,8 +34,11 @@ function MainHome() {
     });
 
 
-    const homeStateRef = useRef<HTMLDivElement>(null);
+    const homeStateRef = useRef<HTMLDivElement | null>(null);
     const helloRef = useRef<HTMLHeadingElement>(null);
+
+    const location = useLocation();
+
 
     useEffect(() => {
         const intervalSec = setInterval(() => {
@@ -55,7 +58,24 @@ function MainHome() {
         }
     }, []);
 
-    const location = useLocation();
+    useEffect(() => {
+        if (!homeStateRef.current) return;
+
+        const time = 2000;
+
+        const animationTimeout = setTimeout(() => {
+            if (homeStateRef.current) homeStateRef.current.style.animation  = `${time}ms fadeOut ease-out 1`;
+        }, time);
+
+        const opacityTimeout = setTimeout(() => {
+            if (homeStateRef.current) homeStateRef.current.style.opacity = '0';
+        }, time * 2);
+
+        return () => {
+            clearTimeout(animationTimeout);
+            clearTimeout(opacityTimeout);
+        }
+    }, [location.state]);
 
     return (
         <main className='home-main'>
