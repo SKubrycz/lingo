@@ -3,6 +3,7 @@ $baseBg: rgb(253, 229, 210);
 $baseBgPlus: adjust-color($lightness: -10%, $color: $baseBg);
 
 $fontColor: adjust-color($blackness: 60%, $color: $baseColor);
+$fontLighter: adjust-color($color: $baseColor, $blackness: 20%);
 $fontGrayish: adjust-color($saturation: -70%, $lightness: 30%, $color: $fontColor);
 
 $lightBaseColor: adjust-color($color: $baseColor, $lightness: 50%);
