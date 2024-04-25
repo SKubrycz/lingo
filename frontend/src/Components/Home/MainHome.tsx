@@ -61,6 +61,11 @@ function MainHome() {
     useEffect(() => {
         if (!homeStateRef.current) return;
 
+        if (!location.state) {
+            homeStateRef.current.style.opacity = '0';
+            return;
+        }
+
         const time = 2000;
 
         const animationTimeout = setTimeout(() => {
