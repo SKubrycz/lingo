@@ -29,6 +29,10 @@
     background-color: $baseBgPlus;
 }
 
+.main-register-title {
+    animation: .7s popSize 1;
+}
+
 .register-form {
     width: 66%;
 
@@ -50,6 +54,15 @@
 
         &::placeholder {
             color: $fontGrayish;
+        }
+
+        &:focus::placeholder {
+            color: adjust-color($color: $fontGrayish, $lightness: -5%, $saturation: 10%)
+        }
+
+        &:focus {
+            border-bottom: 2px solid $baseColor;
+            transition: border-bottom .2s;
         }
     }
 
