@@ -26,6 +26,10 @@
     background-color: $baseBgPlus;
 }
 
+.main-login-title {
+    animation: .7s popSize 1;
+}
+
 .login-form {
     width: 66%;
 
@@ -47,6 +51,15 @@
 
         &::placeholder {
             color: $fontGrayish;
+        }
+
+        &:focus::placeholder {
+            color: adjust-color($color: $fontGrayish, $lightness: -5%, $saturation: 10%)
+        }
+
+        &:focus {
+            border-bottom: 2px solid $baseColor;
+            transition: border-bottom .2s;
         }
     }
 
