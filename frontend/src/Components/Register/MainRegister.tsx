@@ -79,7 +79,7 @@ function MainRegister() {
     return (
         <div className='main-register-wrapper'>
             <main className='main-register'>
-                <h2>Zarejestruj się już teraz!</h2>
+                <h2 className='main-register-title'>Zarejestruj się już teraz!</h2>
                 <form className='register-form' onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         type='email' 
