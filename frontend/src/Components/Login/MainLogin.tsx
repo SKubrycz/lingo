@@ -64,7 +64,7 @@ function MainLogin() {
     return (
         <div className='main-login-wrapper'>
             <main className='main-login'>
-                <h2>Zaloguj się</h2>
+                <h2 className='main-login-title'>Zaloguj się</h2>
                 <form className='login-form' method='post' onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         type='login' 
