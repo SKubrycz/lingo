@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 type RegisterState = {
     email: string;
@@ -63,6 +63,8 @@ function MainRegister() {
         passwordAgain: '',
     });
 
+    const [error, setError] = useState<string | null>();
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,6 +74,7 @@ function MainRegister() {
             .then(() => {
                 navigate('/', { state: 'Rejestracja przebiegła pomyślnie' });
             }).catch((error) => {
+                setError(error.response.data);
                 console.log(error);
             })
     };
@@ -80,6 +83,7 @@ function MainRegister() {
         <div className='main-register-wrapper'>
             <main className='main-register'>
                 <h2 className='main-register-title'>Zarejestruj się już teraz!</h2>
+                <h3 className='error-text'>{error}</h3>
                 <form className='register-form' onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         type='email' 
