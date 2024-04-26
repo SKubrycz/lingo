@@ -7,7 +7,7 @@ router.post('/login', async (req, res) => {
 
         console.log(`posted in /login: ${login}, ${password}`);
 
-        res.status(200).send('Logged in');
+        res.status(200).send('Zalogowano');
     } catch (error) {
         res.status(500).send(`Error /login ${error}`);
     }
