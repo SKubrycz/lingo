@@ -5,15 +5,21 @@ const hashData = require('../utilities/hashData');
 
 router.post('/register', async (req, res) => {
     try {
-        const { email, login, password, passwordAgain } = req.body;
+        const { email, login, password, passwordAgain } = await req.body;
 
         const hash = await hashData(password);
 
-        console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
+        if (password === '' || !password) return res.status(404).send('Hasło niepoprawne');
+        if (passwordAgain === '' || !passwordAgain) return res.status(404).send('Powtórzone hasło niepoprawne');
+        if (password === passwordAgain) {
+            console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
+            return res.status(200).send('Zarejestrowano');
+        } else {
+            return res.status(404).send('Hasła nie są takie same');
+        }
 
-        res.status(200).send('Registered');
     } catch (error) {
-        res.status(500).send(`Error /register ${error}`);
+        return res.status(500).send(`Error /register ${error}`);
     }
 });
 
