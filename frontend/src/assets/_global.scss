@@ -69,6 +69,13 @@ button {
     cursor: pointer;
 }
 
+.error-text {
+    font-weight: bold;
+
+    color: rgb(240, 10, 10);
+}
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;
