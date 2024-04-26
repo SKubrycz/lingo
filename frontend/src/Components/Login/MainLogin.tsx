@@ -1,7 +1,7 @@
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';
 
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 
 type LoginState = {
@@ -47,6 +47,8 @@ function MainLogin() {
         password: '',
     });
 
+    const [error, setError] = useState<string | null>();
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,6 +58,7 @@ function MainLogin() {
             .then(() => {
                 navigate('/', { state: 'Zalogowano pomyślnie' });
             }).catch((error) => {
+                setError(error.response.data);
                 console.log(error);
             })
     };
@@ -65,6 +68,7 @@ function MainLogin() {
         <div className='main-login-wrapper'>
             <main className='main-login'>
                 <h2 className='main-login-title'>Zaloguj się</h2>
+                <h3 className='error-text'>{error}</h3>
                 <form className='login-form' method='post' onSubmit={(e) => handleSubmit(e)}>
                     <input 
                         type='login' 
