@@ -2,11 +2,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config()
+require('dotenv').config();
+
+const db = require('./assets/db');
 
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
-
 
 app.use(express.json());
 
