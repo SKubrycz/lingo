@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const MongoClient = require("mongodb").MongoClient;
 
 const uri = 
     "mongodb://localhost:27017/language-app";
@@ -17,11 +17,12 @@ const runDB = async () => {
         //const result = await cursor.toArray();
 
         //console.log(result);
-        console.log("Connected successfully to server");
+        console.log("Connected successfully to the server");
 
-        return client;
+        return client.db('language-app');
     } catch (err) {
         console.log('mongodb err', err);
+        client.close();
     }
 }
 runDB().catch(console.dir);
