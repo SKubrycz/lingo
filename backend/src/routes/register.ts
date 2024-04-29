@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const runDB = require('../assets/db');
+
 const hashData = require('../utilities/hashData');
 
 router.post('/register', async (req, res) => {
@@ -13,6 +15,25 @@ router.post('/register', async (req, res) => {
         if (passwordAgain === '' || !passwordAgain) return res.status(404).send('Powtórzone hasło niepoprawne');
         if (password === passwordAgain) {
             console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
+
+            const client = await runDB();
+            
+            try {
+                const db = await client.db("language-app");
+
+                const usersCollection = db.collection('users');
+                const result = await usersCollection.insertOne({
+                    'email': email,
+                    'login': login,
+                    'password': hash,
+                });
+                console.log(result);
+            } finally {
+                client.close();
+            }
+
+
+
             return res.status(200).send('Zarejestrowano');
         } else {
             return res.status(404).send('Hasła nie są takie same');
