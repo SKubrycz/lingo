@@ -1,8 +1,8 @@
-import { useLocation } from 'react-router-dom';
-
 import { useEffect, useRef, useReducer } from 'react';
 
 import StartHome from './StartHome';
+
+import { useMessage } from '../../';
 
 function reducer(state: any, action: any) {
     switch(action.type) {
@@ -37,7 +37,7 @@ function MainHome() {
     const homeStateRef = useRef<HTMLDivElement | null>(null);
     const helloRef = useRef<HTMLHeadingElement>(null);
 
-    const location = useLocation();
+    const { message } = useMessage();
 
 
     useEffect(() => {
@@ -61,7 +61,7 @@ function MainHome() {
     useEffect(() => {
         if (!homeStateRef.current) return;
 
-        if (!location.state) {
+        if (!message) {
             homeStateRef.current.style.opacity = '0';
             return;
         }
@@ -80,11 +80,11 @@ function MainHome() {
             clearTimeout(animationTimeout);
             clearTimeout(opacityTimeout);
         }
-    }, [location.state]);
+    }, [message]);
 
     return (
         <main className='home-main'>
-            <div ref={homeStateRef} className='home-state-info'>{location.state}</div>
+            <div ref={homeStateRef} className='home-state-info'>{message}</div>
             <h1 ref={helloRef}>LOGO</h1>
             <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>

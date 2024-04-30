@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useReducer, useState } from 'react';
 
+import { useMessage } from '../..';
+
 
 type LoginState = {
     login: string;
@@ -49,6 +51,8 @@ function MainLogin() {
 
     const [error, setError] = useState<string | null>();
 
+    const { message, setMessage } = useMessage();
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,6 +60,8 @@ function MainLogin() {
 
         await axios.post('http://localhost:8000/login', loginData)
             .then(() => {
+                setMessage('Zalogowano pomyślnie');
+                console.log(message);
                 navigate('/', { state: 'Zalogowano pomyślnie' });
             }).catch((error) => {
                 setError(error.response.data);

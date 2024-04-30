@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useReducer, useState } from 'react';
 
+import { useMessage } from '../../';
+
 type RegisterState = {
     email: string;
     login: string;
@@ -67,11 +69,15 @@ function MainRegister() {
 
     const navigate = useNavigate();
 
+    const { message, setMessage } = useMessage();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         await axios.post('http://localhost:8000/register', registerData)
             .then(() => {
+                setMessage('Rejestracja przebiegła pomyślnie');
+                console.log(message);
                 navigate('/', { state: 'Rejestracja przebiegła pomyślnie' });
             }).catch((error) => {
                 setError(error.response.data);
