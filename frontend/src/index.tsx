@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.scss';
@@ -8,19 +8,41 @@ import Register from './Components/Register/Register';
 import About from './Components/About/About';
 import reportWebVitals from './reportWebVitals';
 
+export const MessageContext = createContext<{
+  message: string | undefined;
+  setMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
+}>({
+  message: undefined,
+  setMessage: () => {},
+});
+
+export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  const [message, setMessage] = useState<string | undefined>(undefined);
+
+  return (
+    <MessageContext.Provider value={{ message, setMessage }}>
+      {children}
+    </MessageContext.Provider>
+  );
+};
+
+export const useMessage = () => useContext(MessageContext);
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home></Home>}></Route>
-        <Route path='/login' element={<Login></Login>}></Route>
-        <Route path='/register' element={<Register></Register>}></Route>
-        <Route path='/about' element={<About></About>}></Route>
-      </Routes>
-    </BrowserRouter>
+      <MessageProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home></Home>}></Route>
+            <Route path='/login' element={<Login></Login>}></Route>
+            <Route path='/register' element={<Register></Register>}></Route>
+            <Route path='/about' element={<About></About>}></Route>
+          </Routes>
+        </BrowserRouter>
+      </MessageProvider>
   </React.StrictMode>
 );
 
