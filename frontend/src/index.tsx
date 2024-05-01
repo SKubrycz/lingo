@@ -6,6 +6,7 @@ import Home from './Components/Home/Home';
 import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
 import About from './Components/About/About';
+import Profile from './Components/Profile/Profile';
 import reportWebVitals from './reportWebVitals';
 
 export const MessageContext = createContext<{
@@ -40,6 +41,7 @@ root.render(
             <Route path='/login' element={<Login></Login>}></Route>
             <Route path='/register' element={<Register></Register>}></Route>
             <Route path='/about' element={<About></About>}></Route>
+            <Route path='/profile' element={<Profile></Profile>}></Route>
           </Routes>
         </BrowserRouter>
       </MessageProvider>
