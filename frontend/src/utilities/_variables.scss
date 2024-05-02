@@ -1,6 +1,7 @@
 $baseColor: rgb(230, 92, 0);
 $baseBg: rgb(253, 229, 210);
 $baseBgPlus: adjust-color($lightness: -10%, $color: $baseBg);
+$baseBgPanel: adjust-color($color: $baseBg, $lightness: -25%, $saturation: -2%);
 
 $fontColor: adjust-color($blackness: 60%, $color: $baseColor);
 $fontLighter: adjust-color($color: $baseColor, $blackness: 20%);
