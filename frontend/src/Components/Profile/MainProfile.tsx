@@ -1,12 +1,37 @@
+import axios from 'axios';
+
+import { useParams } from 'react-router-dom';
+
+import { useEffect, useState } from 'react';
+
+interface User {
+    login: string;
+}
 
 function MainProfile() {
+    const { userId } = useParams<{ userId: string }>();
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const res = await axios.get<User>(`http://localhost:8000/profile/${userId}`);
+            console.log(res.data);
+            setUser(res.data);
+          } catch (error) {
+            console.error("Failed to fetch user data:", error);
+          }
+        };
+    
+        fetchUserData();
+     }, [userId]);
 
     return (
         <div className='main-profile-wrapper'>
             <main className='main-profile'>
                 <article className='main-profile-user'>
-                    <div className='profile-user-img'>User Img</div>
-                    <p>UsernameUsername</p>
+                    <div className='profile-user-img'>{user?.login}</div>
+                    <p>{user?.login}</p>
                 </article>
                 <article className='main-profile-stats'>
                     <div className='main-profile-stat-container'>
