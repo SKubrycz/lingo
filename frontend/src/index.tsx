@@ -42,6 +42,7 @@ root.render(
             <Route path='/register' element={<Register></Register>}></Route>
             <Route path='/about' element={<About></About>}></Route>
             <Route path='/profile' element={<Profile></Profile>}></Route>
+            <Route path="/profile/:userId" element={<Profile></Profile>} />
           </Routes>
         </BrowserRouter>
       </MessageProvider>
