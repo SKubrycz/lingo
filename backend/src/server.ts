@@ -8,6 +8,7 @@ const runDB = require('./assets/db');
 
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
+const profileRoute = require('./routes/profile');
 
 app.use(express.json());
 
@@ -22,6 +23,7 @@ app.use(cors({
 
 app.use(registerRoute);
 app.use(loginRoute);
+app.use(profileRoute)
 
 
 app.listen(process.env.PORT, () => console.log(`server running on port: ${process.env.PORT}`));
