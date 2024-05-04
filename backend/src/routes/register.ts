@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const runDB = require('../assets/db');
-
 const queries = require('../assets/queries');
 
 const hashData = require('../utilities/hashData');
@@ -15,9 +13,9 @@ router.post('/register', async (req, res) => {
 
         const hash = await hashData(password);
 
-        if (password === '' || !password) return res.status(404).send('Hasło niepoprawne');
-        if (passwordAgain === '' || !passwordAgain) return res.status(404).send('Powtórzone hasło niepoprawne');
-        if (regex.test(password) === false) return res.status(404).send('Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny');
+        if (password === '' || !password) return res.status(422).send('Hasło niepoprawne');
+        if (passwordAgain === '' || !passwordAgain) return res.status(422).send('Powtórzone hasło niepoprawne');
+        if (regex.test(password) === false) return res.status(422).send('Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny');
         if (password === passwordAgain) {
             console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
 
@@ -25,7 +23,7 @@ router.post('/register', async (req, res) => {
 
             return res.status(200).send('Zarejestrowano');
         } else {
-            return res.status(404).send('Hasła nie są takie same');
+            return res.status(400).send('Hasła nie są takie same');
         }
 
     } catch (error) {
