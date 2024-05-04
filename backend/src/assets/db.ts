@@ -7,16 +7,7 @@ const client = new MongoClient(uri, {});
 
 const runDB = async () => {
     try {
-        // Connect the client to the server
         await client.connect();
-        // Establish and verify connection
-        //const database = await client.db("language-app");
-
-        //const cursor = await db.collection('users').find({});
-
-        //const result = await cursor.toArray();
-
-        //console.log(result);
         console.log("Connected successfully to the server");
 
         return client.db('language-app');
