@@ -1,7 +1,7 @@
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';
 
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { useMessage } from '../..';
 
@@ -54,6 +54,10 @@ function MainLogin() {
     const { message, setMessage } = useMessage();
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setMessage(undefined);
+    }, [message, setMessage]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
