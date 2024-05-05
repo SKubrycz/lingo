@@ -37,7 +37,7 @@ function MainHome() {
     const homeStateRef = useRef<HTMLDivElement | null>(null);
     const helloRef = useRef<HTMLHeadingElement>(null);
 
-    const { message } = useMessage();
+    const { message, setMessage } = useMessage();
 
 
     useEffect(() => {
@@ -74,13 +74,14 @@ function MainHome() {
 
         const opacityTimeout = setTimeout(() => {
             if (homeStateRef.current) homeStateRef.current.style.opacity = '0';
+            if (message) setMessage(undefined);
         }, time * 2);
 
         return () => {
             clearTimeout(animationTimeout);
             clearTimeout(opacityTimeout);
         }
-    }, [message]);
+    }, [message, setMessage]);
 
     return (
         <main className='home-main'>
