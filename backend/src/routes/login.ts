@@ -13,6 +13,8 @@ router.post('/login', async (req, res) => {
 
 
         const result = await queries.findOneUser(login);
+        if (!result) return res.status(404).send('Nie znaleziono użytkownika');
+
         const comparison = await comparePassword(password, result.password);
         console.log(`comparison: ${comparison}`);
 
