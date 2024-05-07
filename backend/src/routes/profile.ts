@@ -10,7 +10,7 @@ router.get('/profile/:id', async (req, res) => {
         console.log(`get in /profile/:id: ${login}`);
 
 
-        const result = await queries.findOneUser(login); //!query later to be changed
+        const result = await queries.findOneUserByLogin(login) //!query later to be changed
 
         console.log(result.login);
 
