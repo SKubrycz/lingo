@@ -16,13 +16,16 @@ const insertOneUser = async (email, login, hash) => {
     }
 }
 
-const findOneUser = async (login) => {
+const findOneUser = async (email, login) => {
     const db = await runDB();
     
     const userCollection = db.collection('users');
     
     const result = await userCollection.findOne({
-        'login': login,
+        '$or': [
+            { 'email': email },
+            { 'login': login }
+        ]
     });
 
     console.log(result);
