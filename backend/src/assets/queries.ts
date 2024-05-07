@@ -37,6 +37,24 @@ const findOneUser = async (email, login) => {
     return result;
 }
 
+const findOneUserByLogin = async (login) => {
+    const db = await runDB();
+    
+    const userCollection = db.collection('users');
+    
+    const result = await userCollection.findOne({
+        'login': login
+    });
+
+    console.log(result);
+        
+    setTimeout(() => {
+        db.client.close();
+    }, 1500);
+
+    return result;
+}
+
 module.exports = {
-    findOneUser, insertOneUser
+    findOneUser, insertOneUser, findOneUserByLogin
 }
