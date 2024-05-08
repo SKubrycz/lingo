@@ -10,3 +10,12 @@ $fontGrayish: adjust-color($saturation: -70%, $lightness: 30%, $color: $fontColo
 $lightBaseColor: adjust-color($color: $baseColor, $lightness: 50%);
 
 $alertColor: adjust-color($color: $baseColor, $saturation: -30%, $lightness: 25%, $alpha: -0.3);
+
+
+//Screen sizes
+$laptopL: 1440px;
+$laptop: 1024px;
+$tablet: 768px;
+$mobileL: 425px;
+$mobileM: 375px;
+$mobileS: 320px;
