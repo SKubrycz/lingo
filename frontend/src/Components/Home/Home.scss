@@ -108,3 +108,16 @@
         }
     }
 }
+
+
+// ---> MEDIA QUERIES
+
+@media (max-width: $laptopL) {
+
+}
+
+@media (max-width: $laptop) {
+    .home-main {
+        padding: 50px;
+    }
+}
