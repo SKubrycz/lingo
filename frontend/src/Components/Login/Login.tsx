@@ -1,4 +1,4 @@
-import NavLogin from './NavLogin';
+import Navbar from '../Reusables/Navbar/Navbar';
 import MainLogin from './MainLogin';
 
 import './Login.scss';
@@ -6,10 +6,13 @@ import './Login.scss';
 
 function Login() {
 
+    const linkArray: string[] = ['/about', '/register'];
+    const optionsArray: string[] = ['O aplikacji', 'Rejestracja'];
+
     return (
         <>
             <div className='wrapper'>
-                <NavLogin></NavLogin>
+                <Navbar link={linkArray} options={optionsArray}></Navbar>
                 <MainLogin></MainLogin>
             </div>
         </>

@@ -1,15 +1,17 @@
-
-import NavRegister from './NavRegister';
+import Navbar from '../Reusables/Navbar/Navbar';
 import MainRegister from './MainRegister';
 
 import './Register.scss';
 
 function Register() {
 
+    const linkArray: string[] = ['/about', '/login'];
+    const optionsArray: string[] = ['O aplikacji', 'Logowanie'];
+
     return (
         <>
             <div className='wrapper'>
-                <NavRegister></NavRegister>
+                <Navbar link={linkArray} options={optionsArray}></Navbar>
                 <MainRegister></MainRegister>
             </div>
         </>

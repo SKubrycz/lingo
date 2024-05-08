@@ -1,15 +1,18 @@
 //import { useState, useEffect, useRef } from 'react';
 
-import NavHome from './NavHome';
+import Navbar from '../Reusables/Navbar/Navbar';
 import MainHome from './MainHome';
 
 import './Home.scss';
 
 function Home() {
+
+  const linkArray: string[] = ['/about', '/login', '/register'];
+  const optionsArray: string[] = ['O aplikacji', 'Logowanie', 'Rejestracja'];
   
   return (
     <div className='wrapper'>
-      <NavHome></NavHome>
+      <Navbar link={linkArray} options={optionsArray}></Navbar>
       <MainHome></MainHome>
     </div>
   );
