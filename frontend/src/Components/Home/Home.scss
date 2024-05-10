@@ -121,3 +121,13 @@
         padding: 50px;
     }
 }
+
+@media (max-width: $tablet) {
+    
+}
+
+@media (max-width: $mobileL) {
+    .home-main {
+        padding: 25px;
+    }
+}
