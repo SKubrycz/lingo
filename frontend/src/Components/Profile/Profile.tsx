@@ -5,7 +5,7 @@ import './Profile.scss';
 
 function Profile() {
 
-    const linkArray: string[] = ['/about', '/'];
+    const linkArray: string[] = ['/about', '/lessons'];
     const optionsArray: string[] = ['O aplikacji', 'Lekcje'];
 
     return (
