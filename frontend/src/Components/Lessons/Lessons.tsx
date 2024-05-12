@@ -50,6 +50,7 @@ function Lessons() {
                 console.log(res.data);
             }).catch((error) => {
                 console.log(error);
+                setMessage('Sesja wygasła. Proszę zalogować się ponownie')
                 navigate('/');
             });
     }
