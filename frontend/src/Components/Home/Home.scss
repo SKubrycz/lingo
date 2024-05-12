@@ -61,20 +61,6 @@
     background-color: $baseBgPlus;
 }
 
-.home-state-info {
-    padding: 1em;
-
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    border-radius: 15px;
-    border: none;
-
-    background-color: $alertColor;
-}
-
 .home-start {
     margin: .5em 0;
     padding: 1.5em;

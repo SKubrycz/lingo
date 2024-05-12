@@ -114,6 +114,20 @@ button {
     color: rgb(240, 10, 10);
 }
 
+.state-info {
+    padding: 1em;
+
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 15px;
+    border: none;
+
+    background-color: $alertColor;
+}
+
 
 // ---> MEDIA QUERIES
 

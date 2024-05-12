@@ -85,7 +85,7 @@ function MainHome() {
 
     return (
         <main className='home-main'>
-            <div ref={homeStateRef} className='home-state-info'>{message}</div>
+            <div ref={homeStateRef} className='state-info'>{message}</div>
             <h1 ref={helloRef}>LOGO</h1>
             <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>

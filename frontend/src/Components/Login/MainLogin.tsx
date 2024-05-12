@@ -62,11 +62,11 @@ function MainLogin() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        await axios.post('http://localhost:8000/login', loginData)
+        await axios.post('http://localhost:8000/login', loginData, { withCredentials: true })
             .then(() => {
                 setMessage('Zalogowano pomyślnie');
                 console.log(message);
-                navigate('/', { state: 'Zalogowano pomyślnie' });
+                navigate('/lessons', { state: 'Zalogowano pomyślnie' });
             }).catch((error) => {
                 setError(error.response.data);
                 console.log(error);
