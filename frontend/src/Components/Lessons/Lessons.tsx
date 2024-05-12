@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../Reusables/Navbar/Navbar';
 
+import './Lessons.scss';
+
 function Lessons() {
 
     const linkArray: string[] = ['/about', '/profile'];
