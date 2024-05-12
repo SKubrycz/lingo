@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
 
 const queries = require('../assets/queries');
 
 const comparePassword = require('../utilities/comparePassword');
 
-router.post('/login', async (req, res) => {
+router.post('/login',  async (req, res) => {
     try {
         const { login, password } = await req.body;
 
@@ -19,6 +22,15 @@ router.post('/login', async (req, res) => {
         console.log(`comparison: ${comparison}`);
 
         if (comparison === false) return res.status(400).send('Niepoprawne hasło');
+
+        const token = jwt.sign({ login: login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+
+        console.log(token);
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 1000 * 30,
+        });
 
         return res.status(200).send('Zalogowano');
     } catch (error) {
