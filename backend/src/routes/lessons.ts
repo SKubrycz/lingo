@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
-const checkAuth = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
-router.get('/lessons', checkAuth, async (req, res) => {
+router.get('/lessons', auth.checkAuth, async (req, res) => {
     res.send('Witamy w Lekcjach!');
 })
 

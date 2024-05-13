@@ -8,7 +8,7 @@ const queries = require('../assets/queries');
 
 const comparePassword = require('../utilities/comparePassword');
 
-router.post('/login',  async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const { login, password } = await req.body;
 
@@ -29,7 +29,7 @@ router.post('/login',  async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 1000 * 30,
+            maxAge: 1000 * 60,
         });
 
         return res.status(200).send('Zalogowano');
