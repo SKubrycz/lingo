@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 interface User {
     login: string;
+    sessionUser: boolean;
 }
 
 function MainProfile() {
@@ -15,8 +16,9 @@ function MainProfile() {
     useEffect(() => {
         const fetchUserData = async () => {
           try {
-            const res = await axios.get<User>(`http://localhost:8000/profile/${userId}`);
+            const res = await axios.get<User>(`http://localhost:8000/profile/${userId}`, { withCredentials: true });
             console.log(res.data);
+            console.log('sessionUser: ' + res.data.sessionUser);
             setUser(res.data);
           } catch (error) {
             console.error("Failed to fetch user data:", error);
@@ -30,8 +32,8 @@ function MainProfile() {
         <div className='main-profile-wrapper'>
             <main className='main-profile'>
                 <article className='main-profile-user'>
-                    <div className='profile-user-img'>{user?.login}</div>
-                    <p>{user?.login}</p>
+                    <div className='profile-user-img'>{user?.login} {(user?.sessionUser) ? '(Ty)' : undefined}</div>
+                    <p>{user?.login} {(user?.sessionUser) ? '(Ty)' : undefined}</p>
                 </article>
                 <article className='main-profile-stats'>
                     <div className='main-profile-stat-container'>
