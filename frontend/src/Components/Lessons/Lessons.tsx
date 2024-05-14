@@ -11,8 +11,8 @@ import './Lessons.scss';
 function Lessons() {
     const lessonsStateRef = useRef<HTMLDivElement | null>(null);
 
-    const linkArray: string[] = ['/about', '/profile'];
-    const optionsArray: string[] = ['O aplikacji', 'Profil'];
+    const linkArray: string[] = ['/about', '/profile', '/logout'];
+    const optionsArray: string[] = ['O aplikacji', 'Profil', 'Wyloguj'];
 
     const { message, setMessage } = useMessage();
 
