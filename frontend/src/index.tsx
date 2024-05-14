@@ -8,6 +8,7 @@ import Register from './Components/Register/Register';
 import About from './Components/About/About';
 import Profile from './Components/Profile/Profile';
 import Lessons from './Components/Lessons/Lessons';
+import Logout from './Components/Logout/Logout';
 import reportWebVitals from './reportWebVitals';
 
 export const MessageContext = createContext<{
@@ -45,6 +46,7 @@ root.render(
             <Route path='/profile' element={<Profile></Profile>}></Route>
             <Route path='/profile/:userId' element={<Profile></Profile>}></Route>
             <Route path='/lessons' element={<Lessons></Lessons>}></Route>
+            <Route path='/logout' element={<Logout></Logout>}></Route>
           </Routes>
         </BrowserRouter>
       </MessageProvider>
