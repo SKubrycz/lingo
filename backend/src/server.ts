@@ -11,6 +11,7 @@ const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
 const profileRoute = require('./routes/profile');
 const lessonsRoute = require('./routes/lessons');
+const logoutRoute = require('./routes/logout');
 
 app.use(express.json());
 
@@ -29,6 +30,7 @@ app.use(registerRoute);
 app.use(loginRoute);
 app.use(profileRoute)
 app.use(lessonsRoute);
+app.use(logoutRoute);
 
 
 
