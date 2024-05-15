@@ -36,6 +36,7 @@ function MainProfile() {
                 navigate(`/profile/${res.data.login}`);
             } catch (error) {
                 console.log('Failed to fetch current user data: ', error);
+                navigate('/');
             }
         }
 
