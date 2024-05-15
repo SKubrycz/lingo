@@ -7,6 +7,32 @@ const queries = require('../assets/queries');
 
 const auth = require('../middleware/auth');
 
+
+router.get('/profile', auth.isAuthenticated, async (req, res) => {
+    try {
+
+        console.log('/profile');
+        console.log('res.user:' + res.user.login);
+
+        
+        const result = await queries.findOneUserByLogin(res.user.login);
+
+        let sessionUser = false;
+        if (res.user) sessionUser = true;
+
+        const fetched = {
+            id: result._id,
+            login: result.login,
+            sessionUser: sessionUser,
+        }
+
+        return res.status(200).send(fetched);
+
+    } catch (error) {
+        res.status(500).send(`Error /profile ${error}`);
+    }
+})
+
 router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
     try {
         const login = await req.params.id;
@@ -28,7 +54,7 @@ router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
 
         return res.status(200).send(fetched);
     } catch (error) {
-        res.status(500).send(`Error /profile ${error}`);
+        res.status(500).send(`Error /profile/:id ${error}`);
     }
 });
 
