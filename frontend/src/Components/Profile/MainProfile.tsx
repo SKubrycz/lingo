@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 
@@ -12,6 +12,8 @@ interface User {
 function MainProfile() {
     const { userId } = useParams<{ userId: string }>();
     const [user, setUser] = useState<User | null>(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -26,6 +28,19 @@ function MainProfile() {
         };
     
         fetchUserData();
+
+        const fetchCurrentUser = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8000/profile`, { withCredentials: true });
+                console.log(res.data);
+                navigate(`/profile/${res.data.login}`);
+            } catch (error) {
+                console.log('Failed to fetch current user data: ', error);
+            }
+        }
+
+        fetchCurrentUser();
+        
      }, [userId]);
 
     return (
