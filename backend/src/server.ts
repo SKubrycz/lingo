@@ -7,6 +7,7 @@ require('dotenv').config();
 
 require('./assets/db');
 
+const homeRoute = require('./routes/home');
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
 const profileRoute = require('./routes/profile');
@@ -26,6 +27,7 @@ app.use(cors({
 
 app.use(cookieParser());
 
+app.use(homeRoute);
 app.use(registerRoute);
 app.use(loginRoute);
 app.use(profileRoute)
