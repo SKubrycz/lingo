@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useReducer } from 'react';
 
 import StartHome from './StartHome';
@@ -39,6 +41,7 @@ function MainHome() {
 
     const { message, setMessage } = useMessage();
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const intervalSec = setInterval(() => {
@@ -82,6 +85,20 @@ function MainHome() {
             clearTimeout(opacityTimeout);
         }
     }, [message, setMessage]);
+
+    const handleAuth = async () => {
+        await axios.get('http://localhost:8000/', { withCredentials: true })
+            .then((res) => {
+                console.log(res.data);
+            }).catch((error) => {
+                console.log(error);
+                navigate('/lessons');
+            });
+    }
+
+    useEffect(() => {
+        handleAuth();
+    }, []);
 
     return (
         <main className='home-main'>
