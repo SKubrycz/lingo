@@ -1,3 +1,23 @@
 @import '../../utilities/variables';
 
 @import '../../assets/global';
+
+.lessons-lesson {
+    margin: .5em;
+    padding: 1em;
+
+    border-radius: 15px;
+
+    font-size: 20px;
+
+    background-color: $baseBgPlus;
+}
+
+.lessons-lesson-title {
+    padding: .3em 0;
+
+    font: {
+        size: 28px;
+        weight: bold;
+    }
+}
