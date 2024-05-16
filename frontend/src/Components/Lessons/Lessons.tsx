@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 
 import Navbar from '../Reusables/Navbar/Navbar';
+import Lesson from './Lesson';
 
 import { useMessage } from '../..';
 
@@ -63,6 +64,9 @@ function Lessons() {
         <>
             <div ref={lessonsStateRef} className='state-info'>{message}</div>
             <Navbar link={linkArray} options={optionsArray}></Navbar>
+            <div className='wrapper'>
+                <Lesson></Lesson>
+            </div>
         </>
     );
 }
