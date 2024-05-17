@@ -2,15 +2,29 @@
 
 @import '../../assets/global';
 
+.lessons-wrapper {
+    width: 50%;
+    padding: 1.5em;
+
+    background-color: $baseBgPlus;
+}
+
+.lessons-title {
+    font: {
+        size: 32px;
+        weight: bold;
+    }
+}
+
 .lessons-lesson {
-    margin: .5em;
+    margin: 1em 0;
     padding: 1em;
 
     border-radius: 15px;
 
     font-size: 20px;
 
-    background-color: $baseBgPlus;
+    background-color: $baseBgPanel;
 }
 
 .lessons-lesson-title {
