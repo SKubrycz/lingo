@@ -60,12 +60,20 @@ function Lessons() {
         handleAuth();
     }, []);
 
+
+    const lessonDesc = 'Lesson description lesson description'; // leaving it here !FOR NOW
+
     return(
         <>
             <div ref={lessonsStateRef} className='state-info'>{message}</div>
             <Navbar link={linkArray} options={optionsArray}></Navbar>
             <div className='wrapper'>
-                <Lesson></Lesson>
+                <div className='lessons-wrapper'>
+                    <div className='lessons-title'>All Lessons:</div>
+                    <Lesson lessonNumber={1} lessonDesc={lessonDesc}></Lesson>
+                    <Lesson lessonNumber={2} lessonDesc={lessonDesc}></Lesson>
+                    <Lesson lessonNumber={3} lessonDesc={lessonDesc}></Lesson>
+                </div>
             </div>
         </>
     );
