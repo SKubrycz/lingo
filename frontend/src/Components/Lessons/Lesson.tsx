@@ -2,19 +2,24 @@ import { useEffect } from 'react'
 
 import './Lessons.scss';
 
-function Lesson() {
+interface LessonProps {
+    lessonNumber: number;
+    lessonDesc: string;
+}
+
+function Lesson({ lessonNumber, lessonDesc }: LessonProps) {
     
     useEffect(() => {
         /*
-            some fetch-lessons logic here
+            some fetch-lessons logic here (maybe, or: fetching from parent component)
         */
     })
 
     return (
         <>
             <article className='lessons-lesson'>
-                <div className='lessons-lesson-title'>Lesson 1</div>
-                <div>Lesson description lesson description</div>
+                <div className='lessons-lesson-title'>Lesson {lessonNumber}</div>
+                <div>{lessonDesc}</div>
             </article>
         </>
     );
