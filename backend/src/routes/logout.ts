@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
 router.get('/logout', async (req, res) => {
+    console.log('route get /logout: ');
+
     res.clearCookie('token');
     res.status(200).send('Wylogowano');
 });
