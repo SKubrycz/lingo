@@ -6,6 +6,8 @@ require('dotenv').config();
 const auth = require('../middleware/auth');
 
 router.get('/', auth.isAuthenticated, async (req, res) => {
+    console.log('route get /: ');
+    
     let sessionUser = false;
     if (res.user) {
         sessionUser = true;
