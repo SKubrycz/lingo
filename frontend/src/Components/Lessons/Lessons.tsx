@@ -62,6 +62,7 @@ function Lessons() {
 
 
     const lessonDesc = 'Lesson description lesson description'; // leaving it here !FOR NOW
+    const lessonNumbers = [1, 2, 3]; // this also
 
     return(
         <>
@@ -70,9 +71,11 @@ function Lessons() {
             <div className='wrapper'>
                 <div className='lessons-wrapper'>
                     <div className='lessons-title'>All Lessons:</div>
-                    <Lesson lessonNumber={1} lessonDesc={lessonDesc}></Lesson>
-                    <Lesson lessonNumber={2} lessonDesc={lessonDesc}></Lesson>
-                    <Lesson lessonNumber={3} lessonDesc={lessonDesc}></Lesson>
+                    {lessonNumbers.map((value, index) => {
+                        return (
+                            <Lesson key={index} lessonNumber={value} lessonDesc={lessonDesc}></Lesson>
+                        )
+                    })}
                 </div>
             </div>
         </>
