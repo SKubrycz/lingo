@@ -55,6 +55,22 @@ const findOneUserByLogin = async (login) => {
     return result;
 }
 
+const findLessons = async () => {
+    const db = await runDB();
+
+    const lessonsCollection = db.collection('lessons');
+
+    const resultArr = [];
+    const result = await lessonsCollection.find({}, { projection: { _id: 0, number: 1 } });
+    await result.forEach(doc => resultArr.push(doc.number));
+
+    setTimeout(() => {
+        db.client.close();
+    }, 1500);
+
+    return resultArr;
+}
+
 module.exports = {
-    findOneUser, insertOneUser, findOneUserByLogin
+    findOneUser, insertOneUser, findOneUserByLogin, findLessons
 }
