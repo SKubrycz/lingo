@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Navbar from '../Reusables/Navbar/Navbar';
 import Lesson from './Lesson';
@@ -11,6 +11,7 @@ import './Lessons.scss';
 
 function Lessons() {
     const lessonsStateRef = useRef<HTMLDivElement | null>(null);
+    const [lessonNumbers, setLessonNumbers] = useState<number[]>([])
 
     const linkArray: string[] = ['/about', '/profile', '/logout'];
     const optionsArray: string[] = ['O aplikacji', 'Profil', 'Wyloguj'];
@@ -19,10 +20,12 @@ function Lessons() {
 
     const navigate = useNavigate();
 
+    const lessonDesc = 'Lesson description lesson description'; // leaving it here !FOR NOW
+
     useEffect(() => {
         if (!lessonsStateRef.current) return;
 
-        if (!message) {
+        if (!message || message === '') {
             lessonsStateRef.current.style.opacity = '0';
             return;
         }
@@ -49,6 +52,7 @@ function Lessons() {
         await axios.get('http://localhost:8000/lessons', { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
+                setLessonNumbers(res.data);
             }).catch((error) => {
                 console.log(error);
                 setMessage('Sesja wygasła. Proszę zalogować się ponownie')
@@ -60,10 +64,6 @@ function Lessons() {
         handleAuth();
     }, []);
 
-
-    const lessonDesc = 'Lesson description lesson description'; // leaving it here !FOR NOW
-    const lessonNumbers = [1, 2, 3]; // this also
-
     return(
         <>
             <div ref={lessonsStateRef} className='state-info'>{message}</div>
@@ -71,7 +71,7 @@ function Lessons() {
             <div className='wrapper'>
                 <div className='lessons-wrapper'>
                     <div className='lessons-title'>All Lessons:</div>
-                    {lessonNumbers.map((value, index) => {
+                    {lessonNumbers.map((value: number, index: number) => {
                         return (
                             <Lesson key={index} lessonNumber={value} lessonDesc={lessonDesc}></Lesson>
                         )
