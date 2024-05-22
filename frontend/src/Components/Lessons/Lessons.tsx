@@ -20,7 +20,7 @@ function Lessons() {
 
     const navigate = useNavigate();
 
-    const lessonDesc = 'Lesson description lesson description'; // leaving it here !FOR NOW
+    const lessonDesc = 'Lesson description lesson description lesson description'; // leaving it here !FOR NOW
 
     const handleAuth = async () => {
         await axios.get('http://localhost:8000/lessons', { withCredentials: true })
