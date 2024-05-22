@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 1000 * 60,
+            maxAge: 1000 * 60 * 5,
         });
 
         return res.status(200).send('Zalogowano');
