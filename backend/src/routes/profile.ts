@@ -12,8 +12,7 @@ router.get('/profile', auth.isAuthenticated, async (req, res) => {
     try {
 
         console.log('/profile');
-        console.log('res.user:' + res.user.login);
-
+        /* console.log('res.user:' + res.user.login);
         
         const result = await queries.findOneUserByLogin(res.user.login);
 
@@ -24,9 +23,9 @@ router.get('/profile', auth.isAuthenticated, async (req, res) => {
             id: result._id,
             login: result.login,
             sessionUser: sessionUser,
-        }
+        } */
 
-        return res.status(200).send(fetched);
+        return res.status(200).send('Not found');
 
     } catch (error) {
         res.status(500).send(`Error /profile ${error}`);
@@ -44,7 +43,7 @@ router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
         console.log(result.login);
 
         let sessionUser = false;
-        if (res.user) sessionUser = true;
+        if (res.user.login === login) sessionUser = true;
 
         const fetched = {
             id: result._id,
