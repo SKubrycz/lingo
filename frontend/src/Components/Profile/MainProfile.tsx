@@ -16,24 +16,15 @@ function MainProfile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const res = await axios.get<User>(`http://localhost:8000/profile/${userId}`, { withCredentials: true });
-            console.log(res.data);
-            console.log('sessionUser: ' + res.data.sessionUser);
-            setUser(res.data);
-          } catch (error) {
-            console.error("Failed to fetch user data:", error);
-          }
-        };
-    
-        fetchUserData();
-
         const fetchCurrentUser = async () => {
             try {
                 const res = await axios.get(`http://localhost:8000/profile`, { withCredentials: true });
                 console.log(res.data);
-                navigate(`/profile/${res.data.login}`);
+                /* if (res.data.sessionUser === true) {
+                    navigate(`/profile/${res.data.login}`);
+                } else {
+                    navigate(`/profile/${userId}`);
+                } */
             } catch (error) {
                 console.log('Failed to fetch current user data: ', error);
                 navigate('/');
@@ -41,6 +32,23 @@ function MainProfile() {
         }
 
         fetchCurrentUser();
+
+        const fetchUserData = async () => {
+          try {
+            const res = await axios.get<User>(`http://localhost:8000/profile/${userId}`, { withCredentials: true });
+            console.log(res.data);
+            if (res.data.sessionUser === true) {
+                console.log('sessionUser: ' + res.data.sessionUser);
+                setUser(res.data);
+            } else {
+                setUser(res.data);
+            }
+          } catch (error) {
+            console.error("Failed to fetch user data:", error);
+          }
+        };
+    
+        fetchUserData();
         
      }, [userId]);
 
