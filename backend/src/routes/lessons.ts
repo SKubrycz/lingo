@@ -10,10 +10,17 @@ const queries = require('../assets/queries');
 router.get('/lessons', auth.checkAuth, async (req, res) => {
     console.log('route get /lessons: ');
 
-
     const result = await queries.findLessons();
+
+    const userResult = await queries.findOneUserByLogin(res.user.login);
+    console.log(userResult.login);
+
+    const results = {
+        result: result,
+        login: userResult.login
+    }
     
-    res.send(result);
+    res.send(results);
 });
 
 
