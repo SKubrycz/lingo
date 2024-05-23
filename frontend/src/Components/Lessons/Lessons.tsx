@@ -13,7 +13,7 @@ import './Lessons.scss';
 function Lessons() {
     const [lessonNumbers, setLessonNumbers] = useState<number[]>([])
 
-    const linkArray: string[] = ['/about', '/profile', '/logout'];
+    const [linkArray, setLinkArray] = useState<string[]>(['/about', '/profile', '/logout']);
     const optionsArray: string[] = ['O aplikacji', 'Profil', 'Wyloguj'];
 
     const { message, setMessage } = useMessage();
@@ -26,7 +26,9 @@ function Lessons() {
         await axios.get('http://localhost:8000/lessons', { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
-                setLessonNumbers(res.data);
+                setLessonNumbers(res.data.result);
+                setLinkArray(['/about', `/profile/${res.data.login}`, '/logout']);
+                console.log(linkArray);
             }).catch((error) => {
                 console.log(error);
                 setMessage('Sesja wygasła. Proszę zalogować się ponownie')
