@@ -45,6 +45,7 @@ function MainProfile() {
             }
           } catch (error) {
             console.error("Failed to fetch user data:", error);
+            navigate('/');
           }
         };
     
