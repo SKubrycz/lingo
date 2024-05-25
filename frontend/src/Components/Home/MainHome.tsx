@@ -37,10 +37,6 @@ function MainHome() {
         hours: 0,
     });
 
-
-    const homeStateRef = useRef<HTMLDivElement | null>(null);
-    const helloRef = useRef<HTMLHeadingElement>(null);
-
     const { message, setMessage } = useMessage();
 
     const navigate = useNavigate();
@@ -80,7 +76,7 @@ function MainHome() {
     return (
         <main className='home-main'>
             <StateInfo message={message} setMessage={setMessage}></StateInfo>
-            <h1 ref={helloRef}>LOGO</h1>
+            <h1>LOGO</h1>
             <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>
                 {state.hours < 10 ? 0 : ''}{state.hours}:
