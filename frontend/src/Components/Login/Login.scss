@@ -27,6 +27,8 @@
 }
 
 .main-login-title {
+    text-align: center;
+
     animation: .7s popSize 1;
 }
 
@@ -80,5 +82,41 @@
         &:hover {
             background-color: adjust-color($color: $baseColor, $blackness: 10%);
         }
+    }
+}
+
+
+// ---> MEDIA QUERIES
+
+@media (max-width: $laptopL) {
+    .main-login {
+        width: 50%;
+    }
+
+}
+
+@media (max-width: $laptop) {
+}
+
+@media (max-width: $tablet) {
+    .main-login {
+        width: 60%;
+    }
+
+    .login-form {
+        width: 80%;
+    }
+}
+
+@media (max-width: $mobileL) {
+}
+
+@media (max-width: $mobileM) {
+
+}
+
+@media (max-width: $mobileS) {
+    .login-form {
+        width: 90%;
     }
 }
