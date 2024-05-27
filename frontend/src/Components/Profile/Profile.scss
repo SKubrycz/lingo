@@ -108,3 +108,30 @@
     color: $baseBg;
     background-color: $fontColor;
 }
+
+
+// ---> MEDIA QUERIES
+
+@media (max-width: $laptopL) {
+
+}
+
+@media (max-width: $laptop) {
+}
+
+@media (max-width: $tablet) {
+    .main-profile {
+        width: 75%;
+    }
+}
+
+@media (max-width: $mobileL) {
+}
+
+@media (max-width: $mobileM) {
+
+}
+
+@media (max-width: $mobileS) {
+
+}
