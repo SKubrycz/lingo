@@ -23,6 +23,8 @@ button {
     width: inherit;
     margin: none;
     padding: none;
+
+    z-index: 3;
 }
 
 .navbar {
@@ -42,7 +44,7 @@ button {
     color: adjust-color($color: $baseColor, $lightness: 50%);
     background-color: $baseColor;
 
-    z-index: 3;
+    z-index: inherit;
 
     animation: fromTop .3s 1;
 
