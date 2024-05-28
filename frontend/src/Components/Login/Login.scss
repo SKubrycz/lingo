@@ -109,6 +109,13 @@
 }
 
 @media (max-width: $mobileL) {
+    .main-login {
+        width: 75%;
+    }
+
+    .login-form {
+        width: 90%;
+    }
 }
 
 @media (max-width: $mobileM) {
@@ -116,7 +123,4 @@
 }
 
 @media (max-width: $mobileS) {
-    .login-form {
-        width: 90%;
-    }
 }
