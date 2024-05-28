@@ -23,3 +23,35 @@
 
     background-color: $baseBgPlus;
 }
+
+
+// ---> MEDIA QUERIES
+
+@media (max-width: $laptopL) {
+
+}
+
+@media (max-width: $laptop) {
+}
+
+@media (max-width: $tablet) {
+    .main-about {
+        width: 60%;
+    }
+}
+
+@media (max-width: $mobileL) {
+    .main-about {
+        width: 100%;
+
+        padding: 1.5em;
+    }
+}
+
+@media (max-width: $mobileM) {
+
+}
+
+@media (max-width: $mobileS) {
+
+}
