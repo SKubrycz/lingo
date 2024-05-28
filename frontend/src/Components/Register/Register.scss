@@ -112,6 +112,13 @@
 }
 
 @media (max-width: $mobileL) {
+    .main-register {
+        width: 75%;
+    }
+
+    .register-form {
+        width: 90%;
+    }
 }
 
 @media (max-width: $mobileM) {
@@ -119,7 +126,4 @@
 }
 
 @media (max-width: $mobileS) {
-    .register-form {
-        width: 90%;
-    }
 }
