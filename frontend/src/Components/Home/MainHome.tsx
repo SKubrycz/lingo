@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 
 import StateInfo from '../Reusables/StateInfo/StateInfo';

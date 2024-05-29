@@ -31,7 +31,7 @@ function Lessons() {
                 console.log(linkArray);
             }).catch((error) => {
                 console.log(error);
-                setMessage('Sesja wygasła. Proszę zalogować się ponownie')
+                setMessage('Sesja wygasła. Proszę zalogować się ponownie');
                 navigate('/');
             });
     }
