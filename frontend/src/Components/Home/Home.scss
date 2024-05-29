@@ -61,12 +61,14 @@
 }
 
 @media (max-width: $tablet) {
-    
+    .home-main {
+        width: 66%;
+    }
 }
 
 @media (max-width: $mobileL) {
     .home-main {
-        width: 60%;
+        width: auto;
     }
 }
 
