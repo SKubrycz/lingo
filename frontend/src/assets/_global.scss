@@ -133,6 +133,15 @@ button {
 
 // ---> MEDIA QUERIES
 
+@media (max-width: $laptopL) {
+
+}
+
+@media (max-width: $laptop) {
+    
+}
+
+
 @media (max-width: $tablet) {
     .navbar {
         justify-content: center;
@@ -156,6 +165,18 @@ button {
         justify-content: center;
         align-items: center;
     }
+}
+
+@media (max-width: $mobileL) {
+
+}
+
+@media (max-width: $mobileM) {
+
+}
+
+@media (max-width: $mobileS) {
+
 }
 
 
