@@ -99,6 +99,7 @@
 }
 
 @media (max-width: $laptop) {
+
 }
 
 @media (max-width: $tablet) {
@@ -107,7 +108,7 @@
     }
 
     .register-form {
-        width: 80%;
+        width: 90%;
     }
 }
 
@@ -126,4 +127,7 @@
 }
 
 @media (max-width: $mobileS) {
+    .main-register {
+        width: 100%;
+    }
 }
