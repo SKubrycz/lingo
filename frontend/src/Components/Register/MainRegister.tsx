@@ -5,6 +5,7 @@ import { useEffect, useReducer, useState } from 'react';
 
 import { useMessage } from '../../';
 
+
 type RegisterState = {
     email: string;
     login: string;
@@ -23,7 +24,6 @@ interface RegisterActions {
     type: ActionType;
     payload?: string;
 }
-
 
 const loginReducer = (state: RegisterState, action: RegisterActions) => {
     const { type, payload } = action;
@@ -92,7 +92,7 @@ function MainRegister() {
     return (
         <div className='main-register-wrapper'>
             <main className='main-register'>
-                <h2 className='main-register-title'>Zarejestruj się już teraz!</h2>
+                <h2 className='main-register-title'>Zarejestruj się</h2>
                 <h3 className='error-text'>{error}</h3>
                 <form className='register-form' onSubmit={(e) => handleSubmit(e)}>
                     <input 
