@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
+import BurgerIcon from '../../../assets/icons/burger.svg';
+
 interface NavbarProps {
     link: string[];
     options: string[];
@@ -41,7 +43,7 @@ function Navbar({ link, options }: NavbarProps) {
                         <Link key={index} to={link[index]}>{value}</Link>
                     )
                 })}
-                <div className='navbar-burger' onClick={() => handleDisplay()}>___</div>
+                <div className='navbar-burger' onClick={() => handleDisplay()}><img src={BurgerIcon} alt='burger-icon'></img></div>
             </nav>
             <div className='navbar-burger-options' style={navBurgerStyle}>
                 {options.map((value, index) => {
