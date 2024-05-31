@@ -167,6 +167,10 @@ button {
         justify-content: center;
         align-items: center;
     }
+
+    .state-info {
+        top: 12%;
+    }
 }
 
 @media (max-width: $mobileL) {
