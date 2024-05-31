@@ -25,6 +25,8 @@
     font-size: 14px;
 
     background-color: $baseBgPanel;
+
+    cursor: pointer;
 }
 
 .lessons-lesson-title {
@@ -35,6 +37,7 @@
         weight: bold;
     }
 }
+
 
 // ---> MEDIA QUERIES
 
@@ -52,6 +55,9 @@
 }
 
 @media (max-width: $mobileL) {
+    .lessons-wrapper {
+        width: auto;
+    }
 }
 
 @media (max-width: $mobileM) {
