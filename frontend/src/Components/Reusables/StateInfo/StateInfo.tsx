@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface StateInfoProps {
     message: string | undefined;
@@ -8,13 +8,19 @@ interface StateInfoProps {
 function StateInfo({message, setMessage}: StateInfoProps) {
     const stateInfoRef = useRef<HTMLDivElement | null>(null);
 
+    const [messageViewed, setMessageViewed] = useState<string | undefined>(undefined);
+
     useEffect(() => {
         if (!stateInfoRef.current) return;
 
-        if (!message) {
+        if (!message || message === '') {
             stateInfoRef.current.style.opacity = '0';
             return;
         }
+
+        setMessageViewed(message);
+
+        if (messageViewed) setMessage(undefined);
 
         const time = 2000;
 
@@ -24,7 +30,6 @@ function StateInfo({message, setMessage}: StateInfoProps) {
 
         const opacityTimeout = setTimeout(() => {
             if (stateInfoRef.current) stateInfoRef.current.style.opacity = '0';
-            if (message) setMessage(undefined);
         }, time * 2);
 
         return () => {
@@ -34,7 +39,7 @@ function StateInfo({message, setMessage}: StateInfoProps) {
     }, [message, setMessage]);
 
     return(
-        <div ref={stateInfoRef} className='state-info'>{message}</div>
+        <div ref={stateInfoRef} className='state-info'>{messageViewed}</div>
     );
 }
 
