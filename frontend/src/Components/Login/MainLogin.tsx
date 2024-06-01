@@ -26,13 +26,13 @@ const loginReducer = (state: LoginState, action: LoginActions) => {
     const { type, payload } = action;
     switch (type) {
         case ActionType.Login:
-            console.log(state.login);
+            //console.log(state.login);
             return {
                 ...state,
                 login: payload || '',
             };
         case ActionType.Password:
-            console.log(state.password);
+            //console.log(state.password);
             return {
                 ...state,
                 password: payload || '',
