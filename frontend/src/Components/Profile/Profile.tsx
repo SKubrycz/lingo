@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../Reusables/Navbar/Navbar';
 import MainProfile from './MainProfile';
@@ -10,8 +8,6 @@ function Profile() {
 
     const linkArray: string[] = ['/about', '/lessons'];
     const optionsArray: string[] = ['O aplikacji', 'Lekcje'];
-
-    const navigate = useNavigate();
 
     return (
         <>
