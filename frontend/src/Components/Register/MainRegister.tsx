@@ -29,25 +29,25 @@ const loginReducer = (state: RegisterState, action: RegisterActions) => {
     const { type, payload } = action;
     switch (type) {
         case ActionType.Email:
-            console.log(state.email);
+            //console.log(state.email);
             return {
                 ...state,
                 email: payload || '',
             };
         case ActionType.Login:
-            console.log(state.login);
+            //console.log(state.login);
             return {
                 ...state,
                 login: payload || '',
             };
         case ActionType.Password:
-            console.log(state.password);
+            //console.log(state.password);
             return {
                 ...state,
                 password: payload || '',
             };
         case ActionType.PasswordAgain:
-            console.log(state.passwordAgain);
+            //console.log(state.passwordAgain);
             return {
                 ...state,
                 passwordAgain: payload || '',
