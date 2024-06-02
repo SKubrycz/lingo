@@ -75,7 +75,7 @@ function MainHome() {
 
     return (
         <main className='home-main'>
-            <StateInfo message={message} setMessage={setMessage}></StateInfo>
+            <StateInfo></StateInfo>
             <h1>LOGO</h1>
             <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
             <div>
