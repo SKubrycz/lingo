@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface StateInfoProps {
+import { useMessage } from '../../../index';
+
+/* interface StateInfoProps {
     message: string | undefined;
     setMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
-}
+} */
 
-function StateInfo({message, setMessage}: StateInfoProps) {
+function StateInfo() {
     const stateInfoRef = useRef<HTMLDivElement | null>(null);
+
+    const { message, setMessage } = useMessage();
 
     const [messageViewed, setMessageViewed] = useState<string | undefined>(undefined);
 
@@ -21,6 +25,7 @@ function StateInfo({message, setMessage}: StateInfoProps) {
         setMessageViewed(message);
 
         if (messageViewed) setMessage(undefined);
+        console.log(message);
 
         const time = 2000;
 
