@@ -42,7 +42,7 @@ function Lessons() {
 
     return(
         <div className='wrapper'>
-            <StateInfo message={message} setMessage={setMessage}></StateInfo>
+            <StateInfo></StateInfo>
             <Navbar link={linkArray} options={optionsArray}></Navbar>
             
             <div className='lessons-wrapper'>
