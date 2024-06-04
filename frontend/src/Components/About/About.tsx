@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import Navbar from '../Reusables/Navbar/Navbar';
+import StateInfo from '../Reusables/StateInfo/StateInfo';
 import MainAbout from './MainAbout';
 
 import { useMessage } from '../..';
@@ -23,8 +24,8 @@ function About() {
             .then((res) => {
                 if (res.data.login) {
                     console.log(res.data.login);
-                    setLinkArray(['/lessons', `/profile/${res.data.login}`]);
-                    setOptionsArray(['Lekcje', 'Profil']);
+                    setLinkArray(['/lessons', `/profile/${res.data.login}`, '/logout']);
+                    setOptionsArray(['Lekcje', 'Profil', 'Wyloguj']);
                 } else {
                     console.log(res.data);
                 }
@@ -42,6 +43,7 @@ function About() {
     return (
         <>
             <div className='wrapper'>
+                <StateInfo></StateInfo>
                 <Navbar link={linkArray} options={optionsArray}></Navbar>
                 <MainAbout></MainAbout>
             </div>
