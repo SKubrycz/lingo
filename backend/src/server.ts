@@ -36,6 +36,8 @@ app.use(lessonsRoute);
 app.use(logoutRoute);
 app.use(aboutRoute);
 
-
+app.all('*', (req, res) => {
+    res.status(404).send('Błąd 404: Nie znaleziono zawartości');
+})
 
 app.listen(process.env.PORT, () => console.log(`server running on port: ${process.env.PORT}`));
