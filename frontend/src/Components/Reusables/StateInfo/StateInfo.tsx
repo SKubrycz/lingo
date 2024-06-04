@@ -2,17 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useMessage } from '../../../index';
 
-/* interface StateInfoProps {
-    message: string | undefined;
-    setMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
-} */
-
 function StateInfo() {
     const stateInfoRef = useRef<HTMLDivElement | null>(null);
 
     const { message, setMessage } = useMessage();
 
     const [messageViewed, setMessageViewed] = useState<string | undefined>(undefined);
+
+    const handleMessageViewed = async () => {
+        setMessageViewed(message);
+        return setMessage(undefined);
+    }
 
     useEffect(() => {
         if (!stateInfoRef.current) return;
@@ -22,10 +22,7 @@ function StateInfo() {
             return;
         }
 
-        setMessageViewed(message);
-
-        if (messageViewed) setMessage(undefined);
-        console.log(message);
+        handleMessageViewed(); // set context data to a useState and set context data to undefined
 
         const time = 2000;
 
@@ -41,7 +38,7 @@ function StateInfo() {
             clearTimeout(animationTimeout);
             clearTimeout(opacityTimeout);
         }
-    }, [message, setMessage]);
+    }, []);
 
     return(
         <div ref={stateInfoRef} className='state-info'>{messageViewed}</div>
