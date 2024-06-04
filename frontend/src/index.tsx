@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.scss';
+import NotFound from './Components/NotFound/NotFound';
 import Home from './Components/Home/Home';
 import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
@@ -39,6 +40,7 @@ root.render(
       <MessageProvider>
         <BrowserRouter>
           <Routes>
+            <Route path='*' element={<NotFound></NotFound>}></Route>
             <Route path='/' element={<Home></Home>}></Route>
             <Route path='/login' element={<Login></Login>}></Route>
             <Route path='/register' element={<Register></Register>}></Route>
