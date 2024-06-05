@@ -6,6 +6,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../Reusables/Navbar/Navbar';
 import MainProfile from './MainProfile';
 
+import { useMessage } from '../..';
+
 import './Profile.scss';
 
 
@@ -20,6 +22,8 @@ function Profile() {
 
     const { userId } = useParams<{ userId: string }>();
     const [user, setUser] = useState<User | null>(null);
+
+    const { message, setMessage } = useMessage();
 
     const navigate = useNavigate();
 
@@ -56,6 +60,7 @@ function Profile() {
             }
           } catch (error) {
             console.error("Failed to fetch user data:", error);
+            setMessage('Sesja wygasła. Proszę zalogować się ponownie');
             navigate('/');
           }
         };
