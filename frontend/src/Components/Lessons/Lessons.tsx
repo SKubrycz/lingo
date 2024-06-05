@@ -20,7 +20,7 @@ function Lessons() {
 
     const navigate = useNavigate();
 
-    const lessonDesc = 'Lesson description lesson description lesson description'; // leaving it here !FOR NOW
+    const lessonDesc = 'Opis lekcji: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ac tempus velit. Maecenas et feugiat tortor. Nam accumsan enim at diam euismod, id sodales felis dignissim.'; // leaving it here !FOR NOW
 
     const handleAuth = async () => {
         await axios.get('http://localhost:8000/lessons', { withCredentials: true })
@@ -46,7 +46,7 @@ function Lessons() {
             <Navbar link={linkArray} options={optionsArray}></Navbar>
             
             <div className='lessons-wrapper'>
-                <div className='lessons-title'>All Lessons:</div>
+                <div className='lessons-title'>Wszystkie lekcje:</div>
                 {lessonNumbers.map((value: number, index: number) => {
                     return (
                         <Lesson key={index} lessonNumber={value} lessonDesc={lessonDesc}></Lesson>
