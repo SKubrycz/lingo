@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState, useRef } from 'react';
 
 import { useMessage } from '../../';
 
+import handleInputVisibility from '../Reusables/Functions/handleInputVisibility';
 
 type RegisterState = {
     email: string;
@@ -67,6 +68,9 @@ function MainRegister() {
 
     const [error, setError] = useState<string | null>();
 
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const passwordAgainRef = useRef<HTMLInputElement>(null);
+
     const navigate = useNavigate();
 
     const { message, setMessage } = useMessage();
@@ -109,20 +113,29 @@ function MainRegister() {
                         placeholder='Nazwa użytkownika' 
                         autoComplete='username'
                     ></input>
-                    <input 
-                        type='password' 
-                        name='password'
-                        onChange={(e) => registerDispatch({type: ActionType.Password, payload: e.target.value})}
-                        placeholder='Hasło' 
-                        autoComplete='new-password'
-                    ></input>
-                    <input 
-                        type='password' 
-                        name='password-again' 
-                        onChange={(e) => registerDispatch({type: ActionType.PasswordAgain, payload: e.target.value})}
-                        placeholder='Hasło ponownie' 
-                        autoComplete='new-password'
-                    ></input>
+                    <div className='register-password-wrapper'>
+                        <input
+                            ref={passwordRef}
+                            type='password' 
+                            name='password'
+                            onChange={(e) => registerDispatch({type: ActionType.Password, payload: e.target.value})}
+                            placeholder='Hasło' 
+                            autoComplete='new-password'
+                        ></input>
+                        <div className='register-password-reveal' onClick={() => handleInputVisibility(passwordRef)}>Pokaż</div>
+                    </div>
+                    <div className='register-password-wrapper'>
+                        <input 
+                            ref={passwordAgainRef}
+                            type='password' 
+                            name='password-again' 
+                            onChange={(e) => registerDispatch({type: ActionType.PasswordAgain, payload: e.target.value})}
+                            placeholder='Hasło ponownie' 
+                            autoComplete='new-password'
+                        ></input>
+                        <div className='register-password-reveal' onClick={() => handleInputVisibility(passwordAgainRef)}>Pokaż</div>
+                    </div>
+                    
                     <input 
                         type='submit' 
                         name='submit' 
