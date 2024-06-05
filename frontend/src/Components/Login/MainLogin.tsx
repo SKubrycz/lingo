@@ -1,9 +1,11 @@
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';
 
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState, useRef } from 'react';
 
 import { useMessage } from '../..';
+
+import handleInputVisibility from '../Reusables/Functions/handleInputVisibility';
 
 
 type LoginState = {
@@ -51,6 +53,8 @@ function MainLogin() {
 
     const [error, setError] = useState<string | null>();
 
+    const passwordRef = useRef<HTMLInputElement>(null);
+
     const { message, setMessage } = useMessage();
 
     const navigate = useNavigate();
@@ -87,13 +91,17 @@ function MainLogin() {
                         placeholder='Nazwa użytkownika' 
                         autoComplete='username'
                     ></input>
-                    <input 
-                        type='password' 
-                        name='password' 
-                        onChange={(e)=> loginDispatch({type: ActionType.Password, payload: e.target.value})} 
-                        placeholder='Hasło' 
-                        autoComplete='current-password'
+                    <div className='login-password-wrapper'>
+                        <input 
+                            ref={passwordRef}
+                            type='password' 
+                            name='password' 
+                            onChange={(e)=> loginDispatch({type: ActionType.Password, payload: e.target.value})} 
+                            placeholder='Hasło' 
+                            autoComplete='current-password'
                         ></input>
+                        <div className='login-password-reveal' onClick={() => handleInputVisibility(passwordRef)}>Pokaż</div>
+                    </div>
                     <input 
                         type='submit' 
                         name='submit' 
