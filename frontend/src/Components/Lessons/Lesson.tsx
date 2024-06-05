@@ -13,12 +13,12 @@ function Lesson({ lessonNumber, lessonDesc }: LessonProps) {
         /*
             some fetch-lessons logic here (maybe, or: fetching from parent component)
         */
-    })
+    }, []);
 
     return (
         <>
             <article className='lessons-lesson'>
-                <div className='lessons-lesson-title'>Lesson {lessonNumber}</div>
+                <div className='lessons-lesson-title'>Lekcja {lessonNumber}</div>
                 <div>{lessonDesc}</div>
             </article>
         </>
