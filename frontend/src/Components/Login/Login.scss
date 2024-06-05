@@ -85,6 +85,36 @@
     }
 }
 
+.login-password-wrapper {
+    width: 100%;
+
+    position: relative;
+
+    display: flex;
+
+    input {
+        width: 100%;
+    }
+}
+
+.login-password-reveal {
+    position: absolute;
+
+    left: 90%;
+
+    margin: 0.5em 0;
+    padding: 0.5em 0;
+
+    font-size: 13px;
+
+    &:hover {
+        color: $baseColor;
+    }
+
+    cursor: pointer;
+}
+
+
 
 // ---> MEDIA QUERIES
 
@@ -96,6 +126,9 @@
 }
 
 @media (max-width: $laptop) {
+    .login-password-reveal {
+        left: 85%;
+    }
 }
 
 @media (max-width: $tablet) {
