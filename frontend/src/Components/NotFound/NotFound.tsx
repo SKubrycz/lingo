@@ -29,7 +29,14 @@ function NotFound() {
     return (
         <div className='wrapper'>
             <Navbar link={linkArray} options={optionsArray}></Navbar>
-            <h1>{info}</h1>
+            <main className='main-notfound'>
+                <h1>{info}</h1>
+                <h3>Niestety, nie znaleźliśmy tego czego szukasz...</h3>
+                <h3>...ale zawsze możesz poszukać gdzie indziej...</h3>
+                <h3>...na przykład na stronie głównej!</h3><br></br>
+                <h2>Powrót na stronę główną:</h2>
+                <button className='main-notfound-button'><Link to='/'>Strona główna</Link></button>
+            </main>
         </div>
     );
 }
