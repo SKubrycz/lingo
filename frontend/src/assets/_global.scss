@@ -231,3 +231,14 @@ button {
         transform: scale(100%);
     }
 }
+
+@keyframes comeUpLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
