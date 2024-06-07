@@ -74,17 +74,19 @@ function MainHome() {
     }, []);
 
     return (
-        <main className='home-main'>
-            <StateInfo></StateInfo>
-            <h1>LOGO</h1>
-            <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
-            <div>
-                {state.hours < 10 ? 0 : ''}{state.hours}:
-                {state.minutes < 10 ? 0 : ''}{state.minutes}:
-                {state.seconds < 10 ? 0 : ''}{state.seconds}
-            </div>
-            <StartHome></StartHome>
-        </main>
+        <div className='home-main-wrapper'>
+            <main className='home-main'>
+                <StateInfo></StateInfo>
+                <h1>LOGO</h1>
+                <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum egestas elementum.</h3>
+                <div>
+                    {state.hours < 10 ? 0 : ''}{state.hours}:
+                    {state.minutes < 10 ? 0 : ''}{state.minutes}:
+                    {state.seconds < 10 ? 0 : ''}{state.seconds}
+                </div>
+                <StartHome></StartHome>
+            </main>
+        </div>
     );
 }
 
