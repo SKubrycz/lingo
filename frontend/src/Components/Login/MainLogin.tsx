@@ -100,7 +100,7 @@ function MainLogin() {
                             placeholder='Hasło' 
                             autoComplete='current-password'
                         ></input>
-                        <div className='login-password-reveal' onClick={() => handleInputVisibility(passwordRef)}>Pokaż</div>
+                        <div className='login-password-reveal' onClick={(e) => handleInputVisibility(e, passwordRef)}>Pokaż</div>
                     </div>
                     <input 
                         type='submit' 
