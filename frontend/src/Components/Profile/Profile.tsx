@@ -60,7 +60,7 @@ function Profile() {
             }
           } catch (error) {
             console.error("Failed to fetch user data:", error);
-            setMessage('Sesja wygasła. Proszę zalogować się ponownie');
+            //setMessage('Sesja wygasła. Proszę zalogować się ponownie');
             navigate('/');
           }
         };
