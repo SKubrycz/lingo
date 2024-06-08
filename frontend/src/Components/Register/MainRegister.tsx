@@ -122,7 +122,7 @@ function MainRegister() {
                             placeholder='Hasło' 
                             autoComplete='new-password'
                         ></input>
-                        <div className='register-password-reveal' onClick={() => handleInputVisibility(passwordRef)}>Pokaż</div>
+                        <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordRef)}>Pokaż</div>
                     </div>
                     <div className='register-password-wrapper'>
                         <input 
@@ -133,9 +133,8 @@ function MainRegister() {
                             placeholder='Hasło ponownie' 
                             autoComplete='new-password'
                         ></input>
-                        <div className='register-password-reveal' onClick={() => handleInputVisibility(passwordAgainRef)}>Pokaż</div>
+                        <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordAgainRef)}>Pokaż</div>
                     </div>
-                    
                     <input 
                         type='submit' 
                         name='submit' 
