@@ -13,15 +13,28 @@
 }
 
 .main-about {
-    width: 50%;
+    width: 100%;
 
     padding: 2em;
 
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    align-items: center;
 
     background-color: $baseBgPlus;
+}
+
+.main-about-content {
+    width: 75%;
+
+    h2, h4 {
+        animation: 0.4s comeUpLeft ease-out 1;
+    }
+
+    article {
+        animation: 0.6s comeUpLeft ease-out 1;
+    }
 }
 
 
