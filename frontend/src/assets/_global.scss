@@ -132,6 +132,31 @@ button {
     z-index: 10;
 }
 
+.main-footer-wrapper {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: $baseBgPlus;
+}
+
+.main-footer {
+    width: 50%;
+
+    margin: 0;
+    padding: 1.5em 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    a, a:visited {
+        color: $fontColor;
+    }
+}
+
 
 // ---> MEDIA QUERIES
 
