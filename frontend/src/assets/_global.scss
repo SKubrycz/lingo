@@ -8,6 +8,23 @@ button {
     cursor: pointer;
 }
 
+//custom scrollbar
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: $baseBg;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $baseColor;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: adjust-color($color: $baseColor, $blackness: 10%);
+}
+
 .wrapper {
     width: 100%;
     //height: 100vh;
