@@ -5,9 +5,10 @@ import './Lessons.scss';
 interface LessonProps {
     lessonNumber: number;
     lessonDesc: string;
+    lessonStyle: Object;
 }
 
-function Lesson({ lessonNumber, lessonDesc }: LessonProps) {
+function Lesson({ lessonNumber, lessonDesc, lessonStyle }: LessonProps) {
     
     useEffect(() => {
         /*
@@ -18,8 +19,8 @@ function Lesson({ lessonNumber, lessonDesc }: LessonProps) {
     return (
         <>
             <article className='lessons-lesson'>
-                <div className='lessons-lesson-title'>Lekcja {lessonNumber}</div>
-                <div>{lessonDesc}</div>
+                <div className='lessons-lesson-title' style={lessonStyle}>Lekcja {lessonNumber}</div>
+                <div style={lessonStyle}>{lessonDesc}</div>
             </article>
         </>
     );
