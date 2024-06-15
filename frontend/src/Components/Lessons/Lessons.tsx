@@ -40,7 +40,12 @@ function Lessons() {
         handleAuth();
     }, []);
 
-    return(
+    const lessonStyle = {
+        animation: `0.6s comeUpLeft ease-out 1`,
+        animationDelay: '',
+    };
+
+    return (
         <div className='wrapper'>
             <StateInfo></StateInfo>
             <Navbar link={linkArray} options={optionsArray}></Navbar>
@@ -48,8 +53,17 @@ function Lessons() {
             <div className='lessons-wrapper'>
                 <div className='lessons-title'>Wszystkie lekcje:</div>
                 {lessonNumbers.map((value: number, index: number) => {
+                    const numLessons = lessonNumbers.length;
+                    const animationDelay = `${(index / ((numLessons - 1) * 2)) - 0.25}s`;
+                    console.log(`${index}: ${animationDelay}`);
+
                     return (
-                        <Lesson key={index} lessonNumber={value} lessonDesc={lessonDesc}></Lesson>
+                        <Lesson 
+                            key={index} 
+                            lessonNumber={value} 
+                            lessonDesc={lessonDesc}
+                            lessonStyle={{...lessonStyle, animationDelay}}
+                        ></Lesson>
                     )
                 })}
             </div>
