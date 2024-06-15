@@ -11,6 +11,10 @@ button {
 //custom scrollbar
 ::-webkit-scrollbar {
     width: 15px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
 }
 
 ::-webkit-scrollbar-track {
