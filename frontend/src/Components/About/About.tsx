@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../Reusables/Navbar/Navbar';
 import StateInfo from '../Reusables/StateInfo/StateInfo';
 import MainAbout from './MainAbout';
+import Footer from '../Reusables/Footer/Footer';
 
 import { useMessage } from '../..';
 
@@ -14,6 +15,9 @@ function About() {
 
     const [linkArray, setLinkArray] = useState<string[]>(['/login', '/register']);
     const [optionsArray, setOptionsArray] = useState<string[]>(['Logowanie', 'Rejestracja']);
+
+    const footerLinkArray: string[] = ['/about', '/login', '/register'];
+    const footerOptionsArray: string[] = ['O aplikacji', 'Logowanie', 'Rejestracja'];
 
     const { message, setMessage } = useMessage();
 
@@ -46,6 +50,7 @@ function About() {
                 <StateInfo></StateInfo>
                 <Navbar link={linkArray} options={optionsArray}></Navbar>
                 <MainAbout></MainAbout>
+                <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
             </div>
         </>
     );
