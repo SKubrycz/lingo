@@ -219,10 +219,20 @@ button {
     .state-info {
         top: 12%;
     }
+
+    .main-footer {
+        font-size: 13px;
+    }
 }
 
 @media (max-width: $mobileL) {
+    .main-footer {
+        flex-direction: column;
 
+        a, a:visited {
+            margin: .7em;
+        }
+    }
 }
 
 @media (max-width: $mobileM) {
