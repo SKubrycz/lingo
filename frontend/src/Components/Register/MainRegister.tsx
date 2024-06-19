@@ -93,6 +93,8 @@ function MainRegister() {
             })
     };
 
+    const inputLength = 30;
+
     return (
         <div className='main-register-wrapper'>
             <main className='main-register'>
@@ -105,6 +107,7 @@ function MainRegister() {
                         onChange={(e) => registerDispatch({type: ActionType.Email, payload: e.target.value})}
                         placeholder='Adres Email' 
                         autoComplete='email'
+                        maxLength={inputLength}
                     ></input>
                     <input 
                         type='login' 
@@ -112,6 +115,7 @@ function MainRegister() {
                         onChange={(e) => registerDispatch({type: ActionType.Login, payload: e.target.value})}
                         placeholder='Nazwa użytkownika' 
                         autoComplete='username'
+                        maxLength={inputLength}
                     ></input>
                     <div className='register-password-wrapper'>
                         <input
@@ -121,6 +125,7 @@ function MainRegister() {
                             onChange={(e) => registerDispatch({type: ActionType.Password, payload: e.target.value})}
                             placeholder='Hasło' 
                             autoComplete='new-password'
+                            maxLength={inputLength}
                         ></input>
                         <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordRef)}>Pokaż</div>
                     </div>
@@ -132,6 +137,7 @@ function MainRegister() {
                             onChange={(e) => registerDispatch({type: ActionType.PasswordAgain, payload: e.target.value})}
                             placeholder='Hasło ponownie' 
                             autoComplete='new-password'
+                            maxLength={inputLength}
                         ></input>
                         <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordAgainRef)}>Pokaż</div>
                     </div>
