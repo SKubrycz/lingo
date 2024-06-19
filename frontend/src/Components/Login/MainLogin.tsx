@@ -77,6 +77,7 @@ function MainLogin() {
             })
     };
 
+    const inputLength = 30;
 
     return (
         <div className='main-login-wrapper'>
@@ -90,6 +91,7 @@ function MainLogin() {
                         onChange={(e) => loginDispatch({type: ActionType.Login, payload: e.target.value})} 
                         placeholder='Nazwa użytkownika' 
                         autoComplete='username'
+                        maxLength={inputLength}
                     ></input>
                     <div className='login-password-wrapper'>
                         <input 
@@ -99,6 +101,7 @@ function MainLogin() {
                             onChange={(e)=> loginDispatch({type: ActionType.Password, payload: e.target.value})} 
                             placeholder='Hasło' 
                             autoComplete='current-password'
+                            maxLength={inputLength}
                         ></input>
                         <div className='login-password-reveal' onClick={(e) => handleInputVisibility(e, passwordRef)}>Pokaż</div>
                     </div>
