@@ -27,9 +27,11 @@ router.post('/login', async (req, res) => {
 
         console.log(token);
 
+        const minutes = 15;
+
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 1000 * 60 * 5,
+            maxAge: 1000 * 60 * minutes,
         });
 
         return res.status(200).send('Zalogowano');
