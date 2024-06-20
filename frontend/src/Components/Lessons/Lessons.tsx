@@ -9,12 +9,16 @@ import Lesson from './Lesson';
 import { useMessage } from '../..';
 
 import './Lessons.scss';
+import Footer from '../Reusables/Footer/Footer';
 
 function Lessons() {
     const [lessonNumbers, setLessonNumbers] = useState<number[]>([])
 
     const [linkArray, setLinkArray] = useState<string[]>(['/about', '/profile', '/logout']);
     const optionsArray: string[] = ['O aplikacji', 'Profil', 'Wyloguj'];
+
+    const footerLinkArray: string[] = ['/about', '/login', '/register'];
+    const footerOptionsArray: string[] = ['O aplikacji', 'Logowanie', 'Rejestracja'];
 
     const { message, setMessage } = useMessage();
 
@@ -67,6 +71,7 @@ function Lessons() {
                     )
                 })}
             </div>
+            <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
         </div>
     );
 }
