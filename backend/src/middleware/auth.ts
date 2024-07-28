@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const checkAuth = (req, res, next) => {
-    const token = req.cookies.token;
+    const token: string = req.cookies.token;
 
     console.log(token);
 
@@ -11,6 +11,7 @@ const checkAuth = (req, res, next) => {
     try {
         const userVerify = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         res.user = userVerify;
+        console.log(res.user);
         next();
     } catch (error) {
         res.status(401).send('Nieprawidłowy token');
@@ -18,14 +19,13 @@ const checkAuth = (req, res, next) => {
 }
 
 const isAuthenticated = (req, res, next) => {
-    const token = req.cookies.token;
+    const token: string = req.cookies.token;
 
     console.log('token: ' + token);
 
     if (token) {
         const userVerify = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         res.user = userVerify;
-        console.log(res.user);
         next();
     } else {
         next();

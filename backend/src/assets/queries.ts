@@ -1,6 +1,19 @@
+import { ObjectId } from "mongodb";
+
 const runDB = require('../assets/db');
 
-const insertOneUser = async (email, login, hash) => {
+interface User { 
+    email: string;
+    login: string;
+    hash?: string;
+}
+
+interface Lesson {
+    id: ObjectId;
+    number: number;
+}
+
+const insertOneUser = async (email, login, hash): Promise<User> => {
     const db = await runDB();
             
     try {
@@ -12,11 +25,11 @@ const insertOneUser = async (email, login, hash) => {
         });
         console.log(result);
     } finally {
-        db.client.close();
+        return db.client.close();
     }
 }
 
-const findOneUser = async (email, login) => {
+const findOneUser = async (email: string, login: string): Promise<User> => {
     const db = await runDB();
     
     const userCollection = db.collection('users');
@@ -37,7 +50,7 @@ const findOneUser = async (email, login) => {
     return result;
 }
 
-const findOneUserByLogin = async (login) => {
+const findOneUserByLogin = async (login: string): Promise<string> => {
     const db = await runDB();
     
     const userCollection = db.collection('users');
@@ -55,14 +68,14 @@ const findOneUserByLogin = async (login) => {
     return result;
 }
 
-const findLessons = async () => {
+const findLessons = async (): Promise<number[]> => {
     const db = await runDB();
 
     const lessonsCollection = db.collection('lessons');
 
-    const resultArr = [];
-    const result = await lessonsCollection.find({}, { projection: { _id: 0, number: 1 } });
-    await result.forEach(doc => resultArr.push(doc.number));
+    const resultArr: number[] = [];
+    const result: Lesson[] = await lessonsCollection.find({}, { projection: { _id: 0, number: 1 } });
+    await result.forEach((doc: Lesson) => resultArr.push(doc.number));
 
     setTimeout(() => {
         db.client.close();
