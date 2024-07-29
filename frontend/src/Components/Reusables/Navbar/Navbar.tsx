@@ -53,9 +53,9 @@ function Navbar({ link, options }: NavbarProps) {
 
   return (
     <>
-      <Box className="navbar-color">
+      <Box sx={{ flexGrow: 1, width: "100%" }} className="navbar-color">
         <ThemeProvider theme={darkTheme}>
-          <AppBar component="nav" position="fixed" elevation={trigger ? 4 : 0}>
+          <AppBar component="nav" position="sticky" elevation={trigger ? 4 : 0}>
             <Toolbar>
               <Typography
                 variant="h5"
