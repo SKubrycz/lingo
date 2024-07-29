@@ -1,59 +1,107 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, cloneElement } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import BurgerIcon from '../../../assets/icons/burger.svg';
+import BurgerIcon from "../../../assets/icons/burger.svg";
+import { AppBar, Toolbar, Typography, Box, CssBaseline } from "@mui/material";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 interface NavbarProps {
-    link: string[];
-    options: string[];
+  link: string[];
+  options: string[];
 }
 
 function Navbar({ link, options }: NavbarProps) {
-    const [display, setDisplay] = useState<string>('none');
+  const [display, setDisplay] = useState<string>("none");
 
-    const navBurgerStyle: Object = {
-        display: display
-    };
+  const darkTheme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "rgb(230, 92, 0)",
+      },
+    },
+  });
 
-    const handleDisplay = () => {
-        if (display === 'none') {
-            setDisplay('flex');    
-        } else if (display === 'flex') {
-            setDisplay('none');
-        } else return;
-    }
+  const navBurgerStyle: Object = {
+    display: display,
+  };
 
-    const handleDisplayOnResize = () => {
-        if (window.innerWidth > 768) setDisplay('none');
-    }
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+  });
 
-    useEffect(() => {
-        window.addEventListener('resize', handleDisplayOnResize)
+  const handleDisplay = () => {
+    if (display === "none") {
+      setDisplay("flex");
+    } else if (display === "flex") {
+      setDisplay("none");
+    } else return;
+  };
 
-        return () => window.removeEventListener('resize', handleDisplayOnResize);
-    }, []);
+  const handleDisplayOnResize = () => {
+    if (window.innerWidth > 768) setDisplay("none");
+  };
 
-    return (
-        <div className='navbar-wrapper'>
-            <nav className='navbar'>
-                <Link to='/' className='navbar-logo'>LOGO</Link>
+  useEffect(() => {
+    window.addEventListener("resize", handleDisplayOnResize);
+
+    return () => window.removeEventListener("resize", handleDisplayOnResize);
+  }, []);
+
+  return (
+    <>
+      <Box sx={{ flexGrow: 1, width: "100%" }} className="navbar-color">
+        <ThemeProvider theme={darkTheme}>
+          <AppBar component="nav" position="sticky" elevation={trigger ? 4 : 0}>
+            <Toolbar>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  flexGrow: 1,
+                  display: "block",
+                  fontFamily: "Fira Sans",
+                  fontWeight: "500",
+                }}
+              >
+                <Link to="/">LOGO</Link>
+              </Typography>
+              <Box>
                 {options.map((value, index) => {
-                    return (
-                        <Link key={index} to={link[index]}>{value}</Link>
-                    )
+                  return (
+                    <Link key={index} to={link[index]}>
+                      {value}
+                    </Link>
+                  );
                 })}
-                <div className='navbar-burger' onClick={() => handleDisplay()}><img src={BurgerIcon} alt='burger-icon'></img></div>
-            </nav>
-            <div className='navbar-burger-options' style={navBurgerStyle}>
-                {options.map((value, index) => {
-                    return (
-                        <Link key={index} to={link[index]}>{value}</Link>
-                    )
-                })}
-            </div>
-        </div>
-    );
+              </Box>
+            </Toolbar>
+          </AppBar>
+        </ThemeProvider>
+      </Box>
+      {/* <div className='navbar-wrapper'>
+                <nav className='navbar'>
+                    <Link to='/' className='navbar-logo'>LOGO</Link>
+                    {options.map((value, index) => {
+                        return (
+                            <Link key={index} to={link[index]}>{value}</Link>
+                        )
+                    })}
+                    <div className='navbar-burger' onClick={() => handleDisplay()}><img src={BurgerIcon} alt='burger-icon'></img></div>
+                </nav>
+                <div className='navbar-burger-options' style={navBurgerStyle}>
+                    {options.map((value, index) => {
+                        return (
+                            <Link key={index} to={link[index]}>{value}</Link>
+                        )
+                    })}
+                </div>
+            </div> */}
+    </>
+  );
 }
 
 export default Navbar;

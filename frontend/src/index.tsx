@@ -1,16 +1,17 @@
-import React, { createContext, useContext, useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './index.scss';
-import NotFound from './Components/NotFound/NotFound';
-import Home from './Components/Home/Home';
-import Login from './Components/Login/Login';
-import Register from './Components/Register/Register';
-import About from './Components/About/About';
-import Profile from './Components/Profile/Profile';
-import Lessons from './Components/Lessons/Lessons';
-import Logout from './Components/Logout/Logout';
-import reportWebVitals from './reportWebVitals';
+import React, { createContext, useContext, useState } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import "./index.scss";
+import NotFound from "./Components/NotFound/NotFound";
+import Home from "./Components/Home/Home";
+import Login from "./Components/Login/Login";
+import Register from "./Components/Register/Register";
+import About from "./Components/About/About";
+import Profile from "./Components/Profile/Profile";
+import Lessons from "./Components/Lessons/Lessons";
+import Logout from "./Components/Logout/Logout";
+import reportWebVitals from "./reportWebVitals";
 
 export const MessageContext = createContext<{
   message: string | undefined;
@@ -20,7 +21,9 @@ export const MessageContext = createContext<{
   setMessage: () => {},
 });
 
-export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [message, setMessage] = useState<string | undefined>(undefined);
 
   return (
@@ -32,26 +35,37 @@ export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({ childre
 
 export const useMessage = () => useContext(MessageContext);
 
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: "Fira Sans",
+  },
+});
+
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-      <MessageProvider>
+    <MessageProvider>
+      <ThemeProvider theme={defaultTheme}>
         <BrowserRouter>
           <Routes>
-            <Route path='*' element={<NotFound></NotFound>}></Route>
-            <Route path='/' element={<Home></Home>}></Route>
-            <Route path='/login' element={<Login></Login>}></Route>
-            <Route path='/register' element={<Register></Register>}></Route>
-            <Route path='/about' element={<About></About>}></Route>
-            <Route path='/profile' element={<Profile></Profile>}></Route>
-            <Route path='/profile/:userId' element={<Profile></Profile>}></Route>
-            <Route path='/lessons' element={<Lessons></Lessons>}></Route>
-            <Route path='/logout' element={<Logout></Logout>}></Route>
+            <Route path="*" element={<NotFound></NotFound>}></Route>
+            <Route path="/" element={<Home></Home>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/register" element={<Register></Register>}></Route>
+            <Route path="/about" element={<About></About>}></Route>
+            <Route path="/profile" element={<Profile></Profile>}></Route>
+            <Route
+              path="/profile/:userId"
+              element={<Profile></Profile>}
+            ></Route>
+            <Route path="/lessons" element={<Lessons></Lessons>}></Route>
+            <Route path="/logout" element={<Logout></Logout>}></Route>
           </Routes>
         </BrowserRouter>
-      </MessageProvider>
+      </ThemeProvider>
+    </MessageProvider>
   </React.StrictMode>
 );
 

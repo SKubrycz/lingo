@@ -1,4 +1,6 @@
 a, a:visited {
+    padding: .5em;
+
     text-decoration: none;
 
     color: adjust-color($color: $baseColor, $lightness: 50%);
@@ -96,6 +98,11 @@ button {
     }
 
     cursor: pointer;
+}
+
+.navbar-color {
+    color: adjust-color($color: $baseColor, $lightness: 50%);
+    background-color: $baseColor;
 }
 
 .navbar-burger {
