@@ -50,6 +50,5 @@
     "globals": "^15.8.0",
     "sass": "^1.72.0",
     "typescript-eslint": "^7.17.0"
-  },
-  "proxy": "http://localhost:8000/"
+  }
 }
