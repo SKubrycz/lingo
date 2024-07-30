@@ -1,4 +1,4 @@
-const handleInputVisibility = (e: React.MouseEvent<HTMLDivElement>, inputRef: React.RefObject<HTMLInputElement>) => {
+const handleInputVisibility = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<SVGSVGElement>, inputRef: React.RefObject<HTMLInputElement>) => {
     if (inputRef && inputRef.current) {
         const target = e.target as HTMLElement;
         if (inputRef.current.type === 'password') {
@@ -10,5 +10,7 @@ const handleInputVisibility = (e: React.MouseEvent<HTMLDivElement>, inputRef: Re
         }
     }
 }
+
+//TODO: Once no references -> remove!
 
 export default handleInputVisibility;
