@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Navbar from "../Reusables/Navbar/Navbar";
-import StateInfo from "../Reusables/StateInfo/StateInfo";
+import StateInfo from "../Reusables/Informational/StateInfo";
 import Lesson from "./Lesson";
 
 import { useMessage } from "../..";

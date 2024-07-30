@@ -13,10 +13,15 @@ import {
   Input,
   TextField,
   InputAdornment,
+  Snackbar,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
 
 import { useMessage } from "../..";
+
+import ErrorSnackbar from "../Reusables/Informational/ErrorSnackbar";
 
 import handleInputVisibility from "../Reusables/Functions/handleInputVisibility";
 
@@ -63,6 +68,7 @@ function MainLogin() {
 
   const [error, setError] = useState<string | null>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -90,6 +96,17 @@ function MainLogin() {
       });
   };
 
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setShowSnackbar(false);
+  };
+
   const inputLength = 30;
 
   return (
@@ -100,7 +117,6 @@ function MainLogin() {
       >
         Zaloguj się
       </Typography>
-      <h3 className="error-text">{error}</h3>
       <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
         <Box
           component="form"
@@ -117,7 +133,6 @@ function MainLogin() {
             onChange={(e) =>
               loginDispatch({ type: ActionType.Login, payload: e.target.value })
             }
-            placeholder="Nazwa użytkownika"
             autoComplete="username"
           ></TextField>
           <TextField
@@ -149,7 +164,6 @@ function MainLogin() {
                 </InputAdornment>
               ),
             }}
-            placeholder="Hasło"
             autoComplete="current-password"
           />
           <Button
@@ -158,9 +172,15 @@ function MainLogin() {
             name="submit"
             value="Zaloguj"
             sx={{ margin: "1.5em .5em" }}
+            onClick={() => setShowSnackbar(!showSnackbar)}
           >
             Zaloguj
           </Button>
+          <ErrorSnackbar
+            error={error}
+            showSnackbar={showSnackbar}
+            handleCloseSnackbar={handleCloseSnackbar}
+          ></ErrorSnackbar>
         </Box>
       </Box>
     </Container>

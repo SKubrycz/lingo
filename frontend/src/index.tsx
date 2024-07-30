@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import "./index.scss";
+import { defaultTheme } from "./defaultTheme";
 import NotFound from "./Components/NotFound/NotFound";
 import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";
@@ -34,27 +35,6 @@ export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({
 };
 
 export const useMessage = () => useContext(MessageContext);
-
-const defaultTheme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: "rgb(230, 92, 0)",
-    },
-  },
-  typography: {
-    fontFamily: "Fira Sans",
-  },
-  components: {
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          margin: ".5em",
-        },
-      },
-    },
-  },
-});
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
