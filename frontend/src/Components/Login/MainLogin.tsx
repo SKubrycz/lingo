@@ -102,7 +102,8 @@ function MainLogin() {
       </Typography>
       <h3 className="error-text">{error}</h3>
       <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
-        <form
+        <Box
+          component="form"
           className="login-form"
           method="post"
           onSubmit={(e) => handleSubmit(e)}
@@ -160,7 +161,7 @@ function MainLogin() {
           >
             Zaloguj
           </Button>
-        </form>
+        </Box>
       </Box>
     </Container>
   );
