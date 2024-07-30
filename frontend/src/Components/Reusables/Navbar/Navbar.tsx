@@ -53,35 +53,32 @@ function Navbar({ link, options }: NavbarProps) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, width: "100%" }} className="navbar-color">
-        <ThemeProvider theme={darkTheme}>
-          <AppBar component="nav" position="sticky" elevation={trigger ? 4 : 0}>
-            <Toolbar>
-              <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  flexGrow: 1,
-                  display: "block",
-                  fontFamily: "Fira Sans",
-                  fontWeight: "500",
-                }}
-              >
-                <Link to="/">LOGO</Link>
-              </Typography>
-              <Box>
-                {options.map((value, index) => {
-                  return (
-                    <Link key={index} to={link[index]}>
-                      {value}
-                    </Link>
-                  );
-                })}
-              </Box>
-            </Toolbar>
-          </AppBar>
-        </ThemeProvider>
-      </Box>
+      <AppBar component="nav" position="fixed" elevation={trigger ? 4 : 0}>
+        <Toolbar className="navbar-color">
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              display: "block",
+              fontFamily: "Fira Sans",
+              fontWeight: "500",
+            }}
+          >
+            <Link to="/">LOGO</Link>
+          </Typography>
+          <Box>
+            {options.map((value, index) => {
+              return (
+                <Link key={index} to={link[index]}>
+                  {value}
+                </Link>
+              );
+            })}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <div style={{ width: "100%", height: "64px" }}></div>
       {/* <div className='navbar-wrapper'>
                 <nav className='navbar'>
                     <Link to='/' className='navbar-logo'>LOGO</Link>
