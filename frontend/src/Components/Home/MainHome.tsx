@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useReducer } from "react";
 
-import { Container, Box } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 
 import StateInfo from "../Reusables/StateInfo/StateInfo";
 import StartHome from "./StartHome";
@@ -82,20 +82,14 @@ function MainHome() {
   return (
     <>
       <Container maxWidth="lg">
-        <Box>
+        <Box className="home-main">
           <StateInfo></StateInfo>
-          <h1>LOGO</h1>
-          <h3>
+          <Typography variant="h3">LOGO</Typography>
+          <Typography variant="h6">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
             interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum
             egestas elementum.
-          </h3>
-          <div>
-            {state.hours < 10 ? 0 : ""}
-            {state.hours}:{state.minutes < 10 ? 0 : ""}
-            {state.minutes}:{state.seconds < 10 ? 0 : ""}
-            {state.seconds}
-          </div>
+          </Typography>
           <StartHome></StartHome>
         </Box>
       </Container>
