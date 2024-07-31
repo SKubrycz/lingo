@@ -13,17 +13,13 @@ import {
   Input,
   TextField,
   InputAdornment,
-  Snackbar,
-  Alert,
-  AlertTitle,
 } from "@mui/material";
-import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useMessage } from "../..";
 
+import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import ErrorSnackbar from "../Reusables/Informational/ErrorSnackbar";
-
-import handleInputVisibility from "../Reusables/Functions/handleInputVisibility";
 
 type LoginState = {
   login: string;
@@ -133,39 +129,23 @@ function MainLogin() {
             onChange={(e) =>
               loginDispatch({ type: ActionType.Login, payload: e.target.value })
             }
+            inputProps={{
+              maxLength: inputLength,
+            }}
             autoComplete="username"
           ></TextField>
-          <TextField
+          <PasswordInput
             label="Hasło"
-            variant="standard"
-            inputRef={passwordRef}
-            type={showPassword ? "text" : "password"}
             name="password"
-            onChange={(e) =>
+            inputLength={inputLength}
+            autoComplete="current-password"
+            inputDispatch={(e) =>
               loginDispatch({
                 type: ActionType.Password,
                 payload: e.target.value,
               })
             }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? (
-                      <VisibilityOff></VisibilityOff>
-                    ) : (
-                      <Visibility></Visibility>
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            autoComplete="current-password"
-          />
+          ></PasswordInput>
           <Button
             type="submit"
             variant="contained"

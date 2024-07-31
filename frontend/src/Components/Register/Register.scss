@@ -39,31 +39,6 @@
 
     display: flex;
     flex-direction: column;
-    
-    input:not(input[type=submit]) {
-        margin: .5em 0;
-        padding: .5em 0;
-
-        border: none;
-        border-bottom: 2px solid $fontColor;
-
-        outline: none;
-
-        background-color: transparent;
-
-        &::placeholder {
-            color: $fontGrayish;
-        }
-
-        &:focus::placeholder {
-            color: adjust-color($color: $fontGrayish, $lightness: -5%, $saturation: 10%)
-        }
-
-        &:focus {
-            border-bottom: 2px solid $baseColor;
-            transition: border-bottom .2s;
-        }
-    }
 
     input[type=submit] {
         margin: 1em 0;
