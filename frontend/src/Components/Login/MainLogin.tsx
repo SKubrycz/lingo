@@ -107,13 +107,13 @@ function MainLogin() {
 
   return (
     <Container component="div">
-      <Typography
-        variant="h5"
-        sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
-      >
-        Zaloguj się
-      </Typography>
-      <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
+      <Box component="main" className="main-login">
+        <Typography
+          variant="h5"
+          sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
+        >
+          Zaloguj się
+        </Typography>
         <Box
           component="form"
           className="login-form"

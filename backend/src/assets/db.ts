@@ -3,7 +3,7 @@ const MongoClient = require("mongodb").MongoClient;
 const uri = 
     "mongodb://localhost:27017/language-app";
 
-const client = new MongoClient(uri, {});
+const client = new MongoClient(uri, { connectTimeoutMS: 30000 });
 
 const runDB = async () => {
     try {
@@ -13,7 +13,7 @@ const runDB = async () => {
         return client.db('language-app');
     } catch (err) {
         console.log('mongodb err', err);
-        client.close();
+        if (client.isConnected()) client.close();
     }
 }
 runDB().catch(console.dir);
