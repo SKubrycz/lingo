@@ -114,13 +114,13 @@ function MainRegister() {
 
   return (
     <Container component="div">
-      <Typography
-        variant="h5"
-        sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
-      >
-        Rejestracja
-      </Typography>
-      <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
+      <Box component="main" className="main-register">
+        <Typography
+          variant="h5"
+          sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
+        >
+          Rejestracja
+        </Typography>
         <Box
           component="form"
           className="register-form"
