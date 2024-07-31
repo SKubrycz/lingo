@@ -1,155 +1,208 @@
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-import { useEffect, useReducer, useState, useRef } from 'react';
+import { useEffect, useReducer, useState, useRef } from "react";
 
-import { useMessage } from '../../';
+import { Container, Box, TextField, Typography, Button } from "@mui/material";
 
-import handleInputVisibility from '../Reusables/Functions/handleInputVisibility';
+import { useMessage } from "../../";
+
+import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
+import ErrorSnackbar from "../Reusables/Informational/ErrorSnackbar";
 
 type RegisterState = {
-    email: string;
-    login: string;
-    password: string;
-    passwordAgain: string;
-}
+  email: string;
+  login: string;
+  password: string;
+  passwordAgain: string;
+};
 
 enum ActionType {
-    Email = 'email',
-    Login = 'login',
-    Password = 'password',
-    PasswordAgain = 'passwordAgain',
+  Email = "email",
+  Login = "login",
+  Password = "password",
+  PasswordAgain = "passwordAgain",
 }
 
 interface RegisterActions {
-    type: ActionType;
-    payload?: string;
+  type: ActionType;
+  payload?: string;
 }
 
 const loginReducer = (state: RegisterState, action: RegisterActions) => {
-    const { type, payload } = action;
-    switch (type) {
-        case ActionType.Email:
-            //console.log(state.email);
-            return {
-                ...state,
-                email: payload || '',
-            };
-        case ActionType.Login:
-            //console.log(state.login);
-            return {
-                ...state,
-                login: payload || '',
-            };
-        case ActionType.Password:
-            //console.log(state.password);
-            return {
-                ...state,
-                password: payload || '',
-            };
-        case ActionType.PasswordAgain:
-            //console.log(state.passwordAgain);
-            return {
-                ...state,
-                passwordAgain: payload || '',
-            }
-        default:
-            throw new Error(`No such action: ${action.type}`);
-    }
-}
+  const { type, payload } = action;
+  switch (type) {
+    case ActionType.Email:
+      //console.log(state.email);
+      return {
+        ...state,
+        email: payload || "",
+      };
+    case ActionType.Login:
+      //console.log(state.login);
+      return {
+        ...state,
+        login: payload || "",
+      };
+    case ActionType.Password:
+      //console.log(state.password);
+      return {
+        ...state,
+        password: payload || "",
+      };
+    case ActionType.PasswordAgain:
+      //console.log(state.passwordAgain);
+      return {
+        ...state,
+        passwordAgain: payload || "",
+      };
+    default:
+      throw new Error(`No such action: ${action.type}`);
+  }
+};
 
 function MainRegister() {
-    const [registerData, registerDispatch] = useReducer(loginReducer, {
-        email: '',
-        login: '',
-        password: '',
-        passwordAgain: '',
-    });
+  const [registerData, registerDispatch] = useReducer(loginReducer, {
+    email: "",
+    login: "",
+    password: "",
+    passwordAgain: "",
+  });
 
-    const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | null>();
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const passwordAgainRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordAgainRef = useRef<HTMLInputElement>(null);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const { message, setMessage } = useMessage();
+  const { message, setMessage } = useMessage();
 
-    useEffect(() => {
-        setMessage(undefined);
-    }, [message, setMessage]);
+  useEffect(() => {
+    setMessage(undefined);
+  }, [message, setMessage]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-        await axios.post('http://localhost:8000/register', registerData)
-            .then(() => {
-                setMessage('Rejestracja przebiegła pomyślnie');
-                console.log(message);
-                navigate('/', { state: 'Rejestracja przebiegła pomyślnie' });
-            }).catch((error) => {
-                setError(error.response.data);
-                console.log(error);
-            })
-    };
+    await axios
+      .post("http://localhost:8000/register", registerData)
+      .then(() => {
+        setMessage("Rejestracja przebiegła pomyślnie");
+        console.log(message);
+        navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
+      })
+      .catch((error) => {
+        setError(error.response.data);
+        console.log(error);
+      });
+  };
 
-    const inputLength = 30;
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
-    return (
-        <div className='main-register-wrapper'>
-            <main className='main-register'>
-                <h2 className='main-register-title'>Zarejestruj się</h2>
-                <h3 className='error-text'>{error}</h3>
-                <form className='register-form' onSubmit={(e) => handleSubmit(e)}>
-                    <input 
-                        type='email' 
-                        name='email' 
-                        onChange={(e) => registerDispatch({type: ActionType.Email, payload: e.target.value})}
-                        placeholder='Adres Email' 
-                        autoComplete='email'
-                        maxLength={inputLength}
-                    ></input>
-                    <input 
-                        type='login' 
-                        name='login' 
-                        onChange={(e) => registerDispatch({type: ActionType.Login, payload: e.target.value})}
-                        placeholder='Nazwa użytkownika' 
-                        autoComplete='username'
-                        maxLength={inputLength}
-                    ></input>
-                    <div className='register-password-wrapper'>
-                        <input
-                            ref={passwordRef}
-                            type='password' 
-                            name='password'
-                            onChange={(e) => registerDispatch({type: ActionType.Password, payload: e.target.value})}
-                            placeholder='Hasło' 
-                            autoComplete='new-password'
-                            maxLength={inputLength}
-                        ></input>
-                        <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordRef)}>Pokaż</div>
-                    </div>
-                    <div className='register-password-wrapper'>
-                        <input 
-                            ref={passwordAgainRef}
-                            type='password' 
-                            name='password-again' 
-                            onChange={(e) => registerDispatch({type: ActionType.PasswordAgain, payload: e.target.value})}
-                            placeholder='Hasło ponownie' 
-                            autoComplete='new-password'
-                            maxLength={inputLength}
-                        ></input>
-                        <div className='register-password-reveal' onClick={(e) => handleInputVisibility(e, passwordAgainRef)}>Pokaż</div>
-                    </div>
-                    <input 
-                        type='submit' 
-                        name='submit' 
-                        value='Zarejestruj'
-                    ></input>
-                </form>
-            </main>
-        </div>
-    );
+    setShowSnackbar(false);
+  };
+
+  const inputLength = 30;
+
+  return (
+    <Container component="div">
+      <Typography
+        variant="h5"
+        sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
+      >
+        Rejestracja
+      </Typography>
+      <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          component="form"
+          className="register-form"
+          method="post"
+          onSubmit={(e) => handleSubmit(e)}
+        >
+          <TextField
+            label="Adres Email"
+            type="email"
+            name="email"
+            variant="standard"
+            autoFocus={true}
+            onChange={(e) =>
+              registerDispatch({
+                type: ActionType.Email,
+                payload: e.target.value,
+              })
+            }
+            autoComplete="email"
+            inputProps={{
+              maxLength: inputLength,
+            }}
+          ></TextField>
+          <TextField
+            label="Nazwa użytkownika"
+            type="login"
+            name="login"
+            variant="standard"
+            onChange={(e) =>
+              registerDispatch({
+                type: ActionType.Login,
+                payload: e.target.value,
+              })
+            }
+            autoComplete="username"
+            inputProps={{
+              maxLength: inputLength,
+            }}
+          ></TextField>
+          <PasswordInput
+            label="Hasło"
+            name="password"
+            inputLength={inputLength}
+            autoComplete="new-password"
+            inputDispatch={(e) =>
+              registerDispatch({
+                type: ActionType.Password,
+                payload: e.target.value,
+              })
+            }
+          ></PasswordInput>
+          <PasswordInput
+            label="Hasło ponownie"
+            name="password-again"
+            inputLength={inputLength}
+            autoComplete="new-password"
+            inputDispatch={(e) =>
+              registerDispatch({
+                type: ActionType.PasswordAgain,
+                payload: e.target.value,
+              })
+            }
+          ></PasswordInput>
+          <Button
+            type="submit"
+            variant="contained"
+            name="submit"
+            value="Zaloguj"
+            sx={{ margin: "1.5em .5em" }}
+            onClick={() => setShowSnackbar(!showSnackbar)}
+          >
+            Zarejestruj
+          </Button>
+          <ErrorSnackbar
+            error={error}
+            showSnackbar={showSnackbar}
+            handleCloseSnackbar={handleCloseSnackbar}
+          ></ErrorSnackbar>
+        </Box>
+      </Box>
+    </Container>
+  );
 }
 
 export default MainRegister;

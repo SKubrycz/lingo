@@ -4,7 +4,7 @@ import { useEffect, useReducer } from "react";
 
 import { Container, Box, Typography } from "@mui/material";
 
-import StateInfo from "../Reusables/StateInfo/StateInfo";
+import StateInfo from "../Reusables/Informational/StateInfo";
 import StartHome from "./StartHome";
 
 import { useMessage } from "../../";
