@@ -15,6 +15,13 @@ const lessonsRoute = require('./routes/lessons');
 const logoutRoute = require('./routes/logout');
 const aboutRoute = require('./routes/about');
 
+const originDomain = 'http://localhost:3000';
+
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', `script-src 'self' ${originDomain}`);
+    return next();
+});
+
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({
@@ -22,7 +29,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: originDomain,
     credentials: true,
 }));
 
