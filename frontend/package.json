@@ -49,6 +49,7 @@
     "eslint-plugin-react": "^7.35.0",
     "globals": "^15.8.0",
     "sass": "^1.72.0",
-    "typescript-eslint": "^7.17.0"
+    "typescript-eslint": "^7.17.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
