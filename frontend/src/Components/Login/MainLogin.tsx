@@ -64,7 +64,7 @@ function MainLogin() {
   };
 
   const handleCloseSnackbar = (
-    event: React.SyntheticEvent<any> | Event,
+    event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") return;

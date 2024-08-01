@@ -1,14 +1,20 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Container, Box, Typography } from "@mui/material";
 
 import StateInfo from "../Reusables/Informational/StateInfo";
 import StartHome from "./StartHome";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import { useMessage } from "../..";
 
 function MainHome() {
   const navigate = useNavigate();
+
+  const { message, setMessage } = useMessage();
+
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const handleAuth = async () => {
     await axios
@@ -24,12 +30,28 @@ function MainHome() {
 
   useEffect(() => {
     handleAuth();
+    console.log(`The message: ${message}`);
+    if (message) setShowSnackbar(true);
   }, []);
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+    setShowSnackbar(false);
+  };
 
   return (
     <>
       <Container maxWidth="lg">
         <Box className="home-main">
+          <AlertSnackbar
+            severity="info"
+            content={message}
+            showSnackbar={showSnackbar}
+            handleCloseSnackbar={handleCloseSnackbar}
+          ></AlertSnackbar>
           <StateInfo></StateInfo>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">

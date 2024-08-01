@@ -10,24 +10,11 @@ import { useMessage } from "../../";
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
-type RegisterState = {
-  email: string;
-  login: string;
-  password: string;
-  passwordAgain: string;
-};
-
-enum ActionType {
-  Email = "email",
-  Login = "login",
-  Password = "password",
-  PasswordAgain = "passwordAgain",
-}
-
-interface RegisterActions {
-  type: ActionType;
-  payload?: string;
-}
+import {
+  RegisterState,
+  RegisterActions,
+  ActionType,
+} from "../Register/registerTypes";
 
 const loginReducer = (state: RegisterState, action: RegisterActions) => {
   const { type, payload } = action;
@@ -93,7 +80,7 @@ function MainRegister() {
   };
 
   const handleCloseSnackbar = (
-    event: React.SyntheticEvent<any> | Event,
+    event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") return;
