@@ -1,9 +1,10 @@
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AlertSnackbarProps {
   severity: "success" | "info" | "warning" | "error" | undefined;
+  variant: "standard" | "filled" | "outlined" | undefined;
   title?: string | null;
   content: string | null | undefined;
   showSnackbar: boolean;
@@ -15,12 +16,19 @@ interface AlertSnackbarProps {
 
 export default function AlertSnackbar({
   severity,
+  variant,
   title,
   content,
   showSnackbar,
   handleCloseSnackbar,
 }: AlertSnackbarProps) {
-  const [viewedContent] = useState<string | null | undefined>(content);
+  const [viewedContent, setViewedContent] = useState<string | null | undefined>(
+    null
+  );
+
+  useEffect(() => {
+    setViewedContent(content);
+  }, [content]);
 
   return (
     <>
@@ -28,10 +36,11 @@ export default function AlertSnackbar({
         open={showSnackbar}
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
+        sx={{ boxShadow: 3 }}
       >
         <Alert
           severity={severity}
-          variant="filled"
+          variant={variant}
           onClose={handleCloseSnackbar}
         >
           {title ? <AlertTitle>{title}</AlertTitle> : null}

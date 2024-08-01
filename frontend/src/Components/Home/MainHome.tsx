@@ -31,7 +31,7 @@ function MainHome() {
   useEffect(() => {
     handleAuth();
     console.log(`The message: ${message}`);
-    if (message) setShowSnackbar(true);
+    if (message) setShowSnackbar(true); //TODO?: move the setShowSnackbar to the AlrtSnackbar so that everything is in one place (if possible)
   }, []);
 
   const handleCloseSnackbar = (
@@ -48,6 +48,8 @@ function MainHome() {
         <Box className="home-main">
           <AlertSnackbar
             severity="info"
+            variant="standard"
+            title="Informacja"
             content={message}
             showSnackbar={showSnackbar}
             handleCloseSnackbar={handleCloseSnackbar}

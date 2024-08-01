@@ -84,7 +84,7 @@ function MainRegister() {
     reason?: string
   ) => {
     if (reason === "clickaway") return;
-    setShowSnackbar(false);
+    if (error !== "" || null) setShowSnackbar(false);
   };
 
   const inputLength: number = 30;
@@ -172,8 +172,9 @@ function MainRegister() {
             Zarejestruj
           </Button>
           <AlertSnackbar
-            severity={"error"}
-            title={"Błąd"}
+            severity="error"
+            variant="filled"
+            title="Błąd"
             content={error}
             showSnackbar={showSnackbar}
             handleCloseSnackbar={handleCloseSnackbar}
