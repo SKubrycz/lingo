@@ -13,8 +13,6 @@
 }
 
 .main-login {
-    width: 100%;
-
     padding: 1em;
 
     display: flex;
@@ -39,8 +37,6 @@
     display: flex;
     flex-direction: column;
     
-
-
     input[type=submit] {
         margin: 1em 0;
         padding: .5em;
@@ -54,10 +50,6 @@
         background-color: $baseColor;
 
         transition: background-color .3s;
-
-        &:hover {
-            background-color: adjust-color($color: $baseColor, $blackness: 10%);
-        }
     }
 }
 
