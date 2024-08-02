@@ -12,6 +12,7 @@ import "./Profile.scss";
 
 interface User {
   login: string;
+  createdDate: string;
   sessionUser: boolean;
 }
 

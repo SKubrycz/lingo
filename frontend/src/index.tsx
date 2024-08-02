@@ -40,9 +40,9 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <ThemeProvider theme={defaultTheme}>
-    <React.StrictMode>
-      <MessageProvider>
+  <React.StrictMode>
+    <MessageProvider>
+      <ThemeProvider theme={defaultTheme}>
         <BrowserRouter>
           <Routes>
             <Route path="*" element={<NotFound></NotFound>}></Route>
@@ -59,9 +59,9 @@ root.render(
             <Route path="/logout" element={<Logout></Logout>}></Route>
           </Routes>
         </BrowserRouter>
-      </MessageProvider>
-    </React.StrictMode>
-  </ThemeProvider>
+      </ThemeProvider>
+    </MessageProvider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

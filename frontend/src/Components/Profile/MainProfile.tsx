@@ -8,7 +8,6 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Typography,
   ListItemButton,
@@ -16,6 +15,7 @@ import {
 
 interface User {
   login: string;
+  createdDate: string;
   sessionUser: boolean;
 }
 
@@ -43,7 +43,9 @@ function MainProfile({ user }: { user: User | null }) {
                 {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
               </Typography>
             }
-            subheader="Data założenia konta: 12.04.2024"
+            subheader={`Data założenia konta: ${
+              user?.createdDate ? user?.createdDate : "-"
+            }`}
             sx={{
               padding: "2em",
             }}

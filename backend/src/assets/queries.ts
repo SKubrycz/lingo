@@ -2,10 +2,17 @@ import { ObjectId } from "mongodb";
 
 const runDB = require('../assets/db');
 
-interface User { 
+interface InsertUser { 
     email: string;
     login: string;
-    hash?: string;
+    hash: string;
+    createdDate: Date;
+}
+
+interface FindUser {
+    email: string;
+    login: string;
+    createdDate: Date;
 }
 
 interface Lesson {
@@ -13,7 +20,7 @@ interface Lesson {
     number: number;
 }
 
-const insertOneUser = async (email, login, hash): Promise<User> => {
+const insertOneUser = async (email, login, hash): Promise<InsertUser> => {
     const db = await runDB();
             
     try {
@@ -22,6 +29,7 @@ const insertOneUser = async (email, login, hash): Promise<User> => {
             'email': email,
             'login': login,
             'password': hash,
+            'createdDate': new Date(Date.now()),
         });
         console.log(result);
     } finally {
@@ -29,7 +37,7 @@ const insertOneUser = async (email, login, hash): Promise<User> => {
     }
 }
 
-const findOneUser = async (email: string, login: string): Promise<User> => {
+const findOneUser = async (email: string, login: string): Promise<FindUser> => {
     const db = await runDB();
     
     const userCollection = db.collection('users');
