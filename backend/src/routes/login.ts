@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
 
         console.log(token);
 
-        const minutes = 15;
+        const minutes = 60;
 
         res.cookie('token', token, {
             httpOnly: true,

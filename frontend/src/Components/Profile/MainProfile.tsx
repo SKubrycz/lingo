@@ -1,38 +1,53 @@
+import {
+  Box,
+  Card,
+  CardContent,
+  CardActionArea,
+  Container,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
+
 interface User {
-    login: string;
-    sessionUser: boolean;
+  login: string;
+  sessionUser: boolean;
 }
 
-function MainProfile({user}: {user: User | null}) {
+//later to be replaced with API data
+const statsData: (string | number)[] = [1500, 123, "99%", 12.5, 5863895672];
 
-    return (
-        <div className='main-profile-wrapper'>
-            <main className='main-profile'>
-                <article className='main-profile-user'>
-                    <div className='profile-user-img'>{user?.login} {(user?.sessionUser) ? '(Ty)' : undefined}</div>
-                    <p>{user?.login} {(user?.sessionUser) ? '(Ty)' : undefined}</p>
-                </article>
-                <article className='main-profile-stats'>
-                    <div className='main-profile-stat-container'>
-                        <div>Stat1:</div>
-                        <div>123</div>
-                    </div>
-                    <div className='main-profile-stat-container'>
-                        <div>Stat2:</div>
-                        <div>238759</div>
-                    </div>
-                    <div className='main-profile-stat-container'>
-                        <div>Stat3:</div>
-                        <div>10074</div>
-                    </div>
-                    <div className='main-profile-stat-container'>
-                        <div>Stat4:</div>
-                        <div>251h</div>
-                    </div>
-                </article>
-            </main>
-        </div>
-    );
+function MainProfile({ user }: { user: User | null }) {
+  return (
+    <Container component="div">
+      <Box component="main" className="main-profile">
+        <Card>
+          <CardActionArea>
+            <CardContent>
+              <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
+              </Typography>
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+              >
+                {statsData.map((value, index) => {
+                  return (
+                    <ListItem>
+                      Stat{index + 1}: {value}
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Box>
+    </Container>
+  );
 }
 
 export default MainProfile;
