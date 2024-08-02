@@ -1,11 +1,10 @@
-import { useState, useEffect, cloneElement } from "react";
+import { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
 import BurgerIcon from "../../../assets/icons/burger.svg";
-import { AppBar, Toolbar, Typography, Box, CssBaseline } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 interface NavbarProps {
   link: string[];
@@ -14,15 +13,6 @@ interface NavbarProps {
 
 function Navbar({ link, options }: NavbarProps) {
   const [display, setDisplay] = useState<string>("none");
-
-  const darkTheme = createTheme({
-    palette: {
-      mode: "light",
-      primary: {
-        main: "rgb(230, 92, 0)",
-      },
-    },
-  });
 
   const navBurgerStyle: Object = {
     display: display,
@@ -79,24 +69,6 @@ function Navbar({ link, options }: NavbarProps) {
         </Toolbar>
       </AppBar>
       <div style={{ width: "100%", height: "64px" }}></div>
-      {/* <div className='navbar-wrapper'>
-                <nav className='navbar'>
-                    <Link to='/' className='navbar-logo'>LOGO</Link>
-                    {options.map((value, index) => {
-                        return (
-                            <Link key={index} to={link[index]}>{value}</Link>
-                        )
-                    })}
-                    <div className='navbar-burger' onClick={() => handleDisplay()}><img src={BurgerIcon} alt='burger-icon'></img></div>
-                </nav>
-                <div className='navbar-burger-options' style={navBurgerStyle}>
-                    {options.map((value, index) => {
-                        return (
-                            <Link key={index} to={link[index]}>{value}</Link>
-                        )
-                    })}
-                </div>
-            </div> */}
     </>
   );
 }

@@ -1,67 +1,20 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 
 import { Container, Box, Typography } from "@mui/material";
 
 import StateInfo from "../Reusables/Informational/StateInfo";
 import StartHome from "./StartHome";
-
-import { useMessage } from "../../";
-
-function reducer(state: any, action: any) {
-  switch (action.type) {
-    case "seconds":
-      return {
-        ...state,
-        seconds: (state.seconds + 1) % 60,
-      };
-    case "minutes":
-      return {
-        ...state,
-        minutes: (state.minutes + 1) % 60,
-      };
-    case "hours":
-      return {
-        ...state,
-        hours: (state.hours + 1) % 24,
-      };
-    default:
-      throw Error("No such action");
-  }
-}
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import { useMessage } from "../..";
 
 function MainHome() {
-  const [state, dispatch] = useReducer(reducer, {
-    seconds: 0,
-    minutes: 0,
-    hours: 0,
-  });
+  const navigate = useNavigate();
 
   const { message, setMessage } = useMessage();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const intervalSec = setInterval(() => {
-      dispatch({ type: "seconds" });
-    }, 1000);
-    const intervalMin = setInterval(() => {
-      dispatch({ type: "minutes" });
-    }, 60 * 1000);
-    const intervalHour = setInterval(
-      () => {
-        dispatch({ type: "hours" });
-      },
-      60 * 60 * 1000
-    );
-
-    return () => {
-      clearInterval(intervalSec);
-      clearInterval(intervalMin);
-      clearInterval(intervalHour);
-    };
-  }, []);
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const handleAuth = async () => {
     await axios
@@ -77,12 +30,30 @@ function MainHome() {
 
   useEffect(() => {
     handleAuth();
+    console.log(`The message: ${message}`);
+    if (message) setShowSnackbar(true); //TODO?: move the setShowSnackbar to the AlrtSnackbar so that everything is in one place (if possible)
   }, []);
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+    setShowSnackbar(false);
+  };
 
   return (
     <>
       <Container maxWidth="lg">
         <Box className="home-main">
+          <AlertSnackbar
+            severity="info"
+            variant="standard"
+            title="Informacja"
+            content={message}
+            showSnackbar={showSnackbar}
+            handleCloseSnackbar={handleCloseSnackbar}
+          ></AlertSnackbar>
           <StateInfo></StateInfo>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">

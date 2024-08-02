@@ -8,50 +8,33 @@ import { Container, Box, TextField, Typography, Button } from "@mui/material";
 import { useMessage } from "../../";
 
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
-import ErrorSnackbar from "../Reusables/Informational/ErrorSnackbar";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
-type RegisterState = {
-  email: string;
-  login: string;
-  password: string;
-  passwordAgain: string;
-};
+import {
+  RegisterState,
+  RegisterActions,
+  ActionType,
+} from "../Register/registerTypes";
 
-enum ActionType {
-  Email = "email",
-  Login = "login",
-  Password = "password",
-  PasswordAgain = "passwordAgain",
-}
-
-interface RegisterActions {
-  type: ActionType;
-  payload?: string;
-}
-
-const loginReducer = (state: RegisterState, action: RegisterActions) => {
+const registerReducer = (state: RegisterState, action: RegisterActions) => {
   const { type, payload } = action;
   switch (type) {
     case ActionType.Email:
-      //console.log(state.email);
       return {
         ...state,
         email: payload || "",
       };
     case ActionType.Login:
-      //console.log(state.login);
       return {
         ...state,
         login: payload || "",
       };
     case ActionType.Password:
-      //console.log(state.password);
       return {
         ...state,
         password: payload || "",
       };
     case ActionType.PasswordAgain:
-      //console.log(state.passwordAgain);
       return {
         ...state,
         passwordAgain: payload || "",
@@ -62,7 +45,7 @@ const loginReducer = (state: RegisterState, action: RegisterActions) => {
 };
 
 function MainRegister() {
-  const [registerData, registerDispatch] = useReducer(loginReducer, {
+  const [registerData, registerDispatch] = useReducer(registerReducer, {
     email: "",
     login: "",
     password: "",
@@ -71,9 +54,6 @@ function MainRegister() {
 
   const [error, setError] = useState<string | null>();
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const passwordAgainRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -103,14 +83,11 @@ function MainRegister() {
     event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setShowSnackbar(false);
+    if (reason === "clickaway") return;
+    if (error !== "" || null) setShowSnackbar(false);
   };
 
-  const inputLength = 30;
+  const inputLength: number = 30;
 
   return (
     <Container component="div">
@@ -194,11 +171,14 @@ function MainRegister() {
           >
             Zarejestruj
           </Button>
-          <ErrorSnackbar
-            error={error}
+          <AlertSnackbar
+            severity="error"
+            variant="filled"
+            title="Błąd"
+            content={error}
             showSnackbar={showSnackbar}
             handleCloseSnackbar={handleCloseSnackbar}
-          ></ErrorSnackbar>
+          ></AlertSnackbar>
         </Box>
       </Box>
     </Container>

@@ -70,7 +70,7 @@ function Lessons() {
         {lessonNumbers.map((value: number, index: number) => {
           const numLessons = lessonNumbers.length;
           const animationDelay = `${index / ((numLessons - 1) * 2) - 0.25}s`;
-          console.log(`${index}: ${animationDelay}`);
+          //console.log(`${index}: ${animationDelay}`);
 
           return (
             <Lesson

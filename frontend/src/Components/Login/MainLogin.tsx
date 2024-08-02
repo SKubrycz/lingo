@@ -1,52 +1,26 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useReducer, useState, useRef } from "react";
+import { useEffect, useReducer, useState } from "react";
 
-import {
-  Container,
-  Box,
-  Button,
-  Typography,
-  Icon,
-  IconButton,
-  Input,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Container, Box, Button, Typography, TextField } from "@mui/material";
 
 import { useMessage } from "../..";
 
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
-import ErrorSnackbar from "../Reusables/Informational/ErrorSnackbar";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
-type LoginState = {
-  login: string;
-  password: string;
-};
-
-enum ActionType {
-  Login = "login",
-  Password = "password",
-}
-
-interface LoginActions {
-  type: ActionType;
-  payload?: string;
-}
+import { LoginState, LoginActions, ActionType } from "../Login/loginTypes";
 
 const loginReducer = (state: LoginState, action: LoginActions) => {
   const { type, payload } = action;
   switch (type) {
     case ActionType.Login:
-      //console.log(state.login);
       return {
         ...state,
         login: payload || "",
       };
     case ActionType.Password:
-      //console.log(state.password);
       return {
         ...state,
         password: payload || "",
@@ -63,10 +37,7 @@ function MainLogin() {
   });
 
   const [error, setError] = useState<string | null>();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
-  const passwordRef = useRef<HTMLInputElement>(null);
 
   const { message, setMessage } = useMessage();
 
@@ -96,14 +67,11 @@ function MainLogin() {
     event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setShowSnackbar(false);
+    if (reason === "clickaway") return;
+    if (error !== "" || null) setShowSnackbar(false);
   };
 
-  const inputLength = 30;
+  const inputLength: number = 30;
 
   return (
     <Container component="div">
@@ -156,11 +124,14 @@ function MainLogin() {
           >
             Zaloguj
           </Button>
-          <ErrorSnackbar
-            error={error}
+          <AlertSnackbar
+            severity="error"
+            variant="filled"
+            title="Błąd"
+            content={error}
             showSnackbar={showSnackbar}
             handleCloseSnackbar={handleCloseSnackbar}
-          ></ErrorSnackbar>
+          ></AlertSnackbar>
         </Box>
       </Box>
     </Container>
