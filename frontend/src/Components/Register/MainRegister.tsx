@@ -76,6 +76,7 @@ function MainRegister() {
       .catch((error) => {
         setError(error.response.data);
         console.log(error);
+        if (error.response.data) setShowSnackbar(true);
       });
   };
 
@@ -167,7 +168,6 @@ function MainRegister() {
             name="submit"
             value="Zaloguj"
             sx={{ margin: "1.5em .5em" }}
-            onClick={() => setShowSnackbar(!showSnackbar)}
           >
             Zarejestruj
           </Button>

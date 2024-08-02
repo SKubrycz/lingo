@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import Navbar from "../Reusables/Navbar/Navbar";
 import StateInfo from "../Reusables/Informational/StateInfo";
 import Lesson from "./Lesson";
+import Footer from "../Reusables/Footer/Footer";
 
 import { useMessage } from "../..";
 
 import "./Lessons.scss";
-import Footer from "../Reusables/Footer/Footer";
 
 function Lessons() {
   const [lessonNumbers, setLessonNumbers] = useState<number[]>([]);

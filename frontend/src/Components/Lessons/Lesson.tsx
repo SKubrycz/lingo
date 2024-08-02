@@ -1,29 +1,34 @@
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
-import './Lessons.scss';
+import "./Lessons.scss";
+
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 interface LessonProps {
-    lessonNumber: number;
-    lessonDesc: string;
-    lessonStyle: Object;
+  lessonNumber: number;
+  lessonDesc: string;
+  lessonStyle: Object;
 }
 
 function Lesson({ lessonNumber, lessonDesc, lessonStyle }: LessonProps) {
-    
-    useEffect(() => {
-        /*
+  useEffect(() => {
+    /*
             some fetch-lessons logic here (maybe, or: fetching from parent component)
         */
-    }, []);
+  }, []);
 
-    return (
-        <>
-            <article className='lessons-lesson'>
-                <div className='lessons-lesson-title' style={lessonStyle}>Lekcja {lessonNumber}</div>
-                <div style={lessonStyle}>{lessonDesc}</div>
-            </article>
-        </>
-    );
+  return (
+    <>
+      <Card sx={{ maxWidth: "50%", margin: ".5em" }}>
+        <CardActionArea>
+          <CardContent>
+            <Typography variant="h6">Lekcja {lessonNumber}</Typography>
+            <Typography variant="body2">{lessonDesc}</Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </>
+  );
 }
 
 export default Lesson;
