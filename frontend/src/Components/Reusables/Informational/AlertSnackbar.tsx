@@ -1,4 +1,4 @@
-import { Snackbar, Alert, AlertTitle } from "@mui/material";
+import { Snackbar, Alert, AlertTitle, Fade } from "@mui/material";
 
 import { useEffect, useState } from "react";
 
@@ -34,8 +34,9 @@ export default function AlertSnackbar({
     <>
       <Snackbar
         open={showSnackbar}
-        autoHideDuration={5000}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
+        TransitionComponent={Fade}
         sx={{ boxShadow: 3 }}
       >
         <Alert

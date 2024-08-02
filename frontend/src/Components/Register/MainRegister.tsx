@@ -16,7 +16,7 @@ import {
   ActionType,
 } from "../Register/registerTypes";
 
-const loginReducer = (state: RegisterState, action: RegisterActions) => {
+const registerReducer = (state: RegisterState, action: RegisterActions) => {
   const { type, payload } = action;
   switch (type) {
     case ActionType.Email:
@@ -45,7 +45,7 @@ const loginReducer = (state: RegisterState, action: RegisterActions) => {
 };
 
 function MainRegister() {
-  const [registerData, registerDispatch] = useReducer(loginReducer, {
+  const [registerData, registerDispatch] = useReducer(registerReducer, {
     email: "",
     login: "",
     password: "",
