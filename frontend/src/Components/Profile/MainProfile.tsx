@@ -1,12 +1,17 @@
 import {
+  Avatar,
   Box,
   Card,
   CardContent,
-  CardActionArea,
+  CardHeader,
   Container,
+  Divider,
   List,
   ListItem,
+  ListItemAvatar,
+  ListItemText,
   Typography,
+  ListItemButton,
 } from "@mui/material";
 
 interface User {
@@ -21,29 +26,63 @@ function MainProfile({ user }: { user: User | null }) {
   return (
     <Container component="div">
       <Box component="main" className="main-profile">
-        <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography variant="h5" sx={{ fontWeight: 500 }}>
-                {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
-              </Typography>
-              <List
+        <Card sx={{ minWidth: "55%", bgcolor: "primary.light" }}>
+          <CardHeader
+            avatar={
+              <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
+                P
+              </Avatar>
+            }
+            title={
+              <Typography
+                variant="h5"
                 sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
+                  fontWeight: 500,
                 }}
               >
-                {statsData.map((value, index) => {
-                  return (
-                    <ListItem>
-                      Stat{index + 1}: {value}
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </CardContent>
-          </CardActionArea>
+                {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
+              </Typography>
+            }
+            subheader="Data założenia konta: 12.04.2024"
+            sx={{
+              padding: "2em",
+            }}
+          ></CardHeader>
+          <CardContent>
+            <List
+              sx={{
+                width: "100%",
+                minWidth: 360,
+                bgcolor: "background.paper",
+              }}
+            >
+              {statsData.map((value, index) => {
+                return (
+                  <>
+                    <ListItemButton>
+                      <ListItem
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <ListItemText
+                          primary={`Stat${index + 1}:`}
+                        ></ListItemText>
+                        <ListItemText
+                          primary={value}
+                          sx={{ display: "flex", justifyContent: "flex-end" }}
+                        ></ListItemText>
+                      </ListItem>
+                    </ListItemButton>
+                    {!(statsData.length - 1 === index) ? (
+                      <Divider></Divider>
+                    ) : null}
+                  </>
+                );
+              })}
+            </List>
+          </CardContent>
         </Card>
       </Box>
     </Container>
