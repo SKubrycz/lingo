@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -16,6 +17,8 @@ const logoutRoute = require('./routes/logout');
 const aboutRoute = require('./routes/about');
 
 const originDomain = 'http://localhost:3000';
+
+app.use(helmet());
 
 app.use((req, res, next) => {
     res.setHeader('Content-Security-Policy', `script-src 'self' ${originDomain}`);
