@@ -60,6 +60,7 @@ function MainLogin() {
       .catch((error) => {
         setError(error.response.data);
         console.log(error);
+        if (error.response.data) setShowSnackbar(true);
       });
   };
 
@@ -120,7 +121,6 @@ function MainLogin() {
             name="submit"
             value="Zaloguj"
             sx={{ margin: "1.5em .5em" }}
-            onClick={() => setShowSnackbar(!showSnackbar)}
           >
             Zaloguj
           </Button>

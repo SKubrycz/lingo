@@ -1,12 +1,16 @@
 import { createTheme } from "@mui/material/styles";
 
-export const defaultTheme = createTheme({
+const defaultThemePalette = createTheme({
     palette: {
       mode: "light",
       primary: {
-        main: "rgb(230, 92, 0)",
+        main: "#e65c00",
+      },
+      secondary: {
+        main: "#c64000",
       },
     },
+
     typography: {
       fontFamily: "Fira Sans",
     },
@@ -18,5 +22,13 @@ export const defaultTheme = createTheme({
           },
         },
       },
+  }});
+
+export const defaultTheme = createTheme(defaultThemePalette, {
+  palette: {
+    background: {
+      paper: defaultThemePalette.palette.primary.light,
     },
-  });
+  },
+}
+);

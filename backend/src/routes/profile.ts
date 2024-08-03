@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -7,6 +9,19 @@ const queries = require('../assets/queries');
 
 const auth = require('../middleware/auth');
 
+
+interface FindUser {
+    _id: ObjectId;
+    login: string;
+    createdDate: Date;
+}
+
+interface SentUser {
+    id: ObjectId;
+    login: string;
+    createdDate: string; // parsed
+    sessionUser: boolean;
+}
 
 router.get('/profile', auth.isAuthenticated, async (req, res) => {
     try {
@@ -38,16 +53,19 @@ router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
 
         console.log(`get in /profile/:id: ${login}`);
 
-        const result = await queries.findOneUserByLogin(login);
+        const result: FindUser = await queries.findOneUserByLogin(login);
 
         console.log(result.login);
 
         let sessionUser = false;
         if (res.user.login === login) sessionUser = true;
 
-        const fetched = {
+        const parseDate: string = result.createdDate.toLocaleDateString();
+
+        const fetched: SentUser = {
             id: result._id,
             login: result.login,
+            createdDate: parseDate,
             sessionUser: sessionUser,
         }
 
