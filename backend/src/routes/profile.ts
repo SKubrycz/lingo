@@ -58,7 +58,7 @@ router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
         console.log(result.login);
 
         let sessionUser = false;
-        if (res.user.login === login) sessionUser = true;
+        if (req.login === result.login) sessionUser = true;
 
         const parseDate: string = result.createdDate.toLocaleDateString();
 

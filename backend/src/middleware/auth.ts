@@ -20,7 +20,10 @@ const checkAuth = (req, res, next) => {
 
     console.log(accessToken);
 
-    if (!accessToken && refreshToken) {
+    if (!refreshToken) {
+        res.clearCookie('access_token');
+        return res.status(401).send('Nieautoryzowany');
+    } else if (!accessToken && refreshToken) {
         const refreshTokenVerify: TokenData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
         accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET);
@@ -28,12 +31,12 @@ const checkAuth = (req, res, next) => {
             httpOnly: true,
             maxAge: accessTokenExpiry,
         });
-    } else if (!refreshToken) return res.status(401).send('Nieautoryzowany');
+    }
 
     try {
         const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-        res.user = userVerify.login;
-        console.log(res.user);
+        req.login = userVerify.login;
+        console.log(req.login);
         next();
     } catch (error) {
         res.status(401).send('Nieprawidłowy token');
@@ -50,18 +53,19 @@ const isAuthenticated = (req, res, next) => {
         if (!accessToken) {
             const refreshTokenVerify: TokenData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-            accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET);
+            accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: accessTokenExpiry });
             res.cookie('access_token', accessToken, {
                 httpOnly: true,
                 maxAge: accessTokenExpiry,
             });
         } else {
             const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-            res.user = userVerify.login;
+            req.login = userVerify.login;
         }
 
         next();
     } else {
+        res.clearCookie('access_token');
         next();
     }
 }

@@ -8,6 +8,8 @@ require('dotenv').config();
 
 require('./assets/db');
 
+const auth = require('./middleware/auth');
+
 const homeRoute = require('./routes/home');
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
@@ -17,6 +19,10 @@ const logoutRoute = require('./routes/logout');
 const aboutRoute = require('./routes/about');
 
 const originDomain = 'http://localhost:3000';
+
+const routesArray = [
+    homeRoute, registerRoute, loginRoute, profileRoute, lessonsRoute, logoutRoute, aboutRoute,
+];
 
 app.use(helmet());
 
@@ -38,15 +44,9 @@ app.use(cors({
 
 app.use(cookieParser());
 
-app.use(homeRoute);
-app.use(registerRoute);
-app.use(loginRoute);
-app.use(profileRoute)
-app.use(lessonsRoute);
-app.use(logoutRoute);
-app.use(aboutRoute);
+app.use(routesArray);
 
-app.all('*', (req, res) => {
+app.all('*', auth.isAuthenticated, (req, res) => {
     res.status(404).send('Błąd 404: Nie znaleziono zawartości');
 })
 

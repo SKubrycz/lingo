@@ -30,7 +30,7 @@ function MainProfile({ user }: { user: User | null }) {
           <CardHeader
             avatar={
               <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
-                P
+                {user?.login.charAt(0)}
               </Avatar>
             }
             title={
