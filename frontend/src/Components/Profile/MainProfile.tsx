@@ -60,7 +60,7 @@ function MainProfile({ user }: { user: User | null }) {
             >
               {statsData.map((value, index) => {
                 return (
-                  <>
+                  <Box key={index}>
                     <ListItemButton>
                       <ListItem
                         sx={{
@@ -80,7 +80,7 @@ function MainProfile({ user }: { user: User | null }) {
                     {!(statsData.length - 1 === index) ? (
                       <Divider></Divider>
                     ) : null}
-                  </>
+                  </Box>
                 );
               })}
             </List>
