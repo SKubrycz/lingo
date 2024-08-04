@@ -12,7 +12,7 @@ router.get('/lessons', auth.checkAuth, async (req, res) => {
 
     const result = await queries.findLessons();
 
-    const userResult = await queries.findOneUserByLogin(res.user.login);
+    const userResult = await queries.findOneUserByLogin(res.user);
     console.log(userResult.login);
 
     const results = {

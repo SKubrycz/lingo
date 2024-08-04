@@ -11,7 +11,7 @@ router.get('/about', auth.isAuthenticated, async (req, res) => {
     console.log('route get /about: ');
 
     if (res.user !== undefined) {
-        const userResult = await queries.findOneUserByLogin(res.user.login);
+        const userResult = await queries.findOneUserByLogin(res.user);
         console.log(userResult.login);
 
         const results = {
