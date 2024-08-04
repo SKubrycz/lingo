@@ -11,8 +11,15 @@ import { useMessage } from "../..";
 
 import "./Lessons.scss";
 
+interface LessonData {
+  number: number;
+  title: string;
+  description: string;
+  new_words: string[];
+}
+
 function Lessons() {
-  const [lessonNumbers, setLessonNumbers] = useState<number[]>([]);
+  const [lessons, setLessons] = useState<LessonData[]>([]);
 
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
@@ -32,15 +39,12 @@ function Lessons() {
 
   const navigate = useNavigate();
 
-  const lessonDesc =
-    "Opis lekcji: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ac tempus velit. Maecenas et feugiat tortor. Nam accumsan enim at diam euismod, id sodales felis dignissim."; // leaving it here !FOR NOW
-
   const handleAuth = async () => {
     await axios
       .get("http://localhost:8000/lessons", { withCredentials: true })
       .then((res) => {
         console.log(res.data);
-        setLessonNumbers(res.data.result);
+        setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
         console.log(linkArray);
       })
@@ -67,19 +71,8 @@ function Lessons() {
 
       <div className="lessons-wrapper">
         <div className="lessons-title">Wszystkie lekcje:</div>
-        {lessonNumbers.map((value: number, index: number) => {
-          const numLessons = lessonNumbers.length;
-          const animationDelay = `${index / ((numLessons - 1) * 2) - 0.25}s`;
-          //console.log(`${index}: ${animationDelay}`);
-
-          return (
-            <Lesson
-              key={index}
-              lessonNumber={value}
-              lessonDesc={lessonDesc}
-              lessonStyle={{ ...lessonStyle, animationDelay }}
-            ></Lesson>
-          );
+        {lessons.map((value: LessonData, index: number) => {
+          return <Lesson key={index} lessonData={value}></Lesson>;
         })}
       </div>
       <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>

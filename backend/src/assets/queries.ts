@@ -18,6 +18,9 @@ interface FindUser {
 interface Lesson {
     id: ObjectId;
     number: number;
+    title: string;
+    description: string;
+    new_words: string[];
 }
 
 const insertOneUser = async (email, login, hash): Promise<InsertUser> => {
@@ -76,14 +79,16 @@ const findOneUserByLogin = async (login: string): Promise<string> => {
     return result;
 }
 
-const findLessons = async (): Promise<number[]> => {
+const findLessons = async (): Promise<Lesson[]> => {
     const db = await runDB();
 
     const lessonsCollection = db.collection('lessons');
 
-    const resultArr: number[] = [];
-    const result: Lesson[] = await lessonsCollection.find({}, { projection: { _id: 0, number: 1 } });
-    await result.forEach((doc: Lesson) => resultArr.push(doc.number));
+    const resultArr: Lesson[] = [];
+    const result: Lesson[] = await lessonsCollection.find({});
+    await result.forEach((doc: Lesson) => resultArr.push(doc));
+
+    console.log(resultArr);
 
     setTimeout(() => {
         db.client.close();

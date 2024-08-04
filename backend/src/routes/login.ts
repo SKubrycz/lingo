@@ -23,15 +23,15 @@ router.post('/login', async (req, res) => {
 
         if (comparison === false) return res.status(400).send('Niepoprawne hasło');
 
-        const token = jwt.sign({ login: login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ login: login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1y' });
 
         console.log(token);
 
-        const minutes = 60;
+        const hours: number = 24 * 31;
 
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 1000 * 60 * minutes,
+            maxAge: 1000 * 60 * 60 * hours,
         });
 
         return res.status(200).send('Zalogowano');
