@@ -2,7 +2,14 @@ import { useEffect } from "react";
 
 import "./Lessons.scss";
 
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Typography,
+} from "@mui/material";
 
 interface LessonData {
   number: number;
@@ -24,15 +31,28 @@ function Lesson({ lessonData }: LessonProps) {
 
   return (
     <>
-      <Card sx={{ maxWidth: "50%", margin: ".5em", color: "#fff0e6" }}>
+      <Card
+        sx={{
+          minWidth: "33%",
+          margin: ".5em",
+          display: "flex",
+          justifyContent: "space-between",
+          color: "#fff0e6",
+        }}
+      >
         <CardActionArea>
           <CardContent>
             <Typography variant="h6">
-              Lekcja {lessonData.number} - {lessonData.title}
+              {lessonData.number} - {lessonData.title}
             </Typography>
             <Typography variant="body2">{lessonData.description}</Typography>
           </CardContent>
         </CardActionArea>
+        {/* <CardActions>
+          <Button variant="text" sx={{ color: "primary.contrastText" }}>
+            Rozpocznij
+          </Button>
+        </CardActions> */}
       </Card>
     </>
   );

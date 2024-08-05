@@ -26,7 +26,7 @@ function MainProfile({ user }: { user: User | null }) {
   return (
     <Container component="div">
       <Box component="main" className="main-profile">
-        <Card sx={{ minWidth: "55%", bgcolor: "primary.light" }}>
+        <Card sx={{ minWidth: "55%" }}>
           <CardHeader
             avatar={
               <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
