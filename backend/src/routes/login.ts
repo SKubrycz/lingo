@@ -19,20 +19,27 @@ router.post('/login', async (req, res) => {
         if (!result) return res.status(404).send('Nie znaleziono użytkownika');
 
         const comparison = await comparePassword(password, result.password);
-        console.log(`comparison: ${comparison}`);
+        //console.log(`comparison: ${comparison}`);
 
         if (comparison === false) return res.status(400).send('Niepoprawne hasło');
 
-        const token = jwt.sign({ login: login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1y' });
+        const accessTokenExpiry: number = 1000 * 60 * 60;
+        const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
 
-        console.log(token);
+        const accessToken: string = jwt.sign({ _id: result._id, login: result.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: accessTokenExpiry });
+        const refreshToken: string = jwt.sign({ _id: result._id, login: result.login }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: refreshTokenExpiry });
 
-        const hours: number = 24 * 31;
+        console.log(accessToken);
 
-        res.cookie('token', token, {
+        res.cookie('access_token', accessToken, {
             httpOnly: true,
-            maxAge: 1000 * 60 * 60 * hours,
+            maxAge: accessTokenExpiry,
         });
+
+        res.cookie('refresh_token', refreshToken, {
+            httpOnly: true,
+            maxAge: refreshTokenExpiry,
+        })
 
         return res.status(200).send('Zalogowano');
     } catch (error) {

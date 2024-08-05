@@ -1,10 +1,12 @@
 import { createTheme } from "@mui/material/styles";
 
+const navbarFontColor: string = '#fff0e6';
+
 const defaultThemePalette = createTheme({
     palette: {
       mode: "light",
       primary: {
-        main: "#e65c00",
+        main: "rgb(230, 92, 0)",
       },
       secondary: {
         main: "#c64000",
@@ -27,7 +29,7 @@ const defaultThemePalette = createTheme({
 export const defaultTheme = createTheme(defaultThemePalette, {
   palette: {
     background: {
-      paper: defaultThemePalette.palette.primary.light,
+      paper: defaultThemePalette.palette.primary.main,
     },
   },
 }

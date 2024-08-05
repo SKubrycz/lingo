@@ -24,7 +24,7 @@ function Lesson({ lessonData }: LessonProps) {
 
   return (
     <>
-      <Card sx={{ maxWidth: "50%", margin: ".5em" }}>
+      <Card sx={{ maxWidth: "50%", margin: ".5em", color: "#fff0e6" }}>
         <CardActionArea>
           <CardContent>
             <Typography variant="h6">

@@ -6,7 +6,9 @@ require('dotenv').config();
 router.get('/logout', async (req, res) => {
     console.log('route get /logout: ');
 
-    res.clearCookie('token');
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+
     res.status(200).send('Wylogowano');
 });
 

@@ -9,7 +9,7 @@ router.get('/', auth.isAuthenticated, async (req, res) => {
     console.log('route get /: ');
     
     let sessionUser = false;
-    if (res.user) {
+    if (req.login) {
         sessionUser = true;
         res.status(403).send(sessionUser);
     } else {

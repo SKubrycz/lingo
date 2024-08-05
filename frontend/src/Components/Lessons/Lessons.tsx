@@ -79,5 +79,4 @@ function Lessons() {
     </div>
   );
 }
-
 export default Lessons;
