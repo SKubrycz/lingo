@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Navbar from "../Reusables/Navbar/Navbar";
@@ -16,7 +16,7 @@ interface User {
   sessionUser: boolean;
 }
 
-const Profile = memo(function Profile() {
+function Profile() {
   const [linkArray, setLinkArray] = useState<string[]>(["/about", "/lessons"]);
   const [optionsArray, setOptionsArray] = useState<string[]>([
     "O aplikacji",
@@ -83,6 +83,6 @@ const Profile = memo(function Profile() {
       </div>
     </>
   );
-});
+}
 
 export default Profile;
