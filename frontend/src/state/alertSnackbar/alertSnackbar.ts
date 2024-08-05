@@ -19,10 +19,11 @@ const alertSnackbarSlice = createSlice({
     initialState,
     reducers: {
         setAlert: (state, action: PayloadAction<AlertSnackbarState>) => {
-            state.severity = action.payload.severity;
-            state.variant = action.payload.variant;
-            state.title = action.payload.title;
-            state.content = action.payload.content;
+            const { severity, variant, title, content } = action.payload;
+            state.severity = severity;
+            state.variant = variant;
+            state.title = title;
+            state.content = content;
         },
     },
 });
