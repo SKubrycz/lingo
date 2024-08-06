@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { Container, Box, Typography } from "@mui/material";
 
-import StateInfo from "../Reusables/Informational/StateInfo";
 import StartHome from "./StartHome";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { useMessage } from "../..";
@@ -54,7 +53,6 @@ function MainHome() {
             showSnackbar={showSnackbar}
             handleCloseSnackbar={handleCloseSnackbar}
           ></AlertSnackbar>
-          <StateInfo></StateInfo>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras

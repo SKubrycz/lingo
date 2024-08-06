@@ -3,7 +3,7 @@ const MongoClient = require("mongodb").MongoClient;
 const uri = 
     "mongodb://localhost:27017/language-app";
 
-//TODO: Examine client.close() bug which throws an error
+//TODO (Edit: Likely fixed): Examine client.close() bug which throws an error
 
 const client = new MongoClient(uri, { connectTimeoutMS: 30000 });
 

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import Navbar from "../Reusables/Navbar/Navbar";
-import StateInfo from "../Reusables/Informational/StateInfo";
 import MainAbout from "./MainAbout";
 import Footer from "../Reusables/Footer/Footer";
 
@@ -55,7 +54,6 @@ function About() {
   return (
     <>
       <div className="wrapper">
-        <StateInfo></StateInfo>
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <MainAbout></MainAbout>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
