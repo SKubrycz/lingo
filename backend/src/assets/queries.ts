@@ -50,59 +50,56 @@ const insertOneUser = async (email, login, hash): Promise<InsertUser> => {
 
 const findOneUser = async (email: string, login: string): Promise<FindUser> => {
     const db = await runDB();
-    
-    const userCollection = db.collection('users');
-    
-    const result = await userCollection.findOne({
-        '$or': [
-            { 'email': email },
-            { 'login': login }
-        ]
-    });
 
-    console.log(result);
-        
-    setTimeout(() => {
-        db.client.close();
-    }, 1500);
-
-    return result;
+    let result: Promise<FindUser>;
+    
+    try {
+        const userCollection = db.collection('users');
+        result = await userCollection.findOne({
+            '$or': [
+                { 'email': email },
+                { 'login': login }
+            ]
+        });
+        console.log(result);
+    } finally {
+        await db.client.close();
+        return result;
+    }
 }
 
 const findOneUserByLogin = async (login: string): Promise<User> => {
     const db = await runDB();
+    let result: User;
     
-    const userCollection = db.collection('users');
+    try {
+        const userCollection = db.collection('users');
+        result = await userCollection.findOne({
+            'login': login
+        });
     
-    const result: User = await userCollection.findOne({
-        'login': login
-    });
-
-    console.log(result);
-        
-    setTimeout(() => {
-        db.client.close();
-    }, 1500);
-
-    return result;
+        console.log(result);
+    } finally {
+        await db.client.close();
+        return result;
+    }
 }
 
 const findLessons = async (): Promise<Lesson[]> => {
     const db = await runDB();
+    let resultArr: Lesson[] = [];
 
-    const lessonsCollection = db.collection('lessons');
+    try {
+        const lessonsCollection = db.collection('lessons');
 
-    const resultArr: Lesson[] = [];
-    const result: Lesson[] = await lessonsCollection.find({});
-    await result.forEach((doc: Lesson) => resultArr.push(doc));
-
-    console.log(resultArr);
-
-    setTimeout(() => {
-        db.client.close();
-    }, 1500);
-
-    return resultArr;
+        const result: Lesson[] = await lessonsCollection.find({});
+        await result.forEach((doc: Lesson) => resultArr.push(doc));
+    
+        console.log(resultArr);
+    } finally {
+        await db.client.close();
+        return resultArr;
+    }
 }
 
 module.exports = {
