@@ -32,5 +32,13 @@ export const defaultTheme = createTheme(defaultThemePalette, {
       paper: defaultThemePalette.palette.primary.main,
     },
   },
+
+  MuiCard: {
+    styleOverrides: {
+      root: {
+        backgroundColor: defaultThemePalette.palette.primary.main,
+      },
+    },
+  },
 }
 );

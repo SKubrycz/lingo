@@ -2,14 +2,18 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { Box, Container } from "@mui/material";
+
 import Navbar from "../Reusables/Navbar/Navbar";
 import StateInfo from "../Reusables/Informational/StateInfo";
 import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
 import { useMessage } from "../..";
 
 import "./Lessons.scss";
+import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 interface LessonData {
   number: number;
@@ -35,6 +39,8 @@ function Lessons() {
     "Rejestracja",
   ];
 
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+
   const { message, setMessage } = useMessage();
 
   const navigate = useNavigate();
@@ -59,24 +65,43 @@ function Lessons() {
     handleAuth();
   }, []);
 
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+    setShowSnackbar(false);
+  };
+
   const lessonStyle = {
     animation: `0.6s comeUpLeft ease-out 1`,
     animationDelay: "",
-  };
+  }; //Adjust/Remove
+
+  //TODO: Fix AlertSnackbar (not showing up)
 
   return (
-    <div className="wrapper">
-      <StateInfo></StateInfo>
-      <Navbar link={linkArray} options={optionsArray}></Navbar>
-
-      <div className="lessons-wrapper">
-        <div className="lessons-title">Wszystkie lekcje:</div>
-        {lessons.map((value: LessonData, index: number) => {
-          return <Lesson key={index} lessonData={value}></Lesson>;
-        })}
-      </div>
-      <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
-    </div>
+    <>
+      <Container component="div">
+        <StateInfo></StateInfo>
+        <AlertSnackbar
+          severity="info"
+          variant="standard"
+          title="Informacja"
+          content={message}
+          showSnackbar={showSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+        ></AlertSnackbar>
+        <Navbar link={linkArray} options={optionsArray}></Navbar>
+        <Box className="lessons-wrapper">
+          <PageTitle title="Wszystkie lekcje:"></PageTitle>
+          {lessons.map((value: LessonData, index: number) => {
+            return <Lesson key={index} lessonData={value}></Lesson>;
+          })}
+        </Box>
+        <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
+      </Container>
+    </>
   );
 }
 export default Lessons;

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import { useEffect, useReducer, useState } from "react";
 
-import { Container, Box, Button, Typography, TextField } from "@mui/material";
+import { Container, Box, Button, TextField } from "@mui/material";
 
 import { useMessage } from "../..";
 
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 import { LoginState, LoginActions, ActionType } from "../Login/loginTypes";
 
@@ -74,15 +75,12 @@ function MainLogin() {
 
   const inputLength: number = 30;
 
+  //(Probably, but mostly in case of Register component) TODO: Add tooltips for information about input (how long what symbols are valid)
+
   return (
     <Container component="div">
       <Box component="main" className="main-login">
-        <Typography
-          variant="h5"
-          sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
-        >
-          Zaloguj się
-        </Typography>
+        <PageTitle title="Zaloguj się"></PageTitle>
         <Box
           component="form"
           className="login-form"

@@ -9,6 +9,7 @@ import { useMessage } from "../../";
 
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 import {
   RegisterState,
@@ -90,15 +91,12 @@ function MainRegister() {
 
   const inputLength: number = 30;
 
+  //(Probably) TODO: Add tooltips for information about input (how long what symbols are valid)
+
   return (
     <Container component="div">
       <Box component="main" className="main-register">
-        <Typography
-          variant="h5"
-          sx={{ padding: ".5em", textAlign: "center", fontWeight: "500" }}
-        >
-          Rejestracja
-        </Typography>
+        <PageTitle title="Rejestracja"></PageTitle>
         <Box
           component="form"
           className="register-form"

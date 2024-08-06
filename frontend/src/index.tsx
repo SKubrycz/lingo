@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./state/store";
 import { ThemeProvider } from "@mui/material/styles";
 import "./index.scss";
 import { defaultTheme } from "./defaultTheme";
@@ -41,26 +43,28 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <MessageProvider>
-      <ThemeProvider theme={defaultTheme}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="*" element={<NotFound></NotFound>}></Route>
-            <Route path="/" element={<Home></Home>}></Route>
-            <Route path="/login" element={<Login></Login>}></Route>
-            <Route path="/register" element={<Register></Register>}></Route>
-            <Route path="/about" element={<About></About>}></Route>
-            <Route path="/profile" element={<Profile></Profile>}></Route>
-            <Route
-              path="/profile/:userId"
-              element={<Profile></Profile>}
-            ></Route>
-            <Route path="/lessons" element={<Lessons></Lessons>}></Route>
-            <Route path="/logout" element={<Logout></Logout>}></Route>
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </MessageProvider>
+    <Provider store={store}>
+      <MessageProvider>
+        <ThemeProvider theme={defaultTheme}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="*" element={<NotFound></NotFound>}></Route>
+              <Route path="/" element={<Home></Home>}></Route>
+              <Route path="/login" element={<Login></Login>}></Route>
+              <Route path="/register" element={<Register></Register>}></Route>
+              <Route path="/about" element={<About></About>}></Route>
+              <Route path="/profile" element={<Profile></Profile>}></Route>
+              <Route
+                path="/profile/:userId"
+                element={<Profile></Profile>}
+              ></Route>
+              <Route path="/lessons" element={<Lessons></Lessons>}></Route>
+              <Route path="/logout" element={<Logout></Logout>}></Route>
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
+      </MessageProvider>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -1,6 +1,9 @@
 import { Snackbar, Alert, AlertTitle, Fade } from "@mui/material";
 
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setAlert } from "../../../state/alertSnackbar/alertSnackbar";
 
 interface AlertSnackbarProps {
   severity: "success" | "info" | "warning" | "error" | undefined;
@@ -26,7 +29,22 @@ export default function AlertSnackbar({
     null
   );
 
+  //TO DO: Redux part here later to be closely examined
+
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
+  const alertSnackbarDataDispatch = useDispatch();
+
   useEffect(() => {
+    alertSnackbarDataDispatch(
+      setAlert({
+        severity: severity,
+        variant: variant,
+        title: title,
+        content: content,
+      })
+    );
     setViewedContent(content);
   }, [content]);
 
@@ -40,12 +58,14 @@ export default function AlertSnackbar({
         sx={{ boxShadow: 3 }}
       >
         <Alert
-          severity={severity}
-          variant={variant}
+          severity={alertSnackbarData.severity}
+          variant={alertSnackbarData.variant}
           onClose={handleCloseSnackbar}
         >
-          {title ? <AlertTitle>{title}</AlertTitle> : null}
-          {viewedContent}
+          {alertSnackbarData.title ? (
+            <AlertTitle>{alertSnackbarData.title}</AlertTitle>
+          ) : null}
+          {alertSnackbarData.content /* {viewedContent} */}
         </Alert>
       </Snackbar>
     </>
