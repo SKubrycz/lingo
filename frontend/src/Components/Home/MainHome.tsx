@@ -13,8 +13,6 @@ function MainHome() {
 
   const { message, setMessage } = useMessage();
 
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
   const handleAuth = async () => {
     await axios
       .get("http://localhost:8000/", { withCredentials: true })
@@ -30,16 +28,7 @@ function MainHome() {
   useEffect(() => {
     handleAuth();
     console.log(`The message: ${message}`);
-    if (message) setShowSnackbar(true); //TODO?: move the setShowSnackbar to the AlrtSnackbar so that everything is in one place (if possible)
   }, []);
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    setShowSnackbar(false);
-  };
 
   return (
     <>
@@ -50,8 +39,6 @@ function MainHome() {
             variant="standard"
             title="Informacja"
             content={message}
-            showSnackbar={showSnackbar}
-            handleCloseSnackbar={handleCloseSnackbar}
           ></AlertSnackbar>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">

@@ -10,11 +10,6 @@ interface AlertSnackbarProps {
   variant: "standard" | "filled" | "outlined" | undefined;
   title?: string | null;
   content: string | null | undefined;
-  showSnackbar: boolean;
-  handleCloseSnackbar: (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => void;
 }
 
 export default function AlertSnackbar({
@@ -22,12 +17,11 @@ export default function AlertSnackbar({
   variant,
   title,
   content,
-  showSnackbar,
-  handleCloseSnackbar,
 }: AlertSnackbarProps) {
   const [viewedContent, setViewedContent] = useState<string | null | undefined>(
     null
-  );
+  ); // ---> Might be removed in the future
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   //TO DO: Redux part here later to be closely examined
 
@@ -45,8 +39,17 @@ export default function AlertSnackbar({
         content: content,
       })
     );
+    if (content) setShowSnackbar(true);
     setViewedContent(content);
   }, [content]);
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+    setShowSnackbar(false);
+  };
 
   return (
     <>

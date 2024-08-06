@@ -38,8 +38,6 @@ function Lessons() {
     "Rejestracja",
   ];
 
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
   const { message, setMessage } = useMessage();
 
   const navigate = useNavigate();
@@ -61,16 +59,7 @@ function Lessons() {
 
   useEffect(() => {
     handleAuth();
-    if (message) setShowSnackbar(true);
   }, []);
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    setShowSnackbar(false);
-  };
 
   const lessonStyle = {
     animation: `0.6s comeUpLeft ease-out 1`,
@@ -96,8 +85,6 @@ function Lessons() {
         variant="standard"
         title="Informacja"
         content={message}
-        showSnackbar={showSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
       ></AlertSnackbar>
     </>
   );
