@@ -70,7 +70,7 @@ function MainRegister() {
       .post("http://localhost:8000/register", registerData)
       .then(() => {
         setMessage("Rejestracja przebiegła pomyślnie");
-        console.log(message);
+        //console.log(message);
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {

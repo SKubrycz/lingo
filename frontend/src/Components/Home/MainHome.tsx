@@ -17,7 +17,7 @@ function MainHome() {
     await axios
       .get("http://localhost:8000/", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -27,7 +27,7 @@ function MainHome() {
 
   useEffect(() => {
     handleAuth();
-    console.log(`The message: ${message}`);
+    //console.log(`The message: ${message}`);
   }, []);
 
   return (

@@ -54,7 +54,7 @@ function MainLogin() {
       .post("http://localhost:8000/login", loginData, { withCredentials: true })
       .then(() => {
         setMessage("Zalogowano pomyślnie");
-        console.log(message);
+        //console.log(message);
         navigate("/lessons", { state: "Zalogowano pomyślnie" });
       })
       .catch((error) => {

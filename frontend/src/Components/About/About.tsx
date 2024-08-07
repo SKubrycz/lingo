@@ -33,11 +33,11 @@ function About() {
       .get("http://localhost:8000/about", { withCredentials: true })
       .then((res) => {
         if (res.data.login) {
-          console.log(res.data.login);
+          //console.log(res.data.login);
           setLinkArray(["/lessons", `/profile/${res.data.login}`, "/logout"]);
           setOptionsArray(["Lekcje", "Profil", "Wyloguj"]);
         } else {
-          console.log(res.data);
+          //console.log(res.data);
         }
       })
       .catch((error) => {
