@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 import { Container, Box, Typography } from "@mui/material";
 
-import StateInfo from "../Reusables/Informational/StateInfo";
 import StartHome from "./StartHome";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { useMessage } from "../..";
@@ -14,13 +13,11 @@ function MainHome() {
 
   const { message, setMessage } = useMessage();
 
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
   const handleAuth = async () => {
     await axios
       .get("http://localhost:8000/", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -30,17 +27,8 @@ function MainHome() {
 
   useEffect(() => {
     handleAuth();
-    console.log(`The message: ${message}`);
-    if (message) setShowSnackbar(true); //TODO?: move the setShowSnackbar to the AlrtSnackbar so that everything is in one place (if possible)
+    //console.log(`The message: ${message}`);
   }, []);
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    setShowSnackbar(false);
-  };
 
   return (
     <>
@@ -51,10 +39,7 @@ function MainHome() {
             variant="standard"
             title="Informacja"
             content={message}
-            showSnackbar={showSnackbar}
-            handleCloseSnackbar={handleCloseSnackbar}
           ></AlertSnackbar>
-          <StateInfo></StateInfo>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras

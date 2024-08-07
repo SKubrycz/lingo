@@ -38,7 +38,6 @@ function MainLogin() {
   });
 
   const [error, setError] = useState<string | null>();
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const { message, setMessage } = useMessage();
 
@@ -55,22 +54,13 @@ function MainLogin() {
       .post("http://localhost:8000/login", loginData, { withCredentials: true })
       .then(() => {
         setMessage("Zalogowano pomyślnie");
-        console.log(message);
+        //console.log(message);
         navigate("/lessons", { state: "Zalogowano pomyślnie" });
       })
       .catch((error) => {
         setError(error.response.data);
         console.log(error);
-        if (error.response.data) setShowSnackbar(true);
       });
-  };
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    if (error !== "" || null) setShowSnackbar(false);
   };
 
   const inputLength: number = 30;
@@ -127,8 +117,6 @@ function MainLogin() {
             variant="filled"
             title="Błąd"
             content={error}
-            showSnackbar={showSnackbar}
-            handleCloseSnackbar={handleCloseSnackbar}
           ></AlertSnackbar>
         </Box>
       </Box>

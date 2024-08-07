@@ -54,7 +54,6 @@ function MainRegister() {
   });
 
   const [error, setError] = useState<string | null>();
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -71,22 +70,13 @@ function MainRegister() {
       .post("http://localhost:8000/register", registerData)
       .then(() => {
         setMessage("Rejestracja przebiegła pomyślnie");
-        console.log(message);
+        //console.log(message);
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {
         setError(error.response.data);
         console.log(error);
-        if (error.response.data) setShowSnackbar(true);
       });
-  };
-
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    if (error !== "" || null) setShowSnackbar(false);
   };
 
   const inputLength: number = 30;
@@ -174,8 +164,6 @@ function MainRegister() {
             variant="filled"
             title="Błąd"
             content={error}
-            showSnackbar={showSnackbar}
-            handleCloseSnackbar={handleCloseSnackbar}
           ></AlertSnackbar>
         </Box>
       </Box>

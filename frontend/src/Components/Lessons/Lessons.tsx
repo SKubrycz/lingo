@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Box, Container } from "@mui/material";
 
 import Navbar from "../Reusables/Navbar/Navbar";
-import StateInfo from "../Reusables/Informational/StateInfo";
 import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
@@ -39,8 +38,6 @@ function Lessons() {
     "Rejestracja",
   ];
 
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
   const { message, setMessage } = useMessage();
 
   const navigate = useNavigate();
@@ -49,10 +46,9 @@ function Lessons() {
     await axios
       .get("http://localhost:8000/lessons", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
-        console.log(linkArray);
       })
       .catch((error) => {
         console.log(error);
@@ -65,14 +61,6 @@ function Lessons() {
     handleAuth();
   }, []);
 
-  const handleCloseSnackbar = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-    setShowSnackbar(false);
-  };
-
   const lessonStyle = {
     animation: `0.6s comeUpLeft ease-out 1`,
     animationDelay: "",
@@ -82,16 +70,7 @@ function Lessons() {
 
   return (
     <>
-      <Container component="div">
-        <StateInfo></StateInfo>
-        <AlertSnackbar
-          severity="info"
-          variant="standard"
-          title="Informacja"
-          content={message}
-          showSnackbar={showSnackbar}
-          handleCloseSnackbar={handleCloseSnackbar}
-        ></AlertSnackbar>
+      <Container component="div" className="wrapper">
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <Box className="lessons-wrapper">
           <PageTitle title="Wszystkie lekcje:"></PageTitle>
@@ -101,6 +80,12 @@ function Lessons() {
         </Box>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
       </Container>
+      <AlertSnackbar
+        severity="info"
+        variant="standard"
+        title="Informacja"
+        content={message}
+      ></AlertSnackbar>
     </>
   );
 }

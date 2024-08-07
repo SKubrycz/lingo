@@ -1,6 +1,8 @@
 import { Container, Box } from "@mui/material";
 import { Typography } from "@mui/material";
 
+//TODO: Proabably apply Box or Container MUI Component
+
 function MainAbout() {
   return (
     <>

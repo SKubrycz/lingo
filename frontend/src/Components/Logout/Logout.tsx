@@ -1,32 +1,33 @@
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { useMessage } from '../..';
+import { useMessage } from "../..";
 
 function Logout() {
+  const { message, setMessage } = useMessage();
 
-    const { message, setMessage } = useMessage();
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  //TODO: Just fetch from the navbar when it has 'Wyloguj' and remove this component
 
-    const handleLogout = async () => {
-        await axios.get('http://localhost:8000/logout', { withCredentials: true })
-            .then(() => {
-                setMessage('Nastąpiło wylogowanie');
-                navigate('/');
-            }).catch((error) => {
-                console.log(error);
-            });
-    }
+  const handleLogout = async () => {
+    await axios
+      .get("http://localhost:8000/logout", { withCredentials: true })
+      .then(() => {
+        setMessage("Nastąpiło wylogowanie");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    useEffect(() => {
-        handleLogout();
-    });
+  useEffect(() => {
+    handleLogout();
+  });
 
-    return (
-        <></>
-    );
+  return <></>;
 }
 
 export default Logout;
