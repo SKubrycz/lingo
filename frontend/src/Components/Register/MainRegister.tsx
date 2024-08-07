@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useReducer, useState, useRef } from "react";
+import { useEffect, useReducer, useState } from "react";
 
-import { Container, Box, TextField, Typography, Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+
+import { Container, Box, TextField, Button } from "@mui/material";
 
 import { useMessage } from "../../";
 
@@ -57,7 +61,12 @@ function MainRegister() {
 
   const navigate = useNavigate();
 
-  const { message, setMessage } = useMessage();
+  const { message, setMessage } = useMessage(); // later to be removed
+
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
+  const alertSnackbarDataDispatch = useDispatch();
 
   useEffect(() => {
     setMessage(undefined);
@@ -69,12 +78,27 @@ function MainRegister() {
     await axios
       .post("http://localhost:8000/register", registerData)
       .then(() => {
-        setMessage("Rejestracja przebiegła pomyślnie");
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "info",
+            variant: "standard",
+            title: "Informacja",
+            content: "Rejestracja przebiegła pomyślnie",
+          })
+        );
         //console.log(message);
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {
-        setError(error.response.data);
+        //setError(error.response.data);
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "error",
+            variant: "filled",
+            title: "Błąd",
+            content: error.response.data,
+          })
+        );
         console.log(error);
       });
   };
@@ -160,10 +184,10 @@ function MainRegister() {
             Zarejestruj
           </Button>
           <AlertSnackbar
-            severity="error"
-            variant="filled"
-            title="Błąd"
-            content={error}
+            severity={alertSnackbarData.severity}
+            variant={alertSnackbarData.variant}
+            title={alertSnackbarData.title}
+            content={alertSnackbarData.content}
           ></AlertSnackbar>
         </Box>
       </Box>
