@@ -2,6 +2,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+
 import { Container, Box, Typography } from "@mui/material";
 
 import StartHome from "./StartHome";
@@ -12,6 +15,10 @@ function MainHome() {
   const navigate = useNavigate();
 
   const { message, setMessage } = useMessage();
+
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
 
   const handleAuth = async () => {
     await axios
@@ -35,10 +42,10 @@ function MainHome() {
       <Container maxWidth="lg">
         <Box className="home-main">
           <AlertSnackbar
-            severity="info"
-            variant="standard"
-            title="Informacja"
-            content={message}
+            severity={alertSnackbarData.severity}
+            variant={alertSnackbarData.variant}
+            title={alertSnackbarData.title}
+            content={alertSnackbarData.content}
           ></AlertSnackbar>
           <Typography variant="h3">LOGO</Typography>
           <Typography variant="h6">

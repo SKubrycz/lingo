@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 import { useEffect, useReducer, useState } from "react";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { setAlertSnackbar } from "../../state/alertSnackbar/setAlertSnackbar";
+
 import { Container, Box, Button, TextField } from "@mui/material";
 
 import { useMessage } from "../..";
@@ -41,6 +45,10 @@ function MainLogin() {
 
   const { message, setMessage } = useMessage();
 
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,12 +61,24 @@ function MainLogin() {
     await axios
       .post("http://localhost:8000/login", loginData, { withCredentials: true })
       .then(() => {
-        setMessage("Zalogowano pomyślnie");
+        //setMessage("Zalogowano pomyślnie");
         //console.log(message);
+        setAlertSnackbar({
+          severity: "info",
+          variant: "standard",
+          title: "Informacja",
+          content: "Zalogowano pomyślnie",
+        });
         navigate("/lessons", { state: "Zalogowano pomyślnie" });
       })
       .catch((error) => {
         setError(error.response.data);
+        setAlertSnackbar({
+          severity: "error",
+          variant: "filled",
+          title: "Błąd",
+          content: error.response.data,
+        });
         console.log(error);
       });
   };
@@ -113,10 +133,10 @@ function MainLogin() {
             Zaloguj
           </Button>
           <AlertSnackbar
-            severity="error"
-            variant="filled"
-            title="Błąd"
-            content={error}
+            severity={alertSnackbarData.severity}
+            variant={alertSnackbarData.variant}
+            title={alertSnackbarData.title}
+            content={alertSnackbarData.content}
           ></AlertSnackbar>
         </Box>
       </Box>

@@ -1,6 +1,7 @@
 import { Snackbar, Alert, AlertTitle, Fade } from "@mui/material";
 
 import { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { setAlert } from "../../../state/alertSnackbar/alertSnackbar";
@@ -18,29 +19,34 @@ export default function AlertSnackbar({
   title,
   content,
 }: AlertSnackbarProps) {
-  const [viewedContent, setViewedContent] = useState<string | null | undefined>(
-    null
-  ); // ---> Might be removed in the future
+  const [acceptedState, setAcceptedState] = useState<AlertSnackbarProps>();
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-
-  //TO DO: Redux part here later to be closely examined
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
   const alertSnackbarDataDispatch = useDispatch();
 
+  //TO DO: Redux part here later to be closely examined and eventually to replace the useMessage() context
+
   useEffect(() => {
-    alertSnackbarDataDispatch(
-      setAlert({
+    if (content) {
+      setAcceptedState({
         severity: severity,
         variant: variant,
         title: title,
         content: content,
-      })
-    );
-    if (content) setShowSnackbar(true);
-    setViewedContent(content);
+      });
+      alertSnackbarDataDispatch(
+        setAlert({
+          severity: "info",
+          variant: "standard",
+          title: null,
+          content: null,
+        })
+      );
+      setShowSnackbar(true);
+    }
   }, [content]);
 
   const handleCloseSnackbar = (
@@ -61,14 +67,14 @@ export default function AlertSnackbar({
         sx={{ boxShadow: 3 }}
       >
         <Alert
-          severity={alertSnackbarData.severity}
-          variant={alertSnackbarData.variant}
+          severity={acceptedState?.severity}
+          variant={acceptedState?.variant}
           onClose={handleCloseSnackbar}
         >
-          {alertSnackbarData.title ? (
-            <AlertTitle>{alertSnackbarData.title}</AlertTitle>
+          {acceptedState?.title ? (
+            <AlertTitle>{acceptedState?.title}</AlertTitle>
           ) : null}
-          {alertSnackbarData.content /* {viewedContent} */}
+          {acceptedState?.content /* {viewedContent} */}
         </Alert>
       </Snackbar>
     </>

@@ -2,9 +2,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { setAlertSnackbar } from "../../state/alertSnackbar/setAlertSnackbar";
+
 import Navbar from "../Reusables/Navbar/Navbar";
 import MainAbout from "./MainAbout";
 import Footer from "../Reusables/Footer/Footer";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
 import { useMessage } from "../..";
 
@@ -26,6 +31,10 @@ function About() {
 
   const { message, setMessage } = useMessage();
 
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
+
   const navigate = useNavigate();
 
   const handleAuth = () => {
@@ -42,7 +51,13 @@ function About() {
       })
       .catch((error) => {
         console.log(error);
-        setMessage("Sesja wygasła. Proszę zalogować się ponownie");
+        //setMessage("Sesja wygasła. Proszę zalogować się ponownie");
+        setAlertSnackbar({
+          severity: "info",
+          variant: "standard",
+          title: "Informacja",
+          content: "Sesja wygasła. Proszę zalogować się ponownie",
+        });
         navigate("/");
       });
   };
@@ -57,6 +72,12 @@ function About() {
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <MainAbout></MainAbout>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
+        <AlertSnackbar
+          severity={alertSnackbarData.severity}
+          variant={alertSnackbarData.variant}
+          title={alertSnackbarData.title}
+          content={alertSnackbarData.content}
+        ></AlertSnackbar>
       </div>
     </>
   );

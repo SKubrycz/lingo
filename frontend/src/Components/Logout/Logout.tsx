@@ -10,6 +10,7 @@ function Logout() {
   const navigate = useNavigate();
 
   //TODO: Just fetch from the navbar when it has 'Wyloguj' and remove this component
+  //TODO: In the Navbar add redux logic to set alert info
 
   const handleLogout = async () => {
     await axios
