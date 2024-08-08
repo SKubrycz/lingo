@@ -15,6 +15,8 @@ router.get('/', auth.isAuthenticated, async (req, res) => {
     } else {
         res.status(200).send(sessionUser);
     }
+
+    console.log(`sessionUser ${sessionUser}`);
 });
 
 

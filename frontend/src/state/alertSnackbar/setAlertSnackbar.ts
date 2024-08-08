@@ -9,6 +9,8 @@ interface AlertSnackbarState {
     content: string | null | undefined;
 }
 
+//Might be removed
+
 export const setAlertSnackbar = (state: AlertSnackbarState) => {
     const alertSnackbarDataDispatch = useDispatch();
 
