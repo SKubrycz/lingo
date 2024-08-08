@@ -2,9 +2,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlertSnackbar } from "../../state/alertSnackbar/setAlertSnackbar";
 
 import { Box, Container } from "@mui/material";
 
@@ -42,12 +42,11 @@ function Lessons() {
     "Rejestracja",
   ];
 
-  const { message, setMessage } = useMessage();
+  const { message, setMessage } = useMessage(); // later to be removed
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
-  const alertSnackbarDataDispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -62,14 +61,12 @@ function Lessons() {
       .catch((error) => {
         console.log(error);
         //setMessage("Sesja wygasła. Proszę zalogować się ponownie");
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
+        setAlertSnackbar({
+          severity: "info",
+          variant: "standard",
+          title: "Informacja",
+          content: "Sesja wygasła. Proszę zalogować się ponownie",
+        });
         navigate("/");
       });
   };

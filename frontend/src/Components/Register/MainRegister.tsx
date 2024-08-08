@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { useEffect, useReducer, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlertSnackbar } from "../../state/alertSnackbar/setAlertSnackbar";
 
 import { Container, Box, TextField, Button } from "@mui/material";
 
@@ -57,7 +57,7 @@ function MainRegister() {
     passwordAgain: "",
   });
 
-  const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | null>(); // later to be removed
 
   const navigate = useNavigate();
 
@@ -66,7 +66,6 @@ function MainRegister() {
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
-  const alertSnackbarDataDispatch = useDispatch();
 
   useEffect(() => {
     setMessage(undefined);
@@ -78,27 +77,23 @@ function MainRegister() {
     await axios
       .post("http://localhost:8000/register", registerData)
       .then(() => {
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Rejestracja przebiegła pomyślnie",
-          })
-        );
+        setAlertSnackbar({
+          severity: "info",
+          variant: "standard",
+          title: "Informacja",
+          content: "Rejestracja przebiegła pomyślnie",
+        });
         //console.log(message);
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {
         //setError(error.response.data);
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "error",
-            variant: "filled",
-            title: "Błąd",
-            content: error.response.data,
-          })
-        );
+        setAlertSnackbar({
+          severity: "error",
+          variant: "filled",
+          title: "Błąd",
+          content: error.response.data,
+        });
         console.log(error);
       });
   };
