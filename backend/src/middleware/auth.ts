@@ -30,6 +30,7 @@ const checkAuth = (req, res, next) => {
         res.cookie('access_token', accessToken, {
             httpOnly: true,
             maxAge: accessTokenExpiry,
+            sameSite: 'strict',
         });
     }
 
@@ -51,18 +52,19 @@ const isAuthenticated = (req, res, next) => {
 
     if (refreshToken) {
         if (!accessToken) {
+            console.log(`!accessToken`);
             const refreshTokenVerify: TokenData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
             accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: accessTokenExpiry });
             res.cookie('access_token', accessToken, {
                 httpOnly: true,
                 maxAge: accessTokenExpiry,
+                sameSite: 'strict',
             });
         } else {
             const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         }
-
         next();
     } else {
         res.clearCookie('access_token');

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { useEffect, useReducer, useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { setAlertSnackbar } from "../../state/alertSnackbar/setAlertSnackbar";
+import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 import { Container, Box, Button, TextField } from "@mui/material";
 
@@ -48,6 +48,7 @@ function MainLogin() {
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
+  const alertSnackbarDataDispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -63,23 +64,27 @@ function MainLogin() {
       .then(() => {
         //setMessage("Zalogowano pomyślnie");
         //console.log(message);
-        setAlertSnackbar({
-          severity: "info",
-          variant: "standard",
-          title: "Informacja",
-          content: "Zalogowano pomyślnie",
-        });
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "info",
+            variant: "standard",
+            title: "Informacja",
+            content: "Zalogowano pomyślnie",
+          })
+        );
         navigate("/lessons", { state: "Zalogowano pomyślnie" });
       })
       .catch((error) => {
-        setError(error.response.data);
-        setAlertSnackbar({
-          severity: "error",
-          variant: "filled",
-          title: "Błąd",
-          content: error.response.data,
-        });
-        console.log(error);
+        //setError(error.response.data);
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "error",
+            variant: "filled",
+            title: "Błąd",
+            content: error.response.data,
+          })
+        );
+        console.log(error.response.data);
       });
   };
 
