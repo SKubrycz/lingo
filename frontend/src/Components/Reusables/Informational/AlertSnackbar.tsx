@@ -29,7 +29,7 @@ export default function AlertSnackbar({
 
   //TO DO: Redux part here later to be closely examined and eventually to replace the useMessage() context
 
-  useEffect(() => {
+  const handleAcceptedState = () => {
     if (content) {
       setAcceptedState({
         severity: severity,
@@ -37,16 +37,20 @@ export default function AlertSnackbar({
         title: title,
         content: content,
       });
-      alertSnackbarDataDispatch(
+      /*       alertSnackbarDataDispatch(
         setAlert({
           severity: "info",
           variant: "standard",
           title: null,
           content: null,
         })
-      );
+      ); */
       setShowSnackbar(true);
     }
+  };
+
+  useEffect(() => {
+    handleAcceptedState();
   }, [content]);
 
   const handleCloseSnackbar = (
@@ -55,6 +59,14 @@ export default function AlertSnackbar({
   ) => {
     if (reason === "clickaway") return;
     setShowSnackbar(false);
+    alertSnackbarDataDispatch(
+      setAlert({
+        severity: "info",
+        variant: "standard",
+        title: null,
+        content: null,
+      })
+    );
   };
 
   return (

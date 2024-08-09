@@ -58,6 +58,7 @@ function Lessons() {
         //console.log(res.data);
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
+        console.log(alertSnackbarData.content);
       })
       .catch((error) => {
         console.log(error);
