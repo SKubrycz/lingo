@@ -30,6 +30,7 @@ const checkAuth = (req, res, next) => {
         res.cookie('access_token', accessToken, {
             httpOnly: true,
             maxAge: accessTokenExpiry,
+            sameSite: 'strict',
         });
     }
 
@@ -58,6 +59,7 @@ const isAuthenticated = (req, res, next) => {
             res.cookie('access_token', accessToken, {
                 httpOnly: true,
                 maxAge: accessTokenExpiry,
+                sameSite: 'strict',
             });
         } else {
             const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);

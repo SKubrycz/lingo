@@ -32,11 +32,13 @@ router.post('/login', async (req, res) => {
         res.cookie('access_token', accessToken, {
             httpOnly: true,
             maxAge: accessTokenExpiry,
+            sameSite: 'strict',
         });
 
         res.cookie('refresh_token', refreshToken, {
             httpOnly: true,
             maxAge: refreshTokenExpiry,
+            sameSite: 'strict',
         });
 
         return res.status(200).send('Zalogowano');
