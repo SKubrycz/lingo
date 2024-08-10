@@ -61,7 +61,10 @@ const isAuthenticated = (req, res, next) => {
                 maxAge: accessTokenExpiry,
                 sameSite: 'strict',
             });
-        } else {
+            accessToken = req.cookies.access_token;
+            const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            req.login = userVerify.login;
+        } else if (accessToken) {
             const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         }
