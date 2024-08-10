@@ -9,8 +9,6 @@ import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 import { Container, Box, Button, TextField } from "@mui/material";
 
-import { useMessage } from "../..";
-
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -43,8 +41,6 @@ function MainLogin() {
 
   const [error, setError] = useState<string | null>();
 
-  const { message, setMessage } = useMessage();
-
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
@@ -52,18 +48,12 @@ function MainLogin() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setMessage(undefined);
-  }, [message, setMessage]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     await axios
       .post("http://localhost:8000/login", loginData, { withCredentials: true })
       .then(() => {
-        //setMessage("Zalogowano pomyślnie");
-        //console.log(message);
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",

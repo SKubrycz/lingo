@@ -9,12 +9,9 @@ import { Container, Box, Typography } from "@mui/material";
 
 import StartHome from "./StartHome";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
-import { useMessage } from "../..";
 
 function MainHome() {
   const navigate = useNavigate();
-
-  const { message, setMessage } = useMessage();
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -34,7 +31,6 @@ function MainHome() {
 
   useEffect(() => {
     handleAuth();
-    //console.log(`The message: ${message}`);
   }, []);
 
   return (

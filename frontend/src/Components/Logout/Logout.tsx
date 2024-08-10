@@ -2,21 +2,26 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-import { useMessage } from "../..";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 function Logout() {
-  const { message, setMessage } = useMessage();
-
   const navigate = useNavigate();
 
-  //TODO: Just fetch from the navbar when it has 'Wyloguj' and remove this component
-  //TODO: In the Navbar add redux logic to set alert info
+  const alertSnackbarDataDispatch = useDispatch();
 
   const handleLogout = async () => {
     await axios
       .get("http://localhost:8000/logout", { withCredentials: true })
       .then(() => {
-        setMessage("Nastąpiło wylogowanie");
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "info",
+            variant: "standard",
+            title: "Informacja",
+            content: "Nastąpiło wylogowanie",
+          })
+        );
         navigate("/");
       })
       .catch((error) => {

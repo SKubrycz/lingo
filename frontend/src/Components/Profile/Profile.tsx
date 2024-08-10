@@ -3,10 +3,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+
 import Navbar from "../Reusables/Navbar/Navbar";
 import MainProfile from "./MainProfile";
-
-import { useMessage } from "../..";
 
 import "./Profile.scss";
 
@@ -26,9 +27,9 @@ function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const [user, setUser] = useState<User | null>(null);
 
-  const { message, setMessage } = useMessage();
-
   const navigate = useNavigate();
+
+  const alertSnackbarDataDispatch = useDispatch();
 
   const fetchCurrentUser = async () => {
     try {
@@ -65,7 +66,14 @@ function Profile() {
       }
     } catch (error) {
       console.error("Failed to fetch user data:", error);
-      setMessage("Sesja wygasła. Proszę zalogować się ponownie");
+      alertSnackbarDataDispatch(
+        setAlert({
+          severity: "info",
+          variant: "standard",
+          title: "Informacja",
+          content: "Sesja wygasła. Proszę zalogować się ponownie",
+        })
+      );
       navigate("/");
     }
   };
