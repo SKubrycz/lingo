@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 
 router.get('/', auth.isAuthenticated, async (req, res) => {
     console.log('route get /: ');
+    console.log(`req.login ${req.login}`);
     
     let sessionUser = false;
     if (req.login) {

@@ -47,9 +47,7 @@ const checkAuth = (req, res, next) => {
 const isAuthenticated = (req, res, next) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
-
-    //console.log('token: ' + accessToken);
-
+    
     if (refreshToken) {
         if (!accessToken) {
             console.log(`!accessToken`);
@@ -61,7 +59,10 @@ const isAuthenticated = (req, res, next) => {
                 maxAge: accessTokenExpiry,
                 sameSite: 'strict',
             });
-        } else {
+            accessToken = req.cookies.access_token;
+            const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            req.login = userVerify.login;
+        } else if (accessToken) {
             const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 import Navbar from "../Reusables/Navbar/Navbar";
@@ -36,7 +36,6 @@ function Profile() {
       const res = await axios.get(`http://localhost:8000/profile`, {
         withCredentials: true,
       });
-      console.log(res.data);
       if (res.data.sessionUser === true) {
         // setLinkArray(['/about', '/lessons', '/logout']);
         // setOptionsArray(['O aplikacji', 'Lekcje', 'Wyloguj']);
@@ -53,13 +52,10 @@ function Profile() {
         `http://localhost:8000/profile/${userId}`,
         { withCredentials: true }
       );
-      console.log(res.data);
-
       setLinkArray(["/about", "/lessons", "/logout"]);
       setOptionsArray(["O aplikacji", "Lekcje", "Wyloguj"]);
 
       if (res.data.sessionUser === true) {
-        console.log("sessionUser: " + res.data.sessionUser);
         setUser(res.data);
       } else {
         setUser(res.data);

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
@@ -55,8 +55,6 @@ function MainRegister() {
     passwordAgain: "",
   });
 
-  const [error, setError] = useState<string | null>(); // later to be removed
-
   const navigate = useNavigate();
 
   const alertSnackbarData = useSelector(
@@ -81,7 +79,6 @@ function MainRegister() {
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {
-        //setError(error.response.data);
         alertSnackbarDataDispatch(
           setAlert({
             severity: "error",
