@@ -72,13 +72,6 @@ function Lessons() {
     handleAuth();
   }, []);
 
-  const lessonStyle = {
-    animation: `0.6s comeUpLeft ease-out 1`,
-    animationDelay: "",
-  }; //Adjust/Remove
-
-  //TODO: Fix AlertSnackbar (not showing up)
-
   return (
     <>
       <Container component="div" className="wrapper">

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
@@ -39,8 +39,6 @@ function MainLogin() {
     password: "",
   });
 
-  const [error, setError] = useState<string | null>();
-
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
@@ -65,7 +63,6 @@ function MainLogin() {
         navigate("/lessons", { state: "Zalogowano pomyślnie" });
       })
       .catch((error) => {
-        //setError(error.response.data);
         alertSnackbarDataDispatch(
           setAlert({
             severity: "error",

@@ -47,9 +47,7 @@ const checkAuth = (req, res, next) => {
 const isAuthenticated = (req, res, next) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
-
-    //console.log('token: ' + accessToken);
-
+    
     if (refreshToken) {
         if (!accessToken) {
             console.log(`!accessToken`);

@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   Typography,
 } from "@mui/material";
@@ -48,11 +47,6 @@ function Lesson({ lessonData }: LessonProps) {
             <Typography variant="body2">{lessonData.description}</Typography>
           </CardContent>
         </CardActionArea>
-        {/* <CardActions>
-          <Button variant="text" sx={{ color: "primary.contrastText" }}>
-            Rozpocznij
-          </Button>
-        </CardActions> */}
       </Card>
     </>
   );
