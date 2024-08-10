@@ -13,8 +13,6 @@ import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
-import { useMessage } from "../..";
-
 import "./Lessons.scss";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
 
@@ -42,8 +40,6 @@ function Lessons() {
     "Rejestracja",
   ];
 
-  const { message, setMessage } = useMessage(); // later to be removed
-
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
@@ -55,14 +51,12 @@ function Lessons() {
     await axios
       .get("http://localhost:8000/lessons", { withCredentials: true })
       .then((res) => {
-        //console.log(res.data);
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
         console.log(alertSnackbarData.content);
       })
       .catch((error) => {
         console.log(error);
-        //setMessage("Sesja wygasła. Proszę zalogować się ponownie");
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",

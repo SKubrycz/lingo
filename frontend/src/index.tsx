@@ -16,54 +16,30 @@ import Lessons from "./Components/Lessons/Lessons";
 import Logout from "./Components/Logout/Logout";
 import reportWebVitals from "./reportWebVitals";
 
-export const MessageContext = createContext<{
-  message: string | undefined;
-  setMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
-}>({
-  message: undefined,
-  setMessage: () => {},
-});
-
-export const MessageProvider: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-  const [message, setMessage] = useState<string | undefined>(undefined);
-
-  return (
-    <MessageContext.Provider value={{ message, setMessage }}>
-      {children}
-    </MessageContext.Provider>
-  );
-};
-
-export const useMessage = () => useContext(MessageContext);
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <MessageProvider>
-        <ThemeProvider theme={defaultTheme}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="*" element={<NotFound></NotFound>}></Route>
-              <Route path="/" element={<Home></Home>}></Route>
-              <Route path="/login" element={<Login></Login>}></Route>
-              <Route path="/register" element={<Register></Register>}></Route>
-              <Route path="/about" element={<About></About>}></Route>
-              <Route path="/profile" element={<Profile></Profile>}></Route>
-              <Route
-                path="/profile/:userId"
-                element={<Profile></Profile>}
-              ></Route>
-              <Route path="/lessons" element={<Lessons></Lessons>}></Route>
-              <Route path="/logout" element={<Logout></Logout>}></Route>
-            </Routes>
-          </BrowserRouter>
-        </ThemeProvider>
-      </MessageProvider>
+      <ThemeProvider theme={defaultTheme}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="*" element={<NotFound></NotFound>}></Route>
+            <Route path="/" element={<Home></Home>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/register" element={<Register></Register>}></Route>
+            <Route path="/about" element={<About></About>}></Route>
+            <Route path="/profile" element={<Profile></Profile>}></Route>
+            <Route
+              path="/profile/:userId"
+              element={<Profile></Profile>}
+            ></Route>
+            <Route path="/lessons" element={<Lessons></Lessons>}></Route>
+            <Route path="/logout" element={<Logout></Logout>}></Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );

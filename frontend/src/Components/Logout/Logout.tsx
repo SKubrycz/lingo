@@ -5,11 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
-import { useMessage } from "../..";
-
 function Logout() {
-  const { message, setMessage } = useMessage();
-
   const navigate = useNavigate();
 
   const alertSnackbarDataDispatch = useDispatch();
@@ -18,7 +14,6 @@ function Logout() {
     await axios
       .get("http://localhost:8000/logout", { withCredentials: true })
       .then(() => {
-        //setMessage("Nastąpiło wylogowanie");
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",

@@ -9,8 +9,6 @@ import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 import { Container, Box, TextField, Button } from "@mui/material";
 
-import { useMessage } from "../../";
-
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -61,16 +59,10 @@ function MainRegister() {
 
   const navigate = useNavigate();
 
-  const { message, setMessage } = useMessage(); // later to be removed
-
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
   const alertSnackbarDataDispatch = useDispatch();
-
-  useEffect(() => {
-    setMessage(undefined);
-  }, [message, setMessage]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +78,6 @@ function MainRegister() {
             content: "Rejestracja przebiegła pomyślnie",
           })
         );
-        //console.log(message);
         navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
       })
       .catch((error) => {

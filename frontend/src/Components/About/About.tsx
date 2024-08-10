@@ -11,8 +11,6 @@ import MainAbout from "./MainAbout";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
-import { useMessage } from "../..";
-
 import "./About.scss";
 
 function About() {
@@ -28,8 +26,6 @@ function About() {
     "Logowanie",
     "Rejestracja",
   ];
-
-  const { message, setMessage } = useMessage();
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -52,7 +48,6 @@ function About() {
       })
       .catch((error) => {
         console.log(error);
-        //setMessage("Sesja wygasła. Proszę zalogować się ponownie");
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",
