@@ -18,6 +18,7 @@ router.post('/register', async (req, res) => {
         const findUserQuery = await queries.findOneUser(email, login);
         console.log(findUserQuery);
         if (findUserQuery) return res.status(422).send('Użytkownik już istnieje');
+        if (login.length <= 3) return res.status(422).send('Nazwa użytkownika musi być dłuższa niż 3 znaki');
 
         if (password === '' || !password) return res.status(422).send('Hasło niepoprawne');
         if (passwordAgain === '' || !passwordAgain) return res.status(422).send('Powtórzone hasło niepoprawne');

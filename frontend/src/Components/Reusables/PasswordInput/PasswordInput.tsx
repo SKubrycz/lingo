@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import { TextField, InputAdornment, IconButton } from "@mui/material";
+import { TextField, InputAdornment, IconButton, Tooltip } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 enum ActionType {
@@ -37,34 +37,39 @@ export default function PasswordInput({
   const passwordRef = useRef<HTMLInputElement>(null);
 
   return (
-    <TextField
-      label={label}
-      variant="standard"
-      inputRef={passwordRef}
-      type={showPassword ? "text" : "password"}
-      name={name}
-      onChange={(e) => inputDispatch(e)}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={() => setShowPassword(!showPassword)}
-              edge="end"
-            >
-              {showPassword ? (
-                <VisibilityOff></VisibilityOff>
-              ) : (
-                <Visibility></Visibility>
-              )}
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-      inputProps={{
-        maxLength: inputLength,
-      }}
-      autoComplete={autoComplete}
-    />
+    <Tooltip
+      title="Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
+      arrow={true}
+    >
+      <TextField
+        label={label}
+        variant="standard"
+        inputRef={passwordRef}
+        type={showPassword ? "text" : "password"}
+        name={name}
+        onChange={(e) => inputDispatch(e)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                edge="end"
+              >
+                {showPassword ? (
+                  <VisibilityOff></VisibilityOff>
+                ) : (
+                  <Visibility></Visibility>
+                )}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        inputProps={{
+          maxLength: inputLength,
+        }}
+        autoComplete={autoComplete}
+      />
+    </Tooltip>
   );
 }
