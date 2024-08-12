@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
-const hashData = (password) => {
+const hashData = (password: string) => {
     const hashedPassword = bcrypt.hash(password, 10);
 
     return hashedPassword;
 }
 
-module.exports = hashData;
+export default hashData;

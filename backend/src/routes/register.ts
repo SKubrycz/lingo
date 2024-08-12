@@ -1,23 +1,36 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
+
+import { findOneUser, insertOneUser } from '../assets/queries';
+
+import hashData from '../utilities/hashData';
+
 const router = express.Router();
 
-const queries = require('../assets/queries');
+interface RequestBody {
+    email: string;
+    login: string;
+    password: string;
+    passwordAgain: string;
+}
 
-const hashData = require('../utilities/hashData');
+interface RegisterRequest extends Request {
+    body: RequestBody;
+}
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: RegisterRequest, res: Response) => {
     try {
         const { email, login, password, passwordAgain } = await req.body;
 
-        const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        const regex: RegExp = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-        const hash = await hashData(password);
+        const hash: string = await hashData(password);
 
         if ((email === '' || !email) || (login === '' || !login)) return res.status(422).send('Należy wypełnić wszystkie pola formularza');
 
-        const findUserQuery = await queries.findOneUser(email, login);
+        const findUserQuery = await findOneUser(email, login);
         console.log(findUserQuery);
         if (findUserQuery) return res.status(422).send('Użytkownik już istnieje');
+        if (login.length <= 3) return res.status(422).send('Nazwa użytkownika musi być dłuższa niż 3 znaki');
 
         if (password === '' || !password) return res.status(422).send('Hasło niepoprawne');
         if (passwordAgain === '' || !passwordAgain) return res.status(422).send('Powtórzone hasło niepoprawne');
@@ -25,7 +38,7 @@ router.post('/register', async (req, res) => {
         if (password === passwordAgain) {
             console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
 
-            queries.insertOneUser(email, login, hash);
+            insertOneUser({email: email, login: login, password: hash});
 
             return res.status(200).send('Zarejestrowano');
         } else {
@@ -37,4 +50,4 @@ router.post('/register', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

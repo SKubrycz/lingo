@@ -1,27 +1,32 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
+
+import { RequestLogin } from '../middleware/auth';
+import { checkAuth } from '../middleware/auth';
+import { findLessons, findOneUserByLogin } from '../assets/queries';
+
 const router = express.Router();
 
-require('dotenv').config();
-
-const auth = require('../middleware/auth');
-
-const queries = require('../assets/queries');
-
-router.get('/lessons', auth.checkAuth, async (req, res) => {
+router.get('/lessons', checkAuth, async (req: RequestLogin, res: Response) => {
     console.log('route get /lessons: ');
 
-    const result = await queries.findLessons();
+    const result = await findLessons();
 
-    const userResult = await queries.findOneUserByLogin(req.login);
-    console.log(userResult.login);
+    if (!req.login) return res.status(500).send('Coś poszło nie tak po stronie serwera');
 
-    const results = {
-        result: result,
-        login: userResult.login
+    const userResult = await findOneUserByLogin(req.login);
+    if (userResult) {
+        console.log(userResult.login);
+
+        const results = {
+            result: result,
+            login: userResult.login
+        }
+        
+        res.send(results);
+    } else {
+        res.status(404).send('Nie znaleziono użytkownika');
     }
-    
-    res.send(results);
 });
 
 
-module.exports = router;
+export default router;

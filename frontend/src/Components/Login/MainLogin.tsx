@@ -96,7 +96,10 @@ function MainLogin() {
             name="login"
             autoFocus={true}
             onChange={(e) =>
-              loginDispatch({ type: ActionType.Login, payload: e.target.value })
+              loginDispatch({
+                type: ActionType.Login,
+                payload: e.target.value,
+              })
             }
             inputProps={{
               maxLength: inputLength,

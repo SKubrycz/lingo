@@ -1,30 +1,32 @@
+import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from "mongodb";
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-const jwt = require('jsonwebtoken');
-
-require('dotenv').config();
-
-interface TokenData {
+interface TokenData extends JwtPayload {
     _id: ObjectId,
     login: string;
-    iat: number;
-    exp: number;
+}
+
+export interface RequestLogin extends Request {
+    login?: string;
 }
 
 const accessTokenExpiry: number = 1000 * 60 * 60;
 const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
 
-const checkAuth = (req, res, next) => {
+export const checkAuth = (req: RequestLogin, res: Response, next: NextFunction) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
 
     console.log(accessToken);
 
+    if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET) return res.status(500).send('Coś poszło nie tak po naszej stronie');
+
     if (!refreshToken) {
         res.clearCookie('access_token');
         return res.status(401).send('Nieautoryzowany');
     } else if (!accessToken && refreshToken) {
-        const refreshTokenVerify: TokenData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const refreshTokenVerify = <TokenData>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
         accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET);
         res.cookie('access_token', accessToken, {
@@ -35,7 +37,7 @@ const checkAuth = (req, res, next) => {
     }
 
     try {
-        const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+        const userVerify = <TokenData>jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
         req.login = userVerify.login;
         console.log(req.login);
         next();
@@ -44,14 +46,16 @@ const checkAuth = (req, res, next) => {
     }
 }
 
-const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = (req: RequestLogin, res: Response, next: NextFunction) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
+
+    if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET) return res.status(500).send('Coś poszło nie tak po naszej stronie');
     
     if (refreshToken) {
         if (!accessToken) {
             console.log(`!accessToken`);
-            const refreshTokenVerify: TokenData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            const refreshTokenVerify = <TokenData>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
             accessToken = jwt.sign({ _id: refreshTokenVerify._id, login: refreshTokenVerify.login }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: accessTokenExpiry });
             res.cookie('access_token', accessToken, {
@@ -60,10 +64,10 @@ const isAuthenticated = (req, res, next) => {
                 sameSite: 'strict',
             });
             accessToken = req.cookies.access_token;
-            const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            const userVerify = <TokenData>jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         } else if (accessToken) {
-            const userVerify: TokenData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            const userVerify = <TokenData>jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         }
         next();
@@ -71,8 +75,4 @@ const isAuthenticated = (req, res, next) => {
         res.clearCookie('access_token');
         next();
     }
-}
-
-module.exports = {
-    checkAuth, isAuthenticated
 }

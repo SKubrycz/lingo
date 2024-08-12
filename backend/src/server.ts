@@ -1,32 +1,30 @@
-const express = require('express');
-const app = express();
-const helmet = require('helmet');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-require('dotenv').config();
+import express, { Express, Request, Response, NextFunction, Router } from 'express';
+import helmet from 'helmet'
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
-require('./assets/db');
+import { isAuthenticated } from './middleware/auth';
 
-const auth = require('./middleware/auth');
+import homeRoute from './routes/home';
+import registerRoute from './routes/register';
+import loginRoute from './routes/login';
+import profileRoute from './routes/profile';
+import lessonsRoute from './routes/lessons';
+import logoutRoute from './routes/logout';
+import aboutRoute from './routes/about';
 
-const homeRoute = require('./routes/home');
-const registerRoute = require('./routes/register');
-const loginRoute = require('./routes/login');
-const profileRoute = require('./routes/profile');
-const lessonsRoute = require('./routes/lessons');
-const logoutRoute = require('./routes/logout');
-const aboutRoute = require('./routes/about');
+const app: Express = express();
 
-const originDomain = 'http://localhost:3000';
+const originDomain: string = 'http://localhost:3000';
 
-const routesArray = [
+const routesArray: Router[] = [
     homeRoute, registerRoute, loginRoute, profileRoute, lessonsRoute, logoutRoute, aboutRoute,
 ];
 
 app.use(helmet());
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Content-Security-Policy', `script-src 'self' ${originDomain}`);
     return next();
 });
@@ -46,7 +44,7 @@ app.use(cookieParser());
 
 app.use(routesArray);
 
-app.all('*', auth.isAuthenticated, (req, res) => {
+app.all('*', isAuthenticated, (req: Request, res: Response) => {
     res.status(404).send('Błąd 404: Nie znaleziono zawartości');
 })
 

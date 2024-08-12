@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
-import { Container, Box, TextField, Button } from "@mui/material";
+import { Container, Box, TextField, Button, Tooltip } from "@mui/material";
 
 import PasswordInput from "../Reusables/PasswordInput/PasswordInput";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
@@ -122,22 +122,27 @@ function MainRegister() {
               maxLength: inputLength,
             }}
           ></TextField>
-          <TextField
-            label="Nazwa użytkownika"
-            type="login"
-            name="login"
-            variant="standard"
-            onChange={(e) =>
-              registerDispatch({
-                type: ActionType.Login,
-                payload: e.target.value,
-              })
-            }
-            autoComplete="username"
-            inputProps={{
-              maxLength: inputLength,
-            }}
-          ></TextField>
+          <Tooltip
+            title="Nazwa użytkownika musi być dłuższa niż 3 znaki"
+            arrow={true}
+          >
+            <TextField
+              label="Nazwa użytkownika"
+              type="login"
+              name="login"
+              variant="standard"
+              onChange={(e) =>
+                registerDispatch({
+                  type: ActionType.Login,
+                  payload: e.target.value,
+                })
+              }
+              autoComplete="username"
+              inputProps={{
+                maxLength: inputLength,
+              }}
+            ></TextField>
+          </Tooltip>
           <PasswordInput
             label="Hasło"
             name="password"

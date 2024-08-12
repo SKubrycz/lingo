@@ -1,12 +1,10 @@
-const express = require('express');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+
+import { findOneUserByLogin } from '../assets/queries';
+import comparePassword from '../utilities/comparePassword';
+
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-
-require('dotenv').config();
-
-const queries = require('../assets/queries');
-
-const comparePassword = require('../utilities/comparePassword');
 
 router.post('/login', async (req, res) => {
     try {
@@ -14,8 +12,9 @@ router.post('/login', async (req, res) => {
 
         console.log(`posted in /login: ${login}, ${password}`);
 
+        if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET) return;
 
-        const result = await queries.findOneUserByLogin(login);
+        const result = await findOneUserByLogin(login);
         if (!result) return res.status(404).send('Nie znaleziono użytkownika');
 
         const comparison = await comparePassword(password, result.password);
@@ -47,4 +46,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

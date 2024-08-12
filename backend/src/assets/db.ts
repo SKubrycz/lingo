@@ -1,23 +1,31 @@
-const MongoClient = require("mongodb").MongoClient;
+import { MongoClient, Db } from 'mongodb'
 
-const uri = 
+const uri: string = 
     "mongodb://localhost:27017/language-app";
 
 //TODO (Edit: Likely fixed): Examine client.close() bug which throws an error
 
-const client = new MongoClient(uri, { connectTimeoutMS: 30000 });
+let client: MongoClient;
+let db: Db;
 
-const runDB = async () => {
+export const connectToDb = async (): Promise<void> => {
     try {
+        client = new MongoClient(uri, { connectTimeoutMS: 30000 });
         await client.connect();
         console.log("Connected successfully to the server");
 
-        return client.db('language-app');
+        db = client.db('language-app');
     } catch (err) {
         console.log('mongodb err', err);
-        client.close();
+        closeDbConnection();
     }
 }
-runDB().catch(console.dir);
+connectToDb().catch(console.dir);
 
-module.exports = runDB;
+export const getDb = (): Db =>  {
+    return db;
+}
+
+export const closeDbConnection = (): Promise<void> => {
+    return client.close();
+}
