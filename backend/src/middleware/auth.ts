@@ -63,7 +63,6 @@ export const isAuthenticated = (req: RequestLogin, res: Response, next: NextFunc
                 maxAge: accessTokenExpiry,
                 sameSite: 'strict',
             });
-            accessToken = req.cookies.access_token;
             const userVerify = <TokenData>jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             req.login = userVerify.login;
         } else if (accessToken) {
