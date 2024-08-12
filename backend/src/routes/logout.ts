@@ -1,9 +1,8 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
+
 const router = express.Router();
 
-require('dotenv').config();
-
-router.get('/logout', async (req, res) => {
+router.get('/logout', async (req: Request, res: Response) => {
     console.log('route get /logout: ');
 
     res.clearCookie('access_token');

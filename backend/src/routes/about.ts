@@ -1,26 +1,29 @@
-const express = require('express');
+import express, { Response } from 'express';
+
+import { RequestLogin } from '../middleware/auth';
+import { isAuthenticated } from "../middleware/auth";
+import { findOneUserByLogin } from "../assets/queries";
+
 const router = express.Router();
 
-require('dotenv').config();
-
-const auth = require('../middleware/auth');
-
-const queries = require('../assets/queries');
-
-router.get('/about', auth.isAuthenticated, async (req, res) => {
+router.get('/about', isAuthenticated, async (req: RequestLogin, res: Response) => {
     console.log('route get /about: ');
 
-    if (req.login !== undefined) {
-        const userResult = await queries.findOneUserByLogin(req.login);
-        console.log(userResult.login);
+    if (req.login) {
+        const userResult = await findOneUserByLogin(req.login);
+        if (userResult) {
+            console.log(userResult.login);
 
-        const results = {
-            login: userResult.login
+            const results = {
+                login: userResult.login
+            }
+
+            res.status(200).send(results);
+        } else {
+            res.status(404).send('Nie znaleziono użytkownika'); //Later to be closely examined (maybe change the status code)
         }
-
-        res.status(200).send(results);
-    } else if (req.login === undefined) {
-        res.status(200).send('Not logged in');
+    } else if (!req.login) {
+        res.status(200).send('Nie zalogowany');
     }
 });
 

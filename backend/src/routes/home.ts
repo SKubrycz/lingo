@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Response, Router } from 'express';
 import { RequestLogin } from '../middleware/auth';
 
 const router: Router = express.Router();

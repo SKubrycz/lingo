@@ -1,20 +1,18 @@
 import { ObjectId } from "mongodb";
+import express, { Request, Response } from 'express';
 
-const express = require('express');
+import { RequestLogin } from '../middleware/auth';
+
+import { findOneUserByLogin } from '../assets/queries';
+import { isAuthenticated } from "../middleware/auth";
+
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-const queries = require('../assets/queries');
-
-const auth = require('../middleware/auth');
-
 
 interface FindUser {
     _id: ObjectId;
     login: string;
     createdDate: Date;
-}
+} // !not equal to the one in queries.ts
 
 interface SentUser {
     id: ObjectId;
@@ -23,7 +21,7 @@ interface SentUser {
     sessionUser: boolean;
 }
 
-router.get('/profile', auth.isAuthenticated, async (req, res) => {
+router.get('/profile', isAuthenticated, async (req: Request, res: Response) => {
     try {
 
         console.log('/profile');
@@ -47,29 +45,33 @@ router.get('/profile', auth.isAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/profile/:id', auth.isAuthenticated, async (req, res) => {
+router.get('/profile/:id', isAuthenticated, async (req: RequestLogin, res: Response) => {
     try {
         const login = await req.params.id;
 
         console.log(`get in /profile/:id: ${login}`);
 
-        const result: FindUser = await queries.findOneUserByLogin(login);
+        const result: FindUser | null = await findOneUserByLogin(login);
 
-        console.log(result.login);
+        if (result) {
+            console.log(result.login);
 
-        let sessionUser = false;
-        if (req.login === result.login) sessionUser = true;
-
-        const parseDate: string = result.createdDate.toLocaleDateString();
-
-        const fetched: SentUser = {
-            id: result._id,
-            login: result.login,
-            createdDate: parseDate,
-            sessionUser: sessionUser,
+            let sessionUser = false;
+            if (req.login === result.login) sessionUser = true;
+    
+            const parseDate: string = result.createdDate.toLocaleDateString();
+    
+            const fetched: SentUser = {
+                id: result._id,
+                login: result.login,
+                createdDate: parseDate,
+                sessionUser: sessionUser,
+            }
+    
+            return res.status(200).send(fetched);
+        } else {
+            res.status(404)
         }
-
-        return res.status(200).send(fetched);
     } catch (error) {
         res.status(500).send(`Error /profile/:id ${error}`);
     }
