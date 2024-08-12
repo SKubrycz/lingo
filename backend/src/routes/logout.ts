@@ -12,4 +12,4 @@ router.get('/logout', async (req, res) => {
     res.status(200).send('Wylogowano');
 });
 
-module.exports = router;
+export default router;

@@ -24,4 +24,4 @@ router.get('/lessons', auth.checkAuth, async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

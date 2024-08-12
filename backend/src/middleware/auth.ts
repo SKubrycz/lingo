@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from "mongodb";
 
 const jwt = require('jsonwebtoken');
@@ -11,10 +12,14 @@ interface TokenData {
     exp: number;
 }
 
+export interface RequestLogin extends Request {
+    login?: string;
+}
+
 const accessTokenExpiry: number = 1000 * 60 * 60;
 const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
 
-const checkAuth = (req, res, next) => {
+export const checkAuth = (req: RequestLogin, res: Response, next: NextFunction) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
 
@@ -44,7 +49,7 @@ const checkAuth = (req, res, next) => {
     }
 }
 
-const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = (req: RequestLogin, res: Response, next: NextFunction) => {
     let accessToken: string = req.cookies.access_token;
     let refreshToken: string = req.cookies.refresh_token;
     
@@ -71,8 +76,4 @@ const isAuthenticated = (req, res, next) => {
         res.clearCookie('access_token');
         next();
     }
-}
-
-module.exports = {
-    checkAuth, isAuthenticated
 }

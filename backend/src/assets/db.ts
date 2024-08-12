@@ -7,7 +7,7 @@ const uri =
 
 const client = new MongoClient(uri, { connectTimeoutMS: 30000 });
 
-const runDB = async () => {
+export const runDB = async () => {
     try {
         await client.connect();
         console.log("Connected successfully to the server");

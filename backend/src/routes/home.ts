@@ -1,15 +1,15 @@
-const express = require('express');
-const router = express.Router();
+import express, { Request, Response, Router } from 'express';
+import { RequestLogin } from '../middleware/auth';
 
-require('dotenv').config();
+const router: Router = express.Router();
 
 const auth = require('../middleware/auth');
 
-router.get('/', auth.isAuthenticated, async (req, res) => {
+router.get('/', auth.isAuthenticated, async (req: RequestLogin, res: Response) => {
     console.log('route get /: ');
     console.log(`req.login ${req.login}`);
     
-    let sessionUser = false;
+    let sessionUser: boolean = false;
     if (req.login) {
         sessionUser = true;
         res.status(403).send(sessionUser);
@@ -21,4 +21,4 @@ router.get('/', auth.isAuthenticated, async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
