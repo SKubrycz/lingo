@@ -31,14 +31,15 @@ function Lessons() {
     "/profile",
     "/logout",
   ]);
+  const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
+    "/about",
+    "/lessons",
+    "/profile",
+  ]);
+
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
 
-  const footerLinkArray: string[] = ["/about", "/login", "/register"];
-  const footerOptionsArray: string[] = [
-    "O aplikacji",
-    "Logowanie",
-    "Rejestracja",
-  ];
+  const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -53,6 +54,7 @@ function Lessons() {
       .then((res) => {
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
+        setFooterLinkArray(["/about", "/lessons", `/profile${res.data.login}`]);
       })
       .catch((error) => {
         console.log(error);

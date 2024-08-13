@@ -19,13 +19,16 @@ function About() {
     "Logowanie",
     "Rejestracja",
   ]);
-
-  const footerLinkArray: string[] = ["/about", "/login", "/register"];
-  const footerOptionsArray: string[] = [
+  const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
+    "/about",
+    "/login",
+    "/register",
+  ]);
+  const [footerOptionsArray, setFooterOptionsArray] = useState<string[]>([
     "O aplikacji",
     "Logowanie",
     "Rejestracja",
-  ];
+  ]);
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -41,6 +44,12 @@ function About() {
         if (res.data.login) {
           setLinkArray(["/lessons", `/profile/${res.data.login}`, "/logout"]);
           setOptionsArray(["Lekcje", "Profil", "Wyloguj"]);
+          setFooterLinkArray([
+            "/about",
+            "/lessons",
+            `/profile/${res.data.login}`,
+          ]);
+          setFooterOptionsArray(["O aplikacji", "Lekcje", "Profil"]);
         } else {
           //console.log(res.data);
         }
