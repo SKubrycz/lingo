@@ -7,8 +7,6 @@ import { findLessons, findOneUserByLogin } from '../assets/queries';
 const router = express.Router();
 
 router.get('/lessons', checkAuth, async (req: RequestLogin, res: Response) => {
-    console.log('route get /lessons: ');
-
     const result = await findLessons();
 
     if (!req.login) return res.status(500).send('Coś poszło nie tak po stronie serwera');

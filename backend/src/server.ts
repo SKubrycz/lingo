@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 import { isAuthenticated } from './middleware/auth';
+import routeLogger from './middleware/routeLogger';
 
 import homeRoute from './routes/home';
 import registerRoute from './routes/register';
@@ -42,10 +43,12 @@ app.use(cors({
 
 app.use(cookieParser());
 
+app.use(routeLogger);
+
 app.use(routesArray);
 
 app.all('*', isAuthenticated, (req: Request, res: Response) => {
     res.status(404).send('Błąd 404: Nie znaleziono zawartości');
-})
+});
 
-app.listen(process.env.PORT, () => console.log(`server running on port: ${process.env.PORT}`));
+app.listen(process.env.PORT, () => console.log(`Server running on port: ${process.env.PORT}`));
