@@ -21,14 +21,6 @@
     align-items: center;
 }
 
-.main-login-title {
-    padding: .5em;
-    
-    text-align: center;
-
-    animation: .7s popSize 1;
-}
-
 .login-form {
     width: 33%;
 
@@ -66,23 +58,6 @@
         width: 100%;
     }
 }
-
-.login-password-reveal {
-    margin: 0.5em 0;
-    padding: 0.5em 0;
-
-    position: absolute;
-
-    font-size: 13px;
-
-    &:hover {
-        color: $baseColor;
-    }
-
-    cursor: pointer;
-    user-select: none;
-}
-
 
 // ---> MEDIA QUERIES
 
