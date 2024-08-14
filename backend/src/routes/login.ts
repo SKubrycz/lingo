@@ -10,7 +10,7 @@ router.post('/login', async (req, res) => {
     try {
         const { login, password } = await req.body;
 
-        console.log(`posted in /login: ${login}, ${password}`);
+        console.log(`req.body in ${req.originalUrl} ${login}, ${password}`);
 
         if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET) return;
 

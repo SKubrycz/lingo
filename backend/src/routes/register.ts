@@ -36,7 +36,7 @@ router.post('/register', async (req: RegisterRequest, res: Response) => {
         if (passwordAgain === '' || !passwordAgain) return res.status(422).send('Powtórzone hasło niepoprawne');
         if (regex.test(password) === false) return res.status(422).send('Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny');
         if (password === passwordAgain) {
-            console.log(`posted in /register: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
+            console.log(`req.body in ${req.originalUrl}: ${email} ${login} ${password} ${passwordAgain}, ${hash}`);
 
             insertOneUser({email: email, login: login, password: hash});
 

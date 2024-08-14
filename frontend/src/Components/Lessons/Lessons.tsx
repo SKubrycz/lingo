@@ -54,7 +54,11 @@ function Lessons() {
       .then((res) => {
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
-        setFooterLinkArray(["/about", "/lessons", `/profile${res.data.login}`]);
+        setFooterLinkArray([
+          "/about",
+          "/lessons",
+          `/profile/${res.data.login}`,
+        ]);
       })
       .catch((error) => {
         console.log(error);

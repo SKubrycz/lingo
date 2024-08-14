@@ -7,8 +7,6 @@ import { findOneUserByLogin } from "../assets/queries";
 const router = express.Router();
 
 router.get('/about', isAuthenticated, async (req: RequestLogin, res: Response) => {
-    console.log('route get /about: ');
-
     if (req.login) {
         const userResult = await findOneUserByLogin(req.login);
         if (userResult) {

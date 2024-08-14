@@ -1,4 +1,5 @@
 import { MongoClient, Db } from 'mongodb'
+import colors from 'colors';
 
 const uri: string = 
     "mongodb://localhost:27017/language-app";
@@ -12,7 +13,7 @@ export const connectToDb = async (): Promise<void> => {
     try {
         client = new MongoClient(uri, { connectTimeoutMS: 30000 });
         await client.connect();
-        console.log("Connected successfully to the server");
+        console.log("Connected successfully to " + colors.green("MongoClient"));
 
         db = client.db('language-app');
     } catch (err) {

@@ -23,8 +23,6 @@ interface SentUser {
 
 router.get('/profile', isAuthenticated, async (req: Request, res: Response) => {
     try {
-
-        console.log('/profile');
         /* console.log('res.user:' + res.user.login);
         
         const result = await queries.findOneUserByLogin(res.user.login);
@@ -49,7 +47,7 @@ router.get('/profile/:id', isAuthenticated, async (req: RequestLogin, res: Respo
     try {
         const login = await req.params.id;
 
-        console.log(`get in /profile/:id: ${login}`);
+        console.log(`login in ${req.originalUrl} ${login}`);
 
         const result: FindUser | null = await findOneUserByLogin(login);
 
@@ -73,7 +71,7 @@ router.get('/profile/:id', isAuthenticated, async (req: RequestLogin, res: Respo
             res.status(404)
         }
     } catch (error) {
-        res.status(500).send(`Error /profile/:id ${error}`);
+        res.status(500).send(`Error ${req.originalUrl} ${error}`);
     }
 });
 

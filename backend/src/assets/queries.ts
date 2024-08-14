@@ -44,7 +44,7 @@ export const insertOneUser = async ({email, login, password}: InsertUser): Promi
                 'password': password,
                 'createdDate': new Date(Date.now()),
             });
-            console.log(result);
+            //console.log(result);
     } catch (error) {
         console.error(error);
     } finally {
@@ -64,7 +64,7 @@ export const findOneUser = async (email: string, login: string): Promise<FindUse
                 { 'login': login }
             ]
         });
-        console.log(result);
+        //console.log(result);
         return result;
     } catch (error) {
         console.error(error);
@@ -84,7 +84,7 @@ export const findOneUserByLogin = async (login: string): Promise<FindUser | null
             'login': login
         });
     
-        console.log(result);
+        //console.log(result);
         return result;
     } catch (error) {
         console.error(error);
@@ -120,7 +120,7 @@ export const findLessons = async (): Promise<Lesson[] | null> => {
             new_words: res.new_words,
         }))
 
-        console.log(resultArr);
+        //console.log(resultArr);
         return resultArr;
     } catch (error) {
         console.error(error);
