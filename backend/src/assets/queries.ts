@@ -1,4 +1,4 @@
-import { ObjectId, Db, WithId, Document, FindCursor } from "mongodb";
+import { ObjectId, Db } from "mongodb";
 import { connectToDb, getDb, closeDbConnection } from '../assets/db';
 
 interface User {
