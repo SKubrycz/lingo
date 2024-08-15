@@ -12,6 +12,7 @@ import Navbar from "../Reusables/Navbar/Navbar";
 import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 
 import "./Lessons.scss";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -41,7 +42,7 @@ function Lessons() {
 
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
-  const alertSnackbarData = useSelector(
+  const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
   const alertSnackbarDataDispatch = useDispatch();

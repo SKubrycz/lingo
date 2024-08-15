@@ -3,7 +3,7 @@ a, a:visited {
 
     text-decoration: none;
 
-    color: adjust-color($color: $baseColor, $lightness: 50%);
+    //color: adjust-color($color: $baseColor, $lightness: 50%);
 }
 
 button {
@@ -42,7 +42,7 @@ button {
     animation: fadeIn 1s 1;
 }
 
-.navbar-wrapper {
+/* .navbar-wrapper {
     width: inherit;
     margin: none;
     padding: none;
@@ -134,7 +134,7 @@ button {
             background-color: adjust-color($color: $baseColor, $blackness: 10%);
         }
     }
-}
+} */
 
 .error-text {
     font-weight: bold;

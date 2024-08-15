@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import BurgerIcon from "../../../assets/icons/burger.svg";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Link } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 interface NavbarProps {
@@ -55,12 +55,25 @@ function Navbar({ link, options }: NavbarProps) {
               fontWeight: "500",
             }}
           >
-            <Link to="/">LOGO</Link>
+            <Link
+              to="/"
+              component={RouterLink}
+              underline="none"
+              color="primary.contrastText"
+            >
+              LOGO
+            </Link>
           </Typography>
           <Box>
             {options.map((value, index) => {
               return (
-                <Link key={index} to={link[index]}>
+                <Link
+                  key={index}
+                  to={link[index]}
+                  component={RouterLink}
+                  underline="none"
+                  color="primary.contrastText"
+                >
                   {value}
                 </Link>
               );

@@ -1,44 +1,82 @@
 import { createTheme } from "@mui/material/styles";
 
-const navbarFontColor: string = '#fff0e6';
+const navbarFontColor: string = "#fff0e6";
 
 const defaultThemePalette = createTheme({
-    palette: {
-      mode: "light",
-      primary: {
-        main: "rgb(230, 92, 0)",
-      },
-      secondary: {
-        main: "#c64000",
-      },
+  palette: {
+    mode: "light",
+    primary: {
+      main: "rgb(253, 229, 210)", //"rgb(230, 92, 0)",
+      contrastText: "rgb(230, 92, 0)",
     },
+    secondary: {
+      main: "#c64000",
+    },
+    contrastThreshold: 4.5,
+  },
 
-    typography: {
-      fontFamily: "Fira Sans",
-    },
-    components: {
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            margin: ".5em",
-          },
+  typography: {
+    fontFamily: "Fira Sans",
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          margin: ".5em",
         },
       },
-  }});
+    },
+  },
+});
 
 export const defaultTheme = createTheme(defaultThemePalette, {
   palette: {
     background: {
-      paper: defaultThemePalette.palette.primary.main,
+      paper: defaultThemePalette.palette.primary.dark,
     },
   },
 
-  MuiCard: {
-    styleOverrides: {
-      root: {
-        backgroundColor: defaultThemePalette.palette.primary.main,
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: defaultThemePalette.palette.primary.dark,
+        },
+      },
+    },
+
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          label: {
+            "&.Mui-focused": {
+              color: defaultThemePalette.palette.primary.contrastText,
+            },
+          },
+        },
+      },
+    },
+
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          "&::after": {
+            "border-bottom": `2px solid ${defaultThemePalette.palette.primary.contrastText}`,
+          },
+        },
+      },
+    },
+
+    MuiAppBar: {
+      styleOverrides: {
+        root: {},
+      },
+    },
+
+    MuiLink: {
+      styleOverrides: {
+        root: {},
       },
     },
   },
-}
-);
+});
