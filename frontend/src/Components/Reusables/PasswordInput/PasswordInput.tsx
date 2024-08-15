@@ -18,6 +18,7 @@ interface Actions {
 interface PasswordInputProps {
   label: string;
   name: string;
+  openTooltip: boolean;
   inputLength?: number;
   autoComplete?: string;
   inputDispatch: (
@@ -28,18 +29,29 @@ interface PasswordInputProps {
 export default function PasswordInput({
   label,
   name,
+  openTooltip,
   inputLength,
   autoComplete,
   inputDispatch,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const handleTooltipOpen = () => {
+    if (openTooltip) {
+      setOpen(!open);
+    }
+  };
 
   return (
     <Tooltip
       title="Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
       arrow={true}
+      onOpen={handleTooltipOpen}
+      onClose={handleTooltipOpen}
+      open={open}
     >
       <TextField
         label={label}

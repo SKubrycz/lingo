@@ -77,8 +77,6 @@ function MainLogin() {
 
   const inputLength: number = 30;
 
-  //(Probably, but mostly in case of Register component) TODO: Add tooltips for information about input (how long what symbols are valid)
-
   return (
     <Container component="div">
       <Box component="main" className="main-login">
@@ -109,6 +107,7 @@ function MainLogin() {
           <PasswordInput
             label="Hasło"
             name="password"
+            openTooltip={false}
             inputLength={inputLength}
             autoComplete="current-password"
             inputDispatch={(e) =>
