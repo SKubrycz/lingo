@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
-import { Box, Container } from "@mui/material";
+import { Box, Container, Stack, Divider } from "@mui/material";
 
 import Navbar from "../Reusables/Navbar/Navbar";
 import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 
 import "./Lessons.scss";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -41,7 +42,7 @@ function Lessons() {
 
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
-  const alertSnackbarData = useSelector(
+  const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
   const alertSnackbarDataDispatch = useDispatch();
@@ -84,9 +85,20 @@ function Lessons() {
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <Box className="lessons-wrapper">
           <PageTitle title="Wszystkie lekcje:"></PageTitle>
-          {lessons.map((value: LessonData, index: number) => {
-            return <Lesson key={index} lessonData={value}></Lesson>;
-          })}
+          <Stack spacing={4} sx={{ minWidth: "60%", margin: "1em" }}>
+            {lessons.map((value: LessonData, index: number) => {
+              if (index === lessons.length - 1) {
+                return <Lesson key={index} lessonData={value}></Lesson>;
+              } else {
+                return (
+                  <>
+                    <Lesson key={index} lessonData={value}></Lesson>
+                    <Divider></Divider>
+                  </>
+                );
+              }
+            })}
+          </Stack>
         </Box>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
       </Container>

@@ -4,10 +4,13 @@ import "./Lessons.scss";
 
 import {
   Button,
+  Box,
   Card,
   CardActionArea,
   CardContent,
+  Container,
   Typography,
+  Stack,
 } from "@mui/material";
 
 interface LessonData {
@@ -30,7 +33,7 @@ function Lesson({ lessonData }: LessonProps) {
 
   return (
     <>
-      <Card
+      {/* <Card
         sx={{
           minWidth: "33%",
           margin: ".5em",
@@ -47,7 +50,23 @@ function Lesson({ lessonData }: LessonProps) {
             <Typography variant="body2">{lessonData.description}</Typography>
           </CardContent>
         </CardActionArea>
-      </Card>
+      </Card> */}
+
+      <Container
+        component="div"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box component="div">
+          <Typography variant="h6">
+            {lessonData.number} - {lessonData.title}
+          </Typography>
+          <Typography variant="body2">{lessonData.description}</Typography>
+        </Box>
+        <Button variant="text">Rozpocznij</Button>
+      </Container>
     </>
   );
 }
