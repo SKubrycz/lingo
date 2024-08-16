@@ -78,5 +78,13 @@ export const defaultTheme = createTheme(defaultThemePalette, {
         root: {},
       },
     },
+
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: defaultThemePalette.palette.primary.contrastText,
+        },
+      },
+    },
   },
 });
