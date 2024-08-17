@@ -85,18 +85,13 @@ function Lessons() {
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <Box className="lessons-wrapper">
           <PageTitle title="Wszystkie lekcje:"></PageTitle>
-          <Stack spacing={4} sx={{ minWidth: "60%", margin: "1em" }}>
+          <Stack
+            spacing={4}
+            divider={<Divider orientation="horizontal"></Divider>}
+            sx={{ minWidth: "60%", margin: "1em" }}
+          >
             {lessons.map((value: LessonData, index: number) => {
-              if (index === lessons.length - 1) {
-                return <Lesson key={index} lessonData={value}></Lesson>;
-              } else {
-                return (
-                  <>
-                    <Lesson key={index} lessonData={value}></Lesson>
-                    <Divider></Divider>
-                  </>
-                );
-              }
+              return <Lesson key={index} lessonData={value}></Lesson>;
             })}
           </Stack>
         </Box>
