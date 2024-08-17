@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Stack,
   ListItemButton,
 } from "@mui/material";
 
@@ -93,16 +94,78 @@ function MainProfile({ user }: { user: User | null }) {
       <Container component="div">
         <Grid container className="main-profile" columns={12}>
           <Grid container xs={8}>
-            <Grid item xs={12} sx={{ background: "rgb(230, 92, 0)" }}>
-              Somecontent
+            <Grid
+              item
+              xs={12}
+              sx={{
+                margin: "1em",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
+                {user?.login.charAt(0)}
+              </Avatar>
+              <Box
+                component="div"
+                sx={{
+                  margin: "0 1em",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: 500,
+                  }}
+                >
+                  {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 400, color: "primary.dark" }}
+                >
+                  {`Data założenia konta:
+                ${user?.createdDate ? user?.createdDate : "-"}`}
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={12}>
-              Container2
+              <Stack
+                divider={<Divider orientation="horizontal"></Divider>}
+                sx={{
+                  width: "100%",
+                  minWidth: 360,
+                }}
+              >
+                {statsData.map((value, index) => {
+                  return (
+                    //IDEA: Add icons to each ListItem based on what they represent
+                    <ListItem
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <ListItemText
+                        primary={`Stat${index + 1}:`}
+                      ></ListItemText>
+                      <ListItemText
+                        primary={value}
+                        sx={{ display: "flex", justifyContent: "flex-end" }}
+                      ></ListItemText>
+                    </ListItem>
+                  );
+                })}
+              </Stack>
             </Grid>
           </Grid>
           <Grid container xs={4}>
-            <Grid xs={12} sx={{ background: "blue" }}>
-              Another container
+            <Grid item xs={12} sx={{ margin: "1em" }}>
+              {/*<insert some chart or data diagram here (in the future)>*/}{" "}
+              Data
             </Grid>
           </Grid>
         </Grid>

@@ -84,7 +84,7 @@ function Lessons() {
       <Container component="div" className="wrapper">
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <Box className="lessons-wrapper">
-          <PageTitle title="Wszystkie lekcje:"></PageTitle>
+          <PageTitle title="Wszystkie lekcje"></PageTitle>
           <Stack
             spacing={4}
             divider={<Divider orientation="horizontal"></Divider>}
