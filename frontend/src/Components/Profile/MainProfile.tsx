@@ -27,6 +27,8 @@ import {
   QuestionMark,
 } from "@mui/icons-material";
 
+import { defaultTheme } from "../../defaultTheme";
+
 import PageTitle from "../Reusables/PageTitle/PageTitle";
 import { useEffect, useState } from "react";
 
@@ -131,12 +133,22 @@ function MainProfile({ user }: { user: User | null }) {
                   xAxis={[
                     {
                       dataKey: "date",
-                      scaleType: "time",
+                      scaleType: "point",
                       valueFormatter,
                     },
                   ]}
-                  series={[{ dataKey: "count" }]}
+                  series={[
+                    {
+                      dataKey: "count",
+                      color: defaultTheme.palette.primary.contrastText,
+                    },
+                  ]}
                   height={500}
+                  sx={{
+                    ".MuiMarkElement-root": {
+                      fill: defaultTheme.palette.primary.contrastText,
+                    },
+                  }}
                 ></LineChart>
               </Grid>
             </Grid>
