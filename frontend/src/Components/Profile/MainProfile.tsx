@@ -116,7 +116,7 @@ function MainProfile({ user }: { user: User | null }) {
       </Container> */}
       <Container component="div">
         <Grid container className="main-profile" columns={12}>
-          <Grid container xs={8}>
+          <Grid container xs={8} sx={{ display: "block" }}>
             <Grid
               item
               xs={12}
@@ -124,6 +124,7 @@ function MainProfile({ user }: { user: User | null }) {
                 margin: "1em",
                 display: "flex",
                 flexDirection: "row",
+                flexGrow: 1,
               }}
             >
               <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
@@ -135,7 +136,6 @@ function MainProfile({ user }: { user: User | null }) {
                   margin: "0 1em",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
                 }}
               >
                 <Typography
@@ -155,7 +155,7 @@ function MainProfile({ user }: { user: User | null }) {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ flexGrow: 3 }}>
               {" "}
               <Grid item xs={12} sx={{ margin: "1em" }}>
                 {/*<insert some chart or data diagram here (in the future)>*/}
