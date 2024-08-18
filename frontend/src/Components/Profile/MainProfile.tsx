@@ -33,18 +33,25 @@ interface User {
   sessionUser: boolean;
 }
 
+type StatData = number | string;
+
 interface Stat {
   id: number;
   name: string;
-  data: number;
+  data: StatData;
 }
+
+// IDEA: For stats add a tooltip with more information
+
+const myTime: number = Math.floor(Math.random() * 1000 * 60 * 60 * 24);
+const timeSpentLearning: number = Math.floor(myTime / (1000 * 60 * 60));
 
 //later to be replaced with API data
 const statsData: Stat[] = [
-  { id: 1, name: "Czas spędzony na nauce", data: 1500 },
+  { id: 1, name: "Czas spędzony na nauce", data: `${timeSpentLearning} godz.` },
   { id: 2, name: "Liczba ukończonych lekcji", data: 123 },
-  { id: 3, name: "Dokładność w lekcjach", data: 99.5 },
-  { id: 4, name: "Nauczone słowa", data: 12.5 },
+  { id: 3, name: "Dokładność w lekcjach", data: `${99.5}%` },
+  { id: 4, name: "Nauczone słowa", data: 12 },
   { id: 5, name: "Coś", data: 5863895672 },
 ]; //[1500, 123, "99%", 12.5, 5863895672];
 const listIcons = [AccessTime, Done, Percent, Translate, QuestionMark];
