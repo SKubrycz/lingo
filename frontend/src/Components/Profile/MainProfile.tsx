@@ -17,6 +17,8 @@ import {
   ListItemIcon,
 } from "@mui/material";
 
+import { LineChart } from "@mui/x-charts";
+
 import {
   AccessTime,
   Done,
@@ -26,6 +28,7 @@ import {
 } from "@mui/icons-material";
 
 import PageTitle from "../Reusables/PageTitle/PageTitle";
+import { useEffect, useState } from "react";
 
 interface User {
   login: string;
@@ -41,88 +44,44 @@ interface Stat {
   data: StatData;
 }
 
-// IDEA: For stats add a tooltip with more information
-
-const myTime: number = Math.floor(Math.random() * 1000 * 60 * 60 * 24);
-const timeSpentLearning: number = Math.floor(myTime / (1000 * 60 * 60));
-
-//later to be replaced with API data
-const statsData: Stat[] = [
-  { id: 1, name: "Czas spędzony na nauce", data: `${timeSpentLearning} godz.` },
-  { id: 2, name: "Liczba ukończonych lekcji", data: 123 },
-  { id: 3, name: "Dokładność w lekcjach", data: `${99.5}%` },
-  { id: 4, name: "Nauczone słowa", data: 12 },
-  { id: 5, name: "Coś", data: 5863895672 },
-]; //[1500, 123, "99%", 12.5, 5863895672];
-const listIcons = [AccessTime, Done, Percent, Translate, QuestionMark];
-
 function MainProfile({ user }: { user: User | null }) {
+  const dataset = [
+    { date: new Date(2024, 7, 1), count: 1 },
+    { date: new Date(2024, 7, 2), count: 2 },
+    { date: new Date(2024, 7, 3), count: 4 },
+    { date: new Date(2024, 7, 4), count: 5 },
+    { date: new Date(2024, 7, 5), count: 2 },
+    { date: new Date(2024, 7, 6), count: 8 },
+    { date: new Date(2024, 7, 7), count: 7 },
+  ];
+
+  const valueFormatter = (date: Date) => {
+    return date.toLocaleDateString(undefined, {
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
+  // IDEA: For stats add a tooltip with more information
+
+  const myTime: number = Math.floor(Math.random() * 1000 * 60 * 60 * 24);
+  const timeSpentLearning: number = Math.floor(myTime / (1000 * 60 * 60));
+
+  //later to be replaced with API data
+  const statsData: Stat[] = [
+    {
+      id: 1,
+      name: "Czas spędzony na nauce",
+      data: `${timeSpentLearning} godz.`,
+    },
+    { id: 2, name: "Liczba ukończonych lekcji", data: 123 },
+    { id: 3, name: "Dokładność w lekcjach", data: `${99.5}%` },
+    { id: 4, name: "Nauczone słowa", data: 12 },
+    { id: 5, name: "Coś", data: 5863895672 },
+  ]; //[1500, 123, "99%", 12.5, 5863895672];
+  const listIcons = [AccessTime, Done, Percent, Translate, QuestionMark];
   return (
     <>
-      {/*       <Container component="div">
-        <Box component="main" className="main-profile">
-          <Card sx={{ minWidth: "55%" }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
-                  {user?.login.charAt(0)}
-                </Avatar>
-              }
-              title={
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: 500,
-                  }}
-                >
-                  {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
-                </Typography>
-              }
-              subheader={`Data założenia konta: ${
-                user?.createdDate ? user?.createdDate : "-"
-              }`}
-              sx={{
-                padding: "2em",
-              }}
-            ></CardHeader>
-            <CardContent>
-              <List
-                sx={{
-                  width: "100%",
-                  minWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                {statsData.map((value, index) => {
-                  return (
-                    <Box key={index}>
-                      <ListItemButton>
-                        <ListItem
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <ListItemText
-                            primary={`Stat${index + 1}:`}
-                          ></ListItemText>
-                          <ListItemText
-                            primary={value}
-                            sx={{ display: "flex", justifyContent: "flex-end" }}
-                          ></ListItemText>
-                        </ListItem>
-                      </ListItemButton>
-                      {!(statsData.length - 1 === index) ? (
-                        <Divider></Divider>
-                      ) : null}
-                    </Box>
-                  );
-                })}
-              </List>
-            </CardContent>
-          </Card>
-        </Box>
-      </Container> */}
       <Container component="div">
         <PageTitle title="Profil"></PageTitle>
         <Grid container className="main-profile" columns={12}>
@@ -166,10 +125,19 @@ function MainProfile({ user }: { user: User | null }) {
               </Box>
             </Grid>
             <Grid item xs={12} sx={{ flexGrow: 3 }}>
-              {" "}
               <Grid item xs={12} sx={{ margin: "1em" }}>
-                {/*<insert some chart or data diagram here (in the future)>*/}
-                Data
+                <LineChart
+                  dataset={dataset}
+                  xAxis={[
+                    {
+                      dataKey: "date",
+                      scaleType: "time",
+                      valueFormatter,
+                    },
+                  ]}
+                  series={[{ dataKey: "count" }]}
+                  height={500}
+                ></LineChart>
               </Grid>
             </Grid>
           </Grid>
