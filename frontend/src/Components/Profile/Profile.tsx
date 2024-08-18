@@ -8,6 +8,7 @@ import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
 
 import Navbar from "../Reusables/Navbar/Navbar";
 import MainProfile from "./MainProfile";
+import Footer from "../Reusables/Footer/Footer";
 
 import "./Profile.scss";
 
@@ -23,9 +24,16 @@ function Profile() {
     "O aplikacji",
     "Lekcje",
   ]);
+  const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
+    "/about",
+    "/lessons",
+    "/profile",
+  ]);
 
   const { userId } = useParams<{ userId: string }>();
   const [user, setUser] = useState<User | null>(null);
+
+  const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
   const navigate = useNavigate();
 
@@ -54,6 +62,8 @@ function Profile() {
       );
       setLinkArray(["/about", "/lessons", "/logout"]);
       setOptionsArray(["O aplikacji", "Lekcje", "Wyloguj"]);
+
+      setFooterLinkArray(["/about", "/lessons", `/profile/${res.data.login}`]);
 
       if (res.data.sessionUser === true) {
         setUser(res.data);
@@ -100,6 +110,7 @@ function Profile() {
       <div className="wrapper">
         <Navbar link={linkArray} options={optionsArray}></Navbar>
         <MainProfile user={user}></MainProfile>
+        <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
       </div>
     </>
   );
