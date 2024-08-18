@@ -25,6 +25,8 @@ import {
   QuestionMark,
 } from "@mui/icons-material";
 
+import PageTitle from "../Reusables/PageTitle/PageTitle";
+
 interface User {
   login: string;
   createdDate: string;
@@ -115,8 +117,9 @@ function MainProfile({ user }: { user: User | null }) {
         </Box>
       </Container> */}
       <Container component="div">
+        <PageTitle title="Profil"></PageTitle>
         <Grid container className="main-profile" columns={12}>
-          <Grid container xs={8} sx={{ display: "block" }}>
+          <Grid item xs={8} sx={{ display: "block" }}>
             <Grid
               item
               xs={12}
@@ -163,7 +166,7 @@ function MainProfile({ user }: { user: User | null }) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid container xs={4}>
+          <Grid item xs={4}>
             <Stack
               divider={<Divider orientation="horizontal"></Divider>}
               sx={{
@@ -175,6 +178,7 @@ function MainProfile({ user }: { user: User | null }) {
                 const IconComponent = listIcons[index];
                 return (
                   <ListItem
+                    key={index}
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
