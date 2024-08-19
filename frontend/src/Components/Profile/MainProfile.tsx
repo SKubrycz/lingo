@@ -17,6 +17,8 @@ import {
   ListItemIcon,
 } from "@mui/material";
 
+import SettingsIcon from "@mui/icons-material/Settings";
+
 import MainProfileChart from "./MainProfileChart";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
 
@@ -73,6 +75,15 @@ function MainProfile({ user }: { user: User | null }) {
                 ${user?.createdDate ? user?.createdDate : "-"}`}
                 </Typography>
               </Box>
+              {user && (
+                /* Implement user settings, for example delete account, customization (also put Settings into other file) */
+                <SettingsIcon
+                  onClick={() => {
+                    console.log(`You clicked SettingsIcon`);
+                  }}
+                  sx={{ marginRight: ".5em", marginLeft: "auto" }}
+                ></SettingsIcon>
+              )}
             </Grid>
             <Grid item xs={12} sx={{ flexGrow: 3 }}>
               <Grid item xs={12} sx={{ margin: "1em" }}>
