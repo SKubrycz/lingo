@@ -35,7 +35,7 @@ function MainHome() {
 
   return (
     <>
-      <Container maxWidth="lg">
+      <Container maxWidth={false} sx={{ maxWidth: "75%" }}>
         <Box className="home-main">
           <AlertSnackbar
             severity={alertSnackbarData.severity}
@@ -43,12 +43,24 @@ function MainHome() {
             title={alertSnackbarData.title}
             content={alertSnackbarData.content}
           ></AlertSnackbar>
-          <Typography variant="h3">LOGO</Typography>
-          <Typography variant="h6">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-            interdum pulvinar libero non blandit. Nulla suscipit mi et ipsum
-            egestas elementum.
-          </Typography>
+          <Box className="home-main-box">
+            <Typography variant="h3">LINGO</Typography>
+            <Typography variant="h5">
+              Nauka języka nigdy nie była prostsza!
+            </Typography>
+          </Box>
+          <Box className="home-main-box" sx={{ textAlign: "right" }}>
+            <Typography variant="h4">Sprawna nauka</Typography>
+            <Typography variant="h6">
+              Poznaj podstawy, zacznij rozmawiać
+            </Typography>
+          </Box>
+          <Box className="home-main-box">
+            <Typography variant="h4">Widoczny postęp</Typography>
+            <Typography variant="h6">
+              Monitoruj swój progres w nauce dzięki ekstensywnym statystykom
+            </Typography>
+          </Box>
           <StartHome></StartHome>
         </Box>
       </Container>

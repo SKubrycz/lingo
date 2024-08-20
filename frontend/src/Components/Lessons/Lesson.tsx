@@ -33,25 +33,6 @@ function Lesson({ lessonData }: LessonProps) {
 
   return (
     <>
-      {/* <Card
-        sx={{
-          minWidth: "33%",
-          margin: ".5em",
-          display: "flex",
-          justifyContent: "space-between",
-          color: "#fff0e6",
-        }}
-      >
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">
-              {lessonData.number} - {lessonData.title}
-            </Typography>
-            <Typography variant="body2">{lessonData.description}</Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card> */}
-
       <Container
         component="div"
         sx={{

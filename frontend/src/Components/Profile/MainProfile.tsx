@@ -1,23 +1,17 @@
 import {
   Avatar,
   Box,
-  Card,
-  CardContent,
-  CardHeader,
   Container,
   Grid,
   Divider,
-  Icon,
-  List,
-  ListItem,
-  ListItemText,
   Typography,
   Stack,
   ListItemButton,
   ListItemIcon,
+  Tooltip,
 } from "@mui/material";
 
-import SettingsIcon from "@mui/icons-material/Settings";
+import { Edit, Settings } from "@mui/icons-material";
 
 import MainProfileChart from "./MainProfileChart";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -32,6 +26,22 @@ interface User {
 }
 
 function MainProfile({ user }: { user: User | null }) {
+  const [avatarHover, setAvatarHover] = useState<boolean>(false);
+
+  const handleAvatarHover = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (e.type === "mouseenter") {
+      setAvatarHover(true);
+    } else if (e.type === "mouseleave") {
+      setAvatarHover(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log(avatarHover);
+  }, [avatarHover]);
+
   return (
     <>
       <Container component="div">
@@ -48,8 +58,18 @@ function MainProfile({ user }: { user: User | null }) {
                 flexGrow: 1,
               }}
             >
-              <Avatar sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}>
-                {user?.login.charAt(0)}
+              <Avatar
+                onMouseEnter={handleAvatarHover}
+                onMouseLeave={handleAvatarHover}
+                sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}
+              >
+                {avatarHover ? (
+                  <Tooltip title="Kliknij aby zmienić zdjęcie profilowe">
+                    <Edit sx={{ cursor: "pointer" }}></Edit>
+                  </Tooltip>
+                ) : (
+                  user?.login.charAt(0)
+                )}
               </Avatar>
               <Box
                 component="div"
@@ -77,12 +97,16 @@ function MainProfile({ user }: { user: User | null }) {
               </Box>
               {user && (
                 /* Implement user settings, for example delete account, customization (also put Settings into other file) */
-                <SettingsIcon
+                <Settings
                   onClick={() => {
                     console.log(`You clicked SettingsIcon`);
                   }}
-                  sx={{ marginRight: ".5em", marginLeft: "auto" }}
-                ></SettingsIcon>
+                  sx={{
+                    marginRight: ".5em",
+                    marginLeft: "auto",
+                    cursor: "pointer",
+                  }}
+                ></Settings>
               )}
             </Grid>
             <Grid item xs={12} sx={{ flexGrow: 3 }}>
