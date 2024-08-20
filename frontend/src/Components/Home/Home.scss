@@ -19,19 +19,31 @@
 }
 
 .home-main {
-    h1, h2, h3 {
+    margin-top: 7em;
+
+    h1, h2, h3, h4, h5, h6 {
         padding: .5em 0;
-
-        font-weight: 500;
-
-        animation: 0.6s comeUpLeft ease-out 1;
     }
 
-    h4, h5, h6 {
-        padding: .5em 0;
-
-        animation: 0.8s comeUpLeft ease-out 1;
+    h6 {
+        font-weight: 400;
     }
+}
+
+.home-main-box:not(.home-main-box:nth-of-type(1)) {
+    margin: 4em 0;
+}
+
+.home-main-box:nth-of-type(1) {
+    animation: 0.6s comeUpLeft ease-out 1;
+}
+
+.home-main-box:nth-of-type(2) {
+    animation: 0.8s comeUpLeft ease-out 1;
+}
+
+.home-main-box:nth-of-type(3) {
+    animation: 1s comeUpLeft ease-out 1;
 }
 
 .home-start {
@@ -43,7 +55,7 @@
     justify-content: center;
     align-items: center;
 
-    background-color: $baseBg;
+    background-color: transparent; //$baseBg;
 
     border-radius: 5px;
 

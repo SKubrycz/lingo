@@ -61,7 +61,7 @@ function Navbar({ link, options }: NavbarProps) {
               underline="none"
               color="primary.contrastText"
             >
-              LOGO
+              LINGO
             </Link>
           </Typography>
           <Box>
