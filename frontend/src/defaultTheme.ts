@@ -10,7 +10,7 @@ const defaultThemePalette = createTheme({
       contrastText: "rgb(230, 92, 0)",
     },
     secondary: {
-      main: "#c64000",
+      main: "rgb(204, 153, 119)", //"#c64000",
     },
     contrastThreshold: 4.5,
   },
@@ -83,6 +83,17 @@ export const defaultTheme = createTheme(defaultThemePalette, {
       styleOverrides: {
         root: {
           color: defaultThemePalette.palette.primary.contrastText,
+        },
+      },
+    },
+
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgb(255, 246, 240)",
+        },
+        bar: {
+          backgroundColor: defaultThemePalette.palette.primary.contrastText,
         },
       },
     },

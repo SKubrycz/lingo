@@ -12,10 +12,10 @@ import Navbar from "../Reusables/Navbar/Navbar";
 import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import PageTitle from "../Reusables/PageTitle/PageTitle";
 import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 
 import "./Lessons.scss";
-import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 interface LessonData {
   number: number;

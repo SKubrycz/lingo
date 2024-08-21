@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import "./Lessons.scss";
 
 import {
@@ -46,7 +48,13 @@ function Lesson({ lessonData }: LessonProps) {
           </Typography>
           <Typography variant="body2">{lessonData.description}</Typography>
         </Box>
-        <Button variant="text">Rozpocznij</Button>
+        <Button
+          to={`/lesson/${lessonData.number}`}
+          component={RouterLink}
+          sx={{ color: "primary.contrastText", textDecoration: "none" }}
+        >
+          Rozpocznij
+        </Button>
       </Container>
     </>
   );
