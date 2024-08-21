@@ -30,7 +30,7 @@ function Profile() {
     "/profile",
   ]);
 
-  const { userId } = useParams<{ userId: string }>();
+  const { userId } = useParams<{ userId: string | undefined }>();
   const [user, setUser] = useState<User | null>(null);
 
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
@@ -39,7 +39,7 @@ function Profile() {
 
   const alertSnackbarDataDispatch = useDispatch();
 
-  const fetchCurrentUser = async () => {
+  /*   const fetchCurrentUser = async () => {
     try {
       const res = await axios.get(`http://localhost:8000/profile`, {
         withCredentials: true,
@@ -52,7 +52,7 @@ function Profile() {
       console.log("Failed to fetch current user data: ", error);
       navigate("/");
     }
-  };
+  }; */
 
   const fetchUserData = async () => {
     try {
@@ -85,7 +85,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    fetchCurrentUser();
+    //fetchCurrentUser();
     fetchUserData();
   }, [userId]);
 

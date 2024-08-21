@@ -1,78 +1,77 @@
 import { ObjectId } from "mongodb";
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 
-import { RequestLogin } from '../middleware/auth';
-
-import { findOneUserByLogin } from '../assets/queries';
-import { isAuthenticated } from "../middleware/auth";
+import { findOneUserByLogin } from "../assets/queries";
+import { isAuthenticated, RequestLogin } from "../middleware/auth";
 
 const router = express.Router();
 
 interface FindUser {
-    _id: ObjectId;
-    login: string;
-    createdDate: Date;
+  _id: ObjectId;
+  login: string;
+  createdDate: Date;
 } // !not equal to the one in queries.ts
 
 interface SentUser {
-    id: ObjectId;
-    login: string;
-    createdDate: string; // parsed
-    sessionUser: boolean;
+  id: ObjectId;
+  login: string;
+  createdDate: string; // parsed
+  sessionUser: boolean;
 }
 
-router.get('/profile', isAuthenticated, async (req: Request, res: Response) => {
+/* router.get("/profile", isAuthenticated, async (req: Request, res: Response) => {
+  try {
+
+    return res.status(200).send("Not found");
+  } catch (error) {
+    res.status(500).send(`Error /profile ${error}`);
+  }
+}); */
+
+router.get(
+  "/profile/:id",
+  isAuthenticated,
+  async (req: RequestLogin, res: Response) => {
     try {
-        /* console.log('res.user:' + res.user.login);
-        
-        const result = await queries.findOneUserByLogin(res.user.login);
+      let login: string | undefined = await req.params.id;
+
+      console.log(`login in ${req.originalUrl} ${login}`);
+
+      let result: FindUser | null;
+
+      if (
+        (login === undefined || login === "undefined") &&
+        req.login !== undefined
+      ) {
+        console.log(`USING REQ.LOGIN`);
+        result = await findOneUserByLogin(req.login);
+      } else {
+        result = await findOneUserByLogin(login);
+      }
+
+      if (result) {
+        console.log(result.login);
 
         let sessionUser = false;
-        if (res.user) sessionUser = true;
+        if (req.login === result.login) sessionUser = true;
 
-        const fetched = {
-            id: result._id,
-            login: result.login,
-            sessionUser: sessionUser,
-        } */
+        const parseDate: string = result.createdDate.toLocaleDateString();
 
-        return res.status(200).send('Not found');
+        const fetched: SentUser = {
+          id: result._id,
+          login: result.login,
+          createdDate: parseDate,
+          sessionUser: sessionUser,
+        };
 
+        return res.status(200).send(fetched);
+      } else {
+        return res.status(404).send(`Nie znaleziono użytkownika`);
+      }
     } catch (error) {
-        res.status(500).send(`Error /profile ${error}`);
+      res.status(500).send(`Error ${req.originalUrl} ${error}`);
     }
-})
-
-router.get('/profile/:id', isAuthenticated, async (req: RequestLogin, res: Response) => {
-    try {
-        const login = await req.params.id;
-
-        console.log(`login in ${req.originalUrl} ${login}`);
-
-        const result: FindUser | null = await findOneUserByLogin(login);
-
-        if (result) {
-            console.log(result.login);
-
-            let sessionUser = false;
-            if (req.login === result.login) sessionUser = true;
-    
-            const parseDate: string = result.createdDate.toLocaleDateString();
-    
-            const fetched: SentUser = {
-                id: result._id,
-                login: result.login,
-                createdDate: parseDate,
-                sessionUser: sessionUser,
-            }
-    
-            return res.status(200).send(fetched);
-        } else {
-            res.status(404)
-        }
-    } catch (error) {
-        res.status(500).send(`Error ${req.originalUrl} ${error}`);
-    }
-});
+  }
+);
 
 export default router;
