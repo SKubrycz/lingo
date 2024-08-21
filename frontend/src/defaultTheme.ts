@@ -10,7 +10,7 @@ const defaultThemePalette = createTheme({
       contrastText: "rgb(230, 92, 0)",
     },
     secondary: {
-      main: "#c64000",
+      main: "rgb(204, 153, 119)", //"#c64000",
     },
     contrastThreshold: 4.5,
   },

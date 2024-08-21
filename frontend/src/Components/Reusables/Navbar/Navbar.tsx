@@ -44,7 +44,7 @@ function Navbar({ link, options }: NavbarProps) {
   return (
     <>
       <AppBar component="nav" position="fixed" elevation={trigger ? 4 : 0}>
-        <Toolbar className="navbar-color">
+        <Toolbar>
           <Typography
             variant="h5"
             component="div"
