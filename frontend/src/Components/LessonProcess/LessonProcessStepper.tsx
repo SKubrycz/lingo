@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-import { Stepper, Step, StepContent, LinearProgress } from "@mui/material";
+import {
+  Container,
+  LinearProgress,
+  Stepper,
+  Step,
+  Typography,
+  Box,
+} from "@mui/material";
 
 interface LessonData {
   id: number; //only id for now
@@ -19,11 +26,19 @@ function LessonProcessStepper({ id }: LessonData) {
 
   return (
     <>
-      <Stepper activeStep={activeStep}>
-        {[1, 2, 3, 4].map((step, index) => (
-          <Step key={index}>Step{index + 1}</Step>
-        ))}
-      </Stepper>
+      <LinearProgress value={33} variant="determinate"></LinearProgress>
+      <Container component="main" sx={{ height: "50%", margin: "1em 0" }}>
+        <Box
+          height={600}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          border="1px dashed"
+          borderColor="primary.contrastText"
+        >
+          <Typography variant="h6">LESSON CONTENT</Typography>
+        </Box>
+      </Container>
     </>
   );
 }

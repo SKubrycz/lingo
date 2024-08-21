@@ -86,5 +86,16 @@ export const defaultTheme = createTheme(defaultThemePalette, {
         },
       },
     },
+
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgb(255, 246, 240)",
+        },
+        bar: {
+          backgroundColor: defaultThemePalette.palette.primary.contrastText,
+        },
+      },
+    },
   },
 });
