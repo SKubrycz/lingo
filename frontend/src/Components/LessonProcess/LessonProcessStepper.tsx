@@ -67,12 +67,12 @@ function LessonProcessStepper({ id }: LessonData) {
                 Postęp nie zostanie zapisany
               </Typography>
             </DialogContent>
-            <Box
-              display="flex"
-              justifyContent="space-around"
-              onClick={() => endSession()}
-            >
-              <Button variant="contained" color="warning">
+            <Box display="flex" justifyContent="space-around">
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={() => endSession()}
+              >
                 Zakończ
               </Button>
               <Button variant="text" onClick={() => handleCloseDialog()}>
