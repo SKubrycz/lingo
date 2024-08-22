@@ -30,7 +30,7 @@ function Profile() {
     "/profile",
   ]);
 
-  const { userId } = useParams<{ userId: string }>();
+  const { userId } = useParams<{ userId: string | undefined }>();
   const [user, setUser] = useState<User | null>(null);
 
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];

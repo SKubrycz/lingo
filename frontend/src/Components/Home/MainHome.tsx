@@ -49,11 +49,16 @@ function MainHome() {
               Nauka języka nigdy nie była prostsza!
             </Typography>
           </Box>
-          <Box className="home-main-box" sx={{ textAlign: "right" }}>
-            <Typography variant="h4">Sprawna nauka</Typography>
-            <Typography variant="h6">
-              Poznaj podstawy, zacznij rozmawiać
-            </Typography>
+          <Box
+            component="div"
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <Box className="home-main-box" sx={{ textAlign: "right" }}>
+              <Typography variant="h4">Sprawna nauka</Typography>
+              <Typography variant="h6">
+                Poznaj podstawy, zacznij rozmawiać
+              </Typography>
+            </Box>
           </Box>
           <Box className="home-main-box">
             <Typography variant="h4">Widoczny postęp</Typography>
