@@ -30,6 +30,14 @@
     }
 }
 
+.home-main-box {
+    transition: transform .4s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.home-main-box:hover {
+    transform: translateY(-7%);
+}
+
 .home-main-box:not(.home-main-box:nth-of-type(1)) {
     margin: 4em 0;
 }

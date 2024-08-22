@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import express, { Request, Response } from "express";
 
 import { findOneUserByLogin } from "../assets/queries";
-import { isAuthenticated, RequestLogin } from "../middleware/auth";
+import { checkAuth, isAuthenticated, RequestLogin } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -19,6 +19,10 @@ interface SentUser {
   sessionUser: boolean;
 }
 
+router.get("/profile", checkAuth, async (req: Request, res: Response) => {
+  res.redirect("/profile/:id");
+});
+
 /* router.get("/profile", isAuthenticated, async (req: Request, res: Response) => {
   try {
 
@@ -30,7 +34,7 @@ interface SentUser {
 
 router.get(
   "/profile/:id",
-  isAuthenticated,
+  checkAuth,
   async (req: RequestLogin, res: Response) => {
     try {
       let login: string | undefined = await req.params.id;
