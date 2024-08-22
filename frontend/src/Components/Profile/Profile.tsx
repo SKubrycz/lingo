@@ -71,16 +71,32 @@ function Profile() {
         setUser(res.data);
       }
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      alertSnackbarDataDispatch(
-        setAlert({
-          severity: "info",
-          variant: "standard",
-          title: "Informacja",
-          content: "Sesja wygasła. Proszę zalogować się ponownie",
-        })
-      );
-      navigate("/");
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+
+        //IDEA: Make `User not found` Profile page
+        if (error.request?.status === 404) {
+          alertSnackbarDataDispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: "Nie znaleziono użytkownika",
+            })
+          );
+        } else {
+          alertSnackbarDataDispatch(
+            setAlert({
+              severity: "info",
+              variant: "standard",
+              title: "Informacja",
+              content: "Sesja wygasła. Proszę zalogować się ponownie",
+            })
+          );
+        }
+        //console.error("Failed to fetch user data:", error);
+      }
+      navigate("/lessons");
     }
   };
 
