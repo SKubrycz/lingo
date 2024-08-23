@@ -58,19 +58,24 @@ function MainProfile({ user }: { user: User | null }) {
                 flexGrow: 1,
               }}
             >
-              <Avatar
-                onMouseEnter={handleAvatarHover}
-                onMouseLeave={handleAvatarHover}
-                sx={{ width: 50, height: 50, bgcolor: "primary.dark" }}
+              <Tooltip
+                title="Kliknij aby zmienić zdjęcie profilowe"
+                arrow={true}
               >
-                {avatarHover ? (
-                  <Tooltip title="Kliknij aby zmienić zdjęcie profilowe">
-                    <Edit sx={{ cursor: "pointer" }}></Edit>
-                  </Tooltip>
-                ) : (
-                  user?.login.charAt(0)
-                )}
-              </Avatar>
+                <Avatar
+                  onMouseEnter={handleAvatarHover}
+                  onMouseLeave={handleAvatarHover}
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    bgcolor: "primary.dark",
+                    cursor: "pointer",
+                  }}
+                >
+                  {avatarHover ? <Edit></Edit> : user?.login.charAt(0)}
+                </Avatar>
+              </Tooltip>
+
               <Box
                 component="div"
                 sx={{
