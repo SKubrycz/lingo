@@ -102,16 +102,21 @@ function MainProfile({ user }: { user: User | null }) {
               </Box>
               {user && (
                 /* Implement user settings, for example delete account, customization (also put Settings into other file) */
-                <Settings
-                  onClick={() => {
-                    console.log(`You clicked SettingsIcon`);
-                  }}
-                  sx={{
-                    marginRight: ".5em",
-                    marginLeft: "auto",
-                    cursor: "pointer",
-                  }}
-                ></Settings>
+                <Tooltip title="Otwórz ustawienia użytkownika" arrow={true}>
+                  <Settings
+                    onClick={() => {
+                      console.log(`You clicked SettingsIcon`);
+                    }}
+                    sx={{
+                      marginRight: ".5em",
+                      marginLeft: "auto",
+                      cursor: "pointer",
+                      "&:hover": {
+                        color: "primary.contrastText",
+                      },
+                    }}
+                  ></Settings>
+                </Tooltip>
               )}
             </Grid>
             <Grid item xs={12} sx={{ flexGrow: 3 }}>

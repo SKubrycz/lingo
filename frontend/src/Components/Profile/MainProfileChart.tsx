@@ -33,6 +33,7 @@ export default function MainProfileChart() {
       series={[
         {
           dataKey: "count",
+          curve: "linear",
           color: defaultTheme.palette.primary.contrastText,
         },
       ]}
