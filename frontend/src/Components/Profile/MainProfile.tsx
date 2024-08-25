@@ -18,6 +18,7 @@ import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 import { useEffect, useState } from "react";
 import MainProfileStats from "./MainProfileStats";
+import MainProfileSettings from "./MainProfileSettings";
 
 interface User {
   login: string;
@@ -27,6 +28,7 @@ interface User {
 
 function MainProfile({ user }: { user: User | null }) {
   const [avatarHover, setAvatarHover] = useState<boolean>(false);
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
 
   const handleAvatarHover = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -38,9 +40,12 @@ function MainProfile({ user }: { user: User | null }) {
     }
   };
 
-  useEffect(() => {
-    console.log(avatarHover);
-  }, [avatarHover]);
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
 
   return (
     <>
@@ -102,21 +107,28 @@ function MainProfile({ user }: { user: User | null }) {
               </Box>
               {user && (
                 /* Implement user settings, for example delete account, customization (also put Settings into other file) */
-                <Tooltip title="Otwórz ustawienia użytkownika" arrow={true}>
-                  <Settings
-                    onClick={() => {
-                      console.log(`You clicked SettingsIcon`);
-                    }}
-                    sx={{
-                      marginRight: ".5em",
-                      marginLeft: "auto",
-                      cursor: "pointer",
-                      "&:hover": {
-                        color: "primary.contrastText",
-                      },
-                    }}
-                  ></Settings>
-                </Tooltip>
+                <>
+                  <Tooltip
+                    title="Otwórz ustawienia użytkownika"
+                    arrow={true}
+                    onClick={() => handleOpenSettings()}
+                  >
+                    <Settings
+                      sx={{
+                        marginRight: ".5em",
+                        marginLeft: "auto",
+                        cursor: "pointer",
+                        "&:hover": {
+                          color: "primary.contrastText",
+                        },
+                      }}
+                    ></Settings>
+                  </Tooltip>
+                  <MainProfileSettings
+                    open={openSettings}
+                    onClose={() => handleCloseSettings()}
+                  ></MainProfileSettings>
+                </>
               )}
             </Grid>
             <Grid item xs={12} sx={{ flexGrow: 3 }}>
