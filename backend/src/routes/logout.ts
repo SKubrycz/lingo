@@ -1,12 +1,9 @@
-import express, { Request, Response } from 'express';
+import express from "express";
+
+import { getLogout } from "../controllers/logoutController";
 
 const router = express.Router();
 
-router.get('/logout', async (req: Request, res: Response) => {
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
-
-    res.status(200).send('Wylogowano');
-});
+router.get("/logout", getLogout);
 
 export default router;
