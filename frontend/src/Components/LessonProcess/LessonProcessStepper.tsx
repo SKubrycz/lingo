@@ -19,27 +19,17 @@ import {
 import { Close } from "@mui/icons-material";
 
 interface LessonData {
-  id: number; //only id for now
+  id: number | undefined; //only id for now
 }
 
 function LessonProcessStepper({ id }: LessonData) {
-  const [activeStep, setActiveStep] = useState<number>(2);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep: number) => prevActiveStep - 1);
-  };
-
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -97,7 +87,9 @@ function LessonProcessStepper({ id }: LessonData) {
             border="1px dashed"
             borderColor="primary.contrastText"
           >
-            <Typography variant="h6">LESSON CONTENT</Typography>
+            <Typography variant="h6">
+              LESSON CONTENT (id: {id ? id : ""})
+            </Typography>
           </Box>
         </Container>
       </Container>

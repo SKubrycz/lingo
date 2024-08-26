@@ -26,6 +26,8 @@ function LessonProcess() {
     "/profile",
   ]);
 
+  const [lessonInfo, setLessonInfo] = useState<number | undefined>();
+
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
@@ -44,13 +46,17 @@ function LessonProcess() {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data);
+        setLessonInfo(res.data.lessonId);
+      })
+      /* .then((res) => {
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
         setFooterLinkArray([
           "/about",
           "/lessons",
           `/profile/${res.data.login}`,
         ]);
-      })
+      }) */
       .catch((error) => {
         console.log(error);
         alertSnackbarDataDispatch(
@@ -74,7 +80,7 @@ function LessonProcess() {
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
         {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
-        <LessonProcessStepper id={Number(lessonId)}></LessonProcessStepper>
+        <LessonProcessStepper id={lessonInfo}></LessonProcessStepper>
         {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}
       </Container>
       <AlertSnackbar
