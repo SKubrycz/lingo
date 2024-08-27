@@ -82,6 +82,13 @@ export const defaultTheme = createTheme(defaultThemePalette, {
     MuiButton: {
       styleOverrides: {
         root: {
+          color: defaultThemePalette.palette.primary.main,
+          backgroundColor: defaultThemePalette.palette.primary.contrastText,
+
+          "&:hover": {
+            backgroundColor: defaultThemePalette.palette.primary.contrastText,
+          },
+
           //later to be examined/edited/removed
           '&:is([variant="text"], [variant="outlined"])': {
             color: defaultThemePalette.palette.primary.contrastText,
