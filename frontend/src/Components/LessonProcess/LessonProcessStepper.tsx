@@ -17,8 +17,9 @@ import {
 } from "@mui/material";
 
 import { Close } from "@mui/icons-material";
+import LessonProcessStepperContent from "./LessonProcessStepperContent";
 
-interface LessonData {
+export interface LessonData {
   id: number | undefined; //only id for now
 }
 
@@ -80,6 +81,7 @@ function LessonProcessStepper({ id }: LessonData) {
         >
           <LinearProgress value={33} variant="determinate"></LinearProgress>
           <Box
+            width="100%"
             height={600}
             display="flex"
             justifyContent="center"
@@ -87,9 +89,7 @@ function LessonProcessStepper({ id }: LessonData) {
             border="1px dashed"
             borderColor="primary.contrastText"
           >
-            <Typography variant="h6">
-              LESSON CONTENT (id: {id ? id : ""})
-            </Typography>
+            <LessonProcessStepperContent id={id}></LessonProcessStepperContent>
           </Box>
         </Container>
       </Container>
