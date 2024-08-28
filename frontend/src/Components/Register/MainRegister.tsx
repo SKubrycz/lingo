@@ -172,7 +172,15 @@ function MainRegister() {
             variant="contained"
             name="submit"
             value="Zaloguj"
-            sx={{ margin: "1.5em .5em" }}
+            sx={{
+              margin: "1.5em .5em",
+              backgroundColor: "primary.contrastText",
+              "&.MuiButton-contained": {
+                "&:hover": {
+                  backgroundColor: "primary.dark",
+                },
+              },
+            }}
           >
             Zarejestruj
           </Button>

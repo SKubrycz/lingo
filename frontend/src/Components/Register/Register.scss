@@ -38,19 +38,10 @@
     display: flex;
     flex-direction: column;
 
-    input[type=submit] {
-        margin: 1em 0;
-        padding: .5em;
-
-        border: none;
-        border-radius: 5px;
-
-        font-size: 18px;
-
-        color: $lightBaseColor;
-        background-color: $baseColor;
-
-        transition: background-color .3s;
+    button[type="submit"] {
+        &:hover {
+            background-color: adjust-color($color: $baseColor, $blackness: 10%);
+        }
     }
 }
 
