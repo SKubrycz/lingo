@@ -6,8 +6,6 @@ import {
   Dialog,
   Icon,
   LinearProgress,
-  Stepper,
-  Step,
   Typography,
   Box,
   Tooltip,
@@ -17,13 +15,13 @@ import {
 } from "@mui/material";
 
 import { Close } from "@mui/icons-material";
-import LessonProcessStepperContent from "./LessonProcessStepperContent";
+import StepperContent from "./StepperContent";
 
 export interface LessonData {
   id: number | undefined; //only id for now
 }
 
-function LessonProcessStepper({ id }: LessonData) {
+function Stepper({ id }: LessonData) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -89,7 +87,7 @@ function LessonProcessStepper({ id }: LessonData) {
             border="1px dashed"
             borderColor="primary.contrastText"
           >
-            <LessonProcessStepperContent id={id}></LessonProcessStepperContent>
+            <StepperContent id={id}></StepperContent>
           </Box>
         </Container>
       </Container>
@@ -97,4 +95,4 @@ function LessonProcessStepper({ id }: LessonData) {
   );
 }
 
-export default LessonProcessStepper;
+export default Stepper;

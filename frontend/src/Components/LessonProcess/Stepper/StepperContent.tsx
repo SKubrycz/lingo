@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from "react";
 
 import { Box, Typography } from "@mui/material";
 
-import { LessonData } from "./LessonProcessStepper";
-import { PermDeviceInformation } from "@mui/icons-material";
+import { LessonData } from "./Stepper";
 
-export default function LessonProcessStepperContent({ id }: LessonData) {
+import "./Stepper.scss";
+
+function StepperContent({ id }: LessonData) {
   //later to be replaced by API call
   /*   const wordBlocks: string[] = [
     "I am",
@@ -66,6 +67,7 @@ export default function LessonProcessStepperContent({ id }: LessonData) {
   return (
     <Box
       width="100%"
+      height="50%"
       margin="1em"
       display="flex"
       flexDirection="column"
@@ -82,6 +84,7 @@ export default function LessonProcessStepperContent({ id }: LessonData) {
         justifyContent="flex-start"
         sx={{
           width: "80%",
+          height: "40px",
           margin: "1em",
           padding: ".7em",
           fontSize: "18px",
@@ -91,35 +94,47 @@ export default function LessonProcessStepperContent({ id }: LessonData) {
       >
         {sentenceArr.map((s, i) => {
           return (
-            <div
+            <Box
               key={i}
-              style={{
-                margin: "0 .5em",
-                padding: ".3em",
-                border: "2px solid gray",
+              onClick={() => handleRemoveWord(s)}
+              className="sentence-box"
+              sx={{
+                border: "2px solid",
+                borderColor: "primary.contrastText",
                 borderRadius: ".5em",
               }}
-              onClick={() => handleRemoveWord(s)}
             >
               {s}
-            </div>
+            </Box>
           );
         })}
       </Box>
-      <Box component="aside">
+      <Box
+        component="article"
+        height="30%"
+        display="flex"
+        justifyContent="center"
+      >
         {wordBlocks.map((word, i) => {
           return (
-            <div
+            <Box
               key={i}
               draggable={true}
               onDragStart={(e) => dragWord(e, word)}
               onClick={() => handleAddWord(word)}
+              className="word-blocks-box"
+              sx={{
+                border: "2px solid gray",
+                borderRadius: ".5em",
+              }}
             >
               {word}
-            </div>
+            </Box>
           );
         })}
       </Box>
     </Box>
   );
 }
+
+export default StepperContent;

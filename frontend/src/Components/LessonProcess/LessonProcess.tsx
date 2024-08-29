@@ -10,7 +10,7 @@ import { Container } from "@mui/material";
 
 import Navbar from "../Reusables/Navbar/Navbar";
 import Footer from "../Reusables/Footer/Footer";
-import LessonProcessStepper from "./LessonProcessStepper";
+import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 
@@ -80,7 +80,7 @@ function LessonProcess() {
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
         {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
-        <LessonProcessStepper id={lessonInfo}></LessonProcessStepper>
+        <Stepper id={lessonInfo}></Stepper>
         {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}
       </Container>
       <AlertSnackbar
