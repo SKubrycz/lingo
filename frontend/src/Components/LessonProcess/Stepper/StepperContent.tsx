@@ -32,7 +32,7 @@ function StepperContent({ id }: LessonData) {
   const dragWord = (e: React.DragEvent<HTMLElement>, item: string) => {
     console.log(`dragWord`);
     if (e.dataTransfer && dropInput.current) {
-      e.dataTransfer.setData("word", JSON.stringify(item));
+      e.dataTransfer.setData("text/plain", JSON.stringify(item));
     }
   };
 
@@ -40,7 +40,7 @@ function StepperContent({ id }: LessonData) {
     e.preventDefault();
     console.log(`dropWord`);
     if (e.dataTransfer) {
-      const data = JSON.parse(e.dataTransfer.getData("word"));
+      const data = JSON.parse(e.dataTransfer.getData("text"));
       console.log(data);
       setSentenceArr([...sentenceArr, data]);
       setWordBlocks(wordBlocks.filter((w) => w != data));
@@ -102,6 +102,7 @@ function StepperContent({ id }: LessonData) {
                 border: "2px solid",
                 borderColor: "primary.contrastText",
                 borderRadius: ".5em",
+                cursor: "pointer",
               }}
             >
               {s}
@@ -126,6 +127,7 @@ function StepperContent({ id }: LessonData) {
               sx={{
                 border: "2px solid gray",
                 borderRadius: ".5em",
+                cursor: "pointer",
               }}
             >
               {word}
