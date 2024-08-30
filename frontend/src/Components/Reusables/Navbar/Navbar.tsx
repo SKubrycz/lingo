@@ -3,7 +3,17 @@ import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import BurgerIcon from "../../../assets/icons/burger.svg";
-import { AppBar, Toolbar, Typography, Box, Link } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 interface NavbarProps {
@@ -13,6 +23,7 @@ interface NavbarProps {
 
 function Navbar({ link, options }: NavbarProps) {
   const [display, setDisplay] = useState<string>("none");
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navBurgerStyle: Object = {
     display: display,
@@ -33,6 +44,14 @@ function Navbar({ link, options }: NavbarProps) {
 
   const handleDisplayOnResize = () => {
     if (window.innerWidth > 768) setDisplay("none");
+  };
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
   };
 
   useEffect(() => {
@@ -66,22 +85,64 @@ function Navbar({ link, options }: NavbarProps) {
           </Typography>
           <Box>
             {options.map((value, index) => {
-              return (
-                <Link
-                  key={index}
-                  to={link[index]}
-                  component={RouterLink}
-                  underline="none"
-                  color="primary.contrastText"
-                >
-                  {value}
-                </Link>
-              );
+              if (link[index] === "/logout") {
+                return (
+                  <Link
+                    key={index}
+                    to=""
+                    component={RouterLink}
+                    underline="none"
+                    color="primary.contrastText"
+                    onClick={handleDialogOpen}
+                  >
+                    {value}
+                  </Link>
+                );
+              } else {
+                return (
+                  <Link
+                    key={index}
+                    to={link[index]}
+                    component={RouterLink}
+                    underline="none"
+                    color="primary.contrastText"
+                  >
+                    {value}
+                  </Link>
+                );
+              }
             })}
           </Box>
         </Toolbar>
       </AppBar>
       <div style={{ width: "100%", height: "64px" }}></div>
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle align="center">Wylogowanie</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" align="center">
+            Czy na pewno chcesz się wylogować?
+          </Typography>
+          <Box display="flex" justifyContent="center" margin=".5em">
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "primary.contrastText",
+              }}
+            >
+              <Link
+                to="/logout"
+                component={RouterLink}
+                underline="none"
+                margin="none"
+                padding="none"
+              >
+                Wyloguj
+              </Link>
+            </Button>
+            <Button>Anuluj</Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
