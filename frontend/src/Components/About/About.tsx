@@ -39,7 +39,9 @@ function About() {
 
   const handleAuth = () => {
     axios
-      .get("http://localhost:8000/about", { withCredentials: true })
+      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/about`, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data.login) {
           setLinkArray(["/lessons", `/profile/${res.data.login}`, "/logout"]);

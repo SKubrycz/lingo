@@ -37,13 +37,13 @@ const postLogin = async (req: Request, res: Response) => {
       { expiresIn: refreshTokenExpiry }
     );
 
-    res.cookie("access_token", accessToken, {
+    res.cookie("access_token_lingo", accessToken, {
       httpOnly: true,
       maxAge: accessTokenExpiry,
       sameSite: "strict",
     });
 
-    res.cookie("refresh_token", refreshToken, {
+    res.cookie("refresh_token_lingo", refreshToken, {
       httpOnly: true,
       maxAge: refreshTokenExpiry,
       sameSite: "strict",

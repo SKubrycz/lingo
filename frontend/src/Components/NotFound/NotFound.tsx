@@ -14,10 +14,12 @@ function NotFound() {
   const optionsArray: string[] = ["Strona główna"];
 
   const handleNotFound = async () => {
-    await axios.get("http://localhost:8000/*").catch((err) => {
-      console.log(err.response.data);
-      setInfo(err.response.data);
-    });
+    await axios
+      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/*`)
+      .catch((err) => {
+        console.log(err.response.data);
+        setInfo(err.response.data);
+      });
   };
 
   useEffect(() => {
