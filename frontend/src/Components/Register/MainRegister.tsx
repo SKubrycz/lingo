@@ -66,7 +66,10 @@ function MainRegister() {
     e.preventDefault();
 
     await axios
-      .post("http://localhost:8000/register", registerData)
+      .post(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/register`,
+        registerData
+      )
       .then(() => {
         alertSnackbarDataDispatch(
           setAlert({

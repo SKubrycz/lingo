@@ -50,7 +50,13 @@ function MainLogin() {
     e.preventDefault();
 
     await axios
-      .post("http://localhost:8000/login", loginData, { withCredentials: true })
+      .post(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/login`,
+        loginData,
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
         alertSnackbarDataDispatch(
           setAlert({

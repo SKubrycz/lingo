@@ -12,7 +12,9 @@ function Logout() {
 
   const handleLogout = async () => {
     await axios
-      .get("http://localhost:8000/logout", { withCredentials: true })
+      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/logout`, {
+        withCredentials: true,
+      })
       .then(() => {
         alertSnackbarDataDispatch(
           setAlert({

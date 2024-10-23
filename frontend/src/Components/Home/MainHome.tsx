@@ -19,7 +19,9 @@ function MainHome() {
 
   const handleAuth = async () => {
     await axios
-      .get("http://localhost:8000/", { withCredentials: true })
+      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/`, {
+        withCredentials: true,
+      })
       .then((res) => {
         //console.log(res.data);
       })

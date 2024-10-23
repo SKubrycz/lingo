@@ -24,7 +24,7 @@ import aboutRoute from "./routes/about";
 
 const app: Express = express();
 
-const originDomain: string = "http://localhost:3000";
+const originDomain: string = "http://localhost:3001";
 
 const routesArray: Router[] = [
   homeRoute,

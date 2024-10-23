@@ -57,7 +57,7 @@ function Profile() {
   const fetchUserData = async () => {
     try {
       const res = await axios.get<User>(
-        `http://localhost:8000/profile/${userId}`,
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/profile/${userId}`,
         { withCredentials: true }
       );
       setLinkArray(["/about", "/lessons", "/logout"]);

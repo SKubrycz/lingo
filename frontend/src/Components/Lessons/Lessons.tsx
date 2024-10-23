@@ -51,7 +51,9 @@ function Lessons() {
 
   const handleAuth = async () => {
     await axios
-      .get("http://localhost:8000/lessons", { withCredentials: true })
+      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/lessons`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setLessons(res.data.result);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);

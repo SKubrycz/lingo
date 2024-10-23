@@ -42,9 +42,12 @@ function LessonProcess() {
 
   const handleAuth = async () => {
     await axios
-      .get(`http://localhost:8000/lesson/${lessonId}`, {
-        withCredentials: true,
-      })
+      .get(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         console.log(res.data);
         setLessonInfo(res.data.lessonId);

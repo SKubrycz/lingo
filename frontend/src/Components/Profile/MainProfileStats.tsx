@@ -95,8 +95,13 @@ export default function MainProfileStats() {
       {statsData.map((value, index) => {
         const IconComponent = listIcons[index];
         return value.type === "accuracy" ? (
-          <Tooltip title={value.desc} arrow={true} sx={{ textAlign: "center" }}>
-            <ListItem key={index} sx={listItemSx}>
+          <Tooltip
+            title={value.desc}
+            arrow={true}
+            sx={{ textAlign: "center" }}
+            key={index}
+          >
+            <ListItem sx={listItemSx}>
               <ListItemIcon>
                 <IconComponent></IconComponent>
               </ListItemIcon>
