@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 
 import { LessonData } from "./Stepper";
 
 import "./Stepper.scss";
+import { Preview, Replay } from "@mui/icons-material";
 
 function StepperContent({ id }: LessonData) {
-  //later to be replaced by API call
   /*   const wordBlocks: string[] = [
     "I am",
     "You are",
@@ -18,6 +18,8 @@ function StepperContent({ id }: LessonData) {
   ]; */
 
   const [sentenceArr, setSentenceArr] = useState<string[]>([]);
+
+  //later to be replaced by API call
   const [wordBlocks, setWordBlocks] = useState<string[]>([
     "I am",
     "You are",
@@ -58,6 +60,11 @@ function StepperContent({ id }: LessonData) {
     console.log(`onclick filtered`);
   };
 
+  const resetSentence = () => {
+    setWordBlocks([...wordBlocks, ...sentenceArr]);
+    setSentenceArr([]);
+  };
+
   useEffect(() => {
     if (sentenceArr.length < 1) return;
     const word: string = sentenceArr[sentenceArr.length - 1];
@@ -82,6 +89,8 @@ function StepperContent({ id }: LessonData) {
         onDragOver={(e) => e.preventDefault()}
         display="flex"
         justifyContent="flex-start"
+        alignItems="center"
+        position="relative"
         sx={{
           width: "80%",
           height: "40px",
@@ -115,6 +124,18 @@ function StepperContent({ id }: LessonData) {
             </Box>
           );
         })}
+        <Replay
+          sx={{
+            position: "absolute",
+            right: "1.2em",
+            cursor: "pointer",
+            color: "gray",
+            "&:hover": {
+              color: "primary.contrastText",
+            },
+          }}
+          onClick={() => resetSentence()}
+        ></Replay>
       </Box>
       <Box
         component="article"

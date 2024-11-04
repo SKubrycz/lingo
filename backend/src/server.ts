@@ -21,6 +21,7 @@ import lessonsRoute from "./routes/lessons";
 import lessonRoute from "./routes/lesson";
 import logoutRoute from "./routes/logout";
 import aboutRoute from "./routes/about";
+import timeSpentRoute from "./routes/timeSpent";
 
 const app: Express = express();
 
@@ -35,6 +36,7 @@ const routesArray: Router[] = [
   lessonsRoute,
   logoutRoute,
   aboutRoute,
+  timeSpentRoute,
 ];
 
 app.use(helmet());

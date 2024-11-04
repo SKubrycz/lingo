@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 import {
   Container,
   Dialog,
@@ -21,7 +23,12 @@ export interface LessonData {
   id: number | undefined; //only id for now
 }
 
-function Stepper({ id }: LessonData) {
+export interface LessonDataWithSession {
+  id: number | undefined; //only id for now
+  endSession: () => void;
+}
+
+function Stepper({ id, endSession }: LessonDataWithSession) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -31,10 +38,6 @@ function Stepper({ id }: LessonData) {
   };
   const handleCloseDialog = () => {
     setOpenDialog(false);
-  };
-
-  const endSession = () => {
-    navigate("/lessons");
   };
 
   return (

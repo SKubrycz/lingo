@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,9 @@ function LessonProcess() {
   ]);
 
   const [lessonInfo, setLessonInfo] = useState<number | undefined>();
+
+  const interval = useRef<NodeJS.Timeout | undefined>(undefined);
+  const timeSpent = useRef<number>(0);
 
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
@@ -74,8 +77,76 @@ function LessonProcess() {
       });
   };
 
+  const handleUnloadData = async (e: Event) => {
+    e.preventDefault();
+
+    if (
+      document.visibilityState === "hidden" &&
+      document.URL.startsWith(`http://localhost:3001/lesson/`)
+    ) {
+      console.log("running unloadData...", document.URL);
+
+      // navigator.sendBeacon(
+      //   `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
+      //   JSON.stringify({
+      //     timeSpent: timeSpent.current,
+      //   })
+      // );
+
+      try {
+        const response = await axios.post(
+          `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
+          { timeSpent: timeSpent.current },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log(`From /timespent: ${response.data}`);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const endSession = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
+        { timeSpent: timeSpent.current },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(`From /timespent: ${response.data}`);
+
+      navigate("/lessons");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     handleAuth();
+
+    interval.current = setInterval(() => {
+      timeSpent.current++;
+      console.log(timeSpent.current);
+    }, 1000);
+
+    document.addEventListener("visibilitychange", (e) => handleUnloadData(e));
+
+    return () => {
+      document.removeEventListener("visibilitychange", (e) =>
+        handleUnloadData(e)
+      );
+      clearInterval(interval.current);
+    };
   }, []);
 
   return (
@@ -83,7 +154,7 @@ function LessonProcess() {
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
         {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
-        <Stepper id={lessonInfo}></Stepper>
+        <Stepper id={lessonInfo} endSession={endSession}></Stepper>
         {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}
       </Container>
       <AlertSnackbar
