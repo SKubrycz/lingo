@@ -99,10 +99,16 @@ function StepperContent({ id }: LessonData) {
               onClick={() => handleRemoveWord(s)}
               className="sentence-box"
               sx={{
-                border: "2px solid",
-                borderColor: "primary.contrastText",
+                padding: "0.5em",
+                color: "primary.main",
+                backgroundColor: "primary.contrastText",
                 borderRadius: ".5em",
                 cursor: "pointer",
+                userSelect: "none",
+                "&:hover": {
+                  boxShadow: "0px 0px 4px gray",
+                  transition: "100ms box-shadow ease-in-out",
+                },
               }}
             >
               {s}
@@ -125,9 +131,16 @@ function StepperContent({ id }: LessonData) {
               onClick={() => handleAddWord(word)}
               className="word-blocks-box"
               sx={{
-                border: "2px solid gray",
+                padding: "0.5em",
+                color: "primary.main",
+                backgroundColor: "gray",
                 borderRadius: ".5em",
                 cursor: "pointer",
+                userSelect: "none",
+                "&:hover": {
+                  boxShadow: "0px 0px 4px gray",
+                  transition: "100ms box-shadow ease-in-out",
+                },
               }}
             >
               {word}
