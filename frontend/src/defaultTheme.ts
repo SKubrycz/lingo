@@ -61,7 +61,7 @@ export const defaultTheme = createTheme(defaultThemePalette, {
       styleOverrides: {
         root: {
           "&::after": {
-            "border-bottom": `2px solid ${defaultThemePalette.palette.primary.contrastText}`,
+            borderBottom: `2px solid ${defaultThemePalette.palette.primary.contrastText}`,
           },
         },
       },
