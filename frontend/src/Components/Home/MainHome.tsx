@@ -46,8 +46,10 @@ function MainHome() {
             content={alertSnackbarData.content}
           ></AlertSnackbar>
           <Box className="home-main-box">
-            <Typography variant="h3">LINGO</Typography>
-            <Typography variant="h5">
+            <Typography variant="h3" sx={{ color: "primary.contrastText" }}>
+              LINGO
+            </Typography>
+            <Typography variant="h6">
               Nauka języka nigdy nie była prostsza!
             </Typography>
           </Box>
@@ -55,15 +57,22 @@ function MainHome() {
             component="div"
             sx={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <Box className="home-main-box" sx={{ textAlign: "right" }}>
-              <Typography variant="h4">Sprawna nauka</Typography>
+            <Box
+              className="home-main-box"
+              sx={{ width: "100%", textAlign: "right" }}
+            >
+              <Typography variant="h4" sx={{ color: "primary.contrastText" }}>
+                Sprawna nauka
+              </Typography>
               <Typography variant="h6">
                 Poznaj podstawy, zacznij rozmawiać
               </Typography>
             </Box>
           </Box>
           <Box className="home-main-box">
-            <Typography variant="h4">Widoczny postęp</Typography>
+            <Typography variant="h4" sx={{ color: "primary.contrastText" }}>
+              Widoczny postęp
+            </Typography>
             <Typography variant="h6">
               Monitoruj swój progres w nauce dzięki ekstensywnym statystykom
             </Typography>

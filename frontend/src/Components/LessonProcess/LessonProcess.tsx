@@ -29,7 +29,7 @@ function LessonProcess() {
   const [lessonInfo, setLessonInfo] = useState<number | undefined>();
 
   const interval = useRef<NodeJS.Timeout | undefined>(undefined);
-  const timeSpent = useRef<number>(0);
+  const timeStart = useRef<number>(0);
 
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
@@ -85,24 +85,18 @@ function LessonProcess() {
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
       console.log("running unloadData...", document.URL);
-
-      // navigator.sendBeacon(
-      //   `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
-      //   JSON.stringify({
-      //     timeSpent: timeSpent.current,
-      //   })
-      // );
-
       try {
         const response = await axios.post(
           `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
-          { timeSpent: timeSpent.current },
+          { timeSpent: performance.now() - timeStart.current },
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
+
+        timeStart.current = performance.now();
 
         console.log(`From /timespent: ${response.data}`);
       } catch (err) {
@@ -115,13 +109,15 @@ function LessonProcess() {
     try {
       const response = await axios.post(
         `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
-        { timeSpent: timeSpent.current },
+        { timeSpent: performance.now() - timeStart.current },
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
+
+      timeStart.current = performance.now();
 
       console.log(`From /timespent: ${response.data}`);
 
@@ -134,10 +130,7 @@ function LessonProcess() {
   useEffect(() => {
     handleAuth();
 
-    interval.current = setInterval(() => {
-      timeSpent.current++;
-      console.log(timeSpent.current);
-    }, 1000);
+    timeStart.current = performance.now();
 
     document.addEventListener("visibilitychange", (e) => handleUnloadData(e));
 
@@ -145,7 +138,6 @@ function LessonProcess() {
       document.removeEventListener("visibilitychange", (e) =>
         handleUnloadData(e)
       );
-      clearInterval(interval.current);
     };
   }, []);
 

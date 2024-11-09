@@ -37,7 +37,6 @@ function Home() {
 
   useEffect(() => {
     document.addEventListener("scroll", checkScroll);
-    console.log("after adding");
 
     return () => {
       document.removeEventListener("scroll", checkScroll);
