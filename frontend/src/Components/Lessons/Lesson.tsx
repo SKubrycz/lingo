@@ -5,7 +5,7 @@ import "./Lessons.scss";
 import { Button, Box, Container, Typography } from "@mui/material";
 
 interface LessonData {
-  number: number;
+  lessonId: number;
   title: string;
   description: string;
   new_words: string[];
@@ -27,12 +27,12 @@ function Lesson({ lessonData }: LessonProps) {
       >
         <Box component="div">
           <Typography variant="h6">
-            {lessonData.number} - {lessonData.title}
+            {lessonData.lessonId} - {lessonData.title}
           </Typography>
           <Typography variant="body2">{lessonData.description}</Typography>
         </Box>
         <Button
-          to={`/lesson/${lessonData.number}/1`}
+          to={`/lesson/${lessonData.lessonId}/1`}
           component={RouterLink}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >

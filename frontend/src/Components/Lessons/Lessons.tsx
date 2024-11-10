@@ -18,7 +18,7 @@ import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 import "./Lessons.scss";
 
 interface LessonData {
-  number: number;
+  lessonId: number;
   title: string;
   description: string;
   new_words: string[];

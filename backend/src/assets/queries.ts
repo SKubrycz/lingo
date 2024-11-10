@@ -37,7 +37,7 @@ interface Lesson extends LessonView {
 
 interface LessonView {
   id: ObjectId;
-  number: number;
+  lessonId: number;
   title: string;
   description: string;
   new_words: string[];
@@ -111,7 +111,7 @@ export const findOneUserByLogin = async (
   }
 };
 
-export const findLessons = async (): Promise<LessonView[] | null> => {
+export const findLessonsList = async (): Promise<LessonView[] | null> => {
   await connectToDb();
   const db: Db = await getDb();
   let resultArr: LessonView[] = [];
@@ -125,7 +125,7 @@ export const findLessons = async (): Promise<LessonView[] | null> => {
         {
           projection: {
             _id: 1,
-            number: 1,
+            lessonId: 1,
             title: 1,
             description: 1,
             new_words: 1,
@@ -136,7 +136,7 @@ export const findLessons = async (): Promise<LessonView[] | null> => {
 
     resultArr = result.map((res) => ({
       id: res._id,
-      number: res.number,
+      lessonId: res.lessonId,
       title: res.title,
       description: res.description,
       new_words: res.new_words,

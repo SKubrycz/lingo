@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-import {
-  findOneUserByLogin,
-  findLessons,
-  findLessonById,
-} from "../assets/queries";
+import { findLessonById } from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
   const { lessonId, exerciseId } = await req.params;
