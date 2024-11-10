@@ -1,22 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import { LessonData } from "./Stepper";
+import type { LessonData } from "../Stepper";
 
-import "./Stepper.scss";
-import { Preview, Replay } from "@mui/icons-material";
+import "../Stepper.scss";
 
-function StepperContent({ id }: LessonData) {
-  /*   const wordBlocks: string[] = [
-    "I am",
-    "You are",
-    "He is",
-    "Hello",
-    "Good morning",
-    "Good afternoon",
-  ]; */
+import { Replay } from "@mui/icons-material";
 
+export default function DragEx({ id }: LessonData) {
   const [sentenceArr, setSentenceArr] = useState<string[]>([]);
 
   //later to be replaced by API call
@@ -172,5 +164,3 @@ function StepperContent({ id }: LessonData) {
     </Box>
   );
 }
-
-export default StepperContent;

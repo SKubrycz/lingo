@@ -25,9 +25,29 @@ const insertToLessons = (db: Db) => {
   lessonsCollection.insertMany([
     {
       _id: new ObjectId("66af513c23082b6501dade65"),
-      number: 1,
+      lessonId: 1,
       title: "Wprowadzenie",
       description: "Nauczysz się jak przywitać się w języku angielskim",
+      exercises: [
+        {
+          exerciseId: 1,
+          type: "card",
+          word: "Good morning",
+          description: '"Dzień dobry" - o poranku',
+        },
+        {
+          exerciseId: 2,
+          type: "card",
+          word: "Good afternoon",
+          description: '"Dzień dobry" - po południu',
+        },
+        {
+          exerciseId: 3,
+          type: "card",
+          word: "Good evening",
+          description: '"Dobry wieczór"',
+        },
+      ],
       new_words: [
         "Hi",
         "Hello",
@@ -40,7 +60,7 @@ const insertToLessons = (db: Db) => {
     },
     {
       _id: new ObjectId("66c0cc3ffba0ae1abe9684b0"),
-      number: 2,
+      lessonId: 2,
       title: "Zwroty w różnych osobach",
       description: "Lorem ipsum opis drugiej lekcji",
       new_words: ["Me", "You", "He", "She", "They", "Mr", "Mrs"],

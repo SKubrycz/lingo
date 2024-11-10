@@ -1,19 +1,8 @@
-import { useEffect, useState } from "react";
-
 import { Link as RouterLink } from "react-router-dom";
 
 import "./Lessons.scss";
 
-import {
-  Button,
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Container,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Button, Box, Container, Typography } from "@mui/material";
 
 interface LessonData {
   number: number;
@@ -27,12 +16,6 @@ interface LessonProps {
 }
 
 function Lesson({ lessonData }: LessonProps) {
-  useEffect(() => {
-    /*
-            some fetch-lessons logic here (maybe, or: fetching from parent component)
-        */
-  }, []);
-
   return (
     <>
       <Container
@@ -49,7 +32,7 @@ function Lesson({ lessonData }: LessonProps) {
           <Typography variant="body2">{lessonData.description}</Typography>
         </Box>
         <Button
-          to={`/lesson/${lessonData.number}`}
+          to={`/lesson/${lessonData.number}/1`}
           component={RouterLink}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >

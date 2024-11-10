@@ -18,7 +18,7 @@ const getLessons = async (req: RequestLogin, res: Response) => {
       login: userResult.login,
     };
 
-    res.send(results);
+    res.status(200).send(results);
   } else {
     res.status(404).send("Nie znaleziono użytkownika");
   }

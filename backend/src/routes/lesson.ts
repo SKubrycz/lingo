@@ -5,6 +5,6 @@ import { getLessonId } from "../controllers/lessonController";
 
 const router = express.Router();
 
-router.get("/lesson/:id", getLessonId);
+router.get("/lesson/:lessonId/:exerciseId", getLessonId);
 
 export default router;

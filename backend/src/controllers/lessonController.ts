@@ -1,16 +1,26 @@
 import { Request, Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-import { findOneUserByLogin, findLessons } from "../assets/queries";
+import {
+  findOneUserByLogin,
+  findLessons,
+  findLessonById,
+} from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
-  const id = await req.params.id;
+  const { lessonId, exerciseId } = await req.params;
 
-  if (!id) return res.status(404).send("Nie znaleziono lekcji");
-  else {
-    // Later to be replaced by database lesson information
-    return res.status(200).send({ lessonId: id });
-  }
+  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!exerciseId)
+    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+
+  const lessonResult = await findLessonById(
+    Number(lessonId),
+    Number(exerciseId)
+  );
+  if (!lessonResult) return res.status(500).send("Nie udało się pobrać danych");
+
+  return res.status(200).send(lessonResult);
 };
 
 export { getLessonId };

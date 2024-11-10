@@ -14,7 +14,12 @@ import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
 
-function LessonProcess() {
+interface LessonsProcessProps {
+  lessonInfo: any;
+  children: React.ReactNode;
+}
+
+function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
     "/profile",
@@ -26,56 +31,16 @@ function LessonProcess() {
     "/profile",
   ]);
 
-  const [lessonInfo, setLessonInfo] = useState<number | undefined>();
-
-  const interval = useRef<NodeJS.Timeout | undefined>(undefined);
   const timeStart = useRef<number>(0);
 
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
-  const { lessonId } = useParams<{ lessonId: string }>();
-
   const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
-  const alertSnackbarDataDispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const handleAuth = async () => {
-    await axios
-      .get(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setLessonInfo(res.data.lessonId);
-      })
-      /* .then((res) => {
-        setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
-        setFooterLinkArray([
-          "/about",
-          "/lessons",
-          `/profile/${res.data.login}`,
-        ]);
-      }) */
-      .catch((error) => {
-        console.log(error);
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
-        //navigate("/");
-      });
-  };
 
   const handleUnloadData = async (e: Event) => {
     e.preventDefault();
@@ -96,12 +61,15 @@ function LessonProcess() {
           }
         );
 
-        timeStart.current = performance.now();
-
         console.log(`From /timespent: ${response.data}`);
       } catch (err) {
         console.error(err);
       }
+    } else if (
+      document.visibilityState === "visible" &&
+      document.URL.startsWith(`http://localhost:3001/lesson/`)
+    ) {
+      timeStart.current = performance.now();
     }
   };
 
@@ -128,8 +96,6 @@ function LessonProcess() {
   };
 
   useEffect(() => {
-    handleAuth();
-
     timeStart.current = performance.now();
 
     document.addEventListener("visibilitychange", (e) => handleUnloadData(e));
@@ -146,7 +112,9 @@ function LessonProcess() {
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
         {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
-        <Stepper id={lessonInfo} endSession={endSession}></Stepper>
+        <Stepper id={lessonInfo} endSession={endSession}>
+          {children}
+        </Stepper>
         {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}
       </Container>
       <AlertSnackbar

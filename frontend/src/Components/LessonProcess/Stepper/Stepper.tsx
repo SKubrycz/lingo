@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 
 import { Close } from "@mui/icons-material";
-import StepperContent from "./StepperContent";
 
 export interface LessonData {
   id: number | undefined; //only id for now
@@ -26,9 +25,10 @@ export interface LessonData {
 export interface LessonDataWithSession {
   id: number | undefined; //only id for now
   endSession: () => void;
+  children: React.ReactNode;
 }
 
-function Stepper({ id, endSession }: LessonDataWithSession) {
+function Stepper({ id, endSession, children }: LessonDataWithSession) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ function Stepper({ id, endSession }: LessonDataWithSession) {
             border="1px dashed"
             borderColor="primary.contrastText"
           >
-            <StepperContent id={id}></StepperContent>
+            {children}
           </Box>
         </Container>
       </Container>
