@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 
 import type { CardExerciseData, CardExerciseProps } from "../exerciseTypes";
 
-export default function L1Exercise1({ lessonId }: CardExerciseProps) {
+export default function L1Exercise2({ lessonId }: CardExerciseProps) {
   const [lessonInfo, setLessonInfo] = useState<CardExerciseData>({
     exercise: {
       exerciseId: 0,
@@ -29,7 +29,7 @@ export default function L1Exercise1({ lessonId }: CardExerciseProps) {
   const handleAuth = async () => {
     await axios
       .get(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}/1`,
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}/2`,
         {
           withCredentials: true,
         }
@@ -58,13 +58,20 @@ export default function L1Exercise1({ lessonId }: CardExerciseProps) {
 
   return (
     <LessonProcess lessonInfo={lessonInfo}>
+      <Button
+        to={`/lesson/${lessonId}/1`}
+        component={RouterLink}
+        sx={{ color: "primary.contrastText", textDecoration: "none" }}
+      >
+        Wstecz
+      </Button>
       <CardEx
         exerciseId={lessonInfo?.exercise?.exerciseId}
         word={lessonInfo?.exercise?.word}
         description={lessonInfo?.exercise?.description}
       ></CardEx>
       <Button
-        to={`/lesson/${lessonId}/2`}
+        to={`/lesson/${lessonId}/3`}
         component={RouterLink}
         sx={{ color: "primary.contrastText", textDecoration: "none" }}
       >

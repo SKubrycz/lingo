@@ -112,7 +112,11 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
         {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
-        <Stepper id={lessonInfo} endSession={endSession}>
+        <Stepper
+          exerciseId={lessonInfo.exercise.exerciseId}
+          exerciseCount={lessonInfo.exerciseCount}
+          endSession={endSession}
+        >
           {children}
         </Stepper>
         {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}

@@ -31,6 +31,11 @@ interface Exercise {
   description: string;
 }
 
+interface ExerciseData {
+  exercise: Exercise;
+  exerciseCount: number;
+}
+
 interface Lesson extends LessonView {
   exercises: Exercise[];
 }
@@ -41,6 +46,7 @@ interface LessonView {
   title: string;
   description: string;
   new_words: string[];
+  exerciseCount: number;
 }
 
 export const insertOneUser = async ({
@@ -129,6 +135,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
             title: 1,
             description: 1,
             new_words: 1,
+            exerciseCount: 1,
           },
         }
       )
@@ -140,6 +147,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
       title: res.title,
       description: res.description,
       new_words: res.new_words,
+      exerciseCount: res.exerciseCount,
     }));
 
     //console.log(resultArr);
@@ -155,10 +163,10 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
 export const findLessonById = async (
   lessonId: number,
   exerciseId: number
-): Promise<Exercise | null> => {
+): Promise<ExerciseData | null> => {
   await connectToDb();
   const db: Db = await getDb();
-  let result: Exercise;
+  let result: ExerciseData;
 
   try {
     const lessonsCollection = db.collection<Lesson>("lessons");
@@ -170,13 +178,19 @@ export const findLessonById = async (
           _id: 1,
           lessonId: 1,
           exercises: 1,
+          exerciseCount: 1,
         },
       }
     );
 
     if (colResult) {
-      let exercise = colResult.exercises.filter((ex) => ex.exerciseId === 1);
-      result = exercise[0];
+      let exercise = colResult.exercises.filter(
+        (ex) => ex.exerciseId === exerciseId
+      );
+      result = {
+        exercise: exercise[0],
+        exerciseCount: colResult.exerciseCount,
+      };
       console.log(result);
     } else return null;
 

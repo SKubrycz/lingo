@@ -22,13 +22,19 @@ export interface LessonData {
   id: number | undefined; //only id for now
 }
 
-export interface LessonDataWithSession {
-  id: number | undefined; //only id for now
+interface LessonDataWithSession {
+  exerciseId: number;
+  exerciseCount: number;
   endSession: () => void;
   children: React.ReactNode;
 }
 
-function Stepper({ id, endSession, children }: LessonDataWithSession) {
+function Stepper({
+  exerciseId,
+  exerciseCount,
+  endSession,
+  children,
+}: LessonDataWithSession) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -80,7 +86,10 @@ function Stepper({ id, endSession, children }: LessonDataWithSession) {
             margin: "1em 0",
           }}
         >
-          <LinearProgress value={33} variant="determinate"></LinearProgress>
+          <LinearProgress
+            value={(exerciseId * 100) / exerciseCount}
+            variant="determinate"
+          ></LinearProgress>
           <Box
             width="100%"
             height={600}
