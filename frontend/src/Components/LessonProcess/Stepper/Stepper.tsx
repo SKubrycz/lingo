@@ -114,8 +114,8 @@ function Stepper({
             display="flex"
             justifyContent="center"
             alignItems="center"
-            border="1px dashed"
-            borderColor="primary.contrastText"
+            // border="1px dashed"
+            // borderColor="primary.contrastText"
           >
             {children}
           </Box>

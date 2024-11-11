@@ -12,8 +12,8 @@ export default function CardEx({ exerciseId, word, description }: CardExProps) {
       <Container
         sx={{
           width: "fit-content",
-          height: "45%",
-          minWidth: "100px",
+          height: "60%",
+          minWidth: "250px",
           minHeight: "150px",
           display: "flex",
           flexDirection: "column",
@@ -21,6 +21,15 @@ export default function CardEx({ exerciseId, word, description }: CardExProps) {
           animation: "0.8s comeDown 1 ease-in-out",
         }}
       >
+        <Typography
+          variant="h6"
+          sx={{
+            color: "secondary.main",
+            fontWeight: 300,
+          }}
+        >
+          Nowe słowo
+        </Typography>
         <Box
           sx={{
             width: "100%",
@@ -36,11 +45,11 @@ export default function CardEx({ exerciseId, word, description }: CardExProps) {
             backgroundColor: "primary.contrastText",
           }}
         >
-          <Typography variant="h5">{exerciseId}</Typography>
+          {/* <Typography variant="h5">{exerciseId}</Typography> */}
           <Typography variant="h6">{word}</Typography>
         </Box>
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{
             margin: "1em",
           }}
