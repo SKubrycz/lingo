@@ -1,23 +1,49 @@
 import { ObjectId } from "mongodb";
 
+// IDEA: type: string; for letting frontend know what exercise template to apply (?)
+
 const l1exercises = [
   {
     exerciseId: 1,
     type: "card",
     word: "Good morning",
-    description: '"Dzień dobry" - o poranku',
+    translation: "Dzień dobry",
+    description: "o poranku",
   },
   {
     exerciseId: 2,
     type: "card",
     word: "Good afternoon",
-    description: '"Dzień dobry" - po południu',
+    translation: "Dzień dobry",
+    description: "po południu",
   },
   {
     exerciseId: 3,
     type: "card",
     word: "Good evening",
-    description: '"Dobry wieczór"',
+    translation: "Dobry wieczór",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    word: "Good night",
+    translation: "Dobranoc",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "card",
+    word: "Hi",
+    translation: "Cześć",
+    description: "nieformalne przywitanie",
+  },
+  {
+    exerciseId: 6,
+    type: "card",
+    word: "Hello",
+    translation: "Cześć",
+    description: "bardziej formalne przywitanie",
   },
 ];
 

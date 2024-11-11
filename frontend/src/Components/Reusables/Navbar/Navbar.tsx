@@ -139,7 +139,7 @@ function Navbar({ link, options }: NavbarProps) {
                 Wyloguj
               </Link>
             </Button>
-            <Button>Anuluj</Button>
+            <Button onClick={() => handleDialogClose()}>Anuluj</Button>
           </Box>
         </DialogContent>
       </Dialog>

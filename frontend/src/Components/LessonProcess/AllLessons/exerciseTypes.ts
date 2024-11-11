@@ -2,6 +2,7 @@ export interface CardExercise {
   exerciseId: number;
   type: string;
   word: string;
+  translation: string;
   description: string;
 }
 
@@ -12,4 +13,5 @@ export interface CardExerciseData {
 
 export interface CardExerciseProps {
   lessonId: number; // Lesson number;
+  exerciseId: number;
 }

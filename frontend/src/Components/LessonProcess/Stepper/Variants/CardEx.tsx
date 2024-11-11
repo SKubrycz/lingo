@@ -1,15 +1,25 @@
 import { Box, Container, Typography } from "@mui/material";
+import { forwardRef } from "react";
 
 interface CardExProps {
   exerciseId: number | undefined;
   word: string | undefined;
+  translation: string | undefined;
   description: string | undefined;
 }
 
-export default function CardEx({ exerciseId, word, description }: CardExProps) {
+interface CardExPropsRef extends CardExProps {
+  cardRef: HTMLElement;
+}
+
+const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
+  { exerciseId, word, translation, description },
+  cardRef
+) {
   return (
     <>
       <Container
+        ref={cardRef}
         sx={{
           width: "fit-content",
           height: "60%",
@@ -54,9 +64,11 @@ export default function CardEx({ exerciseId, word, description }: CardExProps) {
             margin: "1em",
           }}
         >
-          {description}
+          <b>{translation}</b> {description ? `- ${description}` : undefined}
         </Typography>
       </Container>
     </>
   );
-}
+});
+
+export default CardEx;

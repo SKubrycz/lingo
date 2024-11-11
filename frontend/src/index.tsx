@@ -15,9 +15,7 @@ import Profile from "./Components/Profile/Profile";
 import Lessons from "./Components/Lessons/Lessons";
 import Logout from "./Components/Logout/Logout";
 import reportWebVitals from "./reportWebVitals";
-import L1Exercise1 from "./Components/LessonProcess/AllLessons/Lesson1/L1Exercise1";
-import L1Exercise2 from "./Components/LessonProcess/AllLessons/Lesson1/L1Exercise2";
-import L1Exercise3 from "./Components/LessonProcess/AllLessons/Lesson1/L1Exercise3";
+import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -37,15 +35,29 @@ root.render(
           <Route path="/lessons" element={<Lessons></Lessons>}></Route>
           <Route
             path="/lesson/1/1"
-            element={<L1Exercise1 lessonId={1}></L1Exercise1>}
+            element={<L1NewWord lessonId={1} exerciseId={1}></L1NewWord>}
           ></Route>
           <Route
             path="/lesson/1/2"
-            element={<L1Exercise2 lessonId={1}></L1Exercise2>}
+            element={<L1NewWord lessonId={1} exerciseId={2}></L1NewWord>}
           ></Route>
           <Route
             path="/lesson/1/3"
-            element={<L1Exercise3 lessonId={1}></L1Exercise3>}
+            element={<L1NewWord lessonId={1} exerciseId={3}></L1NewWord>}
+          ></Route>
+          <Route
+            path="/lesson/1/4"
+            element={<L1NewWord lessonId={1} exerciseId={4}></L1NewWord>}
+          ></Route>
+          <Route
+            path="/lesson/1/5"
+            element={<L1NewWord lessonId={1} exerciseId={5}></L1NewWord>}
+          ></Route>
+          <Route
+            path="/lesson/1/6"
+            element={
+              <L1NewWord lessonId={1} exerciseId={6} isLastExercise></L1NewWord>
+            }
           ></Route>
           <Route path="/logout" element={<Logout></Logout>}></Route>
         </Routes>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -13,23 +13,34 @@ import { Button } from "@mui/material";
 
 import type { CardExerciseData, CardExerciseProps } from "../exerciseTypes";
 
-export default function L1Exercise1({ lessonId }: CardExerciseProps) {
+interface L1NewWordProps extends CardExerciseProps {
+  isLastExercise?: boolean;
+}
+
+export default function L1Exercise1({
+  lessonId,
+  exerciseId,
+  isLastExercise = false,
+}: L1NewWordProps) {
   const [lessonInfo, setLessonInfo] = useState<CardExerciseData>({
     exercise: {
       exerciseId: 0,
       type: "",
       word: "",
+      translation: "",
       description: "",
     },
     exerciseCount: 0,
   });
+
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const alertSnackbarDataDispatch = useDispatch();
 
   const handleAuth = async () => {
     await axios
       .get(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}/1`,
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}/${exerciseId}`,
         {
           withCredentials: true,
         }
@@ -54,23 +65,51 @@ export default function L1Exercise1({ lessonId }: CardExerciseProps) {
 
   useEffect(() => {
     handleAuth();
-  }, []);
+
+    if (cardRef.current) {
+      cardRef.current.style.animation = "none";
+      cardRef.current.offsetHeight;
+      cardRef.current.style.animation = "0.8s comeDown 1 ease-in-out";
+    }
+  }, [exerciseId]);
 
   return (
     <LessonProcess lessonInfo={lessonInfo}>
-      <Button sx={{ visibility: "hidden" }}></Button>
+      {exerciseId === 1 ? (
+        <Button sx={{ visibility: "hidden" }}></Button>
+      ) : (
+        <Button
+          to={`/lesson/${lessonId}/${exerciseId - 1}`}
+          component={RouterLink}
+          sx={{ color: "primary.contrastText", textDecoration: "none" }}
+        >
+          Wstecz
+        </Button>
+      )}
       <CardEx
+        ref={cardRef}
         exerciseId={lessonInfo?.exercise?.exerciseId}
         word={lessonInfo?.exercise?.word}
+        translation={lessonInfo?.exercise?.translation}
         description={lessonInfo?.exercise?.description}
       ></CardEx>
-      <Button
-        to={`/lesson/${lessonId}/2`}
-        component={RouterLink}
-        sx={{ color: "primary.contrastText", textDecoration: "none" }}
-      >
-        Dalej
-      </Button>
+      {isLastExercise ? (
+        <Button
+          to={`/lessons`}
+          component={RouterLink}
+          sx={{ color: "primary.contrastText", textDecoration: "none" }}
+        >
+          Zakończ
+        </Button>
+      ) : (
+        <Button
+          to={`/lesson/${lessonId}/${exerciseId + 1}`}
+          component={RouterLink}
+          sx={{ color: "primary.contrastText", textDecoration: "none" }}
+        >
+          Dalej
+        </Button>
+      )}
     </LessonProcess>
   );
 }
