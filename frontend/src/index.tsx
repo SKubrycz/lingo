@@ -60,10 +60,14 @@ root.render(
           ></Route>
           <Route
             path="/lesson/1/7"
+            element={<L1FillWord lessonId={1} exerciseId={7}></L1FillWord>}
+          ></Route>
+          <Route
+            path="/lesson/1/8"
             element={
               <L1FillWord
                 lessonId={1}
-                exerciseId={7}
+                exerciseId={8}
                 isLastExercise
               ></L1FillWord>
             }

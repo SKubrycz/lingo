@@ -33,6 +33,7 @@ export default function L1FillWord({
     },
     exerciseCount: 0,
   });
+  const [correct, setCorrect] = useState<boolean>(false);
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
@@ -92,11 +93,14 @@ export default function L1FillWord({
           question={lessonInfo?.exercise?.question}
           task={lessonInfo?.exercise?.task}
           missingWords={lessonInfo?.exercise?.missingWords}
+          correct={correct}
+          setCorrect={setCorrect}
         ></InputEx>
         {isLastExercise ? (
           <Button
             to={`/lessons`}
             component={RouterLink}
+            disabled={!correct}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Zakończ
@@ -105,6 +109,7 @@ export default function L1FillWord({
           <Button
             to={`/lesson/${lessonId}/${exerciseId + 1}`}
             component={RouterLink}
+            disabled={!correct}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Dalej

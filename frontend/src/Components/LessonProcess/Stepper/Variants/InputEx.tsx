@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect } from "react";
 
 import { Box, Container, TextField, Typography } from "@mui/material";
 
@@ -6,22 +6,26 @@ interface InputExProps {
   question: string;
   task: string;
   missingWords: string;
+  correct: boolean;
+  setCorrect: (correct: boolean) => void;
 }
 
 export default function InputEx({
   question,
   task,
   missingWords,
+  correct,
+  setCorrect,
 }: InputExProps) {
-  const [correct, setCorrect] = useState<boolean>(false);
+  const textRef = useRef<HTMLInputElement | null>(null);
 
   const checkWords = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     e.preventDefault();
 
-    if (!correct) {
-      if (e.target.value.toLowerCase() === missingWords) {
+    if (!correct && textRef.current) {
+      if (textRef.current.value.toLowerCase() === missingWords) {
         setCorrect(true);
         console.log("correct!");
       } else {
@@ -29,6 +33,13 @@ export default function InputEx({
       }
     }
   };
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.value = "";
+      setCorrect(false);
+    }
+  }, [missingWords]);
 
   return (
     <Box
@@ -54,7 +65,7 @@ export default function InputEx({
           animation: "0.8s comeDown 1 ease-in-out",
         }}
       >
-        <Typography variant="h6" sx={{ padding: "0.7em 0" }}>
+        <Typography variant="h6" sx={{ padding: "1.5em 0 0.7em 0" }}>
           {question}
         </Typography>
         <Typography variant="body2" sx={{ color: "secondary.main" }}>
@@ -63,6 +74,7 @@ export default function InputEx({
         <TextField
           placeholder="Wypełnij pole"
           variant="standard"
+          inputRef={textRef}
           autoFocus={true}
           onChange={(e) => checkWords(e)}
           inputProps={{
@@ -70,7 +82,7 @@ export default function InputEx({
           }}
           disabled={correct}
           sx={{
-            padding: "0.5em",
+            padding: "1em",
             ".MuiInputBase-input": {
               padding: "0.5em",
               textAlign: "center",

@@ -53,6 +53,14 @@ const l1exercises = [
     task: "Wypełnij puste pole",
     missingWords: "good morning",
   },
+  {
+    // ! No sentences to fill, just TextField
+    exerciseId: 8,
+    type: "input",
+    question: "Jak przywitamy się ze znajomym? (przywitanie nieformalne)",
+    task: "Wypełnij puste pole",
+    missingWords: "hi",
+  },
 ];
 
 export const lesson1 = {
