@@ -58,6 +58,7 @@ export default function L1Exercise1({ lessonId }: CardExerciseProps) {
 
   return (
     <LessonProcess lessonInfo={lessonInfo}>
+      <Button sx={{ visibility: "hidden" }}></Button>
       <CardEx
         exerciseId={lessonInfo?.exercise?.exerciseId}
         word={lessonInfo?.exercise?.word}

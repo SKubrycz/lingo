@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import axios from "axios";
-
 import {
   Container,
   Dialog,
@@ -49,12 +47,27 @@ function Stepper({
   return (
     <>
       <Container component="div" sx={{ display: "flex" }}>
-        <Tooltip title="Zakończ lekcję">
+        <Tooltip
+          title="Zakończ lekcję"
+          arrow
+          slotProps={{
+            popper: {
+              modifiers: [
+                {
+                  name: "offset",
+                  options: {
+                    offset: [0, -5],
+                  },
+                },
+              ],
+            },
+          }}
+        >
           <Icon
             component={Close}
             color="secondary"
             onClick={() => handleOpenDialog()}
-            sx={{ cursor: "pointer" }}
+            sx={{ paddingTop: "6px", cursor: "pointer" }}
           />
         </Tooltip>
         <Dialog onClose={() => handleCloseDialog()} open={openDialog}>
@@ -87,11 +100,16 @@ function Stepper({
           }}
         >
           <LinearProgress
-            value={(exerciseId * 100) / exerciseCount}
             variant="determinate"
+            value={(exerciseId * 100) / exerciseCount}
+            sx={{
+              width: "100%",
+              ".MuiLinearProgress-bar": {
+                transition: "none",
+              },
+            }}
           ></LinearProgress>
           <Box
-            width="100%"
             height={600}
             display="flex"
             justifyContent="center"
@@ -102,6 +120,42 @@ function Stepper({
             {children}
           </Box>
         </Container>
+        <Box
+          sx={{
+            width: "1em",
+            height: "1em",
+          }}
+        >
+          <Tooltip
+            title="Postęp lekcji"
+            arrow
+            slotProps={{
+              popper: {
+                modifiers: [
+                  {
+                    name: "offset",
+                    options: {
+                      offset: [0, -8],
+                    },
+                  },
+                ],
+              },
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                paddingTop: "6px",
+                fontSize: "16px",
+                fontWeight: 400,
+                color: "secondary.main",
+                cursor: "pointer",
+              }}
+            >
+              {`${Math.round((exerciseId * 100) / exerciseCount)}%`}
+            </Typography>
+          </Tooltip>
+        </Box>
       </Container>
     </>
   );

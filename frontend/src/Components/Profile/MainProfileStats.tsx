@@ -100,6 +100,18 @@ export default function MainProfileStats() {
             arrow={true}
             sx={{ textAlign: "center" }}
             key={index}
+            slotProps={{
+              popper: {
+                modifiers: [
+                  {
+                    name: "offset",
+                    options: {
+                      offset: [0, -20],
+                    },
+                  },
+                ],
+              },
+            }}
           >
             <ListItem sx={listItemSx}>
               <ListItemIcon>
