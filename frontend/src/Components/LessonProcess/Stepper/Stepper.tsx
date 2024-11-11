@@ -104,13 +104,13 @@ function Stepper({
             value={(exerciseId * 100) / exerciseCount}
             sx={{
               width: "100%",
-              ".MuiLinearProgress-bar": {
-                transition: "none",
-              },
+              // ".MuiLinearProgress-bar": {
+              //   transition: "none",
+              // },
             }}
           ></LinearProgress>
           <Box
-            height={600}
+            height={700}
             display="flex"
             justifyContent="center"
             alignItems="center"

@@ -11,9 +11,11 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbar/alertSnackbar";
 import { Button } from "@mui/material";
 
-import type { CardExerciseData, CardExerciseProps } from "../exerciseTypes";
+import type { CardExerciseData } from "../exerciseTypes";
 
-interface L1NewWordProps extends CardExerciseProps {
+interface L1NewWordProps {
+  lessonId: number;
+  exerciseId: number;
   isLastExercise?: boolean;
 }
 

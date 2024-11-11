@@ -8,56 +8,64 @@ interface CardExProps {
   description: string | undefined;
 }
 
-interface CardExPropsRef extends CardExProps {
-  cardRef: HTMLElement;
-}
-
 const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
   { exerciseId, word, translation, description },
   cardRef
 ) {
   return (
     <>
-      <Container
-        ref={cardRef}
+      <Box
         sx={{
-          width: "fit-content",
-          height: "60%",
-          minWidth: "250px",
-          minHeight: "150px",
+          width: "100%",
+          height: "55%",
+          position: "relative",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          animation: "0.8s comeDown 1 ease-in-out",
         }}
       >
-        <Typography
-          variant="h6"
+        <Container
+          ref={cardRef}
           sx={{
-            color: "secondary.main",
-            fontWeight: 300,
-          }}
-        >
-          Nowe słowo
-        </Typography>
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            padding: "0.1em",
+            width: "fit-content",
+            height: "70%",
+            minWidth: "260px",
+            minHeight: "200px",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center",
-            border: "none",
-            borderRadius: "5px",
-            color: "primary.main",
-            backgroundColor: "primary.contrastText",
+            animation: "0.8s comeDown 1 ease-in-out",
           }}
         >
-          {/* <Typography variant="h5">{exerciseId}</Typography> */}
-          <Typography variant="h6">{word}</Typography>
-        </Box>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "secondary.main",
+              fontWeight: 300,
+            }}
+          >
+            Nowe słowo
+          </Typography>
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              padding: "0.1em",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "none",
+              borderRadius: "5px",
+              color: "primary.main",
+              backgroundColor: "primary.contrastText",
+            }}
+          >
+            {/* <Typography variant="h5">{exerciseId}</Typography> */}
+            <Typography variant="h6">{word}</Typography>
+          </Box>
+        </Container>
         <Typography
           variant="body1"
           sx={{
@@ -66,7 +74,7 @@ const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
         >
           <b>{translation}</b> {description ? `- ${description}` : undefined}
         </Typography>
-      </Container>
+      </Box>
     </>
   );
 });

@@ -11,7 +11,14 @@ export interface CardExerciseData {
   exerciseCount: number;
 }
 
-export interface CardExerciseProps {
-  lessonId: number; // Lesson number;
+export interface InputExercise {
   exerciseId: number;
+  question: string;
+  task: string;
+  missingWords: string;
+}
+
+export interface InputExerciseData {
+  exercise: InputExercise;
+  exerciseCount: number;
 }

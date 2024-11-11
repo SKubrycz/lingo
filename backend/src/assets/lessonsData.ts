@@ -45,6 +45,14 @@ const l1exercises = [
     translation: "Cześć",
     description: "bardziej formalne przywitanie",
   },
+  {
+    // ! No sentences to fill, just TextField
+    exerciseId: 7,
+    type: "input",
+    question: "Jak przywitamy się z kimś przed południem?",
+    task: "Wypełnij puste pole",
+    missingWords: "good morning",
+  },
 ];
 
 export const lesson1 = {
