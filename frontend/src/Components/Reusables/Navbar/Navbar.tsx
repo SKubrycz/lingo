@@ -70,7 +70,7 @@ function Navbar({ link, options }: NavbarProps) {
             sx={{
               flexGrow: 1,
               display: "block",
-              fontFamily: "Fira Sans",
+              fontFamily: "Fira Sans, sans-serif",
               fontWeight: "500",
             }}
           >

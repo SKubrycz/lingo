@@ -16,7 +16,7 @@ const defaultThemePalette = createTheme({
   },
 
   typography: {
-    fontFamily: "Fira Sans",
+    fontFamily: "Fira Sans, sans-serif",
   },
   components: {
     MuiTextField: {
