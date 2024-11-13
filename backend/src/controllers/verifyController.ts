@@ -56,6 +56,8 @@ const postVerify = async (req: Request, res: Response) => {
     } else {
       return res.status(500).send(`Coś poszło nie tak po naszej stronie`);
     }
+  } else if (result?.verificationCode !== verificationCode) {
+    return res.status(400).send(`Niepoprawny kod weryfikacyjny`);
   } else {
     return res
       .status(404)

@@ -176,7 +176,7 @@ function MainRegister() {
             type="submit"
             variant="contained"
             name="submit"
-            value="Zaloguj"
+            value="Zarejestruj"
             sx={{
               margin: "1.5em .5em",
               backgroundColor: "primary.contrastText",

@@ -12,6 +12,8 @@ import { setAlert } from "../../../state/alertSnackbar/alertSnackbar";
 
 import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
 
+import "../Register.scss";
+
 export default function Verify() {
   const [code, setCode] = useState<string>("");
   const { verifyId } = useParams<{ verifyId: string | undefined }>();
@@ -101,24 +103,33 @@ export default function Verify() {
         navigate("/login");
       })
       .catch((err) => {
-        if (err.status == 308) {
+        if (err.response.status == 308) {
           alertSnackbarDataDispatch(
             setAlert({
               severity: "error",
               variant: "filled",
               title: "Błąd",
-              content: err.data,
+              content: err.response.data,
             })
           );
 
           navigate("/");
+        } else if (err.response.status == 400) {
+          alertSnackbarDataDispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: err.response.data,
+            })
+          );
         } else {
           alertSnackbarDataDispatch(
             setAlert({
               severity: "error",
               variant: "filled",
               title: "Błąd",
-              content: err.data,
+              content: err.response.data,
             })
           );
 
@@ -152,6 +163,7 @@ export default function Verify() {
       <Box
         component="form"
         method="post"
+        className="form-button"
         onSubmit={(e) => submitCode(e)}
         sx={{
           width: "100%",
@@ -191,11 +203,6 @@ export default function Verify() {
           sx={{
             margin: "1.5em .5em",
             backgroundColor: "primary.contrastText",
-            "&.MuiButton-contained": {
-              "&:hover": {
-                backgroundColor: "primary.dark",
-              },
-            },
           }}
         >
           Zatwierdź
