@@ -63,7 +63,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         verified: false,
       });
 
-      return res.status(200).send("Zarejestrowano");
+      return res.status(200).send({ message: "Zarejestrowano", uuid: uuid });
     } else {
       return res.status(400).send("Hasła nie są takie same");
     }

@@ -17,6 +17,7 @@ import Logout from "./Components/Logout/Logout";
 import reportWebVitals from "./reportWebVitals";
 import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
 import L1FillWord from "./Components/LessonProcess/AllLessons/Lesson1/L1FillWord";
+import Verify from "./Components/Register/Verify/Verify";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -30,6 +31,7 @@ root.render(
           <Route path="/" element={<Home></Home>}></Route>
           <Route path="/login" element={<Login></Login>}></Route>
           <Route path="/register" element={<Register></Register>}></Route>
+          <Route path="/verify/:verifyId" element={<Verify></Verify>}></Route>
           <Route path="/about" element={<About></About>}></Route>
           <Route path="/profile" element={<Profile></Profile>}></Route>
           <Route path="/profile/:userId" element={<Profile></Profile>}></Route>

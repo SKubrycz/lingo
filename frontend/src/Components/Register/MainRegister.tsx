@@ -70,7 +70,7 @@ function MainRegister() {
         `http://localhost:${process.env.REACT_APP_SERVER_PORT}/register`,
         registerData
       )
-      .then(() => {
+      .then((res) => {
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",
@@ -79,7 +79,9 @@ function MainRegister() {
             content: "Rejestracja przebiegła pomyślnie",
           })
         );
-        navigate("/", { state: "Rejestracja przebiegła pomyślnie" });
+        navigate(`/verify/${res.data.uuid}`, {
+          state: "Rejestracja przebiegła pomyślnie",
+        });
       })
       .catch((error) => {
         alertSnackbarDataDispatch(
