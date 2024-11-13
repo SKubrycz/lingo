@@ -73,9 +73,9 @@ function MainRegister() {
       .then((res) => {
         alertSnackbarDataDispatch(
           setAlert({
-            severity: "info",
+            severity: "success",
             variant: "standard",
-            title: "Informacja",
+            title: "Sukces",
             content: "Rejestracja przebiegła pomyślnie",
           })
         );

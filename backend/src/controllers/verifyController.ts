@@ -10,6 +10,8 @@ const getVerify = async (req: Request, res: Response) => {
 
   const result = await findOneUserByUUID(verifyId);
   if (result) {
+    if (result.verified)
+      return res.status(308).send(`Konto zostało już zweryfikowane`);
     console.log(`${verifyId} === ${result.uuid}`);
     return res.status(200).send(`Znaleziono użytkownika ${verifyId}`);
   } else {
@@ -29,6 +31,8 @@ const postVerify = async (req: Request, res: Response) => {
     result.verificationCode.length > 5 &&
     result.verificationCode === verificationCode
   ) {
+    if (result.verified)
+      return res.status(308).send(`Konto zostało już zweryfikowane`);
     const timeDelta =
       (currentTime.getTime() - result.createdDate.getTime()) / (1000 * 60); // minutes
     console.log(`timeDelta: ${timeDelta}`);
@@ -48,9 +52,7 @@ const postVerify = async (req: Request, res: Response) => {
     console.log(`${verifyId} === ${result.uuid}`);
     const updateResult = await updateOneUserByUUID(result.email, result.uuid);
     if (updateResult) {
-      return res
-        .status(200)
-        .send(`Weryfikacja przebiegła pomyślnie: ${verifyId}`);
+      return res.status(200).send(`Weryfikacja przebiegła pomyślnie`);
     } else {
       return res.status(500).send(`Coś poszło nie tak po naszej stronie`);
     }

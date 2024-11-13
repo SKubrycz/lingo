@@ -28,6 +28,7 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<NotFound></NotFound>}></Route>
+          <Route path="/not-found" element={<NotFound></NotFound>}></Route>
           <Route path="/" element={<Home></Home>}></Route>
           <Route path="/login" element={<Login></Login>}></Route>
           <Route path="/register" element={<Register></Register>}></Route>
