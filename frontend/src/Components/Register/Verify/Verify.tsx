@@ -1,9 +1,9 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { Box, Button, Container, Input, Typography } from "@mui/material";
+import { Box, Button, Input, Typography } from "@mui/material";
 import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -137,13 +137,16 @@ export default function Verify() {
   }, []);
 
   return (
-    <Container
+    <Box
       sx={{
-        width: "50%",
+        width: "100%",
+        height: "100%",
         position: "absolute",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
       <Box
@@ -152,6 +155,7 @@ export default function Verify() {
         onSubmit={(e) => submitCode(e)}
         sx={{
           width: "100%",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -203,6 +207,6 @@ export default function Verify() {
         title={alertSnackbarData.title}
         content={alertSnackbarData.content}
       ></AlertSnackbar>
-    </Container>
+    </Box>
   );
 }
