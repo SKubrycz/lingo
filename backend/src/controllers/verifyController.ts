@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { findOneUserByUUID } from "../assets/queries";
+import {
+  deleteOneUserById,
+  findOneUserByUUID,
+  updateOneUserByUUID,
+} from "../assets/queries";
 
 const getVerify = async (req: Request, res: Response) => {
   const { verifyId } = await req.params;
@@ -17,12 +21,39 @@ const postVerify = async (req: Request, res: Response) => {
   const { verificationCode } = await req.body;
   const { verifyId } = await req.params;
 
+  const currentTime = new Date(Date.now());
+
   const result = await findOneUserByUUID(verifyId);
-  if (result && result.verificationCode === verificationCode) {
+  if (
+    result &&
+    result.verificationCode.length > 5 &&
+    result.verificationCode === verificationCode
+  ) {
+    const timeDelta =
+      (currentTime.getTime() - result.createdDate.getTime()) / (1000 * 60); // minutes
+    console.log(`timeDelta: ${timeDelta}`);
+
+    if (timeDelta > 20 && !result.verified) {
+      const deleteResult = await deleteOneUserById(result._id);
+      if (!deleteResult)
+        return res.status(500).send(`Coś poszło nie tak po naszej stronie`);
+
+      return res
+        .status(410)
+        .send(
+          `Okno czasowe weryfikacji emaila wygasło, proszę zarejestrować się ponownie`
+        );
+    }
+
     console.log(`${verifyId} === ${result.uuid}`);
-    return res
-      .status(200)
-      .send(`Weryfikacja przebiegła pomyślnie: ${verifyId}`);
+    const updateResult = await updateOneUserByUUID(result.email, result.uuid);
+    if (updateResult) {
+      return res
+        .status(200)
+        .send(`Weryfikacja przebiegła pomyślnie: ${verifyId}`);
+    } else {
+      return res.status(500).send(`Coś poszło nie tak po naszej stronie`);
+    }
   } else {
     return res
       .status(404)

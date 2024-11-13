@@ -9,7 +9,6 @@ import helmet from "helmet";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import nodemailer from "nodemailer";
 
 import { isAuthenticated } from "./middleware/auth";
 import routeLogger from "./middleware/routeLogger";

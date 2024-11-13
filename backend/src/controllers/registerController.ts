@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { randomBytes } from "node:crypto";
+import nodemailer from "nodemailer";
 
 import { findOneUser, insertOneUser } from "../assets/queries";
 
@@ -51,6 +52,12 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         `req.body in ${req.originalUrl}: ${email} ${login} ${password} ${passwordAgain}, ${hash}`
       );
 
+      const transporter = nodemailer.createTransport({
+        host: "localhost",
+        port: 1025,
+        secure: false,
+      });
+
       const uuid = crypto.randomUUID();
       const verificationCode = randomBytes(3).toString("hex").toUpperCase();
 
@@ -61,6 +68,13 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         uuid: uuid,
         verificationCode: verificationCode,
         verified: false,
+      });
+
+      const mailInfo = await transporter.sendMail({
+        from: "noreply@auth.localhost",
+        to: email,
+        subject: "Weryfikacja konta Lingo",
+        html: `Kod weryfikacyjny: <b>${verificationCode}</b>`,
       });
 
       return res.status(200).send({ message: "Zarejestrowano", uuid: uuid });

@@ -1,4 +1,4 @@
-import { ObjectId, Db } from "mongodb";
+import { ObjectId, Db, UpdateResult, DeleteResult } from "mongodb";
 import { connectToDb, getDb, closeDbConnection } from "../assets/db";
 
 interface User {
@@ -28,6 +28,14 @@ interface FindUser {
   verificationCode: string;
   verified: boolean;
   createdDate: Date;
+}
+
+interface UpdateUser {
+  _id: ObjectId;
+  email: string;
+  login: string;
+  uuid: string;
+  verified: boolean;
 }
 
 interface Exercise {
@@ -140,6 +148,50 @@ export const findOneUserByUUID = async (
     const result = await userCollection.findOne({
       uuid: uuid,
     });
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await closeDbConnection();
+  }
+};
+
+export const updateOneUserByUUID = async (
+  email: string,
+  uuid: string
+): Promise<UpdateResult | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const userCollection = db.collection<UpdateUser>("users");
+    const result = await userCollection.updateOne(
+      { email: { $eq: email }, uuid: { $eq: uuid } },
+      {
+        $set: { verified: true },
+      }
+    );
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await closeDbConnection();
+  }
+};
+
+export const deleteOneUserById = async (
+  id: ObjectId
+): Promise<DeleteResult | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const userCollection = db.collection<UpdateUser>("users");
+    const result = await userCollection.deleteOne({ _id: id });
 
     return result;
   } catch (error) {
