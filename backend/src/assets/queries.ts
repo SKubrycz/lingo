@@ -14,6 +14,7 @@ interface InsertUser {
   login: string;
   password: string;
   uuid: string;
+  verificationCode: string;
   verified: boolean;
   createdDate?: Date;
 }
@@ -23,6 +24,9 @@ interface FindUser {
   email: string;
   login: string;
   password: string;
+  uuid: string;
+  verificationCode: string;
+  verified: boolean;
   createdDate: Date;
 }
 
@@ -56,6 +60,7 @@ export const insertOneUser = async ({
   login,
   password,
   uuid,
+  verificationCode,
   verified,
 }: InsertUser): Promise<void> => {
   await connectToDb();
@@ -68,6 +73,7 @@ export const insertOneUser = async ({
       login: login,
       password: password,
       uuid: uuid,
+      verificationCode: verificationCode,
       verified: verified,
       createdDate: new Date(Date.now()),
     });
@@ -114,6 +120,27 @@ export const findOneUserByLogin = async (
     });
 
     //console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await closeDbConnection();
+  }
+};
+
+export const findOneUserByUUID = async (
+  uuid: string
+): Promise<FindUser | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const userCollection = db.collection<FindUser>("users");
+    const result = await userCollection.findOne({
+      uuid: uuid,
+    });
+
     return result;
   } catch (error) {
     console.error(error);

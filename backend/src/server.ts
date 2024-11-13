@@ -23,6 +23,7 @@ import lessonRoute from "./routes/lesson";
 import logoutRoute from "./routes/logout";
 import aboutRoute from "./routes/about";
 import timeSpentRoute from "./routes/timeSpent";
+import verifyRoute from "./routes/verify";
 
 const app: Express = express();
 
@@ -38,6 +39,7 @@ const routesArray: Router[] = [
   logoutRoute,
   aboutRoute,
   timeSpentRoute,
+  verifyRoute,
 ];
 
 // let transporter = nodemailer.createTransport({

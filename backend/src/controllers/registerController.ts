@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { randomBytes } from "node:crypto";
 
 import { findOneUser, insertOneUser } from "../assets/queries";
 
@@ -51,12 +52,14 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       );
 
       const uuid = crypto.randomUUID();
+      const verificationCode = randomBytes(3).toString("hex").toUpperCase();
 
       insertOneUser({
         email: email,
         login: login,
         password: hash,
         uuid: uuid,
+        verificationCode: verificationCode,
         verified: false,
       });
 
