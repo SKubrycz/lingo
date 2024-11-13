@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ObjectId } from "mongodb";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { findOneUserByLogin } from "../assets/queries";
 
 interface TokenData extends JwtPayload {
   _id: ObjectId;
@@ -14,7 +15,7 @@ export interface RequestLogin extends Request {
 const accessTokenExpiry: number = 1000 * 60 * 60;
 const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
 
-export const checkAuth = (
+export const checkAuth = async (
   req: RequestLogin,
   res: Response,
   next: NextFunction
@@ -50,6 +51,12 @@ export const checkAuth = (
     const userVerify = <TokenData>(
       jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
     );
+    const result = await findOneUserByLogin(userVerify.login);
+    if (!result) {
+      res.clearCookie("access_token_lingo");
+      res.clearCookie("refresh_token_lingo");
+      return res.status(404).send("Nie znaleziono użytkownika");
+    }
     req.login = userVerify.login;
     console.log(req.login);
     next();
@@ -58,7 +65,7 @@ export const checkAuth = (
   }
 };
 
-export const isAuthenticated = (
+export const isAuthenticated = async (
   req: RequestLogin,
   res: Response,
   next: NextFunction
@@ -89,11 +96,23 @@ export const isAuthenticated = (
       const userVerify = <TokenData>(
         jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
       );
+      const result = await findOneUserByLogin(userVerify.login);
+      if (!result) {
+        res.clearCookie("access_token_lingo");
+        res.clearCookie("refresh_token_lingo");
+        return res.status(404).send("Nie znaleziono użytkownika");
+      }
       req.login = userVerify.login;
     } else if (accessToken) {
       const userVerify = <TokenData>(
         jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
       );
+      const result = await findOneUserByLogin(userVerify.login);
+      if (!result) {
+        res.clearCookie("access_token_lingo");
+        res.clearCookie("refresh_token_lingo");
+        return res.status(404).send("Nie znaleziono użytkownika");
+      }
       req.login = userVerify.login;
     }
     next();

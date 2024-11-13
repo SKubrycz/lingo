@@ -1,4 +1,4 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, Db, ObjectId } from "mongodb";
 import colors from "colors";
 
 import { lesson1, lesson2 } from "./lessonsData";

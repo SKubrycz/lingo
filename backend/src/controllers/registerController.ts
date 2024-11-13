@@ -50,7 +50,15 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         `req.body in ${req.originalUrl}: ${email} ${login} ${password} ${passwordAgain}, ${hash}`
       );
 
-      insertOneUser({ email: email, login: login, password: hash });
+      const uuid = crypto.randomUUID();
+
+      insertOneUser({
+        email: email,
+        login: login,
+        password: hash,
+        uuid: uuid,
+        verified: false,
+      });
 
       return res.status(200).send("Zarejestrowano");
     } else {

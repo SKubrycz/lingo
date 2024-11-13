@@ -13,6 +13,8 @@ interface InsertUser {
   email: string;
   login: string;
   password: string;
+  uuid: string;
+  verified: boolean;
   createdDate?: Date;
 }
 
@@ -53,6 +55,8 @@ export const insertOneUser = async ({
   email,
   login,
   password,
+  uuid,
+  verified,
 }: InsertUser): Promise<void> => {
   await connectToDb();
   const db: Db = await getDb();
@@ -63,6 +67,8 @@ export const insertOneUser = async ({
       email: email,
       login: login,
       password: password,
+      uuid: uuid,
+      verified: verified,
       createdDate: new Date(Date.now()),
     });
     //console.log(result);

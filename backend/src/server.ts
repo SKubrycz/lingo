@@ -9,6 +9,7 @@ import helmet from "helmet";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import nodemailer from "nodemailer";
 
 import { isAuthenticated } from "./middleware/auth";
 import routeLogger from "./middleware/routeLogger";
@@ -38,6 +39,26 @@ const routesArray: Router[] = [
   aboutRoute,
   timeSpentRoute,
 ];
+
+// let transporter = nodemailer.createTransport({
+//   host: "localhost",
+//   port: 1025,
+// });
+
+// transporter.verify(function (error, success) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log("Server is ready to take our messages");
+//   }
+// });
+
+// transporter.sendMail({
+//   from: "qwe@localhost",
+//   to: "asd@localhost",
+//   subject: "Hello Asd",
+//   html: "<b>Welcome</b>, <i>Asd</i>",
+// });
 
 app.use(helmet());
 
@@ -71,6 +92,6 @@ app.all("*", isAuthenticated, (req: Request, res: Response) => {
   res.status(404).send("Błąd 404: Nie znaleziono zawartości");
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port: ${process.env.PORT}`)
-);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port: ${process.env.PORT}`);
+});
