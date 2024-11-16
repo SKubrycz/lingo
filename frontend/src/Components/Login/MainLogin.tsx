@@ -51,7 +51,7 @@ function MainLogin() {
 
     await axios
       .post(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/login`,
+        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/login`,
         loginData,
         {
           withCredentials: true,

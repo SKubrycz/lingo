@@ -1,16 +1,42 @@
+@use "sass:color";
+
 $baseColor: rgb(230, 92, 0);
 $baseBg: rgb(253, 229, 210);
-$baseBgPlus: adjust-color($lightness: -10%, $color: $baseBg);
-$baseBgPanel: adjust-color($color: $baseBg, $lightness: -25%, $saturation: -2%);
+$baseBgPlus: color.adjust(
+  $lightness: -10%,
+  $color: $baseBg,
+);
+$baseBgPanel: color.adjust(
+  $color: $baseBg,
+  $lightness: -25%,
+  $saturation: -2%,
+);
 
-$fontColor: adjust-color($blackness: 60%, $color: $baseColor);
-$fontLighter: adjust-color($color: $baseColor, $blackness: 20%);
-$fontGrayish: adjust-color($saturation: -70%, $lightness: 30%, $color: $fontColor);
+$fontColor: color.adjust(
+  $blackness: 60%,
+  $color: $baseColor,
+);
+$fontLighter: color.adjust(
+  $color: $baseColor,
+  $blackness: 20%,
+);
+$fontGrayish: color.adjust(
+  $saturation: -70%,
+  $lightness: 30%,
+  $color: $fontColor,
+);
 
-$lightBaseColor: adjust-color($color: $baseColor, $lightness: 50%);
+$lightBaseColor: color.adjust(
+  $color: $baseColor,
+  $lightness: 50%,
+);
 
-$alertColor: adjust-color($color: $baseColor, $saturation: -30%, $lightness: 25%, $alpha: -0.3);
-
+$alertColor: color.adjust(
+  $color: $baseColor,
+  $saturation: -30%,
+  $lightness: 25%,
+  $alpha: -0.3,
+);
 
 //Screen sizes
 $fullHd: 1920px;

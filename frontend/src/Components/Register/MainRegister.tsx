@@ -67,7 +67,7 @@ function MainRegister() {
 
     await axios
       .post(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/register`,
+        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/register`,
         registerData
       )
       .then((res) => {

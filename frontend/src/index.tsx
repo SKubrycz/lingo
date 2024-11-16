@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
@@ -14,18 +13,16 @@ import About from "./Components/About/About";
 import Profile from "./Components/Profile/Profile";
 import Lessons from "./Components/Lessons/Lessons";
 import Logout from "./Components/Logout/Logout";
-import reportWebVitals from "./reportWebVitals";
 import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
 import L1FillWord from "./Components/LessonProcess/AllLessons/Lesson1/L1FillWord";
 import Verify from "./Components/Register/Verify/Verify";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-root.render(
+createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <ThemeProvider theme={defaultTheme}>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Routes>
           <Route path="*" element={<NotFound></NotFound>}></Route>
           <Route path="/not-found" element={<NotFound></NotFound>}></Route>
@@ -81,8 +78,3 @@ root.render(
     </ThemeProvider>
   </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

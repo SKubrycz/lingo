@@ -15,7 +15,7 @@ function NotFound() {
 
   const handleNotFound = async () => {
     await axios
-      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/*`)
+      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/*`)
       .catch((err) => {
         console.log(err.response.data);
         setInfo(err.response.data);

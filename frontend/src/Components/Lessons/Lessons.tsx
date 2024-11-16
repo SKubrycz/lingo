@@ -51,7 +51,7 @@ function Lessons() {
 
   const handleAuth = async () => {
     await axios
-      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/lessons`, {
+      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/lessons`, {
         withCredentials: true,
       })
       .then((res) => {

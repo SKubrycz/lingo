@@ -1,4 +1,6 @@
-@import "utilities/variables";
+@use "sass:color";
+
+@use "utilities/variables" as *;
 
 @font-face {
   font-family: "Fira Sans", sans-serif;

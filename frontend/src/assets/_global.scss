@@ -1,3 +1,7 @@
+@use "sass:color";
+
+@use "../utilities/variables" as *;
+
 a,
 a:visited {
   padding: 0.5em;
@@ -28,7 +32,7 @@ button {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: adjust-color($color: $baseColor, $blackness: 10%);
+  background: color.adjust($color: $baseColor, $blackness: 10%);
 }
 
 .wrapper {

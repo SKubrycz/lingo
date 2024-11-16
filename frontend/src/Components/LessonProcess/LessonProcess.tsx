@@ -52,7 +52,7 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
       console.log("running unloadData...", document.URL);
       try {
         const response = await axios.post(
-          `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
+          `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent`,
           { timeSpent: performance.now() - timeStart.current },
           {
             headers: {
@@ -76,7 +76,7 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
   const endSession = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/timespent`,
+        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent`,
         { timeSpent: performance.now() - timeStart.current },
         {
           headers: {

@@ -12,7 +12,7 @@ function Logout() {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/logout`, {
+      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/logout`, {
         withCredentials: true,
       })
       .then(() => {

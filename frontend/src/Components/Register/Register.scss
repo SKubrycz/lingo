@@ -1,6 +1,7 @@
-@import "../../utilities/variables";
+@use "sass:color";
 
-@import "../../assets/global";
+@use "../../assets/global";
+@use "../../utilities/variables" as *;
 
 .main-register-wrapper {
   width: 100%;
@@ -39,14 +40,14 @@
 
   button[type="submit"] {
     &:hover {
-      background-color: adjust-color($color: $baseColor, $blackness: 10%);
+      background-color: color.adjust($color: $baseColor, $blackness: 10%);
     }
   }
 }
 
 .form-button {
   button:hover {
-    background-color: adjust-color($color: $baseColor, $blackness: 10%);
+    background-color: color.adjust($color: $baseColor, $blackness: 10%);
   }
 }
 

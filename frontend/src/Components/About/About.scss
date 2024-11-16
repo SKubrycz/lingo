@@ -1,72 +1,73 @@
-@import '../../utilities/variables';
+@use "../../utilities/variables" as *;
 
-@import '../../assets/global';
+@use "../../assets/global";
 
 .main-about-wrapper {
-    width: 100%;
+  width: 100%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    color: $fontColor;
+  color: $fontColor;
 }
 
 .main-about {
-    padding: 2em;
+  padding: 2em;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 
-    //background-color: $baseBgPlus;
+  //background-color: $baseBgPlus;
 }
 
 .main-about-content {
-    width: 75%;
+  width: 75%;
 
-    h1, h2, h3, h4, h5, h6 {
-        padding: .5em 0;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    padding: 0.5em 0;
 
-        font-weight: 500;
+    font-weight: 500;
 
-        animation: 0.4s comeUpLeft ease-out 1;
-    }
+    animation: 0.4s comeUpLeft ease-out 1;
+  }
 
-    article {
-        animation: 0.6s comeUpLeft ease-out 1;
-    }
+  article {
+    animation: 0.6s comeUpLeft ease-out 1;
+  }
 }
-
 
 // ---> MEDIA QUERIES
 
 @media (max-width: $laptopL) {
-
 }
 
 @media (max-width: $laptop) {
 }
 
 @media (max-width: $tablet) {
-    .main-about {
-        width: 60%;
-    }
+  .main-about {
+    width: 60%;
+  }
 }
 
 @media (max-width: $mobileL) {
-    .main-about {
-        width: 100%;
+  .main-about {
+    width: 100%;
 
-        padding: 1.5em;
-    }
+    padding: 1.5em;
+  }
 }
 
 @media (max-width: $mobileM) {
-
 }
 
 @media (max-width: $mobileS) {
-
 }

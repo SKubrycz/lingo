@@ -19,7 +19,7 @@ function MainHome() {
 
   const handleAuth = async () => {
     await axios
-      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/`, {
+      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/`, {
         withCredentials: true,
       })
       .then((res) => {

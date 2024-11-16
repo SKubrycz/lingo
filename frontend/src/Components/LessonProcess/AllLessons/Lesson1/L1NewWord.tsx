@@ -42,7 +42,9 @@ export default function L1Exercise1({
   const handleAuth = async () => {
     await axios
       .get(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/lesson/${lessonId}/${exerciseId}`,
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/lesson/${lessonId}/${exerciseId}`,
         {
           withCredentials: true,
         }

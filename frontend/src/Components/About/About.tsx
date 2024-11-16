@@ -39,7 +39,7 @@ function About() {
 
   const handleAuth = () => {
     axios
-      .get(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/about`, {
+      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/about`, {
         withCredentials: true,
       })
       .then((res) => {

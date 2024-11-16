@@ -1,61 +1,56 @@
-@import '../../utilities/variables';
+@use "../../utilities/variables" as *;
 
-@import '../../assets/global';
+@use "../../assets/global";
 
 .lessons-wrapper {
-    width: 100%;
-    padding: 1.5em 0;
+  width: 100%;
+  padding: 1.5em 0;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
-    //background-color: $baseBgPlus;
+  //background-color: $baseBgPlus;
 }
 
 .lessons-lesson {
-    width: 50%;
+  width: 50%;
 
-    margin: 1em 0;
-    padding: 1em;
+  margin: 1em 0;
+  padding: 1em;
 
-    border-radius: 15px;
+  border-radius: 15px;
 
-    font-size: 14px;
+  font-size: 14px;
 
-    background-color: $baseBgPanel;
+  background-color: $baseBgPanel;
 
-    cursor: pointer;
+  cursor: pointer;
 }
-
-
 
 // ---> MEDIA QUERIES
 
 @media (max-width: $laptopL) {
-
 }
 
 @media (max-width: $laptop) {
 }
 
 @media (max-width: $tablet) {
-    .lessons-wrapper {
-        width: 75%;
-    }
+  .lessons-wrapper {
+    width: 75%;
+  }
 }
 
 @media (max-width: $mobileL) {
-    .lessons-wrapper {
-        width: auto;
-    }
+  .lessons-wrapper {
+    width: auto;
+  }
 }
 
 @media (max-width: $mobileM) {
-
 }
 
 @media (max-width: $mobileS) {
-
 }
