@@ -86,7 +86,9 @@ export default function Verify() {
 
     await axios
       .post(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/verify/${verifyId}`,
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/verify/${verifyId}`,
         {
           verificationCode: code,
         }
