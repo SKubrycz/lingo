@@ -1,8 +1,10 @@
 import express from "express";
 
-import { postLogin } from "../controllers/loginController";
+import { getLogin, postLogin } from "../controllers/loginController";
 
 const router = express.Router();
+
+router.get("/login", getLogin);
 
 router.post("/login", postLogin);
 

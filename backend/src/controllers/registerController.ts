@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 import { findOneUser, insertOneUser } from "../assets/queries";
 
 import hashData from "../utilities/hashData";
+import { registerLangData } from "../assets/routeLangData/register";
 
 interface RequestBody {
   email: string;
@@ -55,6 +56,20 @@ const constructRegisterMail = (verificationCode: string): string => {
     </div>
   </body>`;
   return htmlString;
+};
+
+const getRegister = async (req: Request, res: Response) => {
+  const query = await req.query;
+
+  let langIndex = null;
+
+  if (query.lang === "de") {
+    langIndex = 0;
+  }
+
+  res.status(200).send({
+    languageData: langIndex != null ? registerLangData[langIndex] : null,
+  });
 };
 
 const postRegister = async (req: RegisterRequest, res: Response) => {
@@ -128,4 +143,4 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
   }
 };
 
-export { postRegister };
+export { getRegister, postRegister };

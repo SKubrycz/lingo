@@ -4,6 +4,21 @@ import jwt from "jsonwebtoken";
 
 import { findOneUserByLogin } from "../assets/queries";
 import comparePassword from "../utilities/comparePassword";
+import { loginLangData } from "../assets/routeLangData/login";
+
+const getLogin = async (req: Request, res: Response) => {
+  const query = await req.query;
+
+  let langIndex = null;
+
+  if (query.lang === "de") {
+    langIndex = 0;
+  }
+
+  res.status(200).send({
+    languageData: langIndex != null ? loginLangData[langIndex] : null,
+  });
+};
 
 const postLogin = async (req: Request, res: Response) => {
   try {
@@ -55,4 +70,4 @@ const postLogin = async (req: Request, res: Response) => {
   }
 };
 
-export { postLogin };
+export { getLogin, postLogin };

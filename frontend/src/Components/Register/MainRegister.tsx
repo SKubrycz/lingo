@@ -47,7 +47,11 @@ const registerReducer = (state: RegisterState, action: RegisterActions) => {
   }
 };
 
-function MainRegister() {
+interface MainRegisterProps {
+  languageData: any;
+}
+
+function MainRegister({ languageData }: MainRegisterProps) {
   const [registerData, registerDispatch] = useReducer(registerReducer, {
     email: "",
     login: "",
@@ -101,7 +105,7 @@ function MainRegister() {
   return (
     <Container component="div">
       <Box component="main" className="main-register">
-        <PageTitle title="Rejestracja"></PageTitle>
+        <PageTitle title={languageData?.title ?? "Rejestracja"}></PageTitle>
         <Box
           component="form"
           className="register-form"
@@ -109,7 +113,7 @@ function MainRegister() {
           onSubmit={(e) => handleSubmit(e)}
         >
           <TextField
-            label="Adres Email"
+            label={languageData?.emailPlaceholder ?? "Adres Email"}
             type="email"
             name="email"
             variant="standard"
@@ -121,16 +125,19 @@ function MainRegister() {
               })
             }
             autoComplete="email"
-            inputProps={{
-              maxLength: inputLength,
-            }}
           ></TextField>
           <Tooltip
-            title="Nazwa użytkownika musi być dłuższa niż 3 znaki"
+            title={
+              languageData?.loginPlaceholder?.tooltip ??
+              "Nazwa użytkownika musi być dłuższa niż 3 znaki"
+            }
             arrow={true}
           >
             <TextField
-              label="Nazwa użytkownika"
+              label={
+                languageData?.loginPlaceholder.placeholder ??
+                "Nazwa użytkownika"
+              }
               type="login"
               name="login"
               variant="standard"
@@ -141,14 +148,15 @@ function MainRegister() {
                 })
               }
               autoComplete="username"
-              inputProps={{
-                maxLength: inputLength,
-              }}
             ></TextField>
           </Tooltip>
           <PasswordInput
-            label="Hasło"
+            label={languageData?.passwordPlaceholder?.placeholder ?? "Hasło"}
             name="password"
+            tooltipTitle={
+              languageData?.passwordPlaceholder?.tooltip ??
+              "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
+            }
             openTooltip={true}
             inputLength={inputLength}
             autoComplete="new-password"
@@ -160,8 +168,15 @@ function MainRegister() {
             }
           ></PasswordInput>
           <PasswordInput
-            label="Hasło ponownie"
+            label={
+              languageData?.passwordAgainPlaceholder?.placeholder ??
+              "Hasło ponownie"
+            }
             name="password-again"
+            tooltipTitle={
+              languageData?.passwordAgainPlaceholder?.tooltip ??
+              "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
+            }
             openTooltip={true}
             inputLength={inputLength}
             autoComplete="new-password"
@@ -176,7 +191,7 @@ function MainRegister() {
             type="submit"
             variant="contained"
             name="submit"
-            value="Zarejestruj"
+            value={languageData?.button ?? "Zarejestruj"}
             sx={{
               margin: "1.5em .5em",
               backgroundColor: "primary.contrastText",
@@ -187,7 +202,7 @@ function MainRegister() {
               },
             }}
           >
-            Zarejestruj
+            {languageData?.button ?? "Zarejestruj"}
           </Button>
           <AlertSnackbar
             severity={alertSnackbarData.severity}

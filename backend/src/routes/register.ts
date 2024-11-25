@@ -1,8 +1,10 @@
 import express from "express";
 
-import { postRegister } from "../controllers/registerController";
+import { getRegister, postRegister } from "../controllers/registerController";
 
 const router = express.Router();
+
+router.get("/register", getRegister);
 
 router.post("/register", postRegister);
 

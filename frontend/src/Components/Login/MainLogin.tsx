@@ -33,7 +33,11 @@ const loginReducer = (state: LoginState, action: LoginActions) => {
   }
 };
 
-function MainLogin() {
+interface MainLoginProps {
+  languageData: any;
+}
+
+function MainLogin({ languageData }: MainLoginProps) {
   const [loginData, loginDispatch] = useReducer(loginReducer, {
     login: "",
     password: "",
@@ -86,7 +90,7 @@ function MainLogin() {
   return (
     <Container component="div">
       <Box component="main" className="main-login">
-        <PageTitle title="Zaloguj się"></PageTitle>
+        <PageTitle title={languageData?.title ?? "Zaloguj się"}></PageTitle>
         <Box
           component="form"
           className="login-form"
@@ -94,7 +98,7 @@ function MainLogin() {
           onSubmit={(e) => handleSubmit(e)}
         >
           <TextField
-            label="Nazwa użytkownika"
+            label={languageData?.loginPlaceholder ?? "Nazwa użytkownika"}
             variant="standard"
             type="login"
             name="login"
@@ -105,13 +109,10 @@ function MainLogin() {
                 payload: e.target.value,
               })
             }
-            inputProps={{
-              maxLength: inputLength,
-            }}
             autoComplete="username"
           ></TextField>
           <PasswordInput
-            label="Hasło"
+            label={languageData?.passwordPlaceholder ?? "Hasło"}
             name="password"
             openTooltip={false}
             inputLength={inputLength}
@@ -133,7 +134,7 @@ function MainLogin() {
               backgroundColor: "primary.contrastText",
             }}
           >
-            Zaloguj
+            {languageData?.button ?? "Zaloguj"}
           </Button>
           <AlertSnackbar
             severity={alertSnackbarData.severity}

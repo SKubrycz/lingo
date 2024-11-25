@@ -1,25 +1,67 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+
 import Navbar from "../Reusables/Navbar/Navbar";
 import MainLogin from "./MainLogin";
 import Footer from "../Reusables/Footer/Footer";
 
 import "./Login.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 function Login() {
+  const languageData = useSelector((state: RootState) => state.languageReducer);
+
   const linkArray: string[] = ["/about", "/register"];
-  const optionsArray: string[] = ["O aplikacji", "Rejestracja"];
+  const [optionsArray, setOptionsArray] = useState<string[]>([
+    "O aplikacji",
+    "Rejestracja",
+  ]);
+
+  const [tooltip, setTooltip] = useState<string | null>(null);
+
+  const [loginData, setLoginData] = useState<any>();
 
   const footerLinkArray: string[] = ["/about", "/login", "/register"];
-  const footerOptionsArray: string[] = [
+  const [footerOptionsArray, setFooterOptionsArray] = useState<string[]>([
     "O aplikacji",
     "Logowanie",
     "Rejestracja",
-  ];
+  ]);
+
+  const fetchLanguageData = async (lang: string) => {
+    const route = handleLanguageURL("/login", lang);
+
+    await axios.get(route, { withCredentials: true }).then((res) => {
+      console.log(res.data);
+
+      if (res.data.languageData) {
+        const { navbar, main, footer } = res.data.languageData;
+
+        setOptionsArray([navbar.about, navbar.register]);
+        setTooltip(navbar.tooltip);
+
+        setLoginData(main);
+
+        setFooterOptionsArray([footer.about, footer.login, footer.register]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchLanguageData(languageData.lang);
+  }, []);
 
   return (
     <>
       <div className="wrapper">
-        <Navbar link={linkArray} options={optionsArray}></Navbar>
-        <MainLogin></MainLogin>
+        <Navbar
+          link={linkArray}
+          options={optionsArray}
+          tooltip={tooltip}
+        ></Navbar>
+        <MainLogin languageData={loginData}></MainLogin>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
       </div>
     </>
