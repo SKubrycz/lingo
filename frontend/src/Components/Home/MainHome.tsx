@@ -9,6 +9,7 @@ import { Container, Box, Typography } from "@mui/material";
 
 import StartHome from "./StartHome";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 function MainHome() {
   const navigate = useNavigate();
@@ -16,10 +17,13 @@ function MainHome() {
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
+  const languageData = useSelector((state: RootState) => state.languageReducer);
 
-  const handleAuth = async () => {
+  const handleAuth = async (lang: string | null) => {
+    const route = handleLanguageURL("/", lang);
+
     await axios
-      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/`, {
+      .get(route, {
         withCredentials: true,
       })
       .then((res) => {
@@ -32,7 +36,7 @@ function MainHome() {
   };
 
   useEffect(() => {
-    handleAuth();
+    handleAuth(languageData.lang);
   }, []);
 
   return (

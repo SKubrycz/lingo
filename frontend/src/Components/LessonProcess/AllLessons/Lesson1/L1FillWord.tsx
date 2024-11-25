@@ -7,7 +7,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@mui/material";
 
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 import LessonProcess from "../../LessonProcess";
 import InputEx from "../../Stepper/Variants/InputEx";

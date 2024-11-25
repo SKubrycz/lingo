@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../state/alertSnackbarSlice";
 
 import Navbar from "../Reusables/Navbar/Navbar";
 import MainProfile from "./MainProfile";

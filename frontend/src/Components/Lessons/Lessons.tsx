@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../state/alertSnackbarSlice";
 
 import { Box, Container, Stack, Divider } from "@mui/material";
 
@@ -13,7 +13,7 @@ import Lesson from "./Lesson";
 import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
-import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
+import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 
 import "./Lessons.scss";
 

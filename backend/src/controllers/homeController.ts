@@ -5,6 +5,8 @@ import { RequestLogin } from "../middleware/auth";
 const getHome = async (req: RequestLogin, res: Response) => {
   console.log(`req.login ${req.login}`);
 
+  console.log(req.query);
+
   let sessionUser: boolean = false;
   if (req.login) {
     sessionUser = true;

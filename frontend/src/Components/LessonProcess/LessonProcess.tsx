@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../state/alertSnackbarSlice";
 
 import { Container } from "@mui/material";
 
@@ -12,7 +12,7 @@ import Navbar from "../Reusables/Navbar/Navbar";
 import Footer from "../Reusables/Footer/Footer";
 import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
-import { AlertSnackbarState } from "../../state/alertSnackbar/alertSnackbar";
+import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;

@@ -8,7 +8,7 @@ import LessonProcess from "../../LessonProcess";
 import CardEx from "../../Stepper/Variants/CardEx";
 
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
 import { Button } from "@mui/material";
 
 import type { CardExerciseData } from "../exerciseTypes";

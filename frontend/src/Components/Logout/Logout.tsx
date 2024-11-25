@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../state/alertSnackbarSlice";
 
 function Logout() {
   const navigate = useNavigate();

@@ -13,8 +13,14 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Tooltip,
 } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+import Language from "./Language";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
 
 interface NavbarProps {
   link: string[];
@@ -22,6 +28,8 @@ interface NavbarProps {
 }
 
 function Navbar({ link, options }: NavbarProps) {
+  const languageData = useSelector((state: RootState) => state.languageReducer);
+
   const [display, setDisplay] = useState<string>("none");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
@@ -84,6 +92,56 @@ function Navbar({ link, options }: NavbarProps) {
             </Link>
           </Typography>
           <Box>
+            <Tooltip
+              title={
+                <Typography
+                  component="span"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "12px",
+                  }}
+                >
+                  Zmień język strony: <br></br>
+                  {languageData.languages.map((el, i) => {
+                    if (el != languageData.lang) {
+                      return (
+                        <Language key={i} lang={el} fontSize="9px"></Language>
+                      );
+                    }
+                  })}
+                </Typography>
+              }
+              slotProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: "secondary.dark",
+                  },
+                },
+                arrow: {
+                  sx: {
+                    color: "secondary.dark",
+                  },
+                },
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, -5],
+                      },
+                    },
+                  ],
+                },
+              }}
+              arrow
+            >
+              <span>
+                <Language lang={languageData.lang} noHover></Language>
+              </span>
+            </Tooltip>
             {options.map((value, index) => {
               if (link[index] === "/logout") {
                 return (

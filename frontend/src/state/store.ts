@@ -1,8 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import alertSnackbarReducer from './alertSnackbar/alertSnackbar';
+import { configureStore } from "@reduxjs/toolkit";
+import alertSnackbarReducer from "./alertSnackbarSlice";
+import languageReducer from "./languageSlice";
 
 export const store = configureStore({
-    reducer: {alertSnackbarReducer},
+  reducer: {
+    alertSnackbarReducer: alertSnackbarReducer,
+    languageReducer: languageReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

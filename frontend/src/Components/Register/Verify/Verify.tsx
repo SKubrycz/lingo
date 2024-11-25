@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
-import { setAlert } from "../../../state/alertSnackbar/alertSnackbar";
+import { setAlert } from "../../../state/alertSnackbarSlice";
 
 import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
 
