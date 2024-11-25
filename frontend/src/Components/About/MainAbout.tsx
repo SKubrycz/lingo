@@ -1,13 +1,19 @@
 import { Container, Box } from "@mui/material";
 import { Typography } from "@mui/material";
 
-function MainAbout() {
+interface MainAboutProps {
+  languageData: any;
+}
+
+function MainAbout({ languageData }: MainAboutProps) {
   return (
     <>
       <Container maxWidth="lg">
         <Box component="main" className="main-about">
           <Box component="div" className="main-about-content">
-            <Typography variant="h5">O aplikacji</Typography>
+            <Typography variant="h5">
+              {languageData ? languageData[0]?.title : "O aplikacji"}
+            </Typography>
             <Box component="article">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Vestibulum mauris augue, convallis id volutpat in, mattis ac eros.

@@ -61,10 +61,13 @@ export default function ScrollArrow() {
           transform: "translate(-50%, -50%)",
           animation: "3s bounce infinite",
         }}
-        size={"large"}
         onClick={() => handleScrollDown()}
       >
-        <ArrowDownward></ArrowDownward>
+        <ArrowDownward
+          sx={{
+            fontSize: 36,
+          }}
+        ></ArrowDownward>
       </IconButton>
     </>
   );

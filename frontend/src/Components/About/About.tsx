@@ -12,13 +12,19 @@ import Footer from "../Reusables/Footer/Footer";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
 import "./About.scss";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 function About() {
+  const languageData = useSelector((state: RootState) => state.languageReducer);
+
   const [linkArray, setLinkArray] = useState<string[]>(["/login", "/register"]);
   const [optionsArray, setOptionsArray] = useState<string[]>([
     "Logowanie",
     "Rejestracja",
   ]);
+
+  const [tooltip, setTooltip] = useState<string | null>(null);
+
   const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
     "/about",
     "/login",
@@ -30,6 +36,8 @@ function About() {
     "Rejestracja",
   ]);
 
+  const [aboutData, setAboutData] = useState<any>();
+
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
@@ -37,23 +45,67 @@ function About() {
 
   const navigate = useNavigate();
 
-  const handleAuth = () => {
-    axios
-      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/about`, {
+  const handleAuth = async (lang: string | null) => {
+    const route = handleLanguageURL("/about", lang);
+
+    await axios
+      .get(route, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.login) {
           setLinkArray(["/lessons", `/profile/${res.data.login}`, "/logout"]);
-          setOptionsArray(["Lekcje", "Profil", "Wyloguj"]);
           setFooterLinkArray([
             "/about",
             "/lessons",
             `/profile/${res.data.login}`,
           ]);
-          setFooterOptionsArray(["O aplikacji", "Lekcje", "Profil"]);
+
+          if (res.data.languageData) {
+            const navbar = [
+              res.data.languageData.navbarLogin.lessons,
+              res.data.languageData.navbarLogin.profile,
+              res.data.languageData.navbarLogin.logout,
+            ];
+
+            setOptionsArray(navbar);
+
+            setTooltip(res.data.languageData.navbar.tooltip);
+
+            setAboutData(res.data.languageData.titles);
+
+            const footer = [
+              res.data.languageData.footerLogin.lessons,
+              res.data.languageData.footerLogin.profile,
+              res.data.languageData.footerLogin.logout,
+            ];
+
+            setFooterOptionsArray(footer);
+          } else {
+            setOptionsArray(["Lekcje", "Profil", "Wyloguj"]);
+            setFooterOptionsArray(["O aplikacji", "Lekcje", "Profil"]);
+          }
         } else {
-          //console.log(res.data);
+          console.log(res.data);
+
+          if (res.data.languageData) {
+            const navbar = [
+              res.data.languageData.navbar.login,
+              res.data.languageData.navbar.register,
+            ];
+
+            setOptionsArray(navbar);
+            setTooltip(res.data.languageData.navbar.tooltip);
+
+            setAboutData(res.data.languageData.titles);
+
+            const footer = [
+              res.data.languageData.footer.login,
+              res.data.languageData.footer.register,
+            ];
+
+            setFooterOptionsArray(footer);
+          }
         }
       })
       .catch((error) => {
@@ -71,14 +123,18 @@ function About() {
   };
 
   useEffect(() => {
-    handleAuth();
+    handleAuth(languageData.lang);
   }, []);
 
   return (
     <>
       <div className="wrapper">
-        <Navbar link={linkArray} options={optionsArray}></Navbar>
-        <MainAbout></MainAbout>
+        <Navbar
+          link={linkArray}
+          options={optionsArray}
+          tooltip={tooltip}
+        ></Navbar>
+        <MainAbout languageData={aboutData}></MainAbout>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
         <AlertSnackbar
           severity={alertSnackbarData.severity}
