@@ -1,7 +1,3 @@
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 
@@ -9,35 +5,17 @@ import { Container, Box, Typography } from "@mui/material";
 
 import StartHome from "./StartHome";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
-import handleLanguageURL from "../../utilities/handleLanguageURL";
 
-function MainHome() {
-  const navigate = useNavigate();
+import type { LanguageData } from "./Home";
 
+interface MainHomeProps {
+  languageData: LanguageData | null;
+}
+
+function MainHome({ languageData }: MainHomeProps) {
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
-  const languageData = useSelector((state: RootState) => state.languageReducer);
-
-  const handleAuth = async (lang: string | null) => {
-    const route = handleLanguageURL("/", lang);
-
-    await axios
-      .get(route, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        //console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        navigate("/lessons");
-      });
-  };
-
-  useEffect(() => {
-    handleAuth(languageData.lang);
-  }, []);
 
   return (
     <>
@@ -51,10 +29,11 @@ function MainHome() {
           ></AlertSnackbar>
           <Box className="home-main-box">
             <Typography variant="h3" sx={{ color: "primary.contrastText" }}>
-              LINGO
+              {languageData?.titles[0].title ?? "LINGO"}
             </Typography>
             <Typography variant="h6">
-              Nauka języka nigdy nie była prostsza!
+              {languageData?.titles[0].desc ??
+                "Nauka języka nigdy nie była prostsza!"}
             </Typography>
           </Box>
           <Box
@@ -66,22 +45,26 @@ function MainHome() {
               sx={{ width: "100%", textAlign: "right" }}
             >
               <Typography variant="h4" sx={{ color: "primary.contrastText" }}>
-                Sprawna nauka
+                {languageData?.titles[1].title ?? "Sprawna nauka"}
               </Typography>
               <Typography variant="h6">
-                Poznaj podstawy, zacznij rozmawiać
+                {languageData?.titles[1].desc ??
+                  "Poznaj podstawy, zacznij rozmawiać"}
               </Typography>
             </Box>
           </Box>
           <Box className="home-main-box">
             <Typography variant="h4" sx={{ color: "primary.contrastText" }}>
-              Widoczny postęp
+              {languageData?.titles[2].title ?? "Widoczny postęp"}
             </Typography>
             <Typography variant="h6">
-              Monitoruj swój progres w nauce dzięki ekstensywnym statystykom
+              {languageData?.titles[2].desc ??
+                "Monitoruj swój progres w nauce dzięki ekstensywnym statystykom"}
             </Typography>
           </Box>
-          <StartHome></StartHome>
+          <StartHome
+            buttonContainer={languageData?.buttonContainer}
+          ></StartHome>
         </Box>
       </Container>
     </>

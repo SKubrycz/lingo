@@ -25,9 +25,10 @@ import { RootState } from "../../../state/store";
 interface NavbarProps {
   link: string[];
   options: string[];
+  tooltip: string | null;
 }
 
-function Navbar({ link, options }: NavbarProps) {
+function Navbar({ link, options, tooltip }: NavbarProps) {
   const languageData = useSelector((state: RootState) => state.languageReducer);
 
   const [display, setDisplay] = useState<string>("none");
@@ -104,7 +105,7 @@ function Navbar({ link, options }: NavbarProps) {
                     fontSize: "12px",
                   }}
                 >
-                  Zmień język strony: <br></br>
+                  {tooltip ?? "Zmień język strony"} <br></br>
                   {languageData.languages.map((el, i) => {
                     if (el != languageData.lang) {
                       return (
