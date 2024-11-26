@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
 
@@ -37,6 +37,9 @@ export default function L1FillWord({
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
+  const { state } = useLocation();
+  const navigate = useNavigate();
+
   const alertSnackbarDataDispatch = useDispatch();
 
   const handleAuth = async () => {
@@ -67,7 +70,36 @@ export default function L1FillWord({
       });
   };
 
+  const finishLesson = async () => {
+    await axios
+      .post(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/lesson/${lessonId}/${exerciseId}`,
+        {},
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data);
+        navigate("/lessons");
+      })
+      .catch((error) => {
+        alertSnackbarDataDispatch(
+          setAlert({
+            severity: "error",
+            variant: "filled",
+            title: "Błąd",
+            content: error.response.data,
+          })
+        );
+      });
+  };
+
   useEffect(() => {
+    if (exerciseId && exerciseId > 2 && !state) {
+      navigate("/lessons");
+    }
+
     handleAuth();
 
     if (cardRef.current) {
@@ -85,6 +117,7 @@ export default function L1FillWord({
         ) : (
           <Button
             to={`/lesson/${lessonId}/${exerciseId - 1}`}
+            state={{ index: exerciseId }}
             component={RouterLink}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
@@ -100,9 +133,10 @@ export default function L1FillWord({
         ></InputEx>
         {isLastExercise ? (
           <Button
-            to={`/lessons`}
-            component={RouterLink}
+            //to={`/lessons`}
+            //component={RouterLink}
             disabled={!correct}
+            onClick={() => finishLesson()}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Zakończ
@@ -110,6 +144,7 @@ export default function L1FillWord({
         ) : (
           <Button
             to={`/lesson/${lessonId}/${exerciseId + 1}`}
+            state={{ index: exerciseId }}
             component={RouterLink}
             disabled={!correct}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}

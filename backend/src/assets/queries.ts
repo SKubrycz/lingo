@@ -9,14 +9,22 @@ interface User {
   createdDate: Date;
 }
 
-interface InsertUser {
+interface UserStats {
+  wordsLearned: number;
+}
+
+interface InsertUserData {
   email: string;
   login: string;
   password: string;
   uuid: string;
   verificationCode: string;
   verified: boolean;
-  createdDate?: Date;
+}
+
+interface InsertUser extends InsertUserData {
+  stats: UserStats;
+  createdDate: Date;
 }
 
 interface FindUser {
@@ -63,6 +71,10 @@ interface LessonView {
   exerciseCount: number;
 }
 
+interface LessonStats {
+  wordsLearned: number;
+}
+
 export const insertOneUser = async ({
   email,
   login,
@@ -70,12 +82,17 @@ export const insertOneUser = async ({
   uuid,
   verificationCode,
   verified,
-}: InsertUser): Promise<void> => {
+}: InsertUserData): Promise<void> => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
     const usersCollection = db.collection<InsertUser>("users");
+
+    const stats: UserStats = {
+      wordsLearned: 0,
+    };
+
     const result = await usersCollection.insertOne({
       email: email,
       login: login,
@@ -83,6 +100,7 @@ export const insertOneUser = async ({
       uuid: uuid,
       verificationCode: verificationCode,
       verified: verified,
+      stats: stats,
       createdDate: new Date(Date.now()),
     });
     //console.log(result);
@@ -280,6 +298,62 @@ export const findLessonById = async (
     } else return null;
 
     return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await closeDbConnection();
+  }
+};
+
+export const saveLessonProgressById = async (
+  login: string,
+  lessonId: number,
+  exerciseId: number
+): Promise<string | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+  //let result: ExerciseData;
+  let wordsLearned: string[] = [];
+
+  try {
+    const lessonsCollection = db.collection<Lesson>("lessons");
+
+    const colResult = await lessonsCollection.findOne(
+      { lessonId: lessonId },
+      {
+        projection: {
+          _id: 1,
+          lessonId: 1,
+          exercises: 1,
+          exerciseCount: 1,
+        },
+      }
+    );
+
+    if (colResult) {
+      colResult.exercises.map((el, i) => {
+        if (el.type === "card") wordsLearned.push(el.word);
+      });
+
+      const lessonStats: LessonStats = {
+        wordsLearned: wordsLearned.length,
+      };
+
+      const usersCollection = db.collection<InsertUserData>("users");
+
+      // ! TODO: Update only when finishing a certain lesson for the first time
+      const updateUser = await usersCollection.updateOne(
+        { login: { $eq: login } },
+        {
+          $set: { stats: lessonStats },
+        }
+      );
+
+      console.log(updateUser);
+    } else return null;
+
+    return "Zapisano";
   } catch (error) {
     console.error(error);
     return null;

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-import { findLessonById } from "../assets/queries";
+import { findLessonById, saveLessonProgressById } from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
   const { lessonId, exerciseId } = await req.params;
@@ -19,4 +19,22 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
   return res.status(200).send(lessonResult);
 };
 
-export { getLessonId };
+const postLessonId = async (req: RequestLogin, res: Response) => {
+  const { lessonId, exerciseId } = await req.params;
+
+  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!exerciseId)
+    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+
+  if (req.login) {
+    const saveProgress = await saveLessonProgressById(
+      req.login,
+      Number(lessonId),
+      Number(exerciseId)
+    );
+  }
+
+  return res.status(200).send({ message: "Lekcja zakończona pomyślnie" });
+};
+
+export { getLessonId, postLessonId };

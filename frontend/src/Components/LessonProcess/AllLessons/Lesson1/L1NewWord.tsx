@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
 import LessonProcess from "../../LessonProcess";
 import CardEx from "../../Stepper/Variants/CardEx";
@@ -37,6 +37,9 @@ export default function L1Exercise1({
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
+  const { state } = useLocation();
+  const navigate = useNavigate();
+
   const alertSnackbarDataDispatch = useDispatch();
 
   const handleAuth = async () => {
@@ -68,6 +71,10 @@ export default function L1Exercise1({
   };
 
   useEffect(() => {
+    if (exerciseId && exerciseId > 2 && !state) {
+      navigate("/lessons");
+    }
+
     handleAuth();
 
     if (cardRef.current) {
@@ -84,6 +91,7 @@ export default function L1Exercise1({
       ) : (
         <Button
           to={`/lesson/${lessonId}/${exerciseId - 1}`}
+          state={{ index: exerciseId }}
           component={RouterLink}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
@@ -108,6 +116,7 @@ export default function L1Exercise1({
       ) : (
         <Button
           to={`/lesson/${lessonId}/${exerciseId + 1}`}
+          state={{ index: exerciseId }}
           component={RouterLink}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
