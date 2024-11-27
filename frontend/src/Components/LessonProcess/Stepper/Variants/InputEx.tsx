@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-import { Box, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
 interface InputExProps {
   question: string;
@@ -20,12 +20,16 @@ export default function InputEx({
   const textRef = useRef<HTMLInputElement | null>(null);
 
   const checkWords = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | React.MouseEvent<HTMLButtonElement>
+      | KeyboardEvent,
+    clicked: boolean
   ) => {
     e.preventDefault();
 
     if (!correct && textRef.current) {
-      if (textRef.current.value.toLowerCase() === missingWords) {
+      if (textRef.current.value.toLowerCase() === missingWords && clicked) {
         setCorrect(true);
         console.log("correct!");
       } else {
@@ -39,6 +43,8 @@ export default function InputEx({
       textRef.current.value = "";
       setCorrect(false);
     }
+
+    console.log(missingWords);
   }, [missingWords]);
 
   return (
@@ -76,20 +82,33 @@ export default function InputEx({
           variant="standard"
           inputRef={textRef}
           autoFocus={true}
-          onChange={(e) => checkWords(e)}
-          inputProps={{
-            maxLength: 30,
-          }}
+          onChange={(e) => checkWords(e, false)}
           disabled={correct}
           sx={{
-            padding: "1em",
+            padding: "1em 1em 0.3em 1em",
             ".MuiInputBase-input": {
               padding: "0.5em",
               textAlign: "center",
             },
           }}
         ></TextField>
-        {correct ? "Dobrze!" : ""}
+        <Button
+          variant="contained"
+          className="button-contained"
+          onClick={(e) => checkWords(e, true)}
+          sx={{
+            backgroundColor: "primary.contrastText",
+          }}
+        >
+          Sprawdź
+        </Button>
+        {correct ? (
+          <Typography variant="body1" color="success" sx={{ padding: "0.5em" }}>
+            Dobrze!
+          </Typography>
+        ) : (
+          ""
+        )}
       </Container>
     </Box>
   );

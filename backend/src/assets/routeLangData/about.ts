@@ -39,6 +39,34 @@ interface AboutLangData {
 export const aboutLangData: AboutLangData[] = [
   {
     navbar: {
+      tooltip: "Zmień język strony",
+      login: "Logowanie",
+      register: "Rejestracja",
+    },
+    navbarLogin: {
+      tooltip: "Zmień język strony",
+      lessons: "Lekcje",
+      profile: "Profil",
+      logout: "Wyloguj",
+    },
+    titles: [
+      {
+        title: "O aplikacji",
+      },
+    ],
+    footer: {
+      about: "O aplikacji",
+      login: "Logowanie",
+      register: "Rejestracja",
+    },
+    footerLogin: {
+      lessons: "Lekcje",
+      profile: "Profil",
+      logout: "Wyloguj",
+    },
+  },
+  {
+    navbar: {
       tooltip: "Ändern Sie die Sprache der Website",
       login: "Login",
       register: "Registrieren",

@@ -33,6 +33,35 @@ interface HomeLangData {
 //Over here IDEA 2
 export const homeLangData: HomeLangData[] = [
   {
+    // lang: PL
+    navbar: {
+      tooltip: "Zmień język strony",
+      about: "O aplikacji",
+      login: "Logowanie",
+      register: "Rejestracja",
+    },
+    titles: [
+      { title: "LINGO", desc: "Nauka języka nigdy nie była prostsza" },
+      {
+        title: "Sprawna nauka",
+        desc: "Poznaj podstawy, zacznij rozmawiać",
+      },
+      {
+        title: "Widoczny postęp",
+        desc: "Monitoruj swój progres dzięki ekstensywnym statystykom",
+      },
+    ],
+    buttonContainer: {
+      subtitle: "Naucz się już teraz!",
+      button: "Rozpocznij naukę",
+    },
+    footer: {
+      about: "O aplikacji",
+      login: "Logowanie",
+      register: "Rejestracja",
+    },
+  },
+  {
     // lang: DE
     navbar: {
       tooltip: "Ändern Sie die Sprache der Website",

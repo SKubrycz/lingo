@@ -5,15 +5,12 @@ import jwt from "jsonwebtoken";
 import { findOneUserByLogin } from "../assets/queries";
 import comparePassword from "../utilities/comparePassword";
 import { loginLangData } from "../assets/routeLangData/login";
+import { setLangIndex } from "../utilities/setLangIndex";
 
 const getLogin = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  let langIndex = null;
-
-  if (query.lang === "de") {
-    langIndex = 0;
-  }
+  let langIndex = setLangIndex(String(query.lang));
 
   res.status(200).send({
     languageData: langIndex != null ? loginLangData[langIndex] : null,

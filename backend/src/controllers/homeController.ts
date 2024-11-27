@@ -3,17 +3,14 @@ import { Response } from "express";
 import { RequestLogin } from "../middleware/auth";
 
 import { homeLangData } from "../assets/routeLangData/home";
+import { setLangIndex } from "../utilities/setLangIndex";
 
 const getHome = async (req: RequestLogin, res: Response) => {
   console.log(`req.login ${req.login}`);
 
   const query = await req.query;
 
-  let langIndex = null;
-
-  if (query.lang === "de") {
-    langIndex = 0;
-  }
+  let langIndex = setLangIndex(String(query.lang));
 
   let sessionUser: boolean = false;
 

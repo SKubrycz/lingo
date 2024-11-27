@@ -95,6 +95,14 @@ export default function L1FillWord({
       });
   };
 
+  const handleNextKey = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && correct) {
+      navigate(`/lesson/${lessonId}/${exerciseId + 1}`, {
+        state: { index: exerciseId },
+      });
+    }
+  };
+
   useEffect(() => {
     if (exerciseId && exerciseId > 2 && !state) {
       navigate("/lessons");

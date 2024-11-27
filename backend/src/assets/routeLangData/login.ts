@@ -26,6 +26,24 @@ interface LoginLangData {
 export const loginLangData: LoginLangData[] = [
   {
     navbar: {
+      tooltip: "Zmień język strony",
+      about: "O aplikacji",
+      register: "Rejestracja",
+    },
+    main: {
+      title: "Zaloguj się",
+      loginPlaceholder: "Nazwa użytkownika",
+      passwordPlaceholder: "Hasło",
+      button: "Zaloguj",
+    },
+    footer: {
+      about: "O aplikacji",
+      login: "Logowanie",
+      register: "Rejestracja",
+    },
+  },
+  {
+    navbar: {
       tooltip: "Ändern Sie die Sprache der Website",
       about: "Über die App",
       register: "Registrieren",

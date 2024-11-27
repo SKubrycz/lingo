@@ -3,15 +3,12 @@ import { Response } from "express";
 import { RequestLogin } from "../middleware/auth";
 import { findOneUserByLogin } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
+import { setLangIndex } from "../utilities/setLangIndex";
 
 const getAbout = async (req: RequestLogin, res: Response) => {
   const query = await req.query;
 
-  let langIndex = null;
-
-  if (query.lang === "de") {
-    langIndex = 0;
-  }
+  let langIndex = setLangIndex(String(query.lang));
 
   if (req.login) {
     const userResult = await findOneUserByLogin(req.login);

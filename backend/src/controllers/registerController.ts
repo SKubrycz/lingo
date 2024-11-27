@@ -6,6 +6,7 @@ import { findOneUser, insertOneUser } from "../assets/queries";
 
 import hashData from "../utilities/hashData";
 import { registerLangData } from "../assets/routeLangData/register";
+import { setLangIndex } from "../utilities/setLangIndex";
 
 interface RequestBody {
   email: string;
@@ -61,11 +62,7 @@ const constructRegisterMail = (verificationCode: string): string => {
 const getRegister = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  let langIndex = null;
-
-  if (query.lang === "de") {
-    langIndex = 0;
-  }
+  let langIndex = setLangIndex(String(query.lang));
 
   res.status(200).send({
     languageData: langIndex != null ? registerLangData[langIndex] : null,

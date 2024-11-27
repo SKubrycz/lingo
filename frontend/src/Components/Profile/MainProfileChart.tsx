@@ -42,9 +42,13 @@ export default function MainProfileChart() {
         popper: {
           sx: {
             "& .MuiChartsTooltip-table": {
-              borderRadius: "2px",
+              borderRadius: "5px",
               backgroundColor: "primary.light",
               boxShadow: "0px 2px 5px gray",
+            },
+            "& .MuiChartsTooltip-mark": {
+              border: "2px solid",
+              borderColor: "primary.contrastText",
             },
           },
         },
