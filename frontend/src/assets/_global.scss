@@ -15,6 +15,12 @@ button {
   cursor: pointer;
 }
 
+.button-contained {
+  &:hover {
+    background-color: color.adjust($color: $baseColor, $blackness: 10%);
+  }
+}
+
 //custom scrollbar
 ::-webkit-scrollbar {
   width: 15px;

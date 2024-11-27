@@ -38,6 +38,17 @@ export default function MainProfileChart() {
         },
       ]}
       height={500}
+      slotProps={{
+        popper: {
+          sx: {
+            "& .MuiChartsTooltip-table": {
+              borderRadius: "2px",
+              backgroundColor: "primary.light",
+              boxShadow: "0px 2px 5px gray",
+            },
+          },
+        },
+      }}
       sx={{
         ".MuiMarkElement-root": {
           fill: defaultTheme.palette.primary.contrastText,

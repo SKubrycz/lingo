@@ -181,10 +181,18 @@ function Navbar({ link, options, tooltip }: NavbarProps) {
           <Typography variant="body2" align="center">
             Czy na pewno chcesz się wylogować?
           </Typography>
-          <Box display="flex" justifyContent="center" margin=".5em">
+          <Box
+            display="flex"
+            justifyContent="space-around"
+            margin="1em .7em 0.3em 1em"
+          >
             <Button
               variant="contained"
+              className="button-contained"
               sx={{
+                ".MuiLink-root": {
+                  padding: 0,
+                },
                 backgroundColor: "primary.contrastText",
               }}
             >
