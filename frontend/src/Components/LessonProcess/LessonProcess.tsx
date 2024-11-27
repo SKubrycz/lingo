@@ -16,10 +16,15 @@ import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
+  lessonId: number;
   children: React.ReactNode;
 }
 
-function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
+function LessonProcess({
+  lessonInfo,
+  lessonId,
+  children,
+}: LessonsProcessProps) {
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
     "/profile",
@@ -30,6 +35,7 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
     "/lessons",
     "/profile",
   ]);
+  const lessonIdRef = useRef<number | null>(null);
 
   const timeStart = useRef<number>(0);
 
@@ -52,9 +58,12 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
       console.log("running unloadData...", document.URL);
       try {
         const response = await axios.post(
-          `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent`,
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/timespent/${lessonId}`,
           { timeSpent: performance.now() - timeStart.current },
           {
+            withCredentials: true,
             headers: {
               "Content-Type": "application/json",
             },
@@ -67,7 +76,7 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
       }
     } else if (
       document.visibilityState === "visible" &&
-      document.URL.startsWith(`http://localhost:3001/lesson/`)
+      document.URL.startsWith(`http://localhost:3001/lesson/${lessonId}`)
     ) {
       timeStart.current = performance.now();
     }
@@ -76,9 +85,12 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
   const endSession = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent`,
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/timespent${lessonId}`,
         { timeSpent: performance.now() - timeStart.current },
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
@@ -97,6 +109,8 @@ function LessonProcess({ lessonInfo, children }: LessonsProcessProps) {
 
   useEffect(() => {
     timeStart.current = performance.now();
+
+    if (lessonId) lessonIdRef.current = lessonId;
 
     document.addEventListener("visibilitychange", (e) => handleUnloadData(e));
 

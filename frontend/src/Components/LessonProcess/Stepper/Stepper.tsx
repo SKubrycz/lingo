@@ -104,9 +104,6 @@ function Stepper({
             value={(exerciseId * 100) / exerciseCount}
             sx={{
               width: "100%",
-              // ".MuiLinearProgress-bar": {
-              //   transition: "none",
-              // },
             }}
           ></LinearProgress>
           <Box
@@ -114,8 +111,6 @@ function Stepper({
             display="flex"
             justifyContent="center"
             alignItems="center"
-            // border="1px dashed"
-            // borderColor="primary.contrastText"
           >
             {children}
           </Box>

@@ -10,6 +10,9 @@ interface User {
 }
 
 interface UserStats {
+  timeSpent: DOMHighResTimeStamp;
+  lessonCount: number;
+  lessonAccuracy: number;
   wordsLearned: number;
 }
 
@@ -75,6 +78,13 @@ interface LessonStats {
   wordsLearned: number;
 }
 
+interface InsertUsersLessons {
+  lessonId: number;
+  timeSpent: DOMHighResTimeStamp;
+  accuracy: number;
+  finished: boolean;
+}
+
 export const insertOneUser = async ({
   email,
   login,
@@ -90,10 +100,15 @@ export const insertOneUser = async ({
     const usersCollection = db.collection<InsertUser>("users");
 
     const stats: UserStats = {
+      timeSpent: 0,
+      lessonCount: 0,
+      lessonAccuracy: 0.0,
       wordsLearned: 0,
     };
 
-    const result = await usersCollection.insertOne({
+    let usersLessonsArr: InsertUsersLessons[] = [];
+
+    const usersResult = await usersCollection.insertOne({
       email: email,
       login: login,
       password: password,
@@ -103,6 +118,48 @@ export const insertOneUser = async ({
       stats: stats,
       createdDate: new Date(Date.now()),
     });
+
+    const lessonsCollection = db.collection<LessonView>("lessons");
+
+    const lessonsResult = await lessonsCollection
+      .find(
+        {},
+        {
+          projection: {
+            _id: 1,
+            lessonId: 1,
+            title: 1,
+            description: 1,
+            new_words: 1,
+            exerciseCount: 1,
+          },
+        }
+      )
+      .toArray();
+
+    const lessonsResultArr = lessonsResult.map((res) => ({
+      id: res._id,
+      lessonId: res.lessonId,
+      title: res.title,
+      description: res.description,
+      new_words: res.new_words,
+      exerciseCount: res.exerciseCount,
+    }));
+    lessonsResultArr.forEach((el, i) => {
+      usersLessonsArr.push({
+        lessonId: el.lessonId,
+        timeSpent: 0,
+        accuracy: 0.0,
+        finished: false,
+      });
+    });
+
+    const usersLessonsCollection =
+      db.collection<InsertUsersLessons>("users-lessons");
+
+    const usersLessonsResult = await usersLessonsCollection.insertMany(
+      usersLessonsArr
+    );
     //console.log(result);
   } catch (error) {
     console.error(error);

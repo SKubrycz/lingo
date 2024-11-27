@@ -33,7 +33,8 @@ export default function L1FillWord({
     },
     exerciseCount: 0,
   });
-  const [correct, setCorrect] = useState<boolean>(false);
+  const [correct, setCorrect] = useState<boolean | null>(null);
+  const [disableNext, setDisableNext] = useState<boolean>(true);
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
@@ -119,7 +120,7 @@ export default function L1FillWord({
 
   return (
     <>
-      <LessonProcess lessonInfo={lessonInfo}>
+      <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
         {exerciseId === 1 ? (
           <Button sx={{ visibility: "hidden" }}></Button>
         ) : (
@@ -138,12 +139,13 @@ export default function L1FillWord({
           missingWords={lessonInfo?.exercise?.missingWords}
           correct={correct}
           setCorrect={setCorrect}
+          setDisableNext={setDisableNext}
         ></InputEx>
         {isLastExercise ? (
           <Button
             //to={`/lessons`}
             //component={RouterLink}
-            disabled={!correct}
+            disabled={disableNext}
             onClick={() => finishLesson()}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
@@ -154,7 +156,7 @@ export default function L1FillWord({
             to={`/lesson/${lessonId}/${exerciseId + 1}`}
             state={{ index: exerciseId }}
             component={RouterLink}
-            disabled={!correct}
+            disabled={disableNext}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Dalej

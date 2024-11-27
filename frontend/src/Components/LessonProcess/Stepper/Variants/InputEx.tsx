@@ -2,12 +2,50 @@ import { useRef, useEffect } from "react";
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
+interface InputMessageProps {
+  correct: boolean | null;
+  missingWords: string;
+}
+
+function InputMessage({ correct, missingWords }: InputMessageProps) {
+  switch (correct) {
+    case true:
+      return (
+        <Typography variant="body1" color="success" sx={{ padding: "0.5em" }}>
+          Dobrze!
+        </Typography>
+      );
+    case false:
+      return (
+        <Typography
+          variant="body1"
+          color="error"
+          sx={{ padding: "0.5em", textAlign: "center" }}
+        >
+          Źle, prawidłowa odpowiedź to:{" "}
+          <Typography
+            variant="body1"
+            component="span"
+            sx={{ fontWeight: "bold" }}
+          >
+            {missingWords}
+          </Typography>
+        </Typography>
+      );
+    case null:
+      return <>{""}</>;
+    default:
+      return <>{""}</>;
+  }
+}
+
 interface InputExProps {
   question: string;
   task: string;
   missingWords: string;
-  correct: boolean;
-  setCorrect: (correct: boolean) => void;
+  correct: boolean | null;
+  setCorrect: (correct: boolean | null) => void;
+  setDisableNext: (disableNext: boolean) => void;
 }
 
 export default function InputEx({
@@ -16,24 +54,23 @@ export default function InputEx({
   missingWords,
   correct,
   setCorrect,
+  setDisableNext,
 }: InputExProps) {
   const textRef = useRef<HTMLInputElement | null>(null);
 
   const checkWords = (
-    e:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | React.MouseEvent<HTMLButtonElement>
-      | KeyboardEvent,
-    clicked: boolean
+    e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
   ) => {
     e.preventDefault();
 
     if (!correct && textRef.current) {
-      if (textRef.current.value.toLowerCase() === missingWords && clicked) {
+      if (textRef.current.value.toLowerCase() === missingWords) {
         setCorrect(true);
+        setDisableNext(false);
         console.log("correct!");
       } else {
         setCorrect(false);
+        setDisableNext(false);
       }
     }
   };
@@ -41,10 +78,8 @@ export default function InputEx({
   useEffect(() => {
     if (textRef.current) {
       textRef.current.value = "";
-      setCorrect(false);
+      setCorrect(null);
     }
-
-    console.log(missingWords);
   }, [missingWords]);
 
   return (
@@ -82,8 +117,7 @@ export default function InputEx({
           variant="standard"
           inputRef={textRef}
           autoFocus={true}
-          onChange={(e) => checkWords(e, false)}
-          disabled={correct}
+          disabled={correct == null ? false : true}
           sx={{
             padding: "1em 1em 0.3em 1em",
             ".MuiInputBase-input": {
@@ -95,20 +129,17 @@ export default function InputEx({
         <Button
           variant="contained"
           className="button-contained"
-          onClick={(e) => checkWords(e, true)}
+          onClick={correct == null ? (e) => checkWords(e) : undefined}
           sx={{
             backgroundColor: "primary.contrastText",
           }}
         >
           Sprawdź
         </Button>
-        {correct ? (
-          <Typography variant="body1" color="success" sx={{ padding: "0.5em" }}>
-            Dobrze!
-          </Typography>
-        ) : (
-          ""
-        )}
+        <InputMessage
+          correct={correct}
+          missingWords={missingWords}
+        ></InputMessage>
       </Container>
     </Box>
   );
