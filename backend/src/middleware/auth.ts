@@ -9,6 +9,7 @@ interface TokenData extends JwtPayload {
 }
 
 export interface RequestLogin extends Request {
+  _id?: ObjectId;
   login?: string;
 }
 
@@ -57,6 +58,7 @@ export const checkAuth = async (
       res.clearCookie("refresh_token_lingo");
       return res.status(404).send("Nie znaleziono użytkownika");
     }
+    req._id = userVerify._id;
     req.login = userVerify.login;
     console.log(req.login);
     next();
@@ -102,6 +104,7 @@ export const isAuthenticated = async (
         res.clearCookie("refresh_token_lingo");
         return res.status(404).send("Nie znaleziono użytkownika");
       }
+      req._id = userVerify._id;
       req.login = userVerify.login;
     } else if (accessToken) {
       const userVerify = <TokenData>(
@@ -113,6 +116,7 @@ export const isAuthenticated = async (
         res.clearCookie("refresh_token_lingo");
         return res.status(404).send("Nie znaleziono użytkownika");
       }
+      req._id = userVerify._id;
       req.login = userVerify.login;
     }
     next();

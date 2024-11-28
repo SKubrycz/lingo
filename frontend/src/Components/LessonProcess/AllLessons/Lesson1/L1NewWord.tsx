@@ -85,7 +85,7 @@ export default function L1Exercise1({
   }, [exerciseId]);
 
   return (
-    <LessonProcess lessonInfo={lessonInfo}>
+    <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
       {exerciseId === 1 ? (
         <Button sx={{ visibility: "hidden" }}></Button>
       ) : (

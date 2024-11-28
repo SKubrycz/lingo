@@ -51,16 +51,19 @@ function LessonProcess({
   const handleUnloadData = async (e: Event) => {
     e.preventDefault();
 
+    console.log(document.URL);
+    console.log(document.visibilityState);
+
     if (
       document.visibilityState === "hidden" &&
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
       console.log("running unloadData...", document.URL);
       try {
-        const response = await axios.post(
-          `http://localhost:${
-            import.meta.env.VITE_SERVER_PORT
-          }/timespent/${lessonId}`,
+        const response = await axios.put(
+          `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
+            lessonIdRef.current
+          }`,
           { timeSpent: performance.now() - timeStart.current },
           {
             withCredentials: true,
@@ -76,7 +79,7 @@ function LessonProcess({
       }
     } else if (
       document.visibilityState === "visible" &&
-      document.URL.startsWith(`http://localhost:3001/lesson/${lessonId}`)
+      document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
       timeStart.current = performance.now();
     }
@@ -84,10 +87,10 @@ function LessonProcess({
 
   const endSession = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/timespent${lessonId}`,
+      const response = await axios.put(
+        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
+          lessonIdRef.current
+        }`,
         { timeSpent: performance.now() - timeStart.current },
         {
           withCredentials: true,

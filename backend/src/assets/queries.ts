@@ -1,4 +1,5 @@
-import { ObjectId, Db, UpdateResult, DeleteResult } from "mongodb";
+import { Db, UpdateResult, DeleteResult } from "mongodb";
+import { ObjectId } from "bson";
 import { connectToDb, getDb, closeDbConnection } from "../assets/db";
 
 interface User {
@@ -79,6 +80,7 @@ interface LessonStats {
 }
 
 interface InsertUsersLessons {
+  userId: ObjectId;
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
   accuracy: number;
@@ -119,6 +121,8 @@ export const insertOneUser = async ({
       createdDate: new Date(Date.now()),
     });
 
+    console.log(usersResult.insertedId);
+
     const lessonsCollection = db.collection<LessonView>("lessons");
 
     const lessonsResult = await lessonsCollection
@@ -147,6 +151,7 @@ export const insertOneUser = async ({
     }));
     lessonsResultArr.forEach((el, i) => {
       usersLessonsArr.push({
+        userId: usersResult.insertedId,
         lessonId: el.lessonId,
         timeSpent: 0,
         accuracy: 0.0,
@@ -409,6 +414,36 @@ export const saveLessonProgressById = async (
 
       console.log(updateUser);
     } else return null;
+
+    return "Zapisano";
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await closeDbConnection();
+  }
+};
+
+export const updateLessonTimeSpent = async (
+  id: ObjectId | undefined,
+  lessonId: number,
+  timeSpent: number
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection =
+      db.collection<InsertUsersLessons>("users-lessons");
+
+    const colResult = await usersLessonsCollection.updateOne(
+      { userId: new ObjectId(id), lessonId: lessonId },
+      {
+        $inc: { timeSpent: timeSpent },
+      }
+    );
+
+    if (!colResult) return null;
 
     return "Zapisano";
   } catch (error) {
