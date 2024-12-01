@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
@@ -48,6 +48,8 @@ function LessonProcess({
     (state: RootState) => state.alertSnackbarReducer
   );
 
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const handleUnloadData = async (e: Event) => {
@@ -84,7 +86,7 @@ function LessonProcess({
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
       //timeStart.current = performance.now();
-      setTimeSpent({ timeStart: performance.now() });
+      dispatch(setTimeSpent({ timeStart: performance.now() }));
     }
   };
 
@@ -103,7 +105,7 @@ function LessonProcess({
         }
       );
 
-      setTimeSpent({ timeStart: performance.now() });
+      dispatch(setTimeSpent({ timeStart: performance.now() }));
 
       console.log(`From /timespent: ${response.data}`);
 
@@ -114,7 +116,7 @@ function LessonProcess({
   };
 
   useEffect(() => {
-    setTimeSpent({ timeStart: performance.now() });
+    dispatch(setTimeSpent({ timeStart: performance.now() }));
 
     if (lessonId) lessonIdRef.current = lessonId;
 

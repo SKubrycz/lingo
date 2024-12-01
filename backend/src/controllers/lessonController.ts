@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-import { findLessonById, saveLessonProgressById } from "../assets/queries";
+import {
+  findLessonById,
+  saveLessonProgressById,
+  updateLessonOnFinish,
+} from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
   const { lessonId, exerciseId } = await req.params;
@@ -32,6 +36,18 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
       Number(lessonId),
       Number(exerciseId)
     );
+    if (!saveProgress)
+      return res.status(500).send("Nie udało się zapisać postępu lekcji");
+  }
+
+  if (req._id) {
+    const usersLessonsSave = await updateLessonOnFinish(
+      req._id,
+      Number(lessonId)
+    );
+
+    if (!usersLessonsSave)
+      return res.status(500).send("Nie udało się zapisać postępu lekcji");
   }
 
   return res.status(200).send({ message: "Lekcja zakończona pomyślnie" });

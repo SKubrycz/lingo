@@ -13,7 +13,7 @@ export const timeSpentSlice = createSlice({
   initialState: timeSpent,
   reducers: {
     setTimeSpent: (state, action: PayloadAction<TimeSpent>) => {
-      return { ...state, ...action.payload };
+      return { ...action.payload };
     },
   },
 });

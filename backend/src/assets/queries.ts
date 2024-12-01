@@ -453,3 +453,42 @@ export const updateLessonTimeSpent = async (
     closeDbConnection();
   }
 };
+
+export const updateLessonOnFinish = async (
+  id: ObjectId | undefined,
+  lessonId: number
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection =
+      db.collection<InsertUsersLessons>("users-lessons");
+
+    const findResult = await usersLessonsCollection.findOne({
+      userId: new ObjectId(id),
+      lessonId: lessonId,
+      finished: false,
+    });
+
+    if (!findResult) return null;
+
+    if (!findResult.finished) {
+      const updateResult = await usersLessonsCollection.updateOne(
+        { userId: new ObjectId(id), lessonId: lessonId },
+        {
+          $set: { finished: true },
+        }
+      );
+
+      if (!updateResult) return null;
+    }
+
+    return "Zapisano";
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
