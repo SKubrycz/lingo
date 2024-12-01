@@ -13,12 +13,11 @@
 }
 
 .main-profile {
+  width: 100%;
   padding: 1em;
 
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  //align-items: center;
+  flex-direction: row;
 }
 
 // ---> MEDIA QUERIES

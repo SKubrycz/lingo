@@ -38,8 +38,8 @@ export default function MainProfileStats() {
   );
 
   const listItemSx = {
-    paddingTop: "1.2em",
-    paddingBottom: "1.2em",
+    paddingTop: "1.5em",
+    paddingBottom: "1.5em",
     display: "flex",
     justifyContent: "space-between",
     "&:hover": {
@@ -80,40 +80,57 @@ export default function MainProfileStats() {
       desc: "",
       data: 12,
     },
-    { id: 5, type: "something", name: "Coś", desc: "", data: 5863895672 },
+    //{ id: 5, type: "something", name: "Coś", desc: "", data: 5863895672 },
   ]; //[1500, 123, "99%", 12.5, 5863895672];
   const listIcons = [AccessTime, Done, Percent, Translate, QuestionMark];
 
   return (
-    <Stack
-      divider={<Divider orientation="horizontal"></Divider>}
-      sx={{
-        width: "100%",
-        minWidth: 360,
-      }}
-    >
-      {statsData.map((value, index) => {
-        const IconComponent = listIcons[index];
-        return value.type === "accuracy" ? (
-          <Tooltip
-            title={value.desc}
-            arrow={true}
-            sx={{ textAlign: "center" }}
-            key={index}
-            slotProps={{
-              popper: {
-                modifiers: [
-                  {
-                    name: "offset",
-                    options: {
-                      offset: [0, -20],
+    <>
+      <Stack
+        divider={<Divider orientation="horizontal"></Divider>}
+        sx={{
+          width: "100%",
+          minWidth: 360,
+        }}
+      >
+        {statsData.map((value, index) => {
+          const IconComponent = listIcons[index];
+          return value.type === "accuracy" ? (
+            <Tooltip
+              title={value.desc}
+              arrow={true}
+              sx={{ textAlign: "center" }}
+              key={index}
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, -20],
+                      },
                     },
-                  },
-                ],
-              },
-            }}
-          >
-            <ListItem sx={listItemSx}>
+                  ],
+                },
+              }}
+            >
+              <ListItem sx={listItemSx}>
+                <ListItemIcon>
+                  <IconComponent></IconComponent>
+                </ListItemIcon>
+                <ListItemText primary={value.name}></ListItemText>
+                <ListItemText
+                  primary={value.data}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    fontSize: 24,
+                  }}
+                ></ListItemText>
+              </ListItem>
+            </Tooltip>
+          ) : (
+            <ListItem key={index} sx={listItemSx}>
               <ListItemIcon>
                 <IconComponent></IconComponent>
               </ListItemIcon>
@@ -127,24 +144,10 @@ export default function MainProfileStats() {
                 }}
               ></ListItemText>
             </ListItem>
-          </Tooltip>
-        ) : (
-          <ListItem key={index} sx={listItemSx}>
-            <ListItemIcon>
-              <IconComponent></IconComponent>
-            </ListItemIcon>
-            <ListItemText primary={value.name}></ListItemText>
-            <ListItemText
-              primary={value.data}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                fontSize: 24,
-              }}
-            ></ListItemText>
-          </ListItem>
-        );
-      })}
-    </Stack>
+          );
+        })}
+      </Stack>
+      <Divider orientation="horizontal"></Divider>
+    </>
   );
 }

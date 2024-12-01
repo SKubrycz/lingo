@@ -54,6 +54,7 @@ export default function MainProfileChart() {
         },
       }}
       sx={{
+        minWidth: 350,
         ".MuiMarkElement-root": {
           fill: defaultTheme.palette.primary.contrastText,
         },
