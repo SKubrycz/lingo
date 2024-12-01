@@ -471,7 +471,7 @@ export const updateLessonOnFinish = async (
       finished: false,
     });
 
-    if (!findResult) return null;
+    if (!findResult) return "Lekcja jest już ukończona";
 
     if (!findResult.finished) {
       const updateResult = await usersLessonsCollection.updateOne(

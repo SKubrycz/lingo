@@ -55,9 +55,6 @@ function LessonProcess({
   const handleUnloadData = async (e: Event) => {
     e.preventDefault();
 
-    console.log(document.URL);
-    console.log(document.visibilityState);
-
     if (
       document.visibilityState === "hidden" &&
       document.URL.startsWith(`http://localhost:3001/lesson/`)
