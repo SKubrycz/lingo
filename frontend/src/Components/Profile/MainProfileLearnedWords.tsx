@@ -42,8 +42,6 @@ function MainProfileLearnedWords() {
   const interval = useRef<NodeJS.Timeout | null>(null);
   const timeout = useRef<NodeJS.Timeout | null>(null);
 
-  const WORD_COUNT = 5;
-
   const buttonSx = {
     fontSize: 28,
     color: "gray",
@@ -66,7 +64,7 @@ function MainProfileLearnedWords() {
     if (!userInteracted) {
       interval.current = setInterval(() => {
         if (currentWord.current < 5) {
-          goToNextWord();
+          goToNextWord(userInteracted);
         } else {
           resetToFirstWord();
         }
@@ -75,7 +73,7 @@ function MainProfileLearnedWords() {
       timeout.current = setTimeout(() => {
         interval.current = setInterval(() => {
           if (currentWord.current < 5) {
-            goToNextWord();
+            goToNextWord(false);
           } else {
             resetToFirstWord();
           }
@@ -94,19 +92,19 @@ function MainProfileLearnedWords() {
     setLeftOffset(0);
   };
 
-  const goToPreviousWord = () => {
-    startSlideshow(true);
+  const goToPreviousWord = (click: boolean) => {
+    if (click) startSlideshow(true);
 
-    if (currentWord.current <= WORD_COUNT && currentWord.current > 0) {
+    if (currentWord.current <= wordData.length && currentWord.current > 0) {
       setLeftOffset((leftOffset: number) => leftOffset + offsetStep);
     }
     currentWord.current--;
   };
 
-  const goToNextWord = () => {
-    startSlideshow(true);
+  const goToNextWord = (click: boolean) => {
+    if (click) startSlideshow(true);
 
-    if (currentWord.current <= WORD_COUNT && currentWord.current >= 0) {
+    if (currentWord.current <= wordData.length && currentWord.current >= 0) {
       setLeftOffset((leftOffset: number) => leftOffset - offsetStep);
     }
     currentWord.current++;
@@ -141,7 +139,7 @@ function MainProfileLearnedWords() {
     >
       <IconButton
         disabled={currentWord.current <= 0 ? true : false}
-        onClick={() => goToPreviousWord()}
+        onClick={() => goToPreviousWord(true)}
         sx={{
           "&:disabled": {
             opacity: 0,
@@ -172,6 +170,8 @@ function MainProfileLearnedWords() {
               <Box key={i}>
                 <Typography
                   variant="h5"
+                  noWrap={true}
+                  fontWeight={600}
                   sx={{
                     position: "absolute",
                     top: "50%",
@@ -179,7 +179,6 @@ function MainProfileLearnedWords() {
                     transform: "translate(-50%, -50%)",
                     transition: `left 500ms ease-in-out`,
                     color: "primary.contrastText",
-                    textWrap: "nowrap",
                   }}
                 >
                   {el.word}
@@ -190,8 +189,8 @@ function MainProfileLearnedWords() {
         </Box>
       </Box>
       <IconButton
-        disabled={currentWord.current >= WORD_COUNT ? true : false}
-        onClick={() => goToNextWord()}
+        disabled={currentWord.current >= wordData.length ? true : false}
+        onClick={() => goToNextWord(true)}
         sx={{
           "&:disabled": {
             opacity: 0,
