@@ -13,6 +13,7 @@ import Footer from "../Reusables/Footer/Footer";
 import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
+import { setTimeSpent } from "../../state/timeSpentSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
@@ -25,6 +26,9 @@ function LessonProcess({
   lessonId,
   children,
 }: LessonsProcessProps) {
+  const timeSpentData = useSelector(
+    (state: RootState) => state.timeSpentReducer
+  );
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
     "/profile",
@@ -36,8 +40,6 @@ function LessonProcess({
     "/profile",
   ]);
   const lessonIdRef = useRef<number | null>(null);
-
-  const timeStart = useRef<number>(0);
 
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
@@ -64,7 +66,7 @@ function LessonProcess({
           `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
             lessonIdRef.current
           }`,
-          { timeSpent: performance.now() - timeStart.current },
+          { timeSpent: performance.now() - timeSpentData.timeStart },
           {
             withCredentials: true,
             headers: {
@@ -81,7 +83,8 @@ function LessonProcess({
       document.visibilityState === "visible" &&
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
-      timeStart.current = performance.now();
+      //timeStart.current = performance.now();
+      setTimeSpent({ timeStart: performance.now() });
     }
   };
 
@@ -91,7 +94,7 @@ function LessonProcess({
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
           lessonIdRef.current
         }`,
-        { timeSpent: performance.now() - timeStart.current },
+        { timeSpent: performance.now() - timeSpentData.timeStart },
         {
           withCredentials: true,
           headers: {
@@ -100,7 +103,7 @@ function LessonProcess({
         }
       );
 
-      timeStart.current = performance.now();
+      setTimeSpent({ timeStart: performance.now() });
 
       console.log(`From /timespent: ${response.data}`);
 
@@ -111,7 +114,7 @@ function LessonProcess({
   };
 
   useEffect(() => {
-    timeStart.current = performance.now();
+    setTimeSpent({ timeStart: performance.now() });
 
     if (lessonId) lessonIdRef.current = lessonId;
 

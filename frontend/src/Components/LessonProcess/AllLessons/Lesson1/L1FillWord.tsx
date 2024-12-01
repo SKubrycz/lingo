@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -6,12 +6,14 @@ import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 import LessonProcess from "../../LessonProcess";
 import InputEx from "../../Stepper/Variants/InputEx";
 import type { InputExerciseData } from "../exerciseTypes";
+import { RootState } from "../../../../state/store";
+import { setTimeSpent } from "../../../../state/timeSpentSlice";
 
 interface L1FillWordProps {
   lessonId: number;
@@ -24,6 +26,9 @@ export default function L1FillWord({
   exerciseId,
   isLastExercise = false,
 }: L1FillWordProps) {
+  const timeSpentData = useSelector(
+    (state: RootState) => state.timeSpentReducer
+  );
   const [lessonInfo, setLessonInfo] = useState<InputExerciseData>({
     exercise: {
       exerciseId: 0,
@@ -72,28 +77,51 @@ export default function L1FillWord({
   };
 
   const finishLesson = async () => {
-    await axios
-      .post(
+    try {
+      const response = await axios.post(
         `http://localhost:${
           import.meta.env.VITE_SERVER_PORT
         }/lesson/${lessonId}/${exerciseId}`,
         {},
         { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res.data);
-        navigate("/lessons");
-      })
-      .catch((error) => {
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
         alertSnackbarDataDispatch(
           setAlert({
             severity: "error",
             variant: "filled",
             title: "Błąd",
-            content: error.response.data,
+            content: error?.response?.data,
           })
         );
-      });
+      }
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/timespent/${lessonId}`,
+        { timeSpent: performance.now() - timeSpentData.timeStart },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setTimeSpent({ timeStart: performance.now() });
+
+      console.log(`From /timespent: ${response.data}`);
+
+      navigate("/lessons");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleNextKey = (e: KeyboardEvent) => {

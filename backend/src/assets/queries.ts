@@ -169,7 +169,7 @@ export const insertOneUser = async ({
   } catch (error) {
     console.error(error);
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -191,7 +191,7 @@ export const findOneUser = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -213,7 +213,7 @@ export const findOneUserByLogin = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -234,7 +234,7 @@ export const findOneUserByUUID = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -259,7 +259,7 @@ export const updateOneUserByUUID = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -278,7 +278,7 @@ export const deleteOneUserById = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -321,7 +321,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -364,7 +364,7 @@ export const findLessonById = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -420,7 +420,7 @@ export const saveLessonProgressById = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };
 
@@ -450,6 +450,6 @@ export const updateLessonTimeSpent = async (
     console.error(error);
     return null;
   } finally {
-    await closeDbConnection();
+    closeDbConnection();
   }
 };

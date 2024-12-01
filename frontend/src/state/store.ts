@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import alertSnackbarReducer from "./alertSnackbarSlice";
 import languageReducer from "./languageSlice";
+import timeSpentReducer from "./timeSpentSlice";
 
 export const store = configureStore({
   reducer: {
     alertSnackbarReducer: alertSnackbarReducer,
     languageReducer: languageReducer,
+    timeSpentReducer: timeSpentReducer,
   },
 });
 
