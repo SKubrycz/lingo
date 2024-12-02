@@ -12,10 +12,11 @@ import Footer from "../Reusables/Footer/Footer";
 
 import "./Profile.scss";
 
-interface User {
+export interface User {
   login: string;
   createdDate: string;
   sessionUser: boolean;
+  words: string[];
 }
 
 function Profile() {
@@ -68,6 +69,7 @@ function Profile() {
       setFooterLinkArray(["/about", "/lessons", `/profile/${res.data.login}`]);
 
       if (res.data.sessionUser === true) {
+        console.log(res.data);
         setUser(res.data);
       } else {
         setUser(res.data);

@@ -9,12 +9,7 @@ import { useState } from "react";
 import MainProfileStats from "./MainProfileStats";
 import MainProfileSettings from "./MainProfileSettings";
 import MainProfileLearnedWords from "./MainProfileLearnedWords";
-
-interface User {
-  login: string;
-  createdDate: string;
-  sessionUser: boolean;
-}
+import { User } from "./Profile";
 
 function MainProfile({ user }: { user: User | null }) {
   const [avatarHover, setAvatarHover] = useState<boolean>(false);
@@ -129,7 +124,7 @@ function MainProfile({ user }: { user: User | null }) {
         <Box sx={{ width: "66%", display: "flex", flexDirection: "column" }}>
           <MainProfileStats></MainProfileStats>
           {user?.sessionUser && (
-            <MainProfileLearnedWords></MainProfileLearnedWords>
+            <MainProfileLearnedWords user={user}></MainProfileLearnedWords>
           )}
         </Box>
       </Container>

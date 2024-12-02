@@ -91,6 +91,7 @@ interface UsersLessons {
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
   accuracy: number;
+  timesCompleted: number;
   finished: boolean;
 }
 
@@ -162,6 +163,7 @@ export const insertOneUser = async ({
         lessonId: el.lessonId,
         timeSpent: 0,
         accuracy: 0.0,
+        timesCompleted: 0,
         finished: false,
       });
     });
@@ -510,26 +512,75 @@ export const updateLessonOnFinish = async (
   try {
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
 
-    const findResult = await usersLessonsCollection.findOne({
-      userId: new ObjectId(id),
-      lessonId: lessonId,
-      finished: false,
-    });
+    const findResult = await usersLessonsCollection.findOneAndUpdate(
+      {
+        userId: new ObjectId(id),
+        lessonId: lessonId,
+      },
+      {
+        $inc: { timesCompleted: 1 },
+        $set: { finished: true },
+      }
+    );
 
-    if (!findResult) return "Lekcja jest już ukończona";
-
-    if (!findResult.finished) {
-      const updateResult = await usersLessonsCollection.updateOne(
-        { userId: new ObjectId(id), lessonId: lessonId },
-        {
-          $set: { finished: true },
-        }
-      );
-
-      if (!updateResult) return null;
-    }
+    if (!findResult) return null;
 
     return "Zapisano";
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const findLastFinishedUserLesson = async (
+  id: ObjectId | undefined
+): Promise<string[] | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+
+    const findUsersLessonsResult = await usersLessonsCollection
+      .find(
+        {
+          userId: new ObjectId(id),
+        },
+        {
+          projection: {
+            _id: 1,
+            lessonId: 1,
+          },
+        }
+      )
+      .sort("desc")
+      .limit(1)
+      .toArray();
+
+    console.log(`findUsersLessonsResult: `);
+    console.log(findUsersLessonsResult);
+
+    if (!findUsersLessonsResult) return null;
+
+    const lessonsCollection = db.collection<Lesson>("lessons");
+
+    const findLessonsResult = await lessonsCollection.findOne({
+      lessonId: findUsersLessonsResult[0].lessonId,
+    });
+
+    if (!findLessonsResult) return null;
+
+    let result: string[] = [];
+
+    findLessonsResult.exercises.forEach((el, i) => {
+      if (el.type === "card") {
+        result.push(el.word);
+      }
+    });
+
+    return result;
   } catch (error) {
     console.error(error);
     return null;

@@ -1,7 +1,10 @@
 import { ObjectId } from "mongodb";
 import { Request, Response } from "express";
 
-import { findOneUserByLogin } from "../assets/queries";
+import {
+  findLastFinishedUserLesson,
+  findOneUserByLogin,
+} from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
 interface FindUser {
@@ -11,10 +14,10 @@ interface FindUser {
 } // !not equal to the one in queries.ts
 
 interface SentUser {
-  id: ObjectId;
   login: string;
   createdDate: string; // parsed
   sessionUser: boolean;
+  words: string[];
 }
 
 const getProfile = async (req: Request, res: Response) => {
@@ -28,6 +31,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
     console.log(`login in ${req.originalUrl} ${login}`);
 
     let result: FindUser | null;
+    let words: string[] | null = [];
 
     if (
       (login === undefined || login === "undefined") &&
@@ -35,11 +39,13 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
     ) {
       console.log(`USING REQ.LOGIN`);
       result = await findOneUserByLogin(req.login);
+      words = await findLastFinishedUserLesson(req._id);
     } else {
       result = await findOneUserByLogin(login);
+      words = await findLastFinishedUserLesson(req._id);
     }
 
-    if (result) {
+    if (result && words) {
       console.log(result.login);
 
       let sessionUser = false;
@@ -48,10 +54,10 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
       const parseDate: string = result.createdDate.toLocaleDateString();
 
       const fetched: SentUser = {
-        id: result._id,
         login: result.login,
         createdDate: parseDate,
         sessionUser: sessionUser,
+        words: words,
       };
 
       return res.status(200).send(fetched);

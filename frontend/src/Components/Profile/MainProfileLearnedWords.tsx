@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
+import { User } from "./Profile";
 
 interface WordData {
   id: number;
@@ -10,37 +10,41 @@ interface WordData {
   leftValue: number;
 }
 
-function MainProfileLearnedWords() {
+interface MainProfileLearnedWordsProps {
+  user: User;
+}
+
+function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
   // And here static data for now
   const [wordData, setWordData] = useState<WordData[]>([
     {
       id: 0,
-      word: "I am",
+      word: user?.words[0],
       leftValue: 50 + 0 * 200,
     },
     {
       id: 1,
-      word: "Hello",
+      word: user?.words[1],
       leftValue: 50 + 1 * 200,
     },
     {
       id: 2,
-      word: "He is",
+      word: user?.words[2],
       leftValue: 50 + 2 * 200,
     },
     {
       id: 3,
-      word: "Konstantynopolitańczykowianeczka",
+      word: user?.words[3],
       leftValue: 50 + 3 * 200,
     },
     {
       id: 4,
-      word: "Good morning",
+      word: user?.words[4],
       leftValue: 50 + 4 * 200,
     },
     {
       id: 5,
-      word: "Goodbye",
+      word: user?.words[5],
       leftValue: 50 + 5 * 200,
     },
   ]);
@@ -60,13 +64,6 @@ function MainProfileLearnedWords() {
       color: "primary.contrastText",
     },
   };
-
-  /*
-   *
-   *
-   * Here is going to be a fetch to get the newest word data
-   *
-   */
 
   const startSlideshow = (userInteracted: boolean) => {
     if (interval.current) {
