@@ -43,10 +43,26 @@ function MainProfile({ user }: { user: User | null }) {
       <Container className="main-profile">
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           <Box sx={{ padding: "2em", display: "flex" }}>
-            <Tooltip title="Kliknij aby zmienić zdjęcie profilowe" arrow={true}>
+            {user?.sessionUser ? (
+              <Tooltip
+                title="Kliknij aby zmienić zdjęcie profilowe"
+                arrow={true}
+              >
+                <Avatar
+                  onMouseEnter={handleAvatarHover}
+                  onMouseLeave={handleAvatarHover}
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    bgcolor: "primary.dark",
+                    cursor: "pointer",
+                  }}
+                >
+                  {avatarHover ? <Edit></Edit> : user?.login.charAt(0)}
+                </Avatar>
+              </Tooltip>
+            ) : (
               <Avatar
-                onMouseEnter={handleAvatarHover}
-                onMouseLeave={handleAvatarHover}
                 sx={{
                   width: 50,
                   height: 50,
@@ -54,9 +70,9 @@ function MainProfile({ user }: { user: User | null }) {
                   cursor: "pointer",
                 }}
               >
-                {avatarHover ? <Edit></Edit> : user?.login.charAt(0)}
+                {user?.login.charAt(0)}
               </Avatar>
-            </Tooltip>
+            )}
 
             <Box
               component="div"
@@ -82,7 +98,7 @@ function MainProfile({ user }: { user: User | null }) {
                 ${user?.createdDate ? user?.createdDate : "-"}`}
               </Typography>
             </Box>
-            {user && (
+            {user && user?.sessionUser && (
               /* Implement user settings, for example delete account, customization (also put Settings into other file) */
               <>
                 <Tooltip

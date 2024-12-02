@@ -79,7 +79,14 @@ interface LessonStats {
   wordsLearned: number;
 }
 
-interface InsertUsersLessons {
+interface FindUsersLessons {
+  lessonId: number;
+  timeSpent: DOMHighResTimeStamp;
+  accuracy: number;
+  finished: boolean;
+}
+
+interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
@@ -108,7 +115,7 @@ export const insertOneUser = async ({
       wordsLearned: 0,
     };
 
-    let usersLessonsArr: InsertUsersLessons[] = [];
+    let usersLessonsArr: UsersLessons[] = [];
 
     const usersResult = await usersCollection.insertOne({
       email: email,
@@ -159,8 +166,7 @@ export const insertOneUser = async ({
       });
     });
 
-    const usersLessonsCollection =
-      db.collection<InsertUsersLessons>("users-lessons");
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
 
     const usersLessonsResult = await usersLessonsCollection.insertMany(
       usersLessonsArr
@@ -368,6 +374,47 @@ export const findLessonById = async (
   }
 };
 
+export const findUsersLessonsById = async (
+  id: ObjectId
+): Promise<FindUsersLessons[] | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+
+    const usersLessonsResult = await usersLessonsCollection
+      .find(
+        { userId: { $eq: new ObjectId(id) } },
+        {
+          projection: {
+            lessonId: 1,
+            timeSpent: 1,
+            accuracy: 1,
+            finished: 1,
+          },
+        }
+      )
+      .toArray();
+
+    if (!usersLessonsResult) return null;
+
+    const resultArr: FindUsersLessons[] = usersLessonsResult.map((res) => ({
+      lessonId: res.lessonId,
+      timeSpent: res.timeSpent,
+      accuracy: res.accuracy,
+      finished: res.finished,
+    }));
+
+    return resultArr;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
 export const saveLessonProgressById = async (
   login: string,
   lessonId: number,
@@ -433,8 +480,7 @@ export const updateLessonTimeSpent = async (
   const db: Db = await getDb();
 
   try {
-    const usersLessonsCollection =
-      db.collection<InsertUsersLessons>("users-lessons");
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
 
     const colResult = await usersLessonsCollection.updateOne(
       { userId: new ObjectId(id), lessonId: lessonId },
@@ -462,8 +508,7 @@ export const updateLessonOnFinish = async (
   const db: Db = await getDb();
 
   try {
-    const usersLessonsCollection =
-      db.collection<InsertUsersLessons>("users-lessons");
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
 
     const findResult = await usersLessonsCollection.findOne({
       userId: new ObjectId(id),

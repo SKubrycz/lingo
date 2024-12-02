@@ -33,6 +33,16 @@ function MainProfileLearnedWords() {
       word: "Konstantynopolitańczykowianeczka",
       leftValue: 50 + 3 * 200,
     },
+    {
+      id: 4,
+      word: "Good morning",
+      leftValue: 50 + 4 * 200,
+    },
+    {
+      id: 5,
+      word: "Goodbye",
+      leftValue: 50 + 5 * 200,
+    },
   ]);
 
   const [leftOffset, setLeftOffset] = useState<number>(0);
@@ -59,7 +69,14 @@ function MainProfileLearnedWords() {
    */
 
   const startSlideshow = (userInteracted: boolean) => {
-    if (interval.current) clearInterval(interval.current);
+    if (interval.current) {
+      clearInterval(interval.current);
+      interval.current = null;
+    }
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+      timeout.current = null;
+    }
 
     if (!userInteracted) {
       interval.current = setInterval(() => {
@@ -72,6 +89,7 @@ function MainProfileLearnedWords() {
     } else if (userInteracted) {
       timeout.current = setTimeout(() => {
         interval.current = setInterval(() => {
+          console.log(interval.current);
           if (currentWord.current < 5) {
             goToNextWord(false);
           } else {
@@ -95,7 +113,7 @@ function MainProfileLearnedWords() {
   const goToPreviousWord = (click: boolean) => {
     if (click) startSlideshow(true);
 
-    if (currentWord.current <= wordData.length && currentWord.current > 0) {
+    if (currentWord.current <= wordData.length - 1 && currentWord.current > 0) {
       setLeftOffset((leftOffset: number) => leftOffset + offsetStep);
     }
     currentWord.current--;
@@ -104,7 +122,10 @@ function MainProfileLearnedWords() {
   const goToNextWord = (click: boolean) => {
     if (click) startSlideshow(true);
 
-    if (currentWord.current <= wordData.length && currentWord.current >= 0) {
+    if (
+      currentWord.current <= wordData.length - 1 &&
+      currentWord.current >= 0
+    ) {
       setLeftOffset((leftOffset: number) => leftOffset - offsetStep);
     }
     currentWord.current++;
@@ -161,10 +182,8 @@ function MainProfileLearnedWords() {
           overflow: "hidden",
         }}
       >
-        <Typography variant="body1">Ostatnio poznane słowa</Typography>
+        <Typography variant="body1">Nowo poznane słowa</Typography>
         <Box sx={{ width: "100%", height: "100%" }}>
-          {" "}
-          {/* Hiding parent for position absolute children */}
           {wordData.map((el, i) => {
             return (
               <Box key={i}>
@@ -189,7 +208,7 @@ function MainProfileLearnedWords() {
         </Box>
       </Box>
       <IconButton
-        disabled={currentWord.current >= wordData.length ? true : false}
+        disabled={currentWord.current >= wordData.length - 1 ? true : false}
         onClick={() => goToNextWord(true)}
         sx={{
           "&:disabled": {

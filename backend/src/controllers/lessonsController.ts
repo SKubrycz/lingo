@@ -1,20 +1,29 @@
 import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-import { findLessonsList, findOneUserByLogin } from "../assets/queries";
+import {
+  findLessonsList,
+  findOneUserByLogin,
+  findUsersLessonsById,
+} from "../assets/queries";
 
 const getLessons = async (req: RequestLogin, res: Response) => {
-  const result = await findLessonsList();
+  const lessonsResult = await findLessonsList();
 
   if (!req.login)
+    return res.status(500).send("Coś poszło nie tak po stronie serwera");
+  if (!req._id)
     return res.status(500).send("Coś poszło nie tak po stronie serwera");
 
   const userResult = await findOneUserByLogin(req.login);
   if (userResult) {
     console.log(userResult.login);
 
+    const usersLessonsResult = await findUsersLessonsById(req._id);
+
     const results = {
-      result: result,
+      lessonsResult: lessonsResult,
+      usersLessonsResult: usersLessonsResult,
       login: userResult.login,
     };
 

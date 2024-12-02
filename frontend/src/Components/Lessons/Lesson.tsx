@@ -3,6 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import "./Lessons.scss";
 
 import { Button, Box, Container, Typography } from "@mui/material";
+import { Done } from "@mui/icons-material";
 
 interface LessonData {
   lessonId: number;
@@ -13,9 +14,10 @@ interface LessonData {
 
 interface LessonProps {
   lessonData: LessonData;
+  finished: boolean;
 }
 
-function Lesson({ lessonData }: LessonProps) {
+function Lesson({ lessonData, finished }: LessonProps) {
   return (
     <>
       <Container
@@ -27,17 +29,28 @@ function Lesson({ lessonData }: LessonProps) {
       >
         <Box component="div">
           <Typography variant="h6">
-            {lessonData.lessonId} - {lessonData.title}
+            {lessonData.lessonId} - {lessonData.title}{" "}
+            {finished && <Done color="success"></Done>}
           </Typography>
           <Typography variant="body2">{lessonData.description}</Typography>
         </Box>
-        <Button
-          to={`/lesson/${lessonData.lessonId}/1`}
-          component={RouterLink}
-          sx={{ color: "primary.contrastText", textDecoration: "none" }}
-        >
-          Rozpocznij
-        </Button>
+        {finished ? (
+          <Button
+            to={`/lesson/${lessonData.lessonId}/1`}
+            component={RouterLink}
+            sx={{ color: "primary.contrastText", textDecoration: "none" }}
+          >
+            Powtórz lekcję
+          </Button>
+        ) : (
+          <Button
+            to={`/lesson/${lessonData.lessonId}/1`}
+            component={RouterLink}
+            sx={{ color: "primary.contrastText", textDecoration: "none" }}
+          >
+            Rozpocznij
+          </Button>
+        )}
       </Container>
     </>
   );

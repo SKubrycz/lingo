@@ -24,8 +24,16 @@ interface LessonData {
   new_words: string[];
 }
 
+interface UsersLessonsData {
+  lessonId: number;
+  timeSpent: DOMHighResTimeStamp;
+  accuracy: number;
+  finished: boolean;
+}
+
 function Lessons() {
   const [lessons, setLessons] = useState<LessonData[]>([]);
+  const [usersLessons, setUserLessons] = useState<UsersLessonsData[]>([]);
 
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
@@ -55,7 +63,8 @@ function Lessons() {
         withCredentials: true,
       })
       .then((res) => {
-        setLessons(res.data.result);
+        setLessons(res.data.lessonsResult);
+        setUserLessons(res.data.usersLessonsResult);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
         setFooterLinkArray([
           "/about",
@@ -93,7 +102,13 @@ function Lessons() {
             sx={{ minWidth: "60%", margin: "1em" }}
           >
             {lessons.map((value: LessonData, index: number) => {
-              return <Lesson key={index} lessonData={value}></Lesson>;
+              return (
+                <Lesson
+                  key={index}
+                  lessonData={value}
+                  finished={usersLessons[index]?.finished}
+                ></Lesson>
+              );
             })}
           </Stack>
         </Box>
