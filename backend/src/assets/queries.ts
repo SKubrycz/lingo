@@ -27,6 +27,7 @@ interface InsertUserData {
 }
 
 interface InsertUser extends InsertUserData {
+  role: string;
   stats: UserStats;
   createdDate: Date;
 }
@@ -125,6 +126,7 @@ export const insertOneUser = async ({
       uuid: uuid,
       verificationCode: verificationCode,
       verified: verified,
+      role: "user",
       stats: stats,
       createdDate: new Date(Date.now()),
     });

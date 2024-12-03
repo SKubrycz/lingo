@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-import { Box, Dialog, DialogTitle, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 
 interface MainProfileSettingsProps {
   open: boolean;
@@ -13,7 +20,12 @@ export default function MainProfileSettings({
 }: MainProfileSettingsProps) {
   return (
     <Dialog open={open} onClose={() => onClose()}>
-      <DialogTitle>Ustawienia</DialogTitle>
+      <DialogTitle sx={{ textAlign: "center" }}>Ustawienia</DialogTitle>
+      <DialogContent>
+        <Button variant="contained" color="error">
+          Usuń konto
+        </Button>
+      </DialogContent>
     </Dialog>
   );
 }
