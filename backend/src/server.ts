@@ -23,6 +23,7 @@ import logoutRoute from "./routes/logout";
 import aboutRoute from "./routes/about";
 import timeSpentRoute from "./routes/timeSpent";
 import verifyRoute from "./routes/verify";
+import deleteAccountRoute from "./routes/deleteAccount";
 
 const app: Express = express();
 
@@ -39,6 +40,7 @@ const routesArray: Router[] = [
   aboutRoute,
   timeSpentRoute,
   verifyRoute,
+  deleteAccountRoute,
 ];
 
 // let transporter = nodemailer.createTransport({

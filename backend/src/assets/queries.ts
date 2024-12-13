@@ -590,3 +590,34 @@ export const findLastFinishedUserLesson = async (
     closeDbConnection();
   }
 };
+
+export const insertDeletionCode = async (
+  id: ObjectId | undefined,
+  deletionCode: string
+): Promise<UpdateResult<User> | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersCollection = db.collection<User>("users");
+
+    const result = usersCollection.updateOne(
+      {
+        _id: id,
+      },
+      {
+        $set: {
+          deletionCode: deletionCode,
+        },
+      },
+      { upsert: true }
+    );
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};

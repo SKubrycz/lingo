@@ -1,13 +1,4 @@
-import { useState } from "react";
-
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 interface MainProfileSettingsProps {
   open: boolean;
