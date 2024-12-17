@@ -16,6 +16,7 @@ import Logout from "./Components/Logout/Logout";
 import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
 import L1FillWord from "./Components/LessonProcess/AllLessons/Lesson1/L1FillWord";
 import Verify from "./Components/Register/Verify/Verify";
+import DeleteAccount from "./Components/DeleteAccount/DeleteAccount";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -30,6 +31,10 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/login" element={<Login></Login>}></Route>
           <Route path="/register" element={<Register></Register>}></Route>
           <Route path="/verify/:verifyId" element={<Verify></Verify>}></Route>
+          <Route
+            path="/delete-account/:deleteId"
+            element={<DeleteAccount></DeleteAccount>}
+          ></Route>
           <Route path="/about" element={<About></About>}></Route>
           <Route path="/profile" element={<Profile></Profile>}></Route>
           <Route path="/profile/:userId" element={<Profile></Profile>}></Route>

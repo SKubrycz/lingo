@@ -32,6 +32,11 @@ interface InsertUser extends InsertUserData {
   createdDate: Date;
 }
 
+interface DeleteAccount {
+  uuid: string;
+  deletionCode: string;
+}
+
 interface FindUser {
   _id: ObjectId;
   email: string;
@@ -40,6 +45,7 @@ interface FindUser {
   uuid: string;
   verificationCode: string;
   verified: boolean;
+  deleteAccount: DeleteAccount;
   createdDate: Date;
 }
 
@@ -281,7 +287,7 @@ export const deleteOneUserById = async (
 
   try {
     const userCollection = db.collection<UpdateUser>("users");
-    const result = await userCollection.deleteOne({ _id: id });
+    const result = await userCollection.deleteOne({ _id: new ObjectId(id) });
 
     return result;
   } catch (error) {
@@ -591,8 +597,9 @@ export const findLastFinishedUserLesson = async (
   }
 };
 
-export const insertDeletionCode = async (
+export const insertDeleteAccountData = async (
   id: ObjectId | undefined,
+  uuid: string,
   deletionCode: string
 ): Promise<UpdateResult<User> | null> => {
   await connectToDb();
@@ -601,19 +608,51 @@ export const insertDeletionCode = async (
   try {
     const usersCollection = db.collection<User>("users");
 
-    const result = usersCollection.updateOne(
+    const result = await usersCollection.updateOne(
       {
-        _id: id,
+        _id: new ObjectId(id),
       },
       {
         $set: {
-          deletionCode: deletionCode,
+          deleteAccount: {
+            uuid: uuid,
+            deletionCode: deletionCode,
+          },
         },
       },
       { upsert: true }
     );
 
     return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const findDeletionCode = async (id: ObjectId | undefined) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersCollection = db.collection<FindUser>("users");
+
+    const findUserResult = await usersCollection.findOne(
+      {
+        _id: new ObjectId(id),
+      },
+      {
+        projection: {
+          login: 1,
+          deleteAccount: 1,
+        },
+      }
+    );
+
+    if (!findUserResult) return null;
+    else return findUserResult;
   } catch (error) {
     console.error(error);
     return null;

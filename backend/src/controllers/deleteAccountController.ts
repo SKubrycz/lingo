@@ -3,9 +3,14 @@ import nodemailer from "nodemailer";
 import { Request, Response } from "express";
 import { RequestLogin } from "../middleware/auth";
 import { ObjectId } from "mongodb";
-import { findOneUserByLogin, insertDeletionCode } from "../assets/queries";
+import {
+  findOneUserByLogin,
+  insertDeleteAccountData,
+  findDeletionCode,
+  deleteOneUserById,
+} from "../assets/queries";
 
-const constructDeleteEmail = () => {
+const constructDeleteEmail = (deletionCode: string) => {
   const emailString = `
   <head>
     <meta charset="UTF-8" />
@@ -45,7 +50,7 @@ const constructDeleteEmail = () => {
           color: rgb(253, 229, 210);
         "
       >
-        E5F2D15B
+        ${deletionCode}
       </h2>
       <h6>
         Należy go wpisać w okienku weryfikacji
@@ -58,10 +63,25 @@ const constructDeleteEmail = () => {
   return emailString;
 };
 
-const getDeleteAccount = async (req: Request, res: Response) => {
-  const { deleteId } = req.params;
+const getDeleteAccount = async (req: RequestLogin, res: Response) => {
+  const { deleteId } = await req.params;
 
-  res.status(200).send({ message: "200" });
+  if (req.login) {
+    const userResult = await findOneUserByLogin(req.login);
+    if (!userResult) {
+      return res
+        .status(500)
+        .send({ message: "Coś poszło nie tak po naszej stronie" });
+    }
+
+    if (userResult.deleteAccount.uuid !== deleteId) {
+      return res
+        .status(400)
+        .send({ message: "Nieprawidłowy identyfikator usunięcia konta" });
+    }
+  }
+
+  return res.status(200).send({ message: "200" });
 };
 
 const postPrepareDelete = async (req: RequestLogin, res: Response) => {
@@ -69,12 +89,21 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
   const deletionCode = randomBytes(6).toString("hex");
 
   if (req._id && req.login) {
-    insertDeletionCode(req._id, deletionCode);
+    const insertResult = await insertDeleteAccountData(
+      req._id,
+      uuid,
+      deletionCode
+    );
+    if (!insertResult) {
+      return res
+        .status(500)
+        .send({ message: `Coś poszło nie tak po naszej stronie` });
+    }
 
     const user = await findOneUserByLogin(req.login);
 
     if (user) {
-      const htmlMessage = constructDeleteEmail();
+      const htmlMessage = constructDeleteEmail(deletionCode);
 
       const transporter = nodemailer.createTransport({
         host: "localhost",
@@ -89,29 +118,68 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
         html: htmlMessage,
       });
     } else {
-      res.status(500).send({ message: `Coś poszło nie tak po naszej stronie` });
+      return res
+        .status(500)
+        .send({ message: `Coś poszło nie tak po naszej stronie` });
     }
   } else {
-    res.status(500).send({ message: `Coś poszło nie tak po naszej stronie` });
+    return res
+      .status(500)
+      .send({ message: `Coś poszło nie tak po naszej stronie` });
   }
 
-  res
+  return res
     .status(200)
     .send({ message: "Rozpoczęto procedurę usunięcia konta", uuid: uuid });
 };
 
 const postDeleteAccount = async (req: RequestLogin, res: Response) => {
+  const { deletionCode } = await req.body;
+  const { deleteId } = await req.params;
+
   let id: ObjectId | null = null;
 
   if (req._id) {
     id = req._id;
 
-    // prepare unique link to redirect to
-    // create a unique code to be sent through email
     // verify the account deletion by the verification code
+    const result = await findDeletionCode(id);
+    if (!result) {
+      console.log("no account ", id);
+      return res
+        .status(500)
+        .send({ message: `Coś poszło nie tak po naszej stronie` });
+    }
+
+    if (result.deleteAccount.deletionCode !== deletionCode) {
+      return res.status(400).send({ message: `Podano nieprawidłowy kod` });
+    }
+
+    if (result.deleteAccount.uuid !== deleteId) {
+      return res.status(403).send({ message: `Nieprawidłowa podstrona` });
+    }
+
+    if (
+      result.deleteAccount.deletionCode === deletionCode &&
+      result.deleteAccount.uuid === deleteId
+    ) {
+      const deleteResult = await deleteOneUserById(id);
+      if (!deleteResult) {
+        return res
+          .status(500)
+          .send({ message: `Coś poszło nie tak po naszej stronie` });
+      }
+      console.log("deleteResult: ");
+      console.log(deleteResult);
+
+      res.clearCookie("access_token_lingo");
+      res.clearCookie("refresh_token_lingo");
+    }
   }
 
-  res.status(200).send({ message: "Nastąpiło prawidłowe usunięcie konta" });
+  return res
+    .status(200)
+    .send({ message: "Nastąpiło prawidłowe usunięcie konta" });
 };
 
 export { getDeleteAccount, postPrepareDelete, postDeleteAccount };
