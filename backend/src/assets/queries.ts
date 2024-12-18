@@ -281,15 +281,25 @@ export const updateOneUserByUUID = async (
 
 export const deleteOneUserById = async (
   id: ObjectId
-): Promise<DeleteResult | null> => {
+): Promise<DeleteResult[] | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
     const userCollection = db.collection<UpdateUser>("users");
-    const result = await userCollection.deleteOne({ _id: new ObjectId(id) });
+    const userResult = await userCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    if (!userResult) return null;
 
-    return result;
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+    const usersLessonsResult = await usersLessonsCollection.deleteMany({
+      userId: new ObjectId(id),
+    });
+    if (!usersLessonsResult) return null;
+
+    const deletedResult = [userResult, usersLessonsResult];
+    return deletedResult;
   } catch (error) {
     console.error(error);
     return null;

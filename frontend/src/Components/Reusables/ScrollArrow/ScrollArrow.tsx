@@ -16,8 +16,6 @@ export default function ScrollArrow() {
         window.scrollTo(0, currentScrollHeight.current);
         currentScrollHeight.current += step;
 
-        console.log(currentScrollHeight.current - step);
-        console.log(document.documentElement.scrollHeight);
         if (
           currentScrollHeight.current + step * 20 >=
             document.documentElement.scrollHeight &&
@@ -25,9 +23,6 @@ export default function ScrollArrow() {
         ) {
           clearInterval(interval.current);
           interval.current = null;
-          console.log(currentScrollHeight.current - step);
-          console.log(document.documentElement.scrollHeight);
-          console.log("interval stopped");
         }
       }, 1000 / 240);
     }
