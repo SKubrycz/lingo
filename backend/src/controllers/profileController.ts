@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import {
   findLastFinishedUserLesson,
   findOneUserByLogin,
+  UsersLessons,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -17,7 +18,7 @@ interface SentUser {
   login: string;
   createdDate: string; // parsed
   sessionUser: boolean;
-  words: string[];
+  words: UsersLessons[] | string[];
 }
 
 const getProfile = async (req: Request, res: Response) => {
@@ -31,7 +32,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
     console.log(`login in ${req.originalUrl} ${login}`);
 
     let result: FindUser | null;
-    let words: string[] | null = [];
+    let words: UsersLessons[] | string[] | null = [];
 
     if (
       (login === undefined || login === "undefined") &&

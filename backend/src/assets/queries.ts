@@ -93,7 +93,7 @@ interface FindUsersLessons {
   finished: boolean;
 }
 
-interface UsersLessons {
+export interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
@@ -554,7 +554,7 @@ export const updateLessonOnFinish = async (
 
 export const findLastFinishedUserLesson = async (
   id: ObjectId | undefined
-): Promise<string[] | null> => {
+): Promise<UsersLessons[] | string[] | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
@@ -565,6 +565,7 @@ export const findLastFinishedUserLesson = async (
       .find(
         {
           userId: new ObjectId(id),
+          finished: true,
         },
         {
           projection: {
@@ -582,23 +583,25 @@ export const findLastFinishedUserLesson = async (
 
     if (!findUsersLessonsResult) return null;
 
-    const lessonsCollection = db.collection<Lesson>("lessons");
+    if (findUsersLessonsResult.length > 0) {
+      const lessonsCollection = db.collection<Lesson>("lessons");
 
-    const findLessonsResult = await lessonsCollection.findOne({
-      lessonId: findUsersLessonsResult[0].lessonId,
-    });
+      const findLessonsResult = await lessonsCollection.findOne({
+        lessonId: findUsersLessonsResult[0].lessonId,
+      });
 
-    if (!findLessonsResult) return null;
+      if (!findLessonsResult) return null;
 
-    let result: string[] = [];
+      let result: string[] = [];
 
-    findLessonsResult.exercises.forEach((el, i) => {
-      if (el.type === "card") {
-        result.push(el.word);
-      }
-    });
+      findLessonsResult.exercises.forEach((el, i) => {
+        if (el.type === "card") {
+          result.push(el.word);
+        }
+      });
 
-    return result;
+      return result;
+    } else return findUsersLessonsResult;
   } catch (error) {
     console.error(error);
     return null;

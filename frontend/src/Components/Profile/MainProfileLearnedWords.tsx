@@ -10,44 +10,98 @@ interface WordData {
   leftValue: number;
 }
 
+interface WordsProps {
+  wordData: WordData[] | string;
+}
+
 interface MainProfileLearnedWordsProps {
   user: User;
 }
 
+function Words({ wordData }: WordsProps) {
+  if (Array.isArray(wordData)) {
+    return wordData.map((el, i) => {
+      return (
+        <Box key={i}>
+          <Typography
+            variant="h5"
+            noWrap={true}
+            fontWeight={600}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: `${el.leftValue}%`,
+              transform: "translate(-50%, -50%)",
+              transition: `left 500ms ease-in-out`,
+              color: "primary.contrastText",
+            }}
+          >
+            {el.word}
+          </Typography>
+        </Box>
+      );
+    });
+  } else if (typeof wordData === "string") {
+    return (
+      <Box>
+        <Typography
+          variant="body1"
+          textAlign="center"
+          fontWeight={400}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: `50%`,
+            transform: "translate(-50%, -50%)",
+            transition: `left 500ms ease-in-out`,
+            wordBreak: "break-word",
+          }}
+        >
+          {wordData}
+        </Typography>
+      </Box>
+    );
+  }
+}
+
 function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
   // And here static data for now
-  const [wordData, setWordData] = useState<WordData[]>([
-    {
-      id: 0,
-      word: user?.words[0],
-      leftValue: 50 + 0 * 200,
-    },
-    {
-      id: 1,
-      word: user?.words[1],
-      leftValue: 50 + 1 * 200,
-    },
-    {
-      id: 2,
-      word: user?.words[2],
-      leftValue: 50 + 2 * 200,
-    },
-    {
-      id: 3,
-      word: user?.words[3],
-      leftValue: 50 + 3 * 200,
-    },
-    {
-      id: 4,
-      word: user?.words[4],
-      leftValue: 50 + 4 * 200,
-    },
-    {
-      id: 5,
-      word: user?.words[5],
-      leftValue: 50 + 5 * 200,
-    },
-  ]);
+  const [wordData, setWordData] = useState<WordData[] | string>(
+    user?.words.length > 0
+      ? [
+          {
+            id: 0,
+            word: user?.words[0],
+            leftValue: 50 + 0 * 200,
+          },
+          {
+            id: 1,
+            word: user?.words[1],
+            leftValue: 50 + 1 * 200,
+          },
+          {
+            id: 2,
+            word: user?.words[2],
+            leftValue: 50 + 2 * 200,
+          },
+          {
+            id: 3,
+            word: user?.words[3],
+            leftValue: 50 + 3 * 200,
+          },
+          {
+            id: 4,
+            word: user?.words[4],
+            leftValue: 50 + 4 * 200,
+          },
+          {
+            id: 5,
+            word: user?.words[5],
+            leftValue: 50 + 5 * 200,
+          },
+        ]
+      : "Ukończ swoją pierwszą lekcję aby wyświetlić nauczone słowa!"
+  );
 
   const [leftOffset, setLeftOffset] = useState<number>(0);
   const offsetStep = 200;
@@ -98,13 +152,15 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
   };
 
   const resetToFirstWord = () => {
-    const resetWordData = wordData.map((el, i) => {
-      return el.id === i ? { ...el, leftValue: 50 + i * 200 } : el;
-    });
-    setWordData(resetWordData);
+    if (Array.isArray(wordData)) {
+      const resetWordData = wordData.map((el, i) => {
+        return el.id === i ? { ...el, leftValue: 50 + i * 200 } : el;
+      });
+      setWordData(resetWordData);
 
-    currentWord.current = 0;
-    setLeftOffset(0);
+      currentWord.current = 0;
+      setLeftOffset(0);
+    }
   };
 
   const goToPreviousWord = (click: boolean) => {
@@ -129,11 +185,15 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
   };
 
   useEffect(() => {
-    const updatedWordData = wordData.map((el, i) => {
-      return el.id === i ? { ...el, leftValue: 50 + i * 200 + leftOffset } : el;
-    });
+    if (Array.isArray(wordData)) {
+      const updatedWordData = wordData.map((el, i) => {
+        return el.id === i
+          ? { ...el, leftValue: 50 + i * 200 + leftOffset }
+          : el;
+      });
 
-    setWordData(updatedWordData);
+      setWordData(updatedWordData);
+    }
   }, [leftOffset]);
 
   useEffect(() => {
@@ -181,27 +241,7 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
       >
         <Typography variant="body1">Nowo poznane słowa</Typography>
         <Box sx={{ width: "100%", height: "100%" }}>
-          {wordData.map((el, i) => {
-            return (
-              <Box key={i}>
-                <Typography
-                  variant="h5"
-                  noWrap={true}
-                  fontWeight={600}
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: `${el.leftValue}%`,
-                    transform: "translate(-50%, -50%)",
-                    transition: `left 500ms ease-in-out`,
-                    color: "primary.contrastText",
-                  }}
-                >
-                  {el.word}
-                </Typography>
-              </Box>
-            );
-          })}
+          <Words wordData={wordData}></Words>
         </Box>
       </Box>
       <IconButton
