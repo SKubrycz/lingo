@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -14,6 +14,10 @@ import InputEx from "../../Stepper/Variants/InputEx";
 import type { InputExerciseData } from "../exerciseTypes";
 import { RootState } from "../../../../state/store";
 import { setTimeSpent } from "../../../../state/timeSpentSlice";
+
+interface Correct {
+  correct: boolean;
+}
 
 interface L1FillWordProps {
   lessonId: number;
@@ -42,6 +46,7 @@ export default function L1FillWord({
   const [disableNext, setDisableNext] = useState<boolean>(true);
 
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const textRef = useRef<HTMLInputElement | null>(null);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -72,7 +77,7 @@ export default function L1FillWord({
             content: "Sesja wygasła. Proszę zalogować się ponownie",
           })
         );
-        //navigate("/");
+        navigate("/");
       });
   };
 
@@ -124,14 +129,6 @@ export default function L1FillWord({
     }
   };
 
-  const handleNextKey = (e: KeyboardEvent) => {
-    if (e.key === "Enter" && correct) {
-      navigate(`/lesson/${lessonId}/${exerciseId + 1}`, {
-        state: { index: exerciseId },
-      });
-    }
-  };
-
   useEffect(() => {
     if (exerciseId && exerciseId > 2 && !state) {
       navigate("/lessons");
@@ -145,6 +142,39 @@ export default function L1FillWord({
       cardRef.current.style.animation = "0.8s comeDown 1 ease-in-out";
     }
   }, [exerciseId]);
+
+  const checkWords = async (
+    e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
+  ) => {
+    e.preventDefault();
+
+    if (!correct && textRef.current) {
+      // check word server-side
+      const res: AxiosResponse<Correct> = await axios.post(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/lesson/${lessonId}/${exerciseId}/checkword`,
+        { missingWord: textRef.current.value },
+        { withCredentials: true }
+      );
+
+      if (res.data.correct) {
+        setCorrect(true);
+        setDisableNext(false);
+        console.log("correct!");
+      } else {
+        setCorrect(false);
+        setDisableNext(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.value = "";
+      setCorrect(null);
+    }
+  }, [lessonInfo?.exercise?.missingWords]);
 
   return (
     <>
@@ -166,8 +196,8 @@ export default function L1FillWord({
           task={lessonInfo?.exercise?.task}
           missingWords={lessonInfo?.exercise?.missingWords}
           correct={correct}
-          setCorrect={setCorrect}
-          setDisableNext={setDisableNext}
+          textRef={textRef}
+          checkWords={checkWords}
         ></InputEx>
         {isLastExercise ? (
           <Button

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
@@ -44,8 +44,8 @@ interface InputExProps {
   task: string;
   missingWords: string;
   correct: boolean | null;
-  setCorrect: (correct: boolean | null) => void;
-  setDisableNext: (disableNext: boolean) => void;
+  textRef: React.Ref<HTMLInputElement | null>;
+  checkWords: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function InputEx({
@@ -53,35 +53,9 @@ export default function InputEx({
   task,
   missingWords,
   correct,
-  setCorrect,
-  setDisableNext,
+  textRef,
+  checkWords,
 }: InputExProps) {
-  const textRef = useRef<HTMLInputElement | null>(null);
-
-  const checkWords = (
-    e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
-  ) => {
-    e.preventDefault();
-
-    if (!correct && textRef.current) {
-      if (textRef.current.value.toLowerCase() === missingWords) {
-        setCorrect(true);
-        setDisableNext(false);
-        console.log("correct!");
-      } else {
-        setCorrect(false);
-        setDisableNext(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (textRef.current) {
-      textRef.current.value = "";
-      setCorrect(null);
-    }
-  }, [missingWords]);
-
   return (
     <Box
       sx={{

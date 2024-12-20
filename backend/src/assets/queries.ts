@@ -64,13 +64,18 @@ interface Exercise {
   description: string;
 }
 
+interface InputExercise extends Exercise {
+  task: string;
+  missingWords: string[] | string;
+}
+
 interface ExerciseData {
   exercise: Exercise;
   exerciseCount: number;
 }
 
 interface Lesson extends LessonView {
-  exercises: Exercise[];
+  exercises: Exercise[] | InputExercise[];
 }
 
 interface LessonView {
@@ -427,6 +432,37 @@ export const findUsersLessonsById = async (
     }));
 
     return resultArr;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const findInputExerciseById = async (
+  lessonId: number,
+  exerciseId: number
+): Promise<InputExercise | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const exerciseResult = await lessonsCollection.findOne(
+      { lessonId: { $eq: lessonId } },
+      {
+        projection: {
+          exercises: 1,
+        },
+      }
+    );
+
+    if (!exerciseResult) return null;
+
+    const exercise = exerciseResult.exercises[exerciseId - 1];
+
+    return exercise;
   } catch (error) {
     console.error(error);
     return null;

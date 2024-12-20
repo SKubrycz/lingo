@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
 import {
+  findInputExerciseById,
   findLessonById,
   saveLessonProgressById,
   updateLessonOnFinish,
@@ -53,4 +54,25 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Lekcja zakończona pomyślnie" });
 };
 
-export { getLessonId, postLessonId };
+const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
+  const { lessonId, exerciseId } = await req.params;
+  const word = await req.body;
+
+  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!exerciseId)
+    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+
+  const exerciseResult = await findInputExerciseById(
+    Number(lessonId),
+    Number(exerciseId)
+  );
+  if (!exerciseResult)
+    return res.status(500).send("Nie udało się pobrać danych");
+
+  if (word.missingWord.toLowerCase() !== exerciseResult.missingWords)
+    return res.status(200).send({ correct: false });
+
+  return res.status(200).send({ correct: true });
+};
+
+export { getLessonId, postLessonId, postExerciseAnswer };
