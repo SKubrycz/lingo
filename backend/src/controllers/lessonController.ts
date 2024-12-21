@@ -74,8 +74,6 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
 
   if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
     correct = false;
-
-    return res.status(200).send({ correct: correct });
   } else {
     correct = true;
   }
@@ -92,9 +90,13 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
       return res
         .status(500)
         .send({ message: "Coś poszło nie tak po naszej stronie" });
+  } else {
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
   }
 
-  return res.status(200).send({ correct: true });
+  return res.status(200).send({ correct: correct });
 };
 
 export { getLessonId, postLessonId, postExerciseAnswer };

@@ -21,14 +21,12 @@ interface Correct {
 interface L1FillWordProps {
   lessonId: number;
   exerciseId: number;
-  endSession: () => void;
   isLastExercise?: boolean;
 }
 
 export default function L1FillWord({
   lessonId,
   exerciseId,
-  endSession,
   isLastExercise = false,
 }: L1FillWordProps) {
   const timeSpentData = useSelector(
@@ -107,8 +105,6 @@ export default function L1FillWord({
     }
 
     try {
-      endSession();
-
       navigate("/lessons");
     } catch (err) {
       console.error(err);

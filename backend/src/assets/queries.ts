@@ -94,19 +94,19 @@ interface LessonStats {
 interface FindUsersLessons {
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
-  accuracy: Accuracy[];
+  accuracy: Accuracy;
   finished: boolean;
 }
 
 interface Accuracy {
-  [key: number]: boolean;
+  [key: number]: boolean[];
 }
 
 export interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
-  accuracy: Accuracy[];
+  accuracy: Accuracy;
   timesCompleted: number;
   finished: boolean;
 }
@@ -179,7 +179,7 @@ export const insertOneUser = async ({
         userId: usersResult.insertedId,
         lessonId: el.lessonId,
         timeSpent: 0,
-        accuracy: [],
+        accuracy: {},
         timesCompleted: 0,
         finished: false,
       });
@@ -603,44 +603,58 @@ export const updateLessonAccuracy = async (
 
   try {
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
-
-    const findResult = await usersLessonsCollection.findOne({
+    const findUsersLessonsResult = await usersLessonsCollection.findOne({
       userId: new ObjectId(id),
       lessonId: lessonId,
     });
+    if (!findUsersLessonsResult) return null;
 
-    if (!findResult) return null;
+    console.log("findUsersLessonsResult:");
+    console.log(findUsersLessonsResult);
 
-    console.log("findResult:");
-    console.log(findResult);
-
-    if (findResult.accuracy.length !== findResult.timesCompleted + 1) {
-      const pushAccuracy = await usersLessonsCollection.updateOne(
-        { _id: new ObjectId(id), lessonId: lessonId },
-        {
-          $push: {
-            accuracy: { [exerciseId]: correct },
-          },
-        }
+    if (Object.keys(findUsersLessonsResult.accuracy).length < 1) {
+      const lessonsCollection = db.collection<Lesson>("lessons");
+      const findLessonResult = await lessonsCollection.findOne(
+        { lessonId: lessonId },
+        { projection: { exercises: 1 } }
       );
+      if (!findLessonResult) return null;
 
-      console.log("pushAcc: ", pushAccuracy);
-
-      if (!pushAccuracy) return null;
-    } else if (findResult.accuracy.length === findResult.timesCompleted + 1) {
-      const addAccuracy = await usersLessonsCollection.updateOne(
-        { _id: new ObjectId(id), lessonId: lessonId },
+      // count lessons which are interactive (NOT read-only)
+      let interactiveCount = 0;
+      let exerciseIdObj: Accuracy = {};
+      findLessonResult.exercises.forEach((el, i) => {
+        if (findLessonResult.exercises[i].type != "card") {
+          interactiveCount++;
+          exerciseIdObj[el.exerciseId] = [];
+        }
+      });
+      const insertAccuracy = await usersLessonsCollection.updateOne(
+        { userId: new ObjectId(id), lessonId: lessonId },
         {
           $set: {
-            [`accuracy.${findResult.timesCompleted}.${exerciseId}`]: correct,
+            accuracy: exerciseIdObj,
           },
         }
       );
 
-      console.log("addAcc: ", addAccuracy);
+      console.log(`insertAcc: `, insertAccuracy);
 
-      if (!addAccuracy) return null;
+      if (!insertAccuracy) return null;
     }
+
+    const addAccuracy = await usersLessonsCollection.updateOne(
+      { userId: new ObjectId(id), lessonId: lessonId },
+      {
+        $push: {
+          [`accuracy.${exerciseId}`]: correct,
+        },
+      }
+    );
+
+    console.log("addAcc: ", addAccuracy);
+
+    if (!addAccuracy) return null;
 
     return "Dokładność zaktualizowana";
   } catch (error) {
