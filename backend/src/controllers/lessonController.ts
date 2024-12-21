@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { RequestLogin } from "../middleware/auth";
 import {
   findInputExerciseById,
+  updateLessonAccuracy,
   findLessonById,
   saveLessonProgressById,
   updateLessonOnFinish,
@@ -58,6 +59,8 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
   const { lessonId, exerciseId } = await req.params;
   const word = await req.body;
 
+  let correct: boolean = false;
+
   if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
   if (!exerciseId)
     return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
@@ -69,8 +72,27 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
   if (!exerciseResult)
     return res.status(500).send("Nie udało się pobrać danych");
 
-  if (word.missingWord.toLowerCase() !== exerciseResult.missingWords)
-    return res.status(200).send({ correct: false });
+  if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
+    correct = false;
+
+    return res.status(200).send({ correct: correct });
+  } else {
+    correct = true;
+  }
+
+  if (req._id) {
+    const updateResult = await updateLessonAccuracy(
+      req._id,
+      Number(lessonId),
+      Number(exerciseId),
+      correct
+    );
+
+    if (!updateResult)
+      return res
+        .status(500)
+        .send({ message: "Coś poszło nie tak po naszej stronie" });
+  }
 
   return res.status(200).send({ correct: true });
 };

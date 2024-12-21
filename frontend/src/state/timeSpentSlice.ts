@@ -2,22 +2,33 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface TimeSpent {
   timeStart: DOMHighResTimeStamp;
+  timeStop: DOMHighResTimeStamp;
 }
 
 const timeSpent: TimeSpent = {
   timeStart: 0,
+  timeStop: 0,
 };
 
 export const timeSpentSlice = createSlice({
   name: "timespent",
   initialState: timeSpent,
   reducers: {
-    setTimeSpent: (state, action: PayloadAction<TimeSpent>) => {
-      return { ...action.payload };
+    setTimeStart: (state, action: PayloadAction<any>) => {
+      console.log(`received:`);
+      console.log(action.payload);
+
+      return { ...state, timeStart: action.payload.timeStart };
+    },
+    setTimeStop: (state, action: PayloadAction<any>) => {
+      console.log(`received:`);
+      console.log(action.payload);
+
+      return { ...state, timeStop: action.payload.timeStop };
     },
   },
 });
 
-export const { setTimeSpent } = timeSpentSlice.actions;
+export const { setTimeStart, setTimeStop } = timeSpentSlice.actions;
 
 export default timeSpentSlice.reducer;

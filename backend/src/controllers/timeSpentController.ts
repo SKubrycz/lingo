@@ -13,11 +13,13 @@ const putTimeSpent = async (req: RequestLogin, res: Response) => {
 
   console.log(`timeSpent received: ${timeSpent} on lesson: ${params.lessonId}`);
 
-  const result = await updateLessonTimeSpent(
-    req._id,
-    Number(params.lessonId),
-    Number(timeSpent)
-  );
+  if (req._id) {
+    const result = await updateLessonTimeSpent(
+      req._id,
+      Number(params.lessonId),
+      Number(timeSpent)
+    );
+  }
 
   return res.status(200).send(`Time spent: ${timeSpent}`);
 };

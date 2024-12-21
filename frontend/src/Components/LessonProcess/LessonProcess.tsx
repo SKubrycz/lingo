@@ -13,7 +13,6 @@ import Footer from "../Reusables/Footer/Footer";
 import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
-import { setTimeSpent } from "../../state/timeSpentSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
@@ -26,9 +25,6 @@ function LessonProcess({
   lessonId,
   children,
 }: LessonsProcessProps) {
-  const timeSpentData = useSelector(
-    (state: RootState) => state.timeSpentReducer
-  );
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
     "/profile",
@@ -48,6 +44,8 @@ function LessonProcess({
     (state: RootState) => state.alertSnackbarReducer
   );
 
+  const timeStart = useRef<DOMHighResTimeStamp>(performance.now());
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -60,12 +58,13 @@ function LessonProcess({
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
       console.log("running unloadData...", document.URL);
+      console.log(document.visibilityState);
       try {
         const response = await axios.put(
           `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
             lessonIdRef.current
           }`,
-          { timeSpent: performance.now() - timeSpentData.timeStart },
+          { timeSpent: performance.now() - timeStart.current },
           {
             withCredentials: true,
             headers: {
@@ -82,8 +81,7 @@ function LessonProcess({
       document.visibilityState === "visible" &&
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
-      //timeStart.current = performance.now();
-      dispatch(setTimeSpent({ timeStart: performance.now() }));
+      timeStart.current = performance.now();
     }
   };
 
@@ -93,7 +91,7 @@ function LessonProcess({
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
           lessonIdRef.current
         }`,
-        { timeSpent: performance.now() - timeSpentData.timeStart },
+        { timeSpent: performance.now() - timeStart.current },
         {
           withCredentials: true,
           headers: {
@@ -101,8 +99,6 @@ function LessonProcess({
           },
         }
       );
-
-      dispatch(setTimeSpent({ timeStart: performance.now() }));
 
       console.log(`From /timespent: ${response.data}`);
 
@@ -113,16 +109,16 @@ function LessonProcess({
   };
 
   useEffect(() => {
-    dispatch(setTimeSpent({ timeStart: performance.now() }));
-
     if (lessonId) lessonIdRef.current = lessonId;
 
-    document.addEventListener("visibilitychange", (e) => handleUnloadData(e));
+    const handleVisibilityChange = (e: Event) => {
+      handleUnloadData(e);
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      document.removeEventListener("visibilitychange", (e) =>
-        handleUnloadData(e)
-      );
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 

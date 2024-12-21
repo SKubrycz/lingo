@@ -13,7 +13,6 @@ import LessonProcess from "../../LessonProcess";
 import InputEx from "../../Stepper/Variants/InputEx";
 import type { InputExerciseData } from "../exerciseTypes";
 import { RootState } from "../../../../state/store";
-import { setTimeSpent } from "../../../../state/timeSpentSlice";
 
 interface Correct {
   correct: boolean;
@@ -22,12 +21,14 @@ interface Correct {
 interface L1FillWordProps {
   lessonId: number;
   exerciseId: number;
+  endSession: () => void;
   isLastExercise?: boolean;
 }
 
 export default function L1FillWord({
   lessonId,
   exerciseId,
+  endSession,
   isLastExercise = false,
 }: L1FillWordProps) {
   const timeSpentData = useSelector(
@@ -51,7 +52,7 @@ export default function L1FillWord({
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const alertSnackbarDataDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleAuth = async () => {
     await axios
@@ -69,7 +70,7 @@ export default function L1FillWord({
       })
       .catch((error) => {
         console.log(error);
-        alertSnackbarDataDispatch(
+        dispatch(
           setAlert({
             severity: "info",
             variant: "standard",
@@ -94,7 +95,7 @@ export default function L1FillWord({
       console.log(response.data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        alertSnackbarDataDispatch(
+        dispatch(
           setAlert({
             severity: "error",
             variant: "filled",
@@ -106,22 +107,7 @@ export default function L1FillWord({
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/timespent/${lessonId}`,
-        { timeSpent: performance.now() - timeSpentData.timeStart },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setTimeSpent({ timeStart: performance.now() });
-
-      console.log(`From /timespent: ${response.data}`);
+      endSession();
 
       navigate("/lessons");
     } catch (err) {

@@ -94,15 +94,19 @@ interface LessonStats {
 interface FindUsersLessons {
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
-  accuracy: number;
+  accuracy: Accuracy[];
   finished: boolean;
+}
+
+interface Accuracy {
+  [key: number]: boolean;
 }
 
 export interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
   timeSpent: DOMHighResTimeStamp;
-  accuracy: number;
+  accuracy: Accuracy[];
   timesCompleted: number;
   finished: boolean;
 }
@@ -175,7 +179,7 @@ export const insertOneUser = async ({
         userId: usersResult.insertedId,
         lessonId: el.lessonId,
         timeSpent: 0,
-        accuracy: 0.0,
+        accuracy: [],
         timesCompleted: 0,
         finished: false,
       });
@@ -580,6 +584,65 @@ export const updateLessonOnFinish = async (
     if (!findResult) return null;
 
     return "Zapisano";
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const updateLessonAccuracy = async (
+  id: ObjectId | undefined,
+  lessonId: number,
+  exerciseId: number,
+  correct: boolean
+): Promise<string | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+
+    const findResult = await usersLessonsCollection.findOne({
+      userId: new ObjectId(id),
+      lessonId: lessonId,
+    });
+
+    if (!findResult) return null;
+
+    console.log("findResult:");
+    console.log(findResult);
+
+    if (findResult.accuracy.length !== findResult.timesCompleted + 1) {
+      const pushAccuracy = await usersLessonsCollection.updateOne(
+        { _id: new ObjectId(id), lessonId: lessonId },
+        {
+          $push: {
+            accuracy: { [exerciseId]: correct },
+          },
+        }
+      );
+
+      console.log("pushAcc: ", pushAccuracy);
+
+      if (!pushAccuracy) return null;
+    } else if (findResult.accuracy.length === findResult.timesCompleted + 1) {
+      const addAccuracy = await usersLessonsCollection.updateOne(
+        { _id: new ObjectId(id), lessonId: lessonId },
+        {
+          $set: {
+            [`accuracy.${findResult.timesCompleted}.${exerciseId}`]: correct,
+          },
+        }
+      );
+
+      console.log("addAcc: ", addAccuracy);
+
+      if (!addAccuracy) return null;
+    }
+
+    return "Dokładność zaktualizowana";
   } catch (error) {
     console.error(error);
     return null;

@@ -16,6 +16,7 @@ import PageTitle from "../Reusables/PageTitle/PageTitle";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 
 import "./Lessons.scss";
+import { setTimeSpent } from "../../state/timeSpentSlice";
 
 interface LessonData {
   lessonId: number;
