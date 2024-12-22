@@ -13,7 +13,7 @@ import Footer from "../Reusables/Footer/Footer";
 import "./Profile.scss";
 
 export interface Stats {
-  timeSpent: DOMHighResTimeStamp;
+  totalTimeSpent: DOMHighResTimeStamp;
   lessonsFinished: number;
   accuracy: number;
   wordsLearned: number;

@@ -29,6 +29,28 @@ interface Stat {
   data: StatData;
 }
 
+const formatTimeSpent = (timeSpent: number | undefined): string => {
+  if (timeSpent) {
+    const seconds = 1000;
+    const minutes = 60 * 1000;
+    const hours = 60 * 60 * 1000;
+
+    let timeStr = "";
+
+    if (timeSpent < minutes) {
+      timeStr = `${Math.floor(timeSpent / seconds)}s`;
+    } else if (timeSpent >= minutes && timeSpent < hours) {
+      timeStr = `${Math.floor(timeSpent / minutes)} min.`;
+    } else if (timeSpent >= hours) {
+      timeStr = `${Math.floor(timeSpent / hours)} godz.`;
+    }
+
+    return timeStr;
+  }
+
+  return "0";
+};
+
 interface MainProfileStatsProps {
   stats: Stats | undefined;
 }
@@ -63,7 +85,7 @@ export default function MainProfileStats({ stats }: MainProfileStatsProps) {
       type: "time_spent",
       name: "Czas spędzony na nauce",
       desc: "",
-      data: `${timeSpentLearning} godz.`,
+      data: formatTimeSpent(stats?.totalTimeSpent),
     },
     {
       id: 2,

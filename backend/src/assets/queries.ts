@@ -560,6 +560,48 @@ export const updateLessonTimeSpent = async (
   }
 };
 
+export const getTimeSpent = async (
+  id: ObjectId | undefined
+): Promise<number | null | undefined> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+    const aggregation = [
+      {
+        $match: {
+          userId: new ObjectId(id),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalTimeSpent: {
+            $sum: "$timeSpent",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalTimeSpent: 1,
+        },
+      },
+    ];
+
+    const timeSpentResult = await usersLessonsCollection
+      .aggregate(aggregation)
+      .toArray();
+    if (!timeSpentResult) return null;
+    return timeSpentResult[0].totalTimeSpent;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    closeDbConnection();
+  }
+};
+
 export const updateLessonOnFinish = async (
   id: ObjectId | undefined,
   lessonId: number
@@ -717,6 +759,7 @@ export const getAccuracy = async (
     const accuracy = await usersLessonsCollection
       .aggregate(aggregation)
       .toArray();
+    if (!accuracy) return null;
 
     return accuracy[0].averagePercentage;
   } catch (error) {
