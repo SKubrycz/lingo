@@ -21,6 +21,7 @@ interface Correct {
 interface L1FillWordProps {
   lessonId: number;
   exerciseId: number;
+  endSession: () => void;
   isLastExercise?: boolean;
 }
 
@@ -46,6 +47,7 @@ export default function L1FillWord({
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLInputElement | null>(null);
+  const timeStart = useRef<DOMHighResTimeStamp>(timeSpentData.timeStart);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -105,6 +107,21 @@ export default function L1FillWord({
     }
 
     try {
+      const response = await axios.put(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/timespent/${lessonId}`,
+        { timeSpent: performance.now() - timeStart.current },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(`From /timespent: ${response.data}`);
+
       navigate("/lessons");
     } catch (err) {
       console.error(err);

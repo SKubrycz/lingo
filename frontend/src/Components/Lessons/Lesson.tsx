@@ -4,8 +4,6 @@ import "./Lessons.scss";
 
 import { Button, Box, Container, Typography } from "@mui/material";
 import { Done } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { setTimeStop } from "../../state/timeSpentSlice";
 
 interface LessonData {
   lessonId: number;
@@ -20,8 +18,6 @@ interface LessonProps {
 }
 
 function Lesson({ lessonData, finished }: LessonProps) {
-  const dispatch = useDispatch();
-
   return (
     <>
       <Container
@@ -43,9 +39,6 @@ function Lesson({ lessonData, finished }: LessonProps) {
             to={`/lesson/${lessonData.lessonId}/1`}
             component={RouterLink}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
-            onClick={() =>
-              dispatch(setTimeStop({ timeStop: performance.now() }))
-            }
           >
             Powtórz lekcję
           </Button>
@@ -53,9 +46,6 @@ function Lesson({ lessonData, finished }: LessonProps) {
           <Button
             to={`/lesson/${lessonData.lessonId}/1`}
             component={RouterLink}
-            onClick={() =>
-              dispatch(setTimeStop({ timeStop: performance.now() }))
-            }
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Rozpocznij

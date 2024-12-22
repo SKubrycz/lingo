@@ -13,6 +13,7 @@ import Footer from "../Reusables/Footer/Footer";
 import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
+import { setTimeStart, TimeSpent } from "../../state/timeSpentSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
@@ -40,11 +41,14 @@ function LessonProcess({
   const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
   const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
 
+  const timeSpentData: TimeSpent = useSelector(
+    (state: RootState) => state.timeSpentReducer
+  );
   const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
 
-  const timeStart = useRef<DOMHighResTimeStamp>(performance.now());
+  const timeStart = useRef<DOMHighResTimeStamp>(timeSpentData.timeStart);
 
   const dispatch = useDispatch();
 
@@ -81,6 +85,7 @@ function LessonProcess({
       document.visibilityState === "visible" &&
       document.URL.startsWith(`http://localhost:3001/lesson/`)
     ) {
+      dispatch(setTimeStart({ timeStart: performance.now() }));
       timeStart.current = performance.now();
     }
   };
@@ -109,6 +114,8 @@ function LessonProcess({
   };
 
   useEffect(() => {
+    dispatch(setTimeStart({ timeStart: performance.now() }));
+
     if (lessonId) lessonIdRef.current = lessonId;
 
     const handleVisibilityChange = (e: Event) => {

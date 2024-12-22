@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface TimeSpent {
+export interface TimeSpent {
   timeStart: DOMHighResTimeStamp;
   timeStop: DOMHighResTimeStamp;
 }

@@ -82,7 +82,9 @@ function Stepper({
               <Button
                 variant="contained"
                 color="warning"
-                onClick={() => endSession()}
+                onClick={() => {
+                  endSession();
+                }}
               >
                 Zakończ
               </Button>
