@@ -1,21 +1,47 @@
 import { LineChart } from "@mui/x-charts";
 
 import { defaultTheme } from "../../defaultTheme";
+import { Stats } from "./Profile";
 
-export default function MainProfileChart() {
+interface MainProfileChartProps {
+  stats: Stats;
+}
+
+export default function MainProfileChart({ stats }: MainProfileChartProps) {
+  const today = new Date(Date.now());
+  let tempDate = new Date();
+
   const dataset = [
-    { date: new Date(2024, 7, 1), count: 1 },
-    { date: new Date(2024, 7, 2), count: 2 },
-    { date: new Date(2024, 7, 3), count: 4 },
-    { date: new Date(2024, 7, 4), count: 5 },
-    { date: new Date(2024, 7, 5), count: 2 },
-    { date: new Date(2024, 7, 6), count: 8 },
-    { date: new Date(2024, 7, 7), count: 7 },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 6)),
+      count: stats?.timestamps[6] ?? 0,
+    },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 5)),
+      count: stats?.timestamps[5] ?? 0,
+    },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 4)),
+      count: stats?.timestamps[4] ?? 0,
+    },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 3)),
+      count: stats?.timestamps[3] ?? 0,
+    },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 2)),
+      count: stats?.timestamps[2] ?? 0,
+    },
+    {
+      date: new Date(tempDate.setDate(today.getDate() - 1)),
+      count: stats?.timestamps[1] ?? 0,
+    },
+    { date: today, count: stats?.timestamps[0] ?? 0 },
   ];
 
   const valueFormatter = (date: Date) => {
     return date.toLocaleDateString(undefined, {
-      month: "2-digit",
+      month: "short",
       day: "2-digit",
     });
   };
@@ -26,11 +52,12 @@ export default function MainProfileChart() {
       xAxis={[
         {
           dataKey: "date",
+          label: "Data",
           scaleType: "point",
           valueFormatter,
         },
       ]}
-      yAxis={[{ label: "Ilość ukończonych lekcji" }]}
+      yAxis={[{ label: "Ilość ukończonych lekcji", min: 0 }]}
       series={[
         {
           dataKey: "count",

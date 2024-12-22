@@ -102,6 +102,12 @@ interface Accuracy {
   [key: number]: boolean[];
 }
 
+interface UsersLessonsTimestamps {
+  userId: ObjectId;
+  lessonId: number;
+  completedAt: Date;
+}
+
 export interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
@@ -765,6 +771,92 @@ export const getAccuracy = async (
   } catch (error) {
     console.error(error);
     return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const insertLessonTimeStamp = async (
+  id: ObjectId | undefined,
+  lessonId: number
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsTimestampsCollection =
+      db.collection<UsersLessonsTimestamps>("users-lessons-timestamps");
+    const usersLessonsTimestampsResult =
+      await usersLessonsTimestampsCollection.insertOne({
+        userId: new ObjectId(id),
+        lessonId: lessonId,
+        completedAt: new Date(Date.now()),
+      });
+
+    if (!usersLessonsTimestampsResult) return null;
+
+    return usersLessonsTimestampsResult;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const getLessonsTimeStamps = async (
+  id: ObjectId | undefined,
+  dateRange: Date[]
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  const dayDiff = dateRange[1].getDay() - dateRange[0].getDay();
+
+  try {
+    const usersLessonsTimestampsCollection = db.collection(
+      "users-lessons-timestamps"
+    );
+    const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection
+      .aggregate([
+        {
+          $match: {
+            userId: new ObjectId(id),
+            completedAt: { $gte: dateRange[0], $lt: dateRange[1] },
+          },
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: { format: "%Y-%m-%d", date: "$completedAt" },
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: {
+            _id: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    if (!usersLessonsTimestampsResult) return null;
+
+    let timestampsArr: number[] = [];
+    timestampsArr.fill(0, 0, dayDiff);
+    usersLessonsTimestampsResult.forEach((el, i) => {
+      const elDate: Date = new Date(el._id);
+      const elDateTime = elDate.getTime();
+      const endTime = dateRange[1].getTime();
+      const diff = Math.floor((endTime - elDateTime) / (1000 * 60 * 60 * 24));
+      console.log(diff);
+      timestampsArr[diff] = el.count;
+    });
+
+    return timestampsArr;
+  } catch (error) {
+    console.error(error);
   } finally {
     closeDbConnection();
   }

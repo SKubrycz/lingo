@@ -7,6 +7,7 @@ import {
   findLessonById,
   saveLessonProgressById,
   updateLessonOnFinish,
+  insertLessonTimeStamp,
 } from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
@@ -49,6 +50,14 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     );
 
     if (!usersLessonsSave)
+      return res.status(500).send("Nie udało się zapisać postępu lekcji");
+
+    const usersLessonsTimestampsSave = await insertLessonTimeStamp(
+      req._id,
+      Number(lessonId)
+    );
+
+    if (!usersLessonsTimestampsSave)
       return res.status(500).send("Nie udało się zapisać postępu lekcji");
   }
 

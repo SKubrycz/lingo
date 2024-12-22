@@ -12,14 +12,16 @@ let db: Db;
 
 interface CollectionsObj {
   lessons: boolean;
-  usersLessons: boolean;
   users: boolean;
+  usersLessons: boolean;
+  usersLessonsTimestamps: boolean;
 }
 
 const collectionsObj: CollectionsObj = {
   lessons: false,
-  usersLessons: false,
   users: false,
+  usersLessons: false,
+  usersLessonsTimestamps: false,
 };
 
 const insertToLessons = (db: Db) => {
@@ -47,11 +49,14 @@ export const connectToDb = async (): Promise<void> => {
       db.createCollection("lessons");
       insertToLessons(db);
     }
+    if (!collectionsObj.users) {
+      db.createCollection("users");
+    }
     if (!collectionsObj.usersLessons) {
       db.createCollection("users-lessons");
     }
-    if (!collectionsObj.users) {
-      db.createCollection("users");
+    if (!collectionsObj.usersLessonsTimestamps) {
+      db.createCollection("users-lessons-timestamps");
     }
   } catch (err) {
     console.log("mongodb err", err);

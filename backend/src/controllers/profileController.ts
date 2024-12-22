@@ -7,6 +7,7 @@ import {
   UsersLessons,
   getAccuracy,
   getTimeSpent,
+  getLessonsTimeStamps,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -19,6 +20,7 @@ interface FindUser {
 interface Stats {
   totalTimeSpent: number;
   accuracy: number;
+  timestamps: number[];
 }
 
 interface SentUser {
@@ -68,6 +70,18 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });
 
+      let startDate = new Date(Date.now());
+      let endDate = new Date(Date.now());
+      startDate.setDate(endDate.getDate() - 7);
+      const getTimestamps = await getLessonsTimeStamps(req._id, [
+        startDate,
+        endDate,
+      ]);
+      if (!getTimestamps)
+        return res
+          .status(500)
+          .send({ message: "Coś poszło nie tak po naszej stronie" });
+
       let sessionUser = false;
       if (req.login === result.login) sessionUser = true;
 
@@ -80,6 +94,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         stats: {
           totalTimeSpent: timeSpentResult,
           accuracy: accuracyResult,
+          timestamps: getTimestamps,
         },
         words: words,
       };

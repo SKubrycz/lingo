@@ -119,7 +119,7 @@ function MainProfile({ user }: { user: User | null }) {
               </>
             )}
           </Box>
-          <MainProfileChart></MainProfileChart>
+          <MainProfileChart stats={user?.stats}></MainProfileChart>
         </Box>
         <Box sx={{ width: "66%", display: "flex", flexDirection: "column" }}>
           <MainProfileStats stats={user?.stats}></MainProfileStats>

@@ -17,6 +17,7 @@ export interface Stats {
   lessonsFinished: number;
   accuracy: number;
   wordsLearned: number;
+  timestamps: number[];
 }
 
 export interface User {
