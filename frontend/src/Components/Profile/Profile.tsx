@@ -12,10 +12,18 @@ import Footer from "../Reusables/Footer/Footer";
 
 import "./Profile.scss";
 
+export interface Stats {
+  timeSpent: DOMHighResTimeStamp;
+  lessonsFinished: number;
+  accuracy: number;
+  wordsLearned: number;
+}
+
 export interface User {
   login: string;
   createdDate: string;
   sessionUser: boolean;
+  stats: Stats;
   words: string[];
 }
 

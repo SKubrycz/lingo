@@ -30,6 +30,7 @@ export default function MainProfileChart() {
           valueFormatter,
         },
       ]}
+      yAxis={[{ label: "Ilość ukończonych lekcji" }]}
       series={[
         {
           dataKey: "count",

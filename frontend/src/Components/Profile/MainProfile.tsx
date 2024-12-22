@@ -122,7 +122,7 @@ function MainProfile({ user }: { user: User | null }) {
           <MainProfileChart></MainProfileChart>
         </Box>
         <Box sx={{ width: "66%", display: "flex", flexDirection: "column" }}>
-          <MainProfileStats></MainProfileStats>
+          <MainProfileStats stats={user?.stats}></MainProfileStats>
           {user?.sessionUser && (
             <MainProfileLearnedWords user={user}></MainProfileLearnedWords>
           )}

@@ -17,6 +17,8 @@ import {
   QuestionMark,
 } from "@mui/icons-material";
 
+import type { Stats } from "../Profile/Profile";
+
 type StatData = number | string;
 
 interface Stat {
@@ -27,7 +29,11 @@ interface Stat {
   data: StatData;
 }
 
-export default function MainProfileStats() {
+interface MainProfileStatsProps {
+  stats: Stats | undefined;
+}
+
+export default function MainProfileStats({ stats }: MainProfileStatsProps) {
   // IDEA: For stats add a tooltip with more information
 
   const myTime = useRef<number>(
@@ -71,7 +77,7 @@ export default function MainProfileStats() {
       type: "accuracy",
       name: "Dokładność w lekcjach",
       desc: "Procent poprawnych odpowiedzi (ze wszystkich lekcji)",
-      data: `${99.5}%`,
+      data: `${String(stats?.accuracy).slice(0, 5)}%`,
     },
     {
       id: 4,

@@ -1,5 +1,5 @@
 import { Db, UpdateResult, DeleteResult } from "mongodb";
-import { ObjectId } from "bson";
+import { Document, ObjectId } from "bson";
 import { connectToDb, getDb, closeDbConnection } from "../assets/db";
 
 interface User {
@@ -657,6 +657,68 @@ export const updateLessonAccuracy = async (
     if (!addAccuracy) return null;
 
     return "Dokładność zaktualizowana";
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const getAccuracy = async (
+  id: ObjectId | undefined
+): Promise<number | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+    const aggregation = [
+      {
+        $match: { userId: new ObjectId(id) },
+      },
+      {
+        $project: {
+          accuracy: { $objectToArray: "$accuracy" },
+        },
+      },
+      {
+        $unwind: "$accuracy",
+      },
+      {
+        $unwind: "$accuracy.v",
+      },
+      {
+        $group: {
+          _id: null,
+          trueCount: {
+            $sum: { $cond: [{ $eq: ["$accuracy.v", true] }, 1, 0] },
+          },
+          totalCount: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $project: {
+          averagePercentage: {
+            $multiply: [{ $divide: ["$trueCount", "$totalCount"] }, 100],
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          averagePercentage: 1,
+        },
+      },
+    ];
+
+    const accuracy = await usersLessonsCollection
+      .aggregate(aggregation)
+      .toArray();
+
+    return accuracy[0].averagePercentage;
   } catch (error) {
     console.error(error);
     return null;

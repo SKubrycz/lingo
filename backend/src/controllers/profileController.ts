@@ -5,6 +5,7 @@ import {
   findLastFinishedUserLesson,
   findOneUserByLogin,
   UsersLessons,
+  getAccuracy,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -14,10 +15,15 @@ interface FindUser {
   createdDate: Date;
 } // !not equal to the one in queries.ts
 
+interface Stats {
+  accuracy: number;
+}
+
 interface SentUser {
   login: string;
   createdDate: string; // parsed
   sessionUser: boolean;
+  stats: Stats;
   words: UsersLessons[] | string[];
 }
 
@@ -49,6 +55,12 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
     if (result && words) {
       console.log(result.login);
 
+      const accuracyResult = await getAccuracy(req._id);
+      if (!accuracyResult)
+        return res
+          .status(500)
+          .send({ message: "Coś poszło nie tak po naszej stronie" });
+
       let sessionUser = false;
       if (req.login === result.login) sessionUser = true;
 
@@ -58,6 +70,9 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         login: result.login,
         createdDate: parseDate,
         sessionUser: sessionUser,
+        stats: {
+          accuracy: accuracyResult,
+        },
         words: words,
       };
 
