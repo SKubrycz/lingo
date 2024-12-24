@@ -600,6 +600,7 @@ export const getTimeSpent = async (
       .aggregate(aggregation)
       .toArray();
     if (!timeSpentResult) return null;
+    console.log(timeSpentResult[0].totalTimeSpent)
     return timeSpentResult[0].totalTimeSpent;
   } catch (error) {
     console.error(error);
@@ -723,7 +724,10 @@ export const getAccuracy = async (
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
     const aggregation = [
       {
-        $match: { userId: new ObjectId(id) },
+        $match: { userId: new ObjectId(id), $expr: {
+          $gt: [{ $size: { $objectToArray: "$accuracy" } }, 0]
+        }
+         },
       },
       {
         $project: {
@@ -767,7 +771,12 @@ export const getAccuracy = async (
       .toArray();
     if (!accuracy) return null;
 
-    return accuracy[0].averagePercentage;
+    const acc = accuracy[0];
+    if (!acc) return -1;
+    else {
+      if ("averagePercentage" in acc) return acc.averagePercentage;
+      else return -1;
+    }
   } catch (error) {
     console.error(error);
     return null;

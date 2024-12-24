@@ -99,7 +99,7 @@ export default function MainProfileStats({ stats }: MainProfileStatsProps) {
       type: "accuracy",
       name: "Dokładność w lekcjach",
       desc: "Procent poprawnych odpowiedzi (ze wszystkich lekcji)",
-      data: `${String(stats?.accuracy).slice(0, 5)}%`,
+      data: (stats?.accuracy && stats?.accuracy > 0) ? `${String(stats?.accuracy).slice(0, 5)}%` : "-",
     },
     {
       id: 4,

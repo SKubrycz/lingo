@@ -60,7 +60,8 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
       console.log(result.login);
 
       const timeSpentResult = await getTimeSpent(req._id);
-      if (!timeSpentResult)
+      console.log(`timeSpentResult: ${timeSpentResult}`)
+      if (!timeSpentResult && timeSpentResult != 0)
         return res
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });

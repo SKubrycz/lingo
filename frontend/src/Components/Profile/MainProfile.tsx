@@ -1,6 +1,6 @@
 import { Avatar, Box, Container, Typography, Tooltip } from "@mui/material";
 
-import { Edit, Settings } from "@mui/icons-material";
+import { Settings } from "@mui/icons-material";
 
 import MainProfileChart from "./MainProfileChart";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
@@ -12,18 +12,7 @@ import MainProfileLearnedWords from "./MainProfileLearnedWords";
 import { User } from "./Profile";
 
 function MainProfile({ user }: { user: User | null }) {
-  const [avatarHover, setAvatarHover] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
-
-  const handleAvatarHover = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (e.type === "mouseenter") {
-      setAvatarHover(true);
-    } else if (e.type === "mouseleave") {
-      setAvatarHover(false);
-    }
-  };
 
   const handleOpenSettings = () => {
     setOpenSettings(true);
@@ -38,36 +27,15 @@ function MainProfile({ user }: { user: User | null }) {
       <Container className="main-profile">
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           <Box sx={{ padding: "2em", display: "flex" }}>
-            {user?.sessionUser ? (
-              <Tooltip
-                title="Kliknij aby zmienić zdjęcie profilowe"
-                arrow={true}
-              >
-                <Avatar
-                  onMouseEnter={handleAvatarHover}
-                  onMouseLeave={handleAvatarHover}
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    bgcolor: "primary.dark",
-                    cursor: "pointer",
-                  }}
-                >
-                  {avatarHover ? <Edit></Edit> : user?.login.charAt(0)}
-                </Avatar>
-              </Tooltip>
-            ) : (
-              <Avatar
+          <Avatar
                 sx={{
                   width: 50,
                   height: 50,
                   bgcolor: "primary.dark",
-                  cursor: "pointer",
                 }}
               >
                 {user?.login.charAt(0)}
               </Avatar>
-            )}
 
             <Box
               component="div"

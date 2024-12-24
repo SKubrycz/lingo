@@ -14,29 +14,29 @@ export default function MainProfileChart({ stats }: MainProfileChartProps) {
   const dataset = [
     {
       date: new Date(tempDate.setDate(today.getDate() - 6)),
-      count: stats?.timestamps[6] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[6] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 5)),
-      count: stats?.timestamps[5] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[5] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 4)),
-      count: stats?.timestamps[4] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[4] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 3)),
-      count: stats?.timestamps[3] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[3] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 2)),
-      count: stats?.timestamps[2] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[2] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 1)),
-      count: stats?.timestamps[1] ?? 0,
+      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[1] : 0,
     },
-    { date: today, count: stats?.timestamps[0] ?? 0 },
+    { date: today, count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[0] : 0 },
   ];
 
   const valueFormatter = (date: Date) => {
