@@ -2,6 +2,7 @@ import { LineChart } from "@mui/x-charts";
 
 import { defaultTheme } from "../../defaultTheme";
 import { Stats } from "./Profile";
+import { useEffect } from "react";
 
 interface MainProfileChartProps {
   stats: Stats;
@@ -9,34 +10,35 @@ interface MainProfileChartProps {
 
 export default function MainProfileChart({ stats }: MainProfileChartProps) {
   const today = new Date(Date.now());
+  today.setHours(0, 0, 0, 0);
   let tempDate = new Date();
 
   const dataset = [
     {
       date: new Date(tempDate.setDate(today.getDate() - 6)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[6] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[6] === "number") ? stats?.timestamps[6] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 5)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[5] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[5] === "number") ? stats?.timestamps[5] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 4)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[4] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[4] === "number") ? stats?.timestamps[4] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 3)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[3] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[3] === "number") ? stats?.timestamps[3] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 2)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[2] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[2] === "number") ? stats?.timestamps[2] : 0,
     },
     {
       date: new Date(tempDate.setDate(today.getDate() - 1)),
-      count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[1] : 0,
+      count: (stats?.timestamps && typeof stats?.timestamps[1] === "number") ? stats?.timestamps[1] : 0,
     },
-    { date: today, count: (stats?.timestamps && typeof stats?.timestamps === "number") ? stats?.timestamps[0] : 0 },
+    { date: today, count: (stats?.timestamps && typeof stats?.timestamps[0] === "number") ? stats?.timestamps[0] : 0 },
   ];
 
   const valueFormatter = (date: Date) => {

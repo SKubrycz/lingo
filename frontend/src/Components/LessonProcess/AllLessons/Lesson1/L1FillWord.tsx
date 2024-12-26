@@ -147,6 +147,8 @@ export default function L1FillWord({
   ) => {
     e.preventDefault();
 
+    console.log('checkwords running')
+
     if (!correct && textRef.current) {
       // check word server-side
       const res: AxiosResponse<Correct> = await axios.post(
@@ -172,6 +174,7 @@ export default function L1FillWord({
     if (textRef.current) {
       textRef.current.value = "";
       setCorrect(null);
+      setDisableNext(true);
     }
   }, [lessonInfo?.exercise?.missingWords]);
 
