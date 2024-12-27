@@ -14,7 +14,7 @@ import "./Profile.scss";
 
 export interface Stats {
   totalTimeSpent: DOMHighResTimeStamp;
-  lessonsFinished: number;
+  finishedLessonsCount: number;
   accuracy: number;
   wordsLearned: number;
   timestamps: number[];

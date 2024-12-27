@@ -92,7 +92,7 @@ export default function MainProfileStats({ stats }: MainProfileStatsProps) {
       type: "lessons_finished",
       name: "Liczba ukończonych lekcji",
       desc: "",
-      data: 123,
+      data: (stats?.finishedLessonsCount) ? stats?.finishedLessonsCount : 0,
     },
     {
       id: 3,

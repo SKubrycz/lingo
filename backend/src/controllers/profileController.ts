@@ -8,6 +8,7 @@ import {
   getAccuracy,
   getTimeSpent,
   getLessonsTimeStamps,
+  getAllLessonsTimestamps,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -21,6 +22,7 @@ interface Stats {
   totalTimeSpent: number;
   accuracy: number;
   timestamps: number[];
+  finishedLessonsCount: number;
 }
 
 interface SentUser {
@@ -82,6 +84,11 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         return res
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });
+      const getTimestampCount = await getAllLessonsTimestamps(req._id);
+      if (!getTimestampCount)
+        return res
+          .status(500)
+          .send({ message: "Coś poszło nie tak po naszej stronie" });
 
       let sessionUser = false;
       if (req.login === result.login) sessionUser = true;
@@ -96,6 +103,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
           totalTimeSpent: timeSpentResult,
           accuracy: accuracyResult,
           timestamps: getTimestamps,
+          finishedLessonsCount: getTimestampCount,
         },
         words: words,
       };

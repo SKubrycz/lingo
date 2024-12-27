@@ -871,6 +871,47 @@ export const getLessonsTimeStamps = async (
   }
 };
 
+export const getAllLessonsTimestamps = async (id: ObjectId | undefined): Promise<number | null | undefined> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsTimestampsCollection = db.collection("users-lessons-timestamps");
+    const aggregation = [
+      {
+        $match: {
+          userId: new ObjectId(id)
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          lessonCount: {
+            $sum: 1,
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          lessonCount: 1,
+        }
+      }
+    ];
+    const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection.aggregate(aggregation).toArray();
+    if (!usersLessonsTimestampsResult) return null;
+    if (usersLessonsTimestampsResult.length > 0 && usersLessonsTimestampsResult[0].lessonCount) {
+      return usersLessonsTimestampsResult[0].lessonCount;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    closeDbConnection()
+  }
+}
+
 export const findLastFinishedUserLesson = async (
   id: ObjectId | undefined
 ): Promise<UsersLessons[] | string[] | null> => {
