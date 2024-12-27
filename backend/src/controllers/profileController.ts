@@ -9,6 +9,7 @@ import {
   getTimeSpent,
   getLessonsTimeStamps,
   getAllLessonsTimestamps,
+  getFinishedLessonsWords,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -23,6 +24,7 @@ interface Stats {
   accuracy: number;
   timestamps: number[];
   finishedLessonsCount: number;
+  wordsLearned: number;
 }
 
 interface SentUser {
@@ -89,6 +91,11 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         return res
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });
+      const getWordsLearned = await getFinishedLessonsWords(req._id);
+      if (!getWordsLearned)
+        return res
+          .status(500)
+          .send({ message: "Coś poszło nie tak po naszej stronie" });
 
       let sessionUser = false;
       if (req.login === result.login) sessionUser = true;
@@ -104,6 +111,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
           accuracy: accuracyResult,
           timestamps: getTimestamps,
           finishedLessonsCount: getTimestampCount,
+          wordsLearned: getWordsLearned,
         },
         words: words,
       };

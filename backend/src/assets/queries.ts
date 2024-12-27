@@ -912,6 +912,63 @@ export const getAllLessonsTimestamps = async (id: ObjectId | undefined): Promise
   }
 }
 
+export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const userLessonsCollection = await db.collection("users-lessons");
+    const lessonsCollection = await db.collection("lessons");
+    const aggregation = [
+      {
+        $match: {
+          userId: new ObjectId(id),
+          finished: true,
+        }
+      },
+      {
+        $lookup: {
+          from: "lessons",
+          localField: "lessonId",
+          foreignField: "lessonId",
+          as: "lessonDetails",
+        }
+      },
+      {
+        $unwind: {
+          path: "$lessonDetails",
+          preserveNullAndEmptyArrays: true,
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalNewWords: {
+            $sum: {
+              $size: "$lessonDetails.new_words",
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalNewWords: 1,
+        }
+      }
+    ];
+    const usersLessonsResult = await userLessonsCollection.aggregate(aggregation).toArray();
+    if (!usersLessonsResult) return null;
+    if (usersLessonsResult.length > 0 && usersLessonsResult[0].totalNewWords) {
+      return usersLessonsResult[0].totalNewWords
+    } else return null;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    closeDbConnection();
+  }
+}
+
 export const findLastFinishedUserLesson = async (
   id: ObjectId | undefined
 ): Promise<UsersLessons[] | string[] | null> => {
