@@ -3,14 +3,18 @@ import { ObjectId } from "mongodb";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { findOneUserByLogin } from "../assets/queries";
 
+type Role = "user" | "admin";
+
 interface TokenData extends JwtPayload {
   _id: ObjectId;
   login: string;
+  role: Role;
 }
 
 export interface RequestLogin extends Request {
   _id?: ObjectId;
   login?: string;
+  role?: Role;
 }
 
 const accessTokenExpiry: number = 1000 * 60 * 60;
@@ -38,7 +42,11 @@ export const checkAuth = async (
     );
 
     accessToken = jwt.sign(
-      { _id: refreshTokenVerify._id, login: refreshTokenVerify.login },
+      {
+        _id: refreshTokenVerify._id,
+        login: refreshTokenVerify.login,
+        role: refreshTokenVerify.role,
+      },
       process.env.ACCESS_TOKEN_SECRET
     );
     res.cookie("access_token_lingo", accessToken, {
@@ -60,6 +68,7 @@ export const checkAuth = async (
     }
     req._id = userVerify._id;
     req.login = userVerify.login;
+    req.role = userVerify.role;
     console.log(req.login);
     next();
   } catch (error) {
@@ -86,7 +95,11 @@ export const isAuthenticated = async (
       );
 
       accessToken = jwt.sign(
-        { _id: refreshTokenVerify._id, login: refreshTokenVerify.login },
+        {
+          _id: refreshTokenVerify._id,
+          login: refreshTokenVerify.login,
+          role: refreshTokenVerify.role,
+        },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: accessTokenExpiry }
       );
@@ -106,6 +119,7 @@ export const isAuthenticated = async (
       }
       req._id = userVerify._id;
       req.login = userVerify.login;
+      req.role = userVerify.role;
     } else if (accessToken) {
       const userVerify = <TokenData>(
         jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
@@ -118,10 +132,32 @@ export const isAuthenticated = async (
       }
       req._id = userVerify._id;
       req.login = userVerify.login;
+      req.role = userVerify.role;
     }
     next();
   } else {
     res.clearCookie("access_token_lingo");
+    next();
+  }
+};
+
+export const isAdmin = async (
+  req: RequestLogin,
+  res: Response,
+  next: NextFunction
+) => {
+  const role = req.role;
+  if (!role) {
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+  }
+  if (role !== "admin") {
+    return res
+      .status(403)
+      .send({ message: "Brak uprawnień do wyświetlenia zawartości" });
+  }
+  if (role === "admin") {
     next();
   }
 };

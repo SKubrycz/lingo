@@ -24,6 +24,7 @@ import aboutRoute from "./routes/about";
 import timeSpentRoute from "./routes/timeSpent";
 import verifyRoute from "./routes/verify";
 import deleteAccountRoute from "./routes/deleteAccount";
+import adminRoute from "./routes/admin";
 
 const app: Express = express();
 
@@ -41,27 +42,8 @@ const routesArray: Router[] = [
   timeSpentRoute,
   verifyRoute,
   deleteAccountRoute,
+  adminRoute,
 ];
-
-// let transporter = nodemailer.createTransport({
-//   host: "localhost",
-//   port: 1025,
-// });
-
-// transporter.verify(function (error, success) {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log("Server is ready to take our messages");
-//   }
-// });
-
-// transporter.sendMail({
-//   from: "qwe@localhost",
-//   to: "asd@localhost",
-//   subject: "Hello Asd",
-//   html: "<b>Welcome</b>, <i>Asd</i>",
-// });
 
 app.use(helmet());
 

@@ -39,12 +39,12 @@ const postLogin = async (req: Request, res: Response) => {
     const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
 
     const accessToken: string = jwt.sign(
-      { _id: result._id, login: result.login },
+      { _id: result._id, login: result.login, role: result.role },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: accessTokenExpiry }
     );
     const refreshToken: string = jwt.sign(
-      { _id: result._id, login: result.login },
+      { _id: result._id, login: result.login, role: result.role },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: refreshTokenExpiry }
     );

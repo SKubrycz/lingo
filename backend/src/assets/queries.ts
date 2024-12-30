@@ -45,6 +45,7 @@ interface FindUser {
   uuid: string;
   verificationCode: string;
   verified: boolean;
+  role: "admin" | "user";
   deleteAccount: DeleteAccount;
   createdDate: Date;
 }
