@@ -1,8 +1,32 @@
 import { ObjectId } from "mongodb";
 
-// IDEA: type: string; for letting frontend know what exercise template to apply (?)
+interface CardExercise {
+  exerciseId: number;
+  type: string;
+  word: string;
+  translation: string;
+  description: string;
+}
 
-const l1exercises = [
+interface InputExercise {
+  exerciseId: number;
+  type: string;
+  question: string;
+  task: string;
+  missingWords: string;
+}
+
+interface LessonPanel {
+  _id: ObjectId;
+  lessonId: number;
+  title: string;
+  description: string;
+  exercises: (CardExercise | InputExercise)[];
+  newWords: string[];
+  exerciseCount: number;
+}
+
+const l1exercises: (CardExercise | InputExercise)[] = [
   {
     exerciseId: 1,
     type: "card",
@@ -63,23 +87,20 @@ const l1exercises = [
   },
 ];
 
-export const lesson1 = {
+export const lesson1: LessonPanel = {
   _id: new ObjectId("66af513c23082b6501dade65"),
   lessonId: 1,
   title: "Wprowadzenie",
   description: "Nauczysz się jak przywitać się w języku angielskim",
   exercises: l1exercises,
-  new_words: [
-    "Hi",
-    "Hello",
-    "Good morning",
-    "Good afternoon",
-    "Good evening",
-    "Goodbye",
-    "Bye",
-  ],
+  newWords: [],
   exerciseCount: l1exercises.length,
 };
+l1exercises.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson1.newWords.push(el.word);
+  }
+});
 
 const l2exercises = [];
 

@@ -83,7 +83,7 @@ interface LessonView {
   lessonId: number;
   title: string;
   description: string;
-  new_words: string[];
+  newWords: string[];
   exerciseCount: number;
 }
 
@@ -165,7 +165,7 @@ export const insertOneUser = async ({
             lessonId: 1,
             title: 1,
             description: 1,
-            new_words: 1,
+            newWords: 1,
             exerciseCount: 1,
           },
         }
@@ -177,7 +177,7 @@ export const insertOneUser = async ({
       lessonId: res.lessonId,
       title: res.title,
       description: res.description,
-      new_words: res.new_words,
+      newWords: res.newWords,
       exerciseCount: res.exerciseCount,
     }));
     lessonsResultArr.forEach((el, i) => {
@@ -313,7 +313,18 @@ export const deleteOneUserById = async (
     });
     if (!usersLessonsResult) return null;
 
-    const deletedResult = [userResult, usersLessonsResult];
+    const usersLessonsTimestampsCollection =
+      db.collection<UsersLessonsTimestamps>("users-lessons-timestamps");
+    const usersLessonsTimestampsResult =
+      await usersLessonsTimestampsCollection.deleteMany({
+        userId: new ObjectId(id),
+      });
+    if (!usersLessonsTimestampsResult) return null;
+    const deletedResult = [
+      userResult,
+      usersLessonsResult,
+      usersLessonsTimestampsResult,
+    ];
     return deletedResult;
   } catch (error) {
     console.error(error);
@@ -340,7 +351,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
             lessonId: 1,
             title: 1,
             description: 1,
-            new_words: 1,
+            newWords: 1,
             exerciseCount: 1,
           },
         }
@@ -352,7 +363,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
       lessonId: res.lessonId,
       title: res.title,
       description: res.description,
-      new_words: res.new_words,
+      newWords: res.newWords,
       exerciseCount: res.exerciseCount,
     }));
 
@@ -600,7 +611,7 @@ export const getTimeSpent = async (
       .aggregate(aggregation)
       .toArray();
     if (!timeSpentResult) return null;
-    console.log(timeSpentResult[0].totalTimeSpent)
+    console.log(timeSpentResult[0].totalTimeSpent);
     return timeSpentResult[0].totalTimeSpent;
   } catch (error) {
     console.error(error);
@@ -724,10 +735,12 @@ export const getAccuracy = async (
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
     const aggregation = [
       {
-        $match: { userId: new ObjectId(id), $expr: {
-          $gt: [{ $size: { $objectToArray: "$accuracy" } }, 0]
-        }
-         },
+        $match: {
+          userId: new ObjectId(id),
+          $expr: {
+            $gt: [{ $size: { $objectToArray: "$accuracy" } }, 0],
+          },
+        },
       },
       {
         $project: {
@@ -871,36 +884,45 @@ export const getLessonsTimeStamps = async (
   }
 };
 
-export const getAllLessonsTimestamps = async (id: ObjectId | undefined): Promise<number | null | undefined> => {
+export const getAllLessonsTimestamps = async (
+  id: ObjectId | undefined
+): Promise<number | null | undefined> => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
-    const usersLessonsTimestampsCollection = db.collection("users-lessons-timestamps");
+    const usersLessonsTimestampsCollection = db.collection(
+      "users-lessons-timestamps"
+    );
     const aggregation = [
       {
         $match: {
-          userId: new ObjectId(id)
-        }
+          userId: new ObjectId(id),
+        },
       },
       {
         $group: {
           _id: null,
           lessonCount: {
             $sum: 1,
-          }
-        }
+          },
+        },
       },
       {
         $project: {
           _id: 0,
           lessonCount: 1,
-        }
-      }
+        },
+      },
     ];
-    const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection.aggregate(aggregation).toArray();
+    const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection
+      .aggregate(aggregation)
+      .toArray();
     if (!usersLessonsTimestampsResult) return null;
-    if (usersLessonsTimestampsResult.length > 0 && usersLessonsTimestampsResult[0].lessonCount) {
+    if (
+      usersLessonsTimestampsResult.length > 0 &&
+      usersLessonsTimestampsResult[0].lessonCount
+    ) {
       return usersLessonsTimestampsResult[0].lessonCount;
     } else {
       return null;
@@ -908,9 +930,9 @@ export const getAllLessonsTimestamps = async (id: ObjectId | undefined): Promise
   } catch (error) {
     console.error(error);
   } finally {
-    closeDbConnection()
+    closeDbConnection();
   }
-}
+};
 
 export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
   await connectToDb();
@@ -924,7 +946,7 @@ export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
         $match: {
           userId: new ObjectId(id),
           finished: true,
-        }
+        },
       },
       {
         $lookup: {
@@ -932,42 +954,44 @@ export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
           localField: "lessonId",
           foreignField: "lessonId",
           as: "lessonDetails",
-        }
+        },
       },
       {
         $unwind: {
           path: "$lessonDetails",
           preserveNullAndEmptyArrays: true,
-        }
+        },
       },
       {
         $group: {
           _id: null,
           totalNewWords: {
             $sum: {
-              $size: "$lessonDetails.new_words",
-            }
-          }
-        }
+              $size: "$lessonDetails.newWords",
+            },
+          },
+        },
       },
       {
         $project: {
           _id: 0,
           totalNewWords: 1,
-        }
-      }
+        },
+      },
     ];
-    const usersLessonsResult = await userLessonsCollection.aggregate(aggregation).toArray();
+    const usersLessonsResult = await userLessonsCollection
+      .aggregate(aggregation)
+      .toArray();
     if (!usersLessonsResult) return null;
     if (usersLessonsResult.length > 0 && usersLessonsResult[0].totalNewWords) {
-      return usersLessonsResult[0].totalNewWords
+      return usersLessonsResult[0].totalNewWords;
     } else return null;
   } catch (error) {
     console.error(error);
   } finally {
     closeDbConnection();
   }
-}
+};
 
 export const findLastFinishedUserLesson = async (
   id: ObjectId | undefined
