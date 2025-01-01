@@ -64,7 +64,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
       console.log(result.login);
 
       const timeSpentResult = await getTimeSpent(req._id);
-      console.log(`timeSpentResult: ${timeSpentResult}`)
+      console.log(`timeSpentResult: ${timeSpentResult}`);
       if (!timeSpentResult && timeSpentResult != 0)
         return res
           .status(500)
@@ -87,12 +87,13 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });
       const getTimestampCount = await getAllLessonsTimestamps(req._id);
-      if (!getTimestampCount)
+      if (getTimestampCount != 0 && !getTimestampCount) {
         return res
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });
+      }
       const getWordsLearned = await getFinishedLessonsWords(req._id);
-      if (!getWordsLearned)
+      if (getWordsLearned !== 0 && !getWordsLearned)
         return res
           .status(500)
           .send({ message: "Coś poszło nie tak po naszej stronie" });

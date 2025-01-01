@@ -783,6 +783,8 @@ export const getAccuracy = async (
     const accuracy = await usersLessonsCollection
       .aggregate(aggregation)
       .toArray();
+    console.log(`accuracy`);
+    console.log(accuracy);
     if (!accuracy) return null;
 
     const acc = accuracy[0];
@@ -864,6 +866,8 @@ export const getLessonsTimeStamps = async (
       ])
       .toArray();
 
+    console.log(`usersLessonsTimestampsResult: `);
+    console.log(usersLessonsTimestampsResult);
     if (!usersLessonsTimestampsResult) return null;
 
     let timestampsArr: number[] = [];
@@ -919,15 +923,19 @@ export const getAllLessonsTimestamps = async (
     const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection
       .aggregate(aggregation)
       .toArray();
+    console.log(`getAllLessonsTimeStamps: `);
+    console.log(usersLessonsTimestampsResult);
     if (!usersLessonsTimestampsResult) return null;
-    if (
-      usersLessonsTimestampsResult.length > 0 &&
-      usersLessonsTimestampsResult[0].lessonCount
-    ) {
-      return usersLessonsTimestampsResult[0].lessonCount;
-    } else {
-      return null;
+    if (usersLessonsTimestampsResult.length > 0) {
+      if (usersLessonsTimestampsResult[0].lessonCount) {
+        return usersLessonsTimestampsResult[0].lessonCount;
+      }
     }
+    if (usersLessonsTimestampsResult.length === 0) {
+      return 0;
+    }
+
+    return null;
   } catch (error) {
     console.error(error);
   } finally {
@@ -935,7 +943,9 @@ export const getAllLessonsTimestamps = async (
   }
 };
 
-export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
+export const getFinishedLessonsWords = async (
+  id: ObjectId | undefined
+): Promise<number | null | undefined> => {
   await connectToDb();
   const db: Db = await getDb();
 
@@ -983,10 +993,18 @@ export const getFinishedLessonsWords = async (id: ObjectId | undefined) => {
     const usersLessonsResult = await userLessonsCollection
       .aggregate(aggregation)
       .toArray();
+
     if (!usersLessonsResult) return null;
-    if (usersLessonsResult.length > 0 && usersLessonsResult[0].totalNewWords) {
-      return usersLessonsResult[0].totalNewWords;
-    } else return null;
+    if (usersLessonsResult.length > 0) {
+      if (usersLessonsResult[0].totalNewWords) {
+        return usersLessonsResult[0].totalNewWords;
+      }
+    }
+    if (usersLessonsResult.length === 0) {
+      return 0;
+    }
+
+    return null;
   } catch (error) {
     console.error(error);
   } finally {

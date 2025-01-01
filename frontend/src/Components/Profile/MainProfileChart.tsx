@@ -8,38 +8,72 @@ interface MainProfileChartProps {
   stats: Stats;
 }
 
-export default function MainProfileChart({ stats }: MainProfileChartProps) {
+const dateFromNow = (days: number) => {
   const today = new Date(Date.now());
   today.setHours(0, 0, 0, 0);
+  const DAY = 1000 * 60 * 60 * 24;
+
+  return new Date(today.getTime() - DAY * days);
+};
+
+export default function MainProfileChart({ stats }: MainProfileChartProps) {
   let tempDate = new Date();
 
   const dataset = [
     {
-      date: new Date(tempDate.setDate(today.getDate() - 6)),
-      count: (stats?.timestamps && typeof stats?.timestamps[6] === "number") ? stats?.timestamps[6] : 0,
+      date: dateFromNow(6),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[6] === "number"
+          ? stats?.timestamps[6]
+          : 0,
     },
     {
-      date: new Date(tempDate.setDate(today.getDate() - 5)),
-      count: (stats?.timestamps && typeof stats?.timestamps[5] === "number") ? stats?.timestamps[5] : 0,
+      date: dateFromNow(5),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[5] === "number"
+          ? stats?.timestamps[5]
+          : 0,
     },
     {
-      date: new Date(tempDate.setDate(today.getDate() - 4)),
-      count: (stats?.timestamps && typeof stats?.timestamps[4] === "number") ? stats?.timestamps[4] : 0,
+      date: dateFromNow(4),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[4] === "number"
+          ? stats?.timestamps[4]
+          : 0,
     },
     {
-      date: new Date(tempDate.setDate(today.getDate() - 3)),
-      count: (stats?.timestamps && typeof stats?.timestamps[3] === "number") ? stats?.timestamps[3] : 0,
+      date: dateFromNow(3),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[3] === "number"
+          ? stats?.timestamps[3]
+          : 0,
     },
     {
-      date: new Date(tempDate.setDate(today.getDate() - 2)),
-      count: (stats?.timestamps && typeof stats?.timestamps[2] === "number") ? stats?.timestamps[2] : 0,
+      date: dateFromNow(2),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[2] === "number"
+          ? stats?.timestamps[2]
+          : 0,
     },
     {
-      date: new Date(tempDate.setDate(today.getDate() - 1)),
-      count: (stats?.timestamps && typeof stats?.timestamps[1] === "number") ? stats?.timestamps[1] : 0,
+      date: dateFromNow(1),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[1] === "number"
+          ? stats?.timestamps[1]
+          : 0,
     },
-    { date: today, count: (stats?.timestamps && typeof stats?.timestamps[0] === "number") ? stats?.timestamps[0] : 0 },
+    {
+      date: dateFromNow(0),
+      count:
+        stats?.timestamps && typeof stats?.timestamps[0] === "number"
+          ? stats?.timestamps[0]
+          : 0,
+    },
   ];
+
+  useEffect(() => {
+    console.log(dataset);
+  }, []);
 
   const valueFormatter = (date: Date) => {
     return date.toLocaleDateString(undefined, {
