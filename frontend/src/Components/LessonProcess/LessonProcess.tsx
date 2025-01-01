@@ -48,86 +48,22 @@ function LessonProcess({
     (state: RootState) => state.alertSnackbarReducer
   );
 
-  const timeStart = useRef<DOMHighResTimeStamp>(timeSpentData.timeStart);
-
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const handleUnloadData = async (e: Event) => {
-    e.preventDefault();
-
-    if (
-      document.visibilityState === "hidden" &&
-      document.URL.startsWith(`http://localhost:3001/lesson/`)
-    ) {
-      console.log("running unloadData...", document.URL);
-      console.log(document.visibilityState);
-      try {
-        const response = await axios.put(
-          `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
-            lessonIdRef.current
-          }`,
-          { timeSpent: performance.now() - timeStart.current },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        console.log(`From /timespent: ${response.data}`);
-      } catch (err) {
-        console.error(err);
-      }
-    } else if (
-      document.visibilityState === "visible" &&
-      document.URL.startsWith(`http://localhost:3001/lesson/`)
-    ) {
-      dispatch(setTimeStart({ timeStart: performance.now() }));
-      timeStart.current = performance.now();
-    }
-  };
-
   const endSession = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/timespent/${
-          lessonIdRef.current
-        }`,
-        { timeSpent: performance.now() - timeStart.current },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log(`From /timespent: ${response.data}`);
-
       navigate("/lessons");
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    dispatch(setTimeStart({ timeStart: performance.now() }));
-
-    if (lessonId) lessonIdRef.current = lessonId;
-
-    const handleVisibilityChange = (e: Event) => {
-      handleUnloadData(e);
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   console.log("lesson time measurement has been started");
+  //   dispatch(setTimeStart({ timeStart: performance.now() }));
+  // }, []);
 
   return (
     <>

@@ -13,6 +13,7 @@ import LessonProcess from "../../LessonProcess";
 import InputEx from "../../Stepper/Variants/InputEx";
 import type { InputExerciseData } from "../exerciseTypes";
 import { RootState } from "../../../../state/store";
+import { setCorrectData } from "../../../../state/lessonSlice";
 
 interface Correct {
   correct: boolean;
@@ -30,6 +31,7 @@ export default function L1FillWord({
   exerciseId,
   isLastExercise = false,
 }: L1FillWordProps) {
+  const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
   );
@@ -47,7 +49,6 @@ export default function L1FillWord({
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLInputElement | null>(null);
-  const timeStart = useRef<DOMHighResTimeStamp>(timeSpentData.timeStart);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -88,11 +89,18 @@ export default function L1FillWord({
         `http://localhost:${
           import.meta.env.VITE_SERVER_PORT
         }/lesson/${lessonId}/${exerciseId}`,
-        {},
+        {
+          correct: lessonData.correct,
+          timeSpent: performance.now() - timeSpentData.timeStart,
+        },
         { withCredentials: true }
       );
 
       console.log(response.data);
+
+      dispatch(setCorrectData({ correct: [] }));
+
+      navigate("/lessons");
     } catch (error) {
       if (error instanceof AxiosError) {
         dispatch(
@@ -103,28 +111,9 @@ export default function L1FillWord({
             content: error?.response?.data,
           })
         );
+
+        dispatch(setCorrectData({ correct: [] }));
       }
-    }
-
-    try {
-      const response = await axios.put(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/timespent/${lessonId}`,
-        { timeSpent: performance.now() - timeStart.current },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log(`From /timespent: ${response.data}`);
-
-      navigate("/lessons");
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -147,7 +136,7 @@ export default function L1FillWord({
   ) => {
     e.preventDefault();
 
-    console.log('checkwords running')
+    console.log("checkwords running");
 
     if (!correct && textRef.current) {
       // check word server-side
@@ -167,6 +156,11 @@ export default function L1FillWord({
         setCorrect(false);
         setDisableNext(false);
       }
+
+      const correctArr = Array.from(lessonData.correct);
+      console.log(correctArr);
+      correctArr.push(res.data.correct);
+      dispatch(setCorrectData({ correct: correctArr }));
     }
   };
 

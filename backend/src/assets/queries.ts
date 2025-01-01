@@ -10,13 +10,6 @@ interface User {
   createdDate: Date;
 }
 
-interface UserStats {
-  timeSpent: DOMHighResTimeStamp;
-  lessonCount: number;
-  lessonAccuracy: number;
-  wordsLearned: number;
-}
-
 interface InsertUserData {
   email: string;
   login: string;
@@ -28,7 +21,6 @@ interface InsertUserData {
 
 interface InsertUser extends InsertUserData {
   role: string;
-  stats: UserStats;
   createdDate: Date;
 }
 
@@ -94,27 +86,20 @@ interface LessonStats {
 
 interface FindUsersLessons {
   lessonId: number;
-  timeSpent: DOMHighResTimeStamp;
-  accuracy: Accuracy;
   finished: boolean;
 }
 
-interface Accuracy {
-  [key: number]: boolean[];
-}
-
-interface UsersLessonsTimestamps {
+interface UsersLessonsSessions {
   userId: ObjectId;
   lessonId: number;
+  correct: boolean[];
+  timeSpent: DOMHighResTimeStamp;
   completedAt: Date;
 }
 
 export interface UsersLessons {
   userId: ObjectId;
   lessonId: number;
-  timeSpent: DOMHighResTimeStamp;
-  accuracy: Accuracy;
-  timesCompleted: number;
   finished: boolean;
 }
 
@@ -132,13 +117,6 @@ export const insertOneUser = async ({
   try {
     const usersCollection = db.collection<InsertUser>("users");
 
-    const stats: UserStats = {
-      timeSpent: 0,
-      lessonCount: 0,
-      lessonAccuracy: 0.0,
-      wordsLearned: 0,
-    };
-
     let usersLessonsArr: UsersLessons[] = [];
 
     const usersResult = await usersCollection.insertOne({
@@ -149,7 +127,6 @@ export const insertOneUser = async ({
       verificationCode: verificationCode,
       verified: verified,
       role: "user",
-      stats: stats,
       createdDate: new Date(Date.now()),
     });
 
@@ -185,9 +162,6 @@ export const insertOneUser = async ({
       usersLessonsArr.push({
         userId: usersResult.insertedId,
         lessonId: el.lessonId,
-        timeSpent: 0,
-        accuracy: {},
-        timesCompleted: 0,
         finished: false,
       });
     });
@@ -315,7 +289,7 @@ export const deleteOneUserById = async (
     if (!usersLessonsResult) return null;
 
     const usersLessonsTimestampsCollection =
-      db.collection<UsersLessonsTimestamps>("users-lessons-timestamps");
+      db.collection<UsersLessonsSessions>("users-lessons-sessions");
     const usersLessonsTimestampsResult =
       await usersLessonsTimestampsCollection.deleteMany({
         userId: new ObjectId(id),
@@ -436,8 +410,6 @@ export const findUsersLessonsById = async (
         {
           projection: {
             lessonId: 1,
-            timeSpent: 1,
-            accuracy: 1,
             finished: 1,
           },
         }
@@ -448,8 +420,6 @@ export const findUsersLessonsById = async (
 
     const resultArr: FindUsersLessons[] = usersLessonsResult.map((res) => ({
       lessonId: res.lessonId,
-      timeSpent: res.timeSpent,
-      accuracy: res.accuracy,
       finished: res.finished,
     }));
 
@@ -493,91 +463,6 @@ export const findInputExerciseById = async (
   }
 };
 
-export const saveLessonProgressById = async (
-  login: string,
-  lessonId: number,
-  exerciseId: number
-): Promise<string | null> => {
-  await connectToDb();
-  const db: Db = await getDb();
-  //let result: ExerciseData;
-  let wordsLearned: string[] = [];
-
-  try {
-    const lessonsCollection = db.collection<Lesson>("lessons");
-
-    const colResult = await lessonsCollection.findOne(
-      { lessonId: lessonId },
-      {
-        projection: {
-          _id: 1,
-          lessonId: 1,
-          exercises: 1,
-          exerciseCount: 1,
-        },
-      }
-    );
-
-    if (colResult) {
-      colResult.exercises.map((el, i) => {
-        if (el.type === "card") wordsLearned.push(el.word);
-      });
-
-      const lessonStats: LessonStats = {
-        wordsLearned: wordsLearned.length,
-      };
-
-      const usersCollection = db.collection<InsertUserData>("users");
-
-      // ! TODO: Update only when finishing a certain lesson for the first time
-      const updateUser = await usersCollection.updateOne(
-        { login: { $eq: login } },
-        {
-          $set: { stats: lessonStats },
-        }
-      );
-
-      console.log(updateUser);
-    } else return null;
-
-    return "Zapisano";
-  } catch (error) {
-    console.error(error);
-    return null;
-  } finally {
-    closeDbConnection();
-  }
-};
-
-export const updateLessonTimeSpent = async (
-  id: ObjectId | undefined,
-  lessonId: number,
-  timeSpent: number
-) => {
-  await connectToDb();
-  const db: Db = await getDb();
-
-  try {
-    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
-
-    const colResult = await usersLessonsCollection.updateOne(
-      { userId: new ObjectId(id), lessonId: lessonId },
-      {
-        $inc: { timeSpent: timeSpent },
-      }
-    );
-
-    if (!colResult) return null;
-
-    return "Zapisano";
-  } catch (error) {
-    console.error(error);
-    return null;
-  } finally {
-    closeDbConnection();
-  }
-};
-
 export const getTimeSpent = async (
   id: ObjectId | undefined
 ): Promise<number | null | undefined> => {
@@ -585,7 +470,9 @@ export const getTimeSpent = async (
   const db: Db = await getDb();
 
   try {
-    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+    const usersLessonsCollection = db.collection<UsersLessons>(
+      "users-lessons-sessions"
+    );
     const aggregation = [
       {
         $match: {
@@ -612,8 +499,87 @@ export const getTimeSpent = async (
       .aggregate(aggregation)
       .toArray();
     if (!timeSpentResult) return null;
-    console.log(timeSpentResult[0].totalTimeSpent);
-    return timeSpentResult[0].totalTimeSpent;
+    if (timeSpentResult.length > 0) return timeSpentResult[0].totalTimeSpent;
+    else return 0;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const getAccuracy = async (
+  id: ObjectId | undefined
+): Promise<number | null | undefined> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersLessonsSessionsCollection = db.collection(
+      "users-lessons-sessions"
+    );
+    const aggregation = [
+      {
+        $match: {
+          userId: new ObjectId(id),
+        },
+      },
+      {
+        $project: {
+          totalCount: { $size: "$correct" },
+          trueCount: {
+            $size: {
+              $filter: {
+                input: "$correct",
+                as: "value",
+                cond: { $eq: ["$$value", true] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          percentage: {
+            $multiply: [{ $divide: ["$trueCount", "$totalCount"] }, 100],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPercentage: {
+            $sum: "$percentage",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          accuracy: {
+            $divide: ["$totalPercentage", "$count"],
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          accuracy: 1,
+        },
+      },
+    ];
+
+    const sessionsResult = await usersLessonsSessionsCollection
+      .aggregate(aggregation)
+      .toArray();
+
+    console.log("sessionsResult");
+    console.log(sessionsResult);
+    if (!sessionsResult) return null;
+
+    if (sessionsResult.length > 0) {
+      if (sessionsResult[0].accuracy) return sessionsResult[0].accuracy;
+    } else return 0;
   } catch (error) {
     console.error(error);
   } finally {
@@ -623,13 +589,18 @@ export const getTimeSpent = async (
 
 export const updateLessonOnFinish = async (
   id: ObjectId | undefined,
-  lessonId: number
+  lessonId: number,
+  correct: boolean[],
+  timeSpent: DOMHighResTimeStamp
 ) => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
+    const usersLessonsSessionsCollection = db.collection<UsersLessonsSessions>(
+      "users-lessons-sessions"
+    );
 
     const findResult = await usersLessonsCollection.findOneAndUpdate(
       {
@@ -637,190 +608,21 @@ export const updateLessonOnFinish = async (
         lessonId: lessonId,
       },
       {
-        $inc: { timesCompleted: 1 },
         $set: { finished: true },
       }
     );
-
     if (!findResult) return null;
 
-    return "Zapisano";
-  } catch (error) {
-    console.error(error);
-    return null;
-  } finally {
-    closeDbConnection();
-  }
-};
-
-export const updateLessonAccuracy = async (
-  id: ObjectId | undefined,
-  lessonId: number,
-  exerciseId: number,
-  correct: boolean
-): Promise<string | null> => {
-  await connectToDb();
-  const db: Db = await getDb();
-
-  try {
-    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
-    const findUsersLessonsResult = await usersLessonsCollection.findOne({
+    const sessionResult = await usersLessonsSessionsCollection.insertOne({
       userId: new ObjectId(id),
       lessonId: lessonId,
+      correct: correct,
+      timeSpent: timeSpent,
+      completedAt: new Date(Date.now()),
     });
-    if (!findUsersLessonsResult) return null;
+    if (!sessionResult) return null;
 
-    console.log("findUsersLessonsResult:");
-    console.log(findUsersLessonsResult);
-
-    if (Object.keys(findUsersLessonsResult.accuracy).length < 1) {
-      const lessonsCollection = db.collection<Lesson>("lessons");
-      const findLessonResult = await lessonsCollection.findOne(
-        { lessonId: lessonId },
-        { projection: { exercises: 1 } }
-      );
-      if (!findLessonResult) return null;
-
-      // count lessons which are interactive (NOT read-only)
-      let interactiveCount = 0;
-      let exerciseIdObj: Accuracy = {};
-      findLessonResult.exercises.forEach((el, i) => {
-        if (findLessonResult.exercises[i].type != "card") {
-          interactiveCount++;
-          exerciseIdObj[el.exerciseId] = [];
-        }
-      });
-      const insertAccuracy = await usersLessonsCollection.updateOne(
-        { userId: new ObjectId(id), lessonId: lessonId },
-        {
-          $set: {
-            accuracy: exerciseIdObj,
-          },
-        }
-      );
-
-      console.log(`insertAcc: `, insertAccuracy);
-
-      if (!insertAccuracy) return null;
-    }
-
-    const addAccuracy = await usersLessonsCollection.updateOne(
-      { userId: new ObjectId(id), lessonId: lessonId },
-      {
-        $push: {
-          [`accuracy.${exerciseId}`]: correct,
-        },
-      }
-    );
-
-    console.log("addAcc: ", addAccuracy);
-
-    if (!addAccuracy) return null;
-
-    return "Dokładność zaktualizowana";
-  } catch (error) {
-    console.error(error);
-    return null;
-  } finally {
-    closeDbConnection();
-  }
-};
-
-export const getAccuracy = async (
-  id: ObjectId | undefined
-): Promise<number | null> => {
-  await connectToDb();
-  const db: Db = await getDb();
-
-  try {
-    const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
-    const aggregation = [
-      {
-        $match: {
-          userId: new ObjectId(id),
-          $expr: {
-            $gt: [{ $size: { $objectToArray: "$accuracy" } }, 0],
-          },
-        },
-      },
-      {
-        $project: {
-          accuracy: { $objectToArray: "$accuracy" },
-        },
-      },
-      {
-        $unwind: "$accuracy",
-      },
-      {
-        $unwind: "$accuracy.v",
-      },
-      {
-        $group: {
-          _id: null,
-          trueCount: {
-            $sum: { $cond: [{ $eq: ["$accuracy.v", true] }, 1, 0] },
-          },
-          totalCount: {
-            $sum: 1,
-          },
-        },
-      },
-      {
-        $project: {
-          averagePercentage: {
-            $multiply: [{ $divide: ["$trueCount", "$totalCount"] }, 100],
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          averagePercentage: 1,
-        },
-      },
-    ];
-
-    const accuracy = await usersLessonsCollection
-      .aggregate(aggregation)
-      .toArray();
-    console.log(`accuracy`);
-    console.log(accuracy);
-    if (!accuracy) return null;
-
-    const acc = accuracy[0];
-    if (!acc) return -1;
-    else {
-      if ("averagePercentage" in acc) return acc.averagePercentage;
-      else return -1;
-    }
-  } catch (error) {
-    console.error(error);
-    return null;
-  } finally {
-    closeDbConnection();
-  }
-};
-
-export const insertLessonTimeStamp = async (
-  id: ObjectId | undefined,
-  lessonId: number
-) => {
-  await connectToDb();
-  const db: Db = await getDb();
-
-  try {
-    const usersLessonsTimestampsCollection =
-      db.collection<UsersLessonsTimestamps>("users-lessons-timestamps");
-    const usersLessonsTimestampsResult =
-      await usersLessonsTimestampsCollection.insertOne({
-        userId: new ObjectId(id),
-        lessonId: lessonId,
-        completedAt: new Date(Date.now()),
-      });
-
-    if (!usersLessonsTimestampsResult) return null;
-
-    return usersLessonsTimestampsResult;
+    return "Zapisano";
   } catch (error) {
     console.error(error);
     return null;
@@ -840,7 +642,7 @@ export const getLessonsTimeStamps = async (
 
   try {
     const usersLessonsTimestampsCollection = db.collection(
-      "users-lessons-timestamps"
+      "users-lessons-sessions"
     );
     const usersLessonsTimestampsResult = await usersLessonsTimestampsCollection
       .aggregate([
@@ -897,7 +699,7 @@ export const getAllLessonsTimestamps = async (
 
   try {
     const usersLessonsTimestampsCollection = db.collection(
-      "users-lessons-timestamps"
+      "users-lessons-sessions"
     );
     const aggregation = [
       {

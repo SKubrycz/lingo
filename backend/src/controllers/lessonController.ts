@@ -1,13 +1,10 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
 import {
   findInputExerciseById,
-  updateLessonAccuracy,
   findLessonById,
-  saveLessonProgressById,
   updateLessonOnFinish,
-  insertLessonTimeStamp,
 } from "../assets/queries";
 
 const getLessonId = async (req: RequestLogin, res: Response) => {
@@ -28,36 +25,25 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
 
 const postLessonId = async (req: RequestLogin, res: Response) => {
   const { lessonId, exerciseId } = await req.params;
+  const { correct, timeSpent } = await req.body;
 
   if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
   if (!exerciseId)
     return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
-
-  if (req.login) {
-    const saveProgress = await saveLessonProgressById(
-      req.login,
-      Number(lessonId),
-      Number(exerciseId)
-    );
-    if (!saveProgress)
-      return res.status(500).send("Nie udało się zapisać postępu lekcji");
-  }
+  if (!correct)
+    return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
+  if (!timeSpent)
+    return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
 
   if (req._id) {
     const usersLessonsSave = await updateLessonOnFinish(
       req._id,
-      Number(lessonId)
+      Number(lessonId),
+      correct,
+      timeSpent
     );
 
     if (!usersLessonsSave)
-      return res.status(500).send("Nie udało się zapisać postępu lekcji");
-
-    const usersLessonsTimestampsSave = await insertLessonTimeStamp(
-      req._id,
-      Number(lessonId)
-    );
-
-    if (!usersLessonsTimestampsSave)
       return res.status(500).send("Nie udało się zapisać postępu lekcji");
   }
 
@@ -85,24 +71,6 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     correct = false;
   } else {
     correct = true;
-  }
-
-  if (req._id) {
-    const updateResult = await updateLessonAccuracy(
-      req._id,
-      Number(lessonId),
-      Number(exerciseId),
-      correct
-    );
-
-    if (!updateResult)
-      return res
-        .status(500)
-        .send({ message: "Coś poszło nie tak po naszej stronie" });
-  } else {
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
   }
 
   return res.status(200).send({ correct: correct });

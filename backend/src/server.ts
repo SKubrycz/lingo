@@ -21,7 +21,6 @@ import lessonsRoute from "./routes/lessons";
 import lessonRoute from "./routes/lesson";
 import logoutRoute from "./routes/logout";
 import aboutRoute from "./routes/about";
-import timeSpentRoute from "./routes/timeSpent";
 import verifyRoute from "./routes/verify";
 import deleteAccountRoute from "./routes/deleteAccount";
 import adminRoute from "./routes/admin";
@@ -39,7 +38,6 @@ const routesArray: Router[] = [
   lessonsRoute,
   logoutRoute,
   aboutRoute,
-  timeSpentRoute,
   verifyRoute,
   deleteAccountRoute,
   adminRoute,

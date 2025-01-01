@@ -4,6 +4,9 @@ import "./Lessons.scss";
 
 import { Button, Box, Container, Typography } from "@mui/material";
 import { Done } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { setTimeStart } from "../../state/timeSpentSlice";
 
 interface LessonData {
   lessonId: number;
@@ -18,6 +21,17 @@ interface LessonProps {
 }
 
 function Lesson({ lessonData, finished }: LessonProps) {
+  const timeSpentData = useSelector(
+    (state: RootState) => state.timeSpentReducer
+  );
+
+  const dispatch = useDispatch();
+
+  const startTimer = () => {
+    console.log("lesson time measurement has been started");
+    dispatch(setTimeStart({ timeStart: performance.now() }));
+  };
+
   return (
     <>
       <Container
@@ -38,6 +52,9 @@ function Lesson({ lessonData, finished }: LessonProps) {
           <Button
             to={`/lesson/${lessonData.lessonId}/1`}
             component={RouterLink}
+            onClick={() => {
+              startTimer();
+            }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Powtórz lekcję
@@ -46,6 +63,9 @@ function Lesson({ lessonData, finished }: LessonProps) {
           <Button
             to={`/lesson/${lessonData.lessonId}/1`}
             component={RouterLink}
+            onClick={() => {
+              startTimer();
+            }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
             Rozpocznij

@@ -5,8 +5,6 @@ import { lesson1, lesson2 } from "./lessonsData";
 
 const uri: string = "mongodb://localhost:27017/";
 
-//TODO (Edit: Likely fixed): Examine client.close() bug which throws an error
-
 let client: MongoClient;
 let db: Db;
 
@@ -14,14 +12,14 @@ interface CollectionsObj {
   lessons: boolean;
   users: boolean;
   usersLessons: boolean;
-  usersLessonsTimestamps: boolean;
+  usersLessonsSessions: boolean;
 }
 
 const collectionsObj: CollectionsObj = {
   lessons: false,
   users: false,
   usersLessons: false,
-  usersLessonsTimestamps: false,
+  usersLessonsSessions: false,
 };
 
 const insertToLessons = (db: Db) => {
@@ -55,8 +53,8 @@ export const connectToDb = async (): Promise<void> => {
     if (!collectionsObj.usersLessons) {
       db.createCollection("users-lessons");
     }
-    if (!collectionsObj.usersLessonsTimestamps) {
-      db.createCollection("users-lessons-timestamps");
+    if (!collectionsObj.usersLessonsSessions) {
+      db.createCollection("users-lessons-sessions");
     }
   } catch (err) {
     console.log("mongodb err", err);
