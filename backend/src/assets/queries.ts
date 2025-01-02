@@ -39,6 +39,7 @@ interface FindUser {
   verified: boolean;
   role: "admin" | "user";
   deleteAccount: DeleteAccount;
+  adminCode?: AdminCode;
   createdDate: Date;
 }
 
@@ -80,8 +81,9 @@ interface LessonView {
   exerciseCount: number;
 }
 
-interface LessonStats {
-  wordsLearned: number;
+interface AdminCode {
+  code: string;
+  expiry?: Date;
 }
 
 interface FindUsersLessons {
@@ -225,17 +227,23 @@ export const findOneUserByLogin = async (
 
 export const upsertAdminCode = async (
   id: ObjectId | undefined,
-  code: string
+  code: string,
+  expiry: Date | undefined
 ): Promise<UpdateResult | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
+    const adminCode: AdminCode = {
+      code: code,
+      expiry: expiry,
+    };
+
     const userCollection = db.collection<UpdateUser>("users");
     const result = await userCollection.updateOne(
       { _id: new ObjectId(id), role: { $eq: "admin" } },
       {
-        $set: { adminCode: code },
+        $set: { adminCode: adminCode },
       },
       { upsert: true }
     );

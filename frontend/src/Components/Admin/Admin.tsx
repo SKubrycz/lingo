@@ -1,10 +1,12 @@
 import { Box, Button, Input, ThemeProvider, Typography } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminTheme } from "../../adminTheme";
 
 export function Admin() {
+  const [code, setCode] = useState<string>("");
+
   const navigate = useNavigate();
 
   const handleAuth = async () => {
@@ -23,6 +25,24 @@ export function Admin() {
     }
   };
 
+  const submitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/admin`,
+        { code: code },
+        { withCredentials: true }
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
   useEffect(() => {
     handleAuth();
   }, []);
@@ -32,6 +52,9 @@ export function Admin() {
       <Box
         width="100%"
         height="100vh"
+        component="form"
+        method="post"
+        onSubmit={(e) => submitCode(e)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -41,8 +64,18 @@ export function Admin() {
         }}
       >
         <Typography>Podaj kod otrzymany w wiadomości email:</Typography>
-        <Input sx={{ margin: "1em" }}></Input>
-        <Button variant="contained">Zatwierdź</Button>
+        <Input
+          onChange={(e) => setCode(e.target.value)}
+          sx={{
+            margin: "1em",
+            ".MuiInput-input": {
+              textAlign: "center",
+            },
+          }}
+        ></Input>
+        <Button type="submit" name="submit" variant="contained">
+          Zatwierdź
+        </Button>
       </Box>
     </ThemeProvider>
   );

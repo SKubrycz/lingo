@@ -47,30 +47,40 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
         .status(500)
         .send({ message: "Nie udało się zweryfikować tożsamości" });
 
-    const transporter = nodemailer.createTransport({
-      host: "localhost",
-      port: 1025,
-      secure: false,
-    });
+    const now = new Date(Date.now());
+    if (
+      (userResult.adminCode && !userResult.adminCode.expiry) ||
+      (userResult.adminCode &&
+        userResult.adminCode.expiry &&
+        userResult.adminCode?.expiry < now)
+    ) {
+      const transporter = nodemailer.createTransport({
+        host: "localhost",
+        port: 1025,
+        secure: false,
+      });
 
-    const verificationCode = randomBytes(5).toString("hex").toUpperCase();
-    const insertVerificationCode = await upsertAdminCode(
-      req._id,
-      verificationCode
-    );
-    if (!insertVerificationCode)
-      return res
-        .status(500)
-        .send({ message: "Nie udało się zweryfikować tożsamości" });
+      const verificationCode = randomBytes(5).toString("hex").toUpperCase();
+      const expiry = new Date(Date.now() + 20 * 60 * 1000);
+      const insertVerificationCode = await upsertAdminCode(
+        req._id,
+        verificationCode,
+        expiry
+      );
+      if (!insertVerificationCode)
+        return res
+          .status(500)
+          .send({ message: "Nie udało się zweryfikować tożsamości" });
 
-    const htmlMessage = constructRegisterMail(verificationCode);
+      const htmlMessage = constructRegisterMail(verificationCode);
 
-    const mailInfo = await transporter.sendMail({
-      from: "noreply@auth.localhost",
-      to: userResult?.email,
-      subject: "Weryfikacja konta Lingo",
-      html: htmlMessage,
-    });
+      const mailInfo = await transporter.sendMail({
+        from: "noreply@auth.localhost",
+        to: userResult?.email,
+        subject: "Weryfikacja konta Lingo",
+        html: htmlMessage,
+      });
+    }
   } else
     return res
       .status(500)
@@ -79,10 +89,54 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Zapewniono dostęp do treści" });
 };
 
-const postAdminController = async () => {
-  // user verifies one-time code
-  // if comparison positive send 200
-  // after that, user gets redirected to /admin/panel
+const postAdminController = async (req: RequestLogin, res: Response) => {
+  const { code } = await req.body;
+  if (!code) {
+    return res
+      .status(400)
+      .send({ message: "Przesłano nieprawidłowy formularz" });
+  }
+
+  if (req.login) {
+    const userResult = await findOneUserByLogin(req.login);
+    if (!userResult || !userResult.adminCode || !userResult.adminCode.expiry)
+      return res
+        .status(500)
+        .send({ message: "Nie udało się zweryfikować tożsamości" });
+
+    const now = new Date(Date.now());
+    if (userResult.adminCode.expiry < now) {
+      const insertVerificationCode = await upsertAdminCode(
+        req._id,
+        "",
+        undefined
+      );
+      if (!insertVerificationCode)
+        return res
+          .status(500)
+          .send({ message: "Nie udało się zweryfikować tożsamości" });
+
+      return res.status(401).send({ message: "Kod wygasł" });
+    }
+
+    if (code !== userResult.adminCode.code)
+      return res
+        .status(400)
+        .send({ message: "Nie udało się zweryfikować tożsamości" });
+    if (code === userResult.adminCode.code) {
+      const insertVerificationCode = await upsertAdminCode(
+        req._id,
+        "",
+        undefined
+      );
+      if (!insertVerificationCode)
+        return res
+          .status(500)
+          .send({ message: "Nie udało się zweryfikować tożsamości" });
+    }
+  }
+
+  return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });
 };
 
-export { getAdminController };
+export { getAdminController, postAdminController };
