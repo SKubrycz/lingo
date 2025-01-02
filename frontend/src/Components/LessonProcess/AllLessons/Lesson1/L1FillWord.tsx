@@ -22,7 +22,6 @@ interface Correct {
 interface L1FillWordProps {
   lessonId: number;
   exerciseId: number;
-  endSession: () => void;
   isLastExercise?: boolean;
 }
 

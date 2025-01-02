@@ -1,5 +1,3 @@
-import { ObjectId } from "mongodb";
-
 interface CardExercise {
   exerciseId: number;
   type: string;
@@ -17,7 +15,6 @@ interface InputExercise {
 }
 
 interface LessonPanel {
-  _id: ObjectId;
   lessonId: number;
   title: string;
   description: string;
@@ -88,7 +85,6 @@ const l1exercises: (CardExercise | InputExercise)[] = [
 ];
 
 export const lesson1: LessonPanel = {
-  _id: new ObjectId("66af513c23082b6501dade65"),
   lessonId: 1,
   title: "Wprowadzenie",
   description: "Nauczysz się jak przywitać się w języku angielskim",
@@ -102,12 +98,18 @@ l1exercises.forEach((el, i) => {
   }
 });
 
-const l2exercises = [];
+const l2exercises: (CardExercise | InputExercise)[] = [];
 
-export const lesson2 = {
-  _id: new ObjectId("66c0cc3ffba0ae1abe9684b0"),
+export const lesson2: LessonPanel = {
   lessonId: 2,
   title: "Zwroty w różnych osobach",
   description: "Lorem ipsum opis drugiej lekcji",
-  new_words: ["Me", "You", "He", "She", "They", "Mr", "Mrs"],
+  exercises: l2exercises,
+  newWords: ["Me", "You", "He", "She", "They", "Mr", "Mrs"],
+  exerciseCount: l2exercises.length,
 };
+l2exercises.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson2.newWords.push(el.word);
+  }
+});

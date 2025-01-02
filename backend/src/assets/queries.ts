@@ -223,6 +223,32 @@ export const findOneUserByLogin = async (
   }
 };
 
+export const upsertAdminCode = async (
+  id: ObjectId | undefined,
+  code: string
+): Promise<UpdateResult | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const userCollection = db.collection<UpdateUser>("users");
+    const result = await userCollection.updateOne(
+      { _id: new ObjectId(id), role: { $eq: "admin" } },
+      {
+        $set: { adminCode: code },
+      },
+      { upsert: true }
+    );
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
 export const findOneUserByUUID = async (
   uuid: string
 ): Promise<FindUser | null> => {

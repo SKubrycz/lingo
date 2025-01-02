@@ -32,8 +32,14 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
   if (!correct)
     return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
+  if (correct.length !== 2)
+    return res.status(400).send("Przesłano nieprawidłową zawartość");
+  if (typeof correct[0] !== "boolean" && typeof correct[1] !== "boolean")
+    return res.status(400).send("Przesłano nieprawidłową zawartość");
   if (!timeSpent)
     return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
+  if (typeof timeSpent !== "number")
+    return res.status(400).send("Przesłano nieprawidłową zawartość");
 
   if (req._id) {
     const usersLessonsSave = await updateLessonOnFinish(
