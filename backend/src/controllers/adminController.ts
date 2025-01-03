@@ -94,6 +94,24 @@ const getAdminPanelController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Panel admina został udostępniony" });
 };
 
+const getAdminPanelSubpagesController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  return res
+    .status(200)
+    .send({ message: "/admin/panel/subpages working properly" });
+};
+
+const getAdminPanelLessonsController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  return res
+    .status(200)
+    .send({ message: "/admin/panel/lessons working properly" });
+};
+
 const postAdminController = async (req: RequestLogin, res: Response) => {
   const { code } = await req.body;
   if (!code) {
@@ -128,17 +146,6 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
       return res
         .status(400)
         .send({ message: "Nie udało się zweryfikować tożsamości" });
-    // if (code === userResult.adminCode.code) {
-    //   const insertVerificationCode = await upsertAdminCode(
-    //     req._id,
-    //     "",
-    //     undefined
-    //   );
-    //   if (!insertVerificationCode)
-    //     return res
-    //       .status(500)
-    //       .send({ message: "Nie udało się zweryfikować tożsamości" });
-    // }
 
     if (!process.env.ADMIN_TOKEN_SECRET)
       return res.status(500).send({ message: "Nastąpił błąd w systemie" });
@@ -164,4 +171,10 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });
 };
 
-export { getAdminController, postAdminController, getAdminPanelController };
+export {
+  getAdminController,
+  getAdminPanelController,
+  getAdminPanelSubpagesController,
+  getAdminPanelLessonsController,
+  postAdminController,
+};

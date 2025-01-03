@@ -112,7 +112,7 @@ export const insertOneUser = async ({
   uuid,
   verificationCode,
   verified,
-}: InsertUserData): Promise<void> => {
+}: InsertUserData): Promise<void | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
@@ -176,8 +176,10 @@ export const insertOneUser = async ({
     //console.log(result);
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -197,9 +199,10 @@ export const findOneUser = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -219,9 +222,10 @@ export const findOneUserByLogin = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -245,8 +249,10 @@ export const findAdminCode = async (
     return userResult;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -276,9 +282,10 @@ export const upsertAdminCode = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -297,9 +304,10 @@ export const findOneUserByUUID = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -322,9 +330,10 @@ export const updateOneUserByUUID = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -362,9 +371,10 @@ export const deleteOneUserById = async (
     return deletedResult;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -405,9 +415,10 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
     return resultArr;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -448,9 +459,10 @@ export const findLessonById = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -485,9 +497,10 @@ export const findUsersLessonsById = async (
     return resultArr;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -516,9 +529,10 @@ export const findInputExerciseById = async (
     return exercise;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -562,8 +576,9 @@ export const getTimeSpent = async (
     else return 0;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -641,8 +656,10 @@ export const getAccuracy = async (
     } else return 0;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -684,9 +701,10 @@ export const updateLessonOnFinish = async (
     return "Zapisano";
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -745,8 +763,10 @@ export const getLessonsTimeStamps = async (
     return timestampsArr;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -799,8 +819,10 @@ export const getAllLessonsTimestamps = async (
     return null;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -868,8 +890,10 @@ export const getFinishedLessonsWords = async (
     return null;
   } catch (error) {
     console.error(error);
-  } finally {
     closeDbConnection();
+    return null;
+  } finally {
+    //closeDbConnection();
   }
 };
 
@@ -925,9 +949,10 @@ export const findLastFinishedUserLesson = async (
     } else return findUsersLessonsResult;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -960,9 +985,10 @@ export const insertDeleteAccountData = async (
     return result;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
 
@@ -989,8 +1015,9 @@ export const findDeletionCode = async (id: ObjectId | undefined) => {
     else return findUserResult;
   } catch (error) {
     console.error(error);
+    closeDbConnection();
     return null;
   } finally {
-    closeDbConnection();
+    //closeDbConnection();
   }
 };
