@@ -5,6 +5,7 @@ const adminThemePalette = createTheme({
     mode: "light",
     primary: {
       main: "rgb(100, 149, 237)",
+      dark: "rgb(0, 7, 20)",
       contrastText: "rgb(245, 248, 255)",
     },
     secondary: {

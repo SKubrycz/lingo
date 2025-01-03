@@ -186,6 +186,7 @@ export const isAdminWithCode = async (
     }
 
     const adminToken = req.cookies.admin_token;
+    if (!adminToken) return res.status(403).send({ message: "Odmowa dostępu" });
 
     const adminVerify = <TokenData>(
       jwt.verify(adminToken, process.env.ADMIN_TOKEN_SECRET)

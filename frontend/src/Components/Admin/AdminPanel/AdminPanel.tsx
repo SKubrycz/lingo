@@ -1,11 +1,15 @@
 import { ThemeProvider } from "@emotion/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { adminTheme } from "../../../adminTheme";
+import SubpagesTab from "./SubpagesTab";
+import LessonsTab from "./LessonsTab";
 
 export default function AdminPanel() {
+  const [value, setValue] = useState<number>(0);
+
   const { state } = useLocation();
 
   const navigate = useNavigate();
@@ -30,6 +34,10 @@ export default function AdminPanel() {
     handleAuth();
   }, []);
 
+  const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
     <ThemeProvider theme={adminTheme}>
       <Box
@@ -40,10 +48,27 @@ export default function AdminPanel() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          color: "primary.dark",
           backgroundColor: "primary.contrastText",
         }}
       >
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{
+            fontFamily: "Fira Sans, sans-serif",
+            fontWeight: "500",
+          }}
+        >
+          LINGO
+        </Typography>
         <Typography>Admin Panel</Typography>
+        <Tabs value={value} onChange={handleTabChange}>
+          <Tab label="Podstrony"></Tab>
+          <Tab label="Lekcje"></Tab>
+        </Tabs>
+        <SubpagesTab currentIndex={value} tabIndex={0}></SubpagesTab>
+        <LessonsTab currentIndex={value} tabIndex={1}></LessonsTab>
       </Box>
     </ThemeProvider>
   );
