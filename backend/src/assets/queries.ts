@@ -83,7 +83,7 @@ interface LessonView {
 
 interface AdminCode {
   code: string;
-  expiry?: Date;
+  expiry: Date | undefined;
 }
 
 interface FindUsersLessons {
@@ -220,6 +220,30 @@ export const findOneUserByLogin = async (
   } catch (error) {
     console.error(error);
     return null;
+  } finally {
+    closeDbConnection();
+  }
+};
+
+export const findAdminCode = async (
+  id: ObjectId | undefined,
+  code: string | undefined
+): Promise<FindUser | null | undefined> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const usersCollection = db.collection<FindUser>("users");
+    const userResult = await usersCollection.findOne({
+      _id: new ObjectId(id),
+      "adminCode.code": code,
+    });
+    if (!userResult) return null;
+    if (!userResult.adminCode) return null;
+
+    return userResult;
+  } catch (error) {
+    console.error(error);
   } finally {
     closeDbConnection();
   }

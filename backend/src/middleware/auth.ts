@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ObjectId } from "mongodb";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { findOneUserByLogin } from "../assets/queries";
+import { findAdminCode, findOneUserByLogin } from "../assets/queries";
 
 type Role = "user" | "admin";
 
@@ -159,5 +159,42 @@ export const isAdmin = async (
   }
   if (role === "admin") {
     next();
+  }
+};
+
+export const isAdminWithCode = async (
+  req: RequestLogin,
+  res: Response,
+  next: NextFunction
+) => {
+  const role = req.role;
+  if (!role) {
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+  }
+  if (role !== "admin") {
+    return res
+      .status(403)
+      .send({ message: "Brak uprawnień do wyświetlenia zawartości" });
+  }
+  if (role === "admin") {
+    if (!process.env.ADMIN_TOKEN_SECRET) {
+      return res
+        .status(500)
+        .send({ message: "Weryfikacja uprawnień nie powiodła się" });
+    }
+
+    const adminToken = req.cookies.admin_token;
+
+    const adminVerify = <TokenData>(
+      jwt.verify(adminToken, process.env.ADMIN_TOKEN_SECRET)
+    );
+    const adminCodeResult = await findAdminCode(
+      adminVerify._id,
+      adminToken.code
+    );
+    if (!adminCodeResult)
+      return res.status(404).send({ message: "Nie znaleziono użytkownika" });
   }
 };

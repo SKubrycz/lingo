@@ -1,10 +1,10 @@
 import { Box, Button, Input, ThemeProvider, Typography } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminTheme } from "../../adminTheme";
 
-export function Admin() {
+export default function Admin() {
   const [code, setCode] = useState<string>("");
 
   const navigate = useNavigate();
@@ -36,6 +36,12 @@ export function Admin() {
       );
 
       console.log(res.data);
+
+      navigate("/admin/panel", {
+        state: {
+          fromAdmin: true,
+        },
+      });
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {

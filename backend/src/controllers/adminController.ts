@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import nodemailer from "nodemailer";
 import { Response } from "express";
+import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import { findOneUserByLogin, upsertAdminCode } from "../assets/queries";
 
@@ -134,6 +135,26 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
           .status(500)
           .send({ message: "Nie udało się zweryfikować tożsamości" });
     }
+
+    if (!process.env.ADMIN_TOKEN_SECRET)
+      return res.status(500).send({ message: "Nastąpił błąd w systemie" });
+    const adminTokenExpiry: number = 1000 * 60 * 15;
+    const adminToken: string = jwt.sign(
+      {
+        _id: userResult._id,
+        login: userResult.login,
+        role: userResult.role,
+        code: userResult.adminCode.code,
+      },
+      process.env.ADMIN_TOKEN_SECRET,
+      { expiresIn: adminTokenExpiry }
+    );
+
+    res.cookie("admin_token", adminToken, {
+      httpOnly: true,
+      maxAge: adminTokenExpiry,
+      sameSite: "strict",
+    });
   }
 
   return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });

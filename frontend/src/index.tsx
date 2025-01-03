@@ -17,7 +17,8 @@ import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
 import L1FillWord from "./Components/LessonProcess/AllLessons/Lesson1/L1FillWord";
 import Verify from "./Components/Register/Verify/Verify";
 import DeleteAccount from "./Components/DeleteAccount/DeleteAccount";
-import { Admin } from "./Components/Admin/Admin";
+import Admin from "./Components/Admin/Admin";
+import AdminPanel from "./Components/Admin/AdminPanel/AdminPanel";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -79,6 +80,10 @@ createRoot(document.getElementById("root")!).render(
             }
           ></Route>
           <Route path="/admin" element={<Admin></Admin>}></Route>
+          <Route
+            path="/admin/panel"
+            element={<AdminPanel></AdminPanel>}
+          ></Route>
           <Route path="/logout" element={<Logout></Logout>}></Route>
         </Routes>
       </BrowserRouter>
