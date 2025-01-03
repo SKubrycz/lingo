@@ -238,6 +238,7 @@ export const findAdminCode = async (
       _id: new ObjectId(id),
       "adminCode.code": code,
     });
+    console.log(userResult);
     if (!userResult) return null;
     if (!userResult.adminCode) return null;
 

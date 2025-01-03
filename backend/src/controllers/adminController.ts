@@ -90,6 +90,10 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Zapewniono dostęp do treści" });
 };
 
+const getAdminPanelController = async (req: RequestLogin, res: Response) => {
+  return res.status(200).send({ message: "Panel admina został udostępniony" });
+};
+
 const postAdminController = async (req: RequestLogin, res: Response) => {
   const { code } = await req.body;
   if (!code) {
@@ -124,21 +128,21 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
       return res
         .status(400)
         .send({ message: "Nie udało się zweryfikować tożsamości" });
-    if (code === userResult.adminCode.code) {
-      const insertVerificationCode = await upsertAdminCode(
-        req._id,
-        "",
-        undefined
-      );
-      if (!insertVerificationCode)
-        return res
-          .status(500)
-          .send({ message: "Nie udało się zweryfikować tożsamości" });
-    }
+    // if (code === userResult.adminCode.code) {
+    //   const insertVerificationCode = await upsertAdminCode(
+    //     req._id,
+    //     "",
+    //     undefined
+    //   );
+    //   if (!insertVerificationCode)
+    //     return res
+    //       .status(500)
+    //       .send({ message: "Nie udało się zweryfikować tożsamości" });
+    // }
 
     if (!process.env.ADMIN_TOKEN_SECRET)
       return res.status(500).send({ message: "Nastąpił błąd w systemie" });
-    const adminTokenExpiry: number = 1000 * 60 * 15;
+    const adminTokenExpiry: number = 1000 * 60 * 60;
     const adminToken: string = jwt.sign(
       {
         _id: userResult._id,
@@ -160,4 +164,4 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });
 };
 
-export { getAdminController, postAdminController };
+export { getAdminController, postAdminController, getAdminPanelController };

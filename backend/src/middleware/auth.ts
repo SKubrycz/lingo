@@ -192,9 +192,11 @@ export const isAdminWithCode = async (
     );
     const adminCodeResult = await findAdminCode(
       adminVerify._id,
-      adminToken.code
+      adminVerify.code
     );
     if (!adminCodeResult)
       return res.status(404).send({ message: "Nie znaleziono użytkownika" });
   }
+
+  next();
 };
