@@ -8,6 +8,7 @@ import {
   findOneUserByLogin,
   upsertAdminCode,
 } from "../assets/queries";
+import { aboutLangData } from "../assets/routeLangData/about";
 
 const constructRegisterMail = (verificationCode: string): string => {
   const htmlString = `<!DOCTYPE html>
@@ -102,9 +103,9 @@ const getAdminPanelSubpagesController = async (
   req: RequestLogin,
   res: Response
 ) => {
-  return res
-    .status(200)
-    .send({ message: "/admin/panel/subpages working properly" });
+  const data = aboutLangData[0];
+
+  return res.status(200).send(data);
 };
 
 const getAdminPanelLessonsController = async (

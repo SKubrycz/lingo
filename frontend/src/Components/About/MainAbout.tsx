@@ -15,39 +15,45 @@ function MainAbout({ languageData }: MainAboutProps) {
               {languageData ? languageData[0]?.title : "O aplikacji"}
             </Typography>
             <Box component="article">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum mauris augue, convallis id volutpat in, mattis ac eros.
-              Donec commodo et magna id semper. Vivamus dapibus quam a placerat
-              pellentesque. Pellentesque elementum luctus lacinia. Interdum et
-              malesuada fames ac ante ipsum primis in faucibus.
+              {languageData
+                ? languageData[0]?.desc
+                : `Aplikacja LINGO to bardzo prosta w obsłudze forma nauki języka dla
+              początkujących lub osób nie mających wcześniej styczności z
+              językami obcymi.`}
             </Box>
-            <Typography variant="h6">Lorem ipsum</Typography>
+            <Typography variant="h6">
+              {languageData
+                ? languageData[1]?.title
+                : `Szybko rozpocznij naukę`}
+            </Typography>
             <Box component="article">
-              Integer lobortis consequat nibh, nec auctor elit ullamcorper
-              congue. Morbi at blandit purus, sed consectetur felis. Vivamus
-              efficitur nisi sit amet eros facilisis, sit amet fringilla enim
-              porttitor. Suspendisse maximus, erat vitae sodales molestie, nulla
-              magna aliquam magna, sed euismod libero ante eu elit.
+              {languageData
+                ? languageData[1]?.desc
+                : `Proces rejestracji oraz logowania w serwisie jest wysoce
+              intuicyjny, co sprawia, że możesz bardzo szybko i bez utrudnień
+              przejść do procesu nauczania. Wszystko co potrzebne do nauki
+              możesz znaleźć w odpowiednio przygotowanych lekcjach. Wystarczy
+              parę kliknięć!`}
             </Box>
-            <Typography variant="h6">Dolor sit amet</Typography>
+            <Typography variant="h6">
+              {languageData ? languageData[2]?.title : `Interaktywne ćwiczenia`}
+            </Typography>
             <Box component="article">
-              Proin erat nibh, semper ut rhoncus eu, vulputate in est. Mauris
-              accumsan tincidunt leo quis vulputate. Pellentesque posuere
-              condimentum sem sed iaculis. Sed in lectus at eros accumsan
-              vestibulum. Etiam pellentesque nibh lectus, eget imperdiet massa
-              tristique sed.
+              {languageData
+                ? languageData[2]?.desc
+                : `Przy pomocy LINGO będziesz uczyć się języka poprzez robienie, nie
+              tylko bierne pisanie lub czytanie. Takie rozwiązania w nauce
+              języka pozwolą na znacznie efektywniejsze przyswojenie materiału.`}
             </Box>
-            <Typography variant="h6">Curabitur a venenatis ipsum</Typography>
+            <Typography variant="h6">
+              {languageData ? languageData[3]?.title : `Śledzenie postępu`}
+            </Typography>
             <Box component="article">
-              Suspendisse nec lorem finibus, fermentum ipsum sed, iaculis orci.
-              Praesent vitae feugiat turpis, in bibendum purus. Integer sodales,
-              ex ac congue sagittis, neque tellus convallis mi, ut mattis lorem
-              orci sed velit. Morbi tristique sagittis nulla eu tristique.
-              Aliquam facilisis ipsum vel lacus dignissim, sed sollicitudin arcu
-              efficitur. Nulla eget lacus in risus maximus ultricies vitae nec
-              justo. Curabitur tristique massa ac nibh pretium, sed viverra arcu
-              facilisis. Quisque ac ultricies ipsum. Nulla sit amet libero quis
-              nulla molestie molestie nec sed tortor.
+              {languageData
+                ? languageData[3]?.desc
+                : `Każda przygotowana lekcja po ukończeniu zapisuje statystyki
+              pokazujące jej przebieg. Obserwuj progres oraz poprawiaj błędy
+              językowe celem polepszania znajomości językowych!`}
             </Box>
           </Box>
         </Box>

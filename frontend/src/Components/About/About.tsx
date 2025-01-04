@@ -89,6 +89,7 @@ function About() {
           console.log(res.data);
 
           if (res.data.languageData) {
+            console.log(res.data.languageData);
             const navbar = [
               res.data.languageData.navbar.login,
               res.data.languageData.navbar.register,

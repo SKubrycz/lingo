@@ -20,14 +20,15 @@ interface LoginFooter {
 }
 
 interface LoginLangData {
+  metadata: Metadata;
   navbar: LoginNavbar;
   main: LoginMain;
   footer: LoginFooter;
 }
 
-export const loginLangData: (LoginLangData | Metadata)[] = [
-  { route: "/login", languages: ["pl", "de"] },
+export const loginLangData: LoginLangData[] = [
   {
+    metadata: { route: "/login", language: "pl" },
     navbar: {
       tooltip: "Zmień język strony",
       about: "O aplikacji",
@@ -46,6 +47,7 @@ export const loginLangData: (LoginLangData | Metadata)[] = [
     },
   },
   {
+    metadata: { route: "/login", language: "de" },
     navbar: {
       tooltip: "Ändern Sie die Sprache der Website",
       about: "Über die App",

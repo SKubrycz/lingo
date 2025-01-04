@@ -22,7 +22,7 @@ const getAbout = async (req: RequestLogin, res: Response) => {
 
       res.status(200).send(results);
     } else {
-      res.status(404).send("Nie znaleziono użytkownika"); //Later to be closely examined (maybe change the status code)
+      res.status(404).send("Nie znaleziono użytkownika");
     }
   } else if (!req.login) {
     res.status(200).send({

@@ -68,6 +68,7 @@ export default function AdminPanel() {
       );
 
       console.log(res.data);
+      setSubpagesData(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {

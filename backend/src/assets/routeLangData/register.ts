@@ -26,14 +26,15 @@ interface RegisterFooter {
   register: string;
 }
 interface RegisterLangData {
+  metadata: Metadata;
   navbar: RegisterNavbar;
   main: RegisterMain;
   footer: RegisterFooter;
 }
 
-export const registerLangData: (RegisterLangData | Metadata)[] = [
-  { route: "/register", languages: ["pl", "de"] },
+export const registerLangData: RegisterLangData[] = [
   {
+    metadata: { route: "/register", language: "pl" },
     navbar: {
       tooltip: "Zmień język strony",
       about: "O aplikacji",
@@ -65,6 +66,7 @@ export const registerLangData: (RegisterLangData | Metadata)[] = [
     },
   },
   {
+    metadata: { route: "/register", language: "de" },
     navbar: {
       tooltip: "Ändern Sie die Sprache der Website",
       about: "Über die App",

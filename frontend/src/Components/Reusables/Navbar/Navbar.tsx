@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-
 import { Link as RouterLink } from "react-router-dom";
-
-import BurgerIcon from "../../../assets/icons/burger.svg";
 import {
   AppBar,
   Toolbar,
@@ -34,22 +31,10 @@ function Navbar({ link, options, tooltip }: NavbarProps) {
   const [display, setDisplay] = useState<string>("none");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
-  const navBurgerStyle: Object = {
-    display: display,
-  };
-
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
   });
-
-  const handleDisplay = () => {
-    if (display === "none") {
-      setDisplay("flex");
-    } else if (display === "flex") {
-      setDisplay("none");
-    } else return;
-  };
 
   const handleDisplayOnResize = () => {
     if (window.innerWidth > 768) setDisplay("none");

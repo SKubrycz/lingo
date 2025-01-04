@@ -26,15 +26,16 @@ interface HomeFooter {
 }
 
 interface HomeLangData {
+  metadata: Metadata;
   navbar: HomeNavbar;
   titles: HomeTitle[];
   buttonContainer: HomeButtonContainer;
   footer: HomeFooter;
 }
 
-export const homeLangData: (HomeLangData | Metadata)[] = [
-  { route: "/", languages: ["pl", "de"] },
+export const homeLangData: HomeLangData[] = [
   {
+    metadata: { route: "/", language: "pl" },
     navbar: {
       tooltip: "Zmień język strony",
       about: "O aplikacji",
@@ -63,7 +64,7 @@ export const homeLangData: (HomeLangData | Metadata)[] = [
     },
   },
   {
-    // lang: DE
+    metadata: { route: "/", language: "de" },
     navbar: {
       tooltip: "Ändern Sie die Sprache der Website",
       about: "Über die App",

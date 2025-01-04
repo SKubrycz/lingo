@@ -32,12 +32,14 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
         <TableHead>
           <TableRow>
             <TableCell>Podstrona</TableCell>
+            <TableCell>Języki</TableCell>
             <TableCell>Edytuj</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell>/</TableCell>
+            <TableCell>pl, de</TableCell>
             <TableCell>
               <IconButton>
                 <Edit></Edit>
@@ -46,6 +48,7 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
           </TableRow>
           <TableRow>
             <TableCell>/about</TableCell>
+            <TableCell>pl, de</TableCell>
             <TableCell>
               <IconButton>
                 <Edit></Edit>

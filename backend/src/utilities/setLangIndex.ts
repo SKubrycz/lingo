@@ -5,10 +5,10 @@ export const setLangIndex = (lang: string | undefined): number | null => {
 
   switch (lang) {
     case "pl":
-      index = 1;
+      index = 0;
       break;
     case "de":
-      index = 2;
+      index = 1;
       break;
     default:
       index = null;
