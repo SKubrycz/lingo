@@ -1,3 +1,5 @@
+import { Metadata } from "./routeTypes";
+
 interface AboutNavbar {
   tooltip: string;
   login: string;
@@ -36,7 +38,8 @@ interface AboutLangData {
   footerLogin: AboutFooterLogin;
 }
 
-export const aboutLangData: AboutLangData[] = [
+export const aboutLangData: (AboutLangData | Metadata)[] = [
+  { route: "/about", languages: ["pl", "de"] },
   {
     navbar: {
       tooltip: "Zmień język strony",

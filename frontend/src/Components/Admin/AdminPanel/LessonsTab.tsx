@@ -1,6 +1,7 @@
-import { ConstructionOutlined } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import {
   Box,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -8,62 +9,60 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import axios, { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 
-interface LessonsTabProps {}
+interface LessonsTabProps {
+  lessonsData: any;
+}
 
-export default function LessonsTab({}: LessonsTabProps) {
-  const [lessonsData, setLessonsData] = useState<any[]>([]);
+export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   const [tableHeaders, setTableHeaders] = useState<string[]>([]);
   const [tableData, setTableData] = useState<any[][]>([]);
 
-  const fetchLessons = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/admin/panel/lessons`,
-        { withCredentials: true }
-      );
+  const convertLessonsData = () => {
+    const keys = Object.keys(lessonsData[0]);
+    setTableHeaders(keys);
 
-      console.log(res.data);
-
-      const keys = Object.keys(res.data[0]);
-      setTableHeaders(keys);
-
-      let data: any[] = [];
-      console.log(data);
-      for (let i = 0; i < res.data.length; i++) {
-        data.push([]);
-        keys.forEach((el) => {
-          data[i].push(res.data[i][el]);
-        });
-        console.log(tableData);
-      }
-      setTableData(data);
-      console.log(`tableData: `);
-      console.log(tableData);
-    } catch (error) {
-      console.error(error);
-      if (isAxiosError(error)) {
-      }
+    let data: any[] = [];
+    for (let i = 0; i < lessonsData.length; i++) {
+      data.push([]);
+      keys.forEach((el) => {
+        data[i].push(lessonsData[i][el]);
+      });
     }
+    setTableData(data);
   };
 
   useEffect(() => {
-    fetchLessons();
-    console.log(tableData);
+    convertLessonsData();
   }, []);
 
+  useEffect(() => {
+    console.log(tableData);
+  }, [tableData]);
+
   return (
-    <TableContainer sx={{ width: "fit-content" }}>
+    <TableContainer
+      sx={{
+        width: "fit-content",
+        borderLeft: "1px solid rgb(224,224,224)",
+        borderRight: "1px solid rgb(224,224,224)",
+      }}
+    >
       <Table>
         <TableHead>
           <TableRow>
             {tableHeaders.map((el, i) => {
-              return <TableCell key={i}>{el}</TableCell>;
+              return (
+                <TableCell
+                  key={i}
+                  sx={{ borderRight: "1px solid rgb(224,224,224)" }}
+                >
+                  {el}
+                </TableCell>
+              );
             })}
+            <TableCell>Edytuj</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -72,9 +71,29 @@ export default function LessonsTab({}: LessonsTabProps) {
               <TableRow key={i}>
                 {tableData[i].map((el, i) => {
                   if (Array.isArray(el))
-                    return <TableCell key={i}>{el[0]}...</TableCell>;
-                  else return <TableCell key={i}>{el}</TableCell>;
+                    return (
+                      <TableCell
+                        key={i}
+                        sx={{ borderRight: "1px solid rgb(224,224,224)" }}
+                      >
+                        {el[0]}...
+                      </TableCell>
+                    );
+                  else
+                    return (
+                      <TableCell
+                        key={i}
+                        sx={{ borderRight: "1px solid rgb(224,224,224)" }}
+                      >
+                        {el}
+                      </TableCell>
+                    );
                 })}
+                <TableCell>
+                  <IconButton>
+                    <Edit></Edit>
+                  </IconButton>
+                </TableCell>
               </TableRow>
             );
           })}

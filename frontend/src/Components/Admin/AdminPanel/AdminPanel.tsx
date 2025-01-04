@@ -10,20 +10,28 @@ import AdminPanelNavbar from "./AdminPanelNavbar";
 
 interface ChooseIndexProps {
   currentIndex: number;
+  subpagesData: any;
+  lessonsData: any[];
 }
 
-function ChooseIndex({ currentIndex }: ChooseIndexProps) {
+function ChooseIndex({
+  currentIndex,
+  subpagesData,
+  lessonsData,
+}: ChooseIndexProps) {
   switch (currentIndex) {
     case 0:
-      return <SubpagesTab></SubpagesTab>;
+      return <SubpagesTab subpagesData={subpagesData}></SubpagesTab>;
     case 1:
-      return <LessonsTab></LessonsTab>;
+      return <LessonsTab lessonsData={lessonsData}></LessonsTab>;
     default:
-      return <SubpagesTab></SubpagesTab>;
+      return <SubpagesTab subpagesData={subpagesData}></SubpagesTab>;
   }
 }
 
 export default function AdminPanel() {
+  const [subpagesData, setSubpagesData] = useState<any>();
+  const [lessonsData, setLessonsData] = useState<any[][]>([]);
   const [value, setValue] = useState<number>(0);
 
   const { state } = useLocation();
@@ -50,9 +58,47 @@ export default function AdminPanel() {
     }
   };
 
+  const fetchSubpages = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/admin/panel/subpages`,
+        { withCredentials: true }
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
+  const fetchLessons = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/admin/panel/lessons`,
+        { withCredentials: true }
+      );
+
+      console.log(res.data);
+
+      setLessonsData(res.data);
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
   useEffect(() => {
     if (!state || !state.hasOwnProperty("fromAdmin")) navigate("/admin");
     handleAuth();
+    fetchSubpages();
+    fetchLessons();
   }, []);
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
@@ -100,7 +146,11 @@ export default function AdminPanel() {
               <Tab label="Podstrony"></Tab>
               <Tab label="Lekcje"></Tab>
             </Tabs>
-            <ChooseIndex currentIndex={value}></ChooseIndex>
+            <ChooseIndex
+              currentIndex={value}
+              subpagesData={subpagesData}
+              lessonsData={lessonsData}
+            ></ChooseIndex>
           </Box>
         </Box>
       </Box>

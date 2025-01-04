@@ -1,30 +1,59 @@
-import { Box } from "@mui/material";
-import axios, { isAxiosError } from "axios";
+import {
+  Box,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import { useEffect } from "react";
 
-interface SubpagesTabProps {}
+interface SubpagesTabProps {
+  subpagesData: any;
+}
 
-export default function SubpagesTab({}: SubpagesTabProps) {
-  const fetchSubpages = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/admin/panel/subpages`,
-        { withCredentials: true }
-      );
-
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-      if (isAxiosError(error)) {
-      }
-    }
-  };
-
+export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
   useEffect(() => {
-    fetchSubpages();
+    console.log(subpagesData);
   }, []);
 
-  return <Box sx={{ minWidth: "300px" }}>Something</Box>;
+  return (
+    <TableContainer
+      sx={{
+        width: "fit-content",
+        borderLeft: "1px solid rgb(224,224,224)",
+        borderRight: "1px solid rgb(224,224,224)",
+      }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Podstrona</TableCell>
+            <TableCell>Edytuj</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>/</TableCell>
+            <TableCell>
+              <IconButton>
+                <Edit></Edit>
+              </IconButton>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>/about</TableCell>
+            <TableCell>
+              <IconButton>
+                <Edit></Edit>
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }

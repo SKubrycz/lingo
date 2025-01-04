@@ -1,3 +1,5 @@
+import { Metadata } from "./routeTypes";
+
 interface RegisterNavbar {
   tooltip: string;
   about: string;
@@ -29,7 +31,8 @@ interface RegisterLangData {
   footer: RegisterFooter;
 }
 
-export const registerLangData: RegisterLangData[] = [
+export const registerLangData: (RegisterLangData | Metadata)[] = [
+  { route: "/register", languages: ["pl", "de"] },
   {
     navbar: {
       tooltip: "Zmień język strony",

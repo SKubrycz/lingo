@@ -1,5 +1,7 @@
 // indexes: 0 -> de; _fallback: pl;
 
+import { Metadata } from "./routeTypes";
+
 interface HomeNavbar {
   tooltip: string;
   about: string;
@@ -30,10 +32,9 @@ interface HomeLangData {
   footer: HomeFooter;
 }
 
-//Over here IDEA 2
-export const homeLangData: HomeLangData[] = [
+export const homeLangData: (HomeLangData | Metadata)[] = [
+  { route: "/", languages: ["pl", "de"] },
   {
-    // lang: PL
     navbar: {
       tooltip: "Zmień język strony",
       about: "O aplikacji",

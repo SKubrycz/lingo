@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -46,7 +46,7 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
 
       console.log(res.data);
 
-      navigate("/admin");
+      navigate("/lessons");
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
@@ -68,17 +68,33 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
           backgroundColor: "primary.contrastText",
         }}
       >
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{
-            fontFamily: "Fira Sans, sans-serif",
-            fontWeight: "500",
-            color: "primary.main",
-          }}
-        >
-          LINGO
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              margin: 0,
+              fontFamily: "Fira Sans, sans-serif",
+              fontWeight: "500",
+              lineHeight: "initial",
+              color: "primary.main",
+            }}
+          >
+            LINGO
+          </Typography>
+          <Typography
+            variant="body1"
+            component="div"
+            sx={{
+              margin: "0 0.5em",
+              fontFamily: "Fira Sans, sans-serif",
+              fontWeight: "400",
+              color: "primary.main",
+            }}
+          >
+            Admin Panel
+          </Typography>
+        </Box>
         <Typography
           component="div"
           onClick={() => handleDialogOpen()}

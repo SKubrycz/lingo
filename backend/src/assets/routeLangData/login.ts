@@ -1,3 +1,5 @@
+import { Metadata } from "./routeTypes";
+
 interface LoginNavbar {
   tooltip: string;
   about: string;
@@ -23,7 +25,8 @@ interface LoginLangData {
   footer: LoginFooter;
 }
 
-export const loginLangData: LoginLangData[] = [
+export const loginLangData: (LoginLangData | Metadata)[] = [
+  { route: "/login", languages: ["pl", "de"] },
   {
     navbar: {
       tooltip: "Zmień język strony",
