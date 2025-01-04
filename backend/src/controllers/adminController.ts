@@ -3,7 +3,11 @@ import nodemailer from "nodemailer";
 import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
-import { findOneUserByLogin, upsertAdminCode } from "../assets/queries";
+import {
+  findLessonsList,
+  findOneUserByLogin,
+  upsertAdminCode,
+} from "../assets/queries";
 
 const constructRegisterMail = (verificationCode: string): string => {
   const htmlString = `<!DOCTYPE html>
@@ -107,9 +111,13 @@ const getAdminPanelLessonsController = async (
   req: RequestLogin,
   res: Response
 ) => {
-  return res
-    .status(200)
-    .send({ message: "/admin/panel/lessons working properly" });
+  const lessonsResult = await findLessonsList();
+  if (!lessonsResult)
+    return res
+      .status(500)
+      .send({ message: "Nie udało się pobrać danych o lekcjach" });
+
+  return res.status(200).send(lessonsResult);
 };
 
 const postAdminController = async (req: RequestLogin, res: Response) => {

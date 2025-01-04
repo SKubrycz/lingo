@@ -10,10 +10,9 @@ import AdminPanelNavbar from "./AdminPanelNavbar";
 
 interface ChooseIndexProps {
   currentIndex: number;
-  tabIndex: number;
 }
 
-function ChooseIndex({ currentIndex, tabIndex }: ChooseIndexProps) {
+function ChooseIndex({ currentIndex }: ChooseIndexProps) {
   switch (currentIndex) {
     case 0:
       return <SubpagesTab></SubpagesTab>;
@@ -85,7 +84,7 @@ export default function AdminPanel() {
             <Tab label="Podstrony"></Tab>
             <Tab label="Lekcje"></Tab>
           </Tabs>
-          <ChooseIndex currentIndex={value} tabIndex={0}></ChooseIndex>
+          <ChooseIndex currentIndex={value}></ChooseIndex>
         </Box>
       </Box>
     </ThemeProvider>
