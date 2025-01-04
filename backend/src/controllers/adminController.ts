@@ -169,7 +169,7 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
       { expiresIn: adminTokenExpiry }
     );
 
-    res.cookie("admin_token", adminToken, {
+    res.cookie("admin_token_lingo", adminToken, {
       httpOnly: true,
       maxAge: adminTokenExpiry,
       sameSite: "strict",
@@ -179,10 +179,23 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });
 };
 
+const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
+  if (req._id) {
+    res.clearCookie("admin_token_lingo");
+  } else {
+    return res.status(500).send({ message: "Wylogowanie nie powiodło się" });
+  }
+
+  res
+    .status(200)
+    .send({ message: "Nastąpiło wylogowanie z Panelu Administratora" });
+};
+
 export {
   getAdminController,
   getAdminPanelController,
   getAdminPanelSubpagesController,
   getAdminPanelLessonsController,
   postAdminController,
+  postAdminLogoutController,
 };

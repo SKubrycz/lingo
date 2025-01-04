@@ -26,5 +26,5 @@ export default function SubpagesTab({}: SubpagesTabProps) {
     fetchSubpages();
   }, []);
 
-  return <Box>Something</Box>;
+  return <Box sx={{ minWidth: "300px" }}>Something</Box>;
 }

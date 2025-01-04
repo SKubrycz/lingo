@@ -185,8 +185,9 @@ export const isAdminWithCode = async (
         .send({ message: "Weryfikacja uprawnień nie powiodła się" });
     }
 
-    const adminToken = req.cookies.admin_token;
-    if (!adminToken) return res.status(403).send({ message: "Odmowa dostępu" });
+    const adminToken = req.cookies.admin_token_lingo;
+    if (!adminToken)
+      return res.status(400).send({ message: "Nieprawidłowy token" });
 
     const adminVerify = <TokenData>(
       jwt.verify(adminToken, process.env.ADMIN_TOKEN_SECRET)

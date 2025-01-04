@@ -69,7 +69,7 @@ export default function LessonsTab({}: LessonsTabProps) {
         <TableBody>
           {tableData.map((el, i) => {
             return (
-              <TableRow>
+              <TableRow key={i}>
                 {tableData[i].map((el, i) => {
                   if (Array.isArray(el))
                     return <TableCell key={i}>{el[0]}...</TableCell>;

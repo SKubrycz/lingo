@@ -31,7 +31,7 @@ const adminThemePalette = createTheme({
 export const adminTheme = createTheme(adminThemePalette, {
   palette: {
     background: {
-      paper: adminThemePalette.palette.primary.dark,
+      paper: adminThemePalette.palette.primary.contrastText,
     },
   },
 });

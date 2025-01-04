@@ -7,6 +7,7 @@ import {
   getAdminPanelLessonsController,
   getAdminPanelSubpagesController,
   postAdminController,
+  postAdminLogoutController,
 } from "../controllers/adminController";
 
 const router = express.Router();
@@ -27,5 +28,6 @@ router.get(
 );
 
 router.post("/admin", checkAuth, isAdmin, postAdminController);
+router.post("/admin/logout", checkAuth, isAdmin, postAdminLogoutController);
 
 export default router;

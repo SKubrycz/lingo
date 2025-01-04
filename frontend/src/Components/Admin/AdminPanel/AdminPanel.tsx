@@ -44,14 +44,14 @@ export default function AdminPanel() {
         if (error.status === 403) {
           navigate("/not-found");
         } else {
-          navigate("/");
+          navigate("/admin");
         }
       }
     }
   };
 
   useEffect(() => {
-    if (!state || !state.hasOwnProperty("fromAdmin")) navigate("/");
+    if (!state || !state.hasOwnProperty("fromAdmin")) navigate("/admin");
     handleAuth();
   }, []);
 
@@ -72,19 +72,36 @@ export default function AdminPanel() {
         <AdminPanelNavbar></AdminPanelNavbar>
         <Box
           sx={{
+            width: "100%",
             height: "100%",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          <Typography>Admin Panel</Typography>
-          <Tabs value={value} onChange={handleTabChange}>
-            <Tab label="Podstrony"></Tab>
-            <Tab label="Lekcje"></Tab>
-          </Tabs>
-          <ChooseIndex currentIndex={value}></ChooseIndex>
+          <Box
+            sx={{
+              width: "fit-content",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <Typography>Admin Panel</Typography>
+            <Tabs
+              value={value}
+              onChange={handleTabChange}
+              sx={{
+                width: "100%",
+                borderBottom: "1px solid rgb(224, 224, 224)",
+              }}
+            >
+              <Tab label="Podstrony"></Tab>
+              <Tab label="Lekcje"></Tab>
+            </Tabs>
+            <ChooseIndex currentIndex={value}></ChooseIndex>
+          </Box>
         </Box>
       </Box>
     </ThemeProvider>
