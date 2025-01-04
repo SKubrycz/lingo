@@ -2,15 +2,9 @@ import { Box } from "@mui/material";
 import axios, { isAxiosError } from "axios";
 import { useEffect } from "react";
 
-interface SubpagesTabProps {
-  currentIndex: number;
-  tabIndex: number;
-}
+interface SubpagesTabProps {}
 
-export default function SubpagesTab({
-  currentIndex,
-  tabIndex,
-}: SubpagesTabProps) {
+export default function SubpagesTab({}: SubpagesTabProps) {
   const fetchSubpages = async () => {
     try {
       const res = await axios.get(
@@ -32,5 +26,5 @@ export default function SubpagesTab({
     fetchSubpages();
   }, []);
 
-  return currentIndex === tabIndex ? <Box>Something</Box> : undefined;
+  return <Box>Something</Box>;
 }

@@ -20,7 +20,11 @@ export default function Admin() {
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
-        if (error.status === 403) navigate("/not-found");
+        if (error.status === 403) {
+          navigate("/not-found");
+        } else {
+          navigate("/");
+        }
       }
     }
   };
@@ -71,6 +75,7 @@ export default function Admin() {
       >
         <Typography>Podaj kod otrzymany w wiadomości email:</Typography>
         <Input
+          autoFocus
           onChange={(e) => setCode(e.target.value)}
           sx={{
             margin: "1em",

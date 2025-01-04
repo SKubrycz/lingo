@@ -1,16 +1,37 @@
-import { Box } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import axios, { isAxiosError } from "axios";
 import { useEffect } from "react";
 
-interface LessonsTabProps {
-  currentIndex: number;
-  tabIndex: number;
+interface LessonsTabProps {}
+
+function LessonsTable() {
+  return (
+    <TableContainer sx={{ width: "fit-content" }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>LessonId</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>1</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }
 
-export default function LessonsTab({
-  currentIndex,
-  tabIndex,
-}: LessonsTabProps) {
+export default function LessonsTab({}: LessonsTabProps) {
   const fetchLessons = async () => {
     try {
       const res = await axios.get(
@@ -32,5 +53,5 @@ export default function LessonsTab({
     fetchLessons();
   }, []);
 
-  return currentIndex === tabIndex ? <Box>Lessons Tab</Box> : undefined;
+  return <LessonsTable></LessonsTable>;
 }
