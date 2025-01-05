@@ -87,6 +87,11 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     } else {
       correct = true;
     }
+  } else if (exerciseResult.type === "match") {
+    exerciseResult.words.forEach((el, i) => {
+      if (!correct && word.words[0] === el[0] && word.words[1] === el[1])
+        return (correct = true);
+    });
   }
 
   return res.status(200).send({ correct: correct });

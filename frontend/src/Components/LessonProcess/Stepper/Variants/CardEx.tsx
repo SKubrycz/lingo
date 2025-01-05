@@ -13,69 +13,67 @@ const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
   cardRef
 ) {
   return (
-    <>
-      <Box
+    <Box
+      sx={{
+        width: "100%",
+        height: "55%",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Container
+        ref={cardRef}
         sx={{
-          width: "100%",
-          height: "55%",
-          position: "relative",
+          width: "fit-content",
+          height: "70%",
+          minWidth: "260px",
+          minHeight: "200px",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
           alignItems: "center",
+          animation: "0.8s comeDown 1 ease-in-out",
         }}
       >
-        <Container
-          ref={cardRef}
+        <Typography
+          variant="h6"
           sx={{
-            width: "fit-content",
-            height: "70%",
-            minWidth: "260px",
-            minHeight: "200px",
+            color: "secondary.main",
+            fontWeight: 300,
+          }}
+        >
+          Nowe słowo
+        </Typography>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            padding: "0.1em",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
-            animation: "0.8s comeDown 1 ease-in-out",
+            border: "none",
+            borderRadius: "5px",
+            color: "primary.main",
+            backgroundColor: "primary.contrastText",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              color: "secondary.main",
-              fontWeight: 300,
-            }}
-          >
-            Nowe słowo
-          </Typography>
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              padding: "0.1em",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "none",
-              borderRadius: "5px",
-              color: "primary.main",
-              backgroundColor: "primary.contrastText",
-            }}
-          >
-            {/* <Typography variant="h5">{exerciseId}</Typography> */}
-            <Typography variant="h6">{word}</Typography>
-          </Box>
-        </Container>
-        <Typography
-          variant="body1"
-          sx={{
-            margin: "1em",
-          }}
-        >
-          <b>{translation}</b> {description ? `- ${description}` : undefined}
-        </Typography>
-      </Box>
-    </>
+          {/* <Typography variant="h5">{exerciseId}</Typography> */}
+          <Typography variant="h6">{word}</Typography>
+        </Box>
+      </Container>
+      <Typography
+        variant="body1"
+        sx={{
+          margin: "1em",
+        }}
+      >
+        <b>{translation}</b> {description ? `- ${description}` : undefined}
+      </Typography>
+    </Box>
   );
 });
 

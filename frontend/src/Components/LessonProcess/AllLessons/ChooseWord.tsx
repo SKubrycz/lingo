@@ -1,5 +1,5 @@
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import ChoiceEx from "../Stepper/Variants/ChoiceEx";
 import LessonProcess from "../LessonProcess";
 import { useEffect, useRef, useState } from "react";
@@ -106,18 +106,12 @@ export default function ChooseWord({
 
   return (
     <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
-      {exerciseId === 1 ? (
-        <Button sx={{ visibility: "hidden" }}></Button>
-      ) : (
-        <Button
-          to={`/lesson/${lessonId}/${exerciseId - 1}`}
-          state={{ index: exerciseId }}
-          component={RouterLink}
-          sx={{ color: "primary.contrastText", textDecoration: "none" }}
-        >
-          Wstecz
-        </Button>
-      )}
+      <Box
+        sx={{
+          width: "7%",
+          visibility: "hidden",
+        }}
+      ></Box>
       <ChoiceEx
         task={lessonInfo?.exercise?.task}
         word={lessonInfo?.exercise?.word}

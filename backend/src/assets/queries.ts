@@ -518,7 +518,7 @@ export const findUsersLessonsById = async (
 export const findInputExerciseById = async (
   lessonId: number,
   exerciseId: number
-): Promise<InputExercise | ChoiceExercise | null> => {
+): Promise<InputExercise | ChoiceExercise | MatchExercise | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
@@ -607,6 +607,7 @@ export const getAccuracy = async (
       {
         $match: {
           userId: new ObjectId(id),
+          $expr: { $gt: [{ $size: "$correct" }, 0] },
         },
       },
       {

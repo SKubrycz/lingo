@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -7,11 +7,13 @@ import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import LessonProcess from "../LessonProcess";
 import CardEx from "../Stepper/Variants/CardEx";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../state/alertSnackbarSlice";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import type { CardExerciseData } from "./exerciseTypes";
+import { setCorrectData } from "../../../state/lessonSlice";
+import { RootState } from "../../../state/store";
 
 interface NewWordProps {
   lessonId: number;
@@ -26,12 +28,50 @@ export default function NewWord({
   lessonInfo,
   isLastExercise = false,
 }: NewWordProps) {
+  const lessonData = useSelector((state: RootState) => state.lessonReducer);
+  const timeSpentData = useSelector(
+    (state: RootState) => state.timeSpentReducer
+  );
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const alertSnackbarDataDispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  const finishLesson = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/lesson/${lessonId}/${exerciseId}`,
+        {
+          correct: lessonData.correct,
+          timeSpent: performance.now() - timeSpentData.timeStart,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(response.data);
+
+      dispatch(setCorrectData({ correct: [] }));
+
+      navigate("/lessons");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        dispatch(
+          setAlert({
+            severity: "error",
+            variant: "filled",
+            title: "Błąd",
+            content: error?.response?.data,
+          })
+        );
+
+        dispatch(setCorrectData({ correct: [] }));
+      }
+    }
+  };
 
   useEffect(() => {
     if (exerciseId && exerciseId > 2 && !state) {
@@ -47,18 +87,12 @@ export default function NewWord({
 
   return (
     <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
-      {exerciseId === 1 ? (
-        <Button sx={{ visibility: "hidden" }}></Button>
-      ) : (
-        <Button
-          to={`/lesson/${lessonId}/${exerciseId - 1}`}
-          state={{ index: exerciseId }}
-          component={RouterLink}
-          sx={{ color: "primary.contrastText", textDecoration: "none" }}
-        >
-          Wstecz
-        </Button>
-      )}
+      <Box
+        sx={{
+          width: "7%",
+          visibility: "hidden",
+        }}
+      ></Box>
       <CardEx
         ref={cardRef}
         exerciseId={lessonInfo?.exercise?.exerciseId}
@@ -70,6 +104,7 @@ export default function NewWord({
         <Button
           to={`/lessons`}
           component={RouterLink}
+          onClick={() => finishLesson()}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
           Zakończ
@@ -79,7 +114,10 @@ export default function NewWord({
           to={`/lesson/${lessonId}/${exerciseId + 1}`}
           state={{ index: exerciseId }}
           component={RouterLink}
-          sx={{ color: "primary.contrastText", textDecoration: "none" }}
+          sx={{
+            color: "primary.contrastText",
+            textDecoration: "none",
+          }}
         >
           Dalej
         </Button>

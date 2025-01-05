@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../state/alertSnackbarSlice";
@@ -137,18 +137,12 @@ export default function FillWord({
   return (
     <>
       <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
-        {exerciseId === 1 ? (
-          <Button sx={{ visibility: "hidden" }}></Button>
-        ) : (
-          <Button
-            to={`/lesson/${lessonId}/${exerciseId - 1}`}
-            state={{ index: exerciseId }}
-            component={RouterLink}
-            sx={{ color: "primary.contrastText", textDecoration: "none" }}
-          >
-            Wstecz
-          </Button>
-        )}
+        <Box
+          sx={{
+            width: "7%",
+            visibility: "hidden",
+          }}
+        ></Box>
         <InputEx
           question={lessonInfo?.exercise?.question}
           task={lessonInfo?.exercise?.task}
