@@ -7,29 +7,29 @@ import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setAlert } from "../../../../state/alertSnackbarSlice";
+import { setAlert } from "../../../state/alertSnackbarSlice";
 
-import LessonProcess from "../../LessonProcess";
-import InputEx from "../../Stepper/Variants/InputEx";
-import type { InputExerciseData } from "../exerciseTypes";
-import { RootState } from "../../../../state/store";
-import { setCorrectData } from "../../../../state/lessonSlice";
+import LessonProcess from "../LessonProcess";
+import InputEx from "../Stepper/Variants/InputEx";
+import type { InputExerciseData } from "./exerciseTypes";
+import { RootState } from "../../../state/store";
+import { setCorrectData } from "../../../state/lessonSlice";
 
 interface Correct {
   correct: boolean;
 }
 
-interface L1FillWordProps {
+interface FillWordProps {
   lessonId: number;
   exerciseId: number;
   isLastExercise?: boolean;
 }
 
-export default function L1FillWord({
+export default function FillWord({
   lessonId,
   exerciseId,
   isLastExercise = false,
-}: L1FillWordProps) {
+}: FillWordProps) {
   const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer

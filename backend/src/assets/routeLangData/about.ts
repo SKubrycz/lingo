@@ -19,7 +19,6 @@ interface AboutTitle {
 }
 
 interface AboutFooter {
-  about: string;
   login: string;
   register: string;
 }
@@ -82,7 +81,6 @@ export const aboutLangData: AboutLangData[] = [
       },
     ],
     footer: {
-      about: "O aplikacji",
       login: "Logowanie",
       register: "Rejestracja",
     },
@@ -125,7 +123,6 @@ nur passives Schreiben oder Lesen. Solche Lösungen beim Sprachenlernen ermögli
       },
     ],
     footer: {
-      about: "Über die App",
       login: "Login",
       register: "Registrieren",
     },

@@ -23,7 +23,7 @@ export default function Admin() {
         if (error.status === 403) {
           navigate("/not-found");
         } else {
-          //navigate("/");
+          navigate("/");
         }
       }
     }

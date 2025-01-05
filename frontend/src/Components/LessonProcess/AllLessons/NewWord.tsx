@@ -4,26 +4,26 @@ import { useState, useRef, useEffect } from "react";
 
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
-import LessonProcess from "../../LessonProcess";
-import CardEx from "../../Stepper/Variants/CardEx";
+import LessonProcess from "../LessonProcess";
+import CardEx from "../Stepper/Variants/CardEx";
 
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../../../state/alertSnackbarSlice";
+import { setAlert } from "../../../state/alertSnackbarSlice";
 import { Button } from "@mui/material";
 
-import type { CardExerciseData } from "../exerciseTypes";
+import type { CardExerciseData } from "./exerciseTypes";
 
-interface L1NewWordProps {
+interface NewWordProps {
   lessonId: number;
   exerciseId: number;
   isLastExercise?: boolean;
 }
 
-export default function L1Exercise1({
+export default function NewWord({
   lessonId,
   exerciseId,
   isLastExercise = false,
-}: L1NewWordProps) {
+}: NewWordProps) {
   const [lessonInfo, setLessonInfo] = useState<CardExerciseData>({
     exercise: {
       exerciseId: 0,

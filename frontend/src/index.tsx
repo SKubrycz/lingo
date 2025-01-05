@@ -13,12 +13,13 @@ import About from "./Components/About/About";
 import Profile from "./Components/Profile/Profile";
 import Lessons from "./Components/Lessons/Lessons";
 import Logout from "./Components/Logout/Logout";
-import L1NewWord from "./Components/LessonProcess/AllLessons/Lesson1/L1NewWord";
-import L1FillWord from "./Components/LessonProcess/AllLessons/Lesson1/L1FillWord";
+import L1NewWord from "./Components/LessonProcess/AllLessons/NewWord";
+import L1FillWord from "./Components/LessonProcess/AllLessons/FillWord";
 import Verify from "./Components/Register/Verify/Verify";
 import DeleteAccount from "./Components/DeleteAccount/DeleteAccount";
 import Admin from "./Components/Admin/Admin";
 import AdminPanel from "./Components/Admin/AdminPanel/AdminPanel";
+import LessonExercise from "./Components/LessonProcess/AllLessons/LessonExercise";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -42,10 +43,10 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/profile/:userId" element={<Profile></Profile>}></Route>
           <Route path="/lessons" element={<Lessons></Lessons>}></Route>
           <Route
-            path="/lesson/1/1"
-            element={<L1NewWord lessonId={1} exerciseId={1}></L1NewWord>}
+            path="/lesson/:lessonId/:exerciseId"
+            element={<LessonExercise></LessonExercise>}
           ></Route>
-          <Route
+          {/* <Route
             path="/lesson/1/2"
             element={<L1NewWord lessonId={1} exerciseId={2}></L1NewWord>}
           ></Route>
@@ -78,7 +79,7 @@ createRoot(document.getElementById("root")!).render(
                 isLastExercise
               ></L1FillWord>
             }
-          ></Route>
+          ></Route> */}
           <Route path="/admin" element={<Admin></Admin>}></Route>
           <Route
             path="/admin/panel"

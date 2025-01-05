@@ -1,6 +1,6 @@
 interface CardExercise {
   exerciseId: number;
-  type: string;
+  type: "card";
   word: string;
   translation: string;
   description: string;
@@ -8,10 +8,26 @@ interface CardExercise {
 
 interface InputExercise {
   exerciseId: number;
-  type: string;
+  type: "input";
   question: string;
   task: string;
   missingWords: string;
+}
+
+interface ChoiceExercise {
+  exerciseId: number;
+  type: "choice";
+  question: string;
+  task: string;
+  words: string[];
+  answer: string;
+}
+
+interface MatchExercise {
+  exerciseId: number;
+  type: "match";
+  task: string;
+  words: string[][]; // words = [["You", "Ty"], ...]
 }
 
 interface LessonPanel {

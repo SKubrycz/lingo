@@ -26,12 +26,10 @@ function About() {
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
-    "/about",
     "/login",
     "/register",
   ]);
   const [footerOptionsArray, setFooterOptionsArray] = useState<string[]>([
-    "O aplikacji",
     "Logowanie",
     "Rejestracja",
   ]);
