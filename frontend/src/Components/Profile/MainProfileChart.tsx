@@ -3,6 +3,7 @@ import { LineChart } from "@mui/x-charts";
 import { defaultTheme } from "../../defaultTheme";
 import { Stats } from "./Profile";
 import { useEffect } from "react";
+import { AxisValueFormatterContext } from "@mui/x-charts/internals";
 
 interface MainProfileChartProps {
   stats: Stats;
@@ -82,6 +83,11 @@ export default function MainProfileChart({ stats }: MainProfileChartProps) {
     });
   };
 
+  const formatYAxis = (num: number) => {
+    if (num === Math.floor(num)) return String(Math.floor(num));
+    else return "";
+  };
+
   return (
     <LineChart
       dataset={dataset}
@@ -93,7 +99,13 @@ export default function MainProfileChart({ stats }: MainProfileChartProps) {
           valueFormatter,
         },
       ]}
-      yAxis={[{ label: "Ilość ukończonych lekcji", min: 0 }]}
+      yAxis={[
+        {
+          label: "Ilość ukończonych lekcji",
+          min: 0,
+          valueFormatter: formatYAxis,
+        },
+      ]}
       series={[
         {
           dataKey: "count",

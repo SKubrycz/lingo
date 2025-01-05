@@ -1,4 +1,4 @@
-interface CardExercise {
+export interface CardExercise {
   exerciseId: number;
   type: "card";
   word: string;
@@ -6,7 +6,7 @@ interface CardExercise {
   description: string;
 }
 
-interface InputExercise {
+export interface InputExercise {
   exerciseId: number;
   type: "input";
   question: string;
@@ -14,16 +14,16 @@ interface InputExercise {
   missingWords: string;
 }
 
-interface ChoiceExercise {
+export interface ChoiceExercise {
   exerciseId: number;
   type: "choice";
-  question: string;
   task: string;
+  word: string;
   words: string[];
   answer: string;
 }
 
-interface MatchExercise {
+export interface MatchExercise {
   exerciseId: number;
   type: "match";
   task: string;
@@ -34,12 +34,17 @@ interface LessonPanel {
   lessonId: number;
   title: string;
   description: string;
-  exercises: (CardExercise | InputExercise)[];
+  exercises: (CardExercise | InputExercise | ChoiceExercise | MatchExercise)[];
   newWords: string[];
   exerciseCount: number;
 }
 
-const l1exercises: (CardExercise | InputExercise)[] = [
+const l1exercises: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
   {
     exerciseId: 1,
     type: "card",
@@ -83,7 +88,6 @@ const l1exercises: (CardExercise | InputExercise)[] = [
     description: "bardziej formalne przywitanie",
   },
   {
-    // ! No sentences to fill, just TextField
     exerciseId: 7,
     type: "input",
     question: "Jak przywitamy się z kimś przed południem?",
@@ -91,12 +95,27 @@ const l1exercises: (CardExercise | InputExercise)[] = [
     missingWords: "good morning",
   },
   {
-    // ! No sentences to fill, just TextField
     exerciseId: 8,
     type: "input",
     question: "Jak przywitamy się ze znajomym? (przywitanie nieformalne)",
     task: "Wypełnij puste pole",
     missingWords: "hi",
+  },
+  {
+    exerciseId: 9,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "Good night",
+    words: ["Dobranoc", "Cześć", "Dobry wieczór"],
+    answer: "Dobranoc",
+  },
+  {
+    exerciseId: 10,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "Good evening",
+    words: ["Dobry wieczór", "Dzień dobry", "Dobranoc"],
+    answer: "Dobry wieczór",
   },
 ];
 

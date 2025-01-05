@@ -16,25 +16,16 @@ import type { CardExerciseData } from "./exerciseTypes";
 interface NewWordProps {
   lessonId: number;
   exerciseId: number;
-  isLastExercise?: boolean;
+  lessonInfo: any;
+  isLastExercise: boolean;
 }
 
 export default function NewWord({
   lessonId,
   exerciseId,
+  lessonInfo,
   isLastExercise = false,
 }: NewWordProps) {
-  const [lessonInfo, setLessonInfo] = useState<CardExerciseData>({
-    exercise: {
-      exerciseId: 0,
-      type: "",
-      word: "",
-      translation: "",
-      description: "",
-    },
-    exerciseCount: 0,
-  });
-
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const { state } = useLocation();
@@ -42,40 +33,10 @@ export default function NewWord({
 
   const alertSnackbarDataDispatch = useDispatch();
 
-  const handleAuth = async () => {
-    await axios
-      .get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setLessonInfo(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
-        //navigate("/");
-      });
-  };
-
   useEffect(() => {
     if (exerciseId && exerciseId > 2 && !state) {
       navigate("/lessons");
     }
-
-    handleAuth();
 
     if (cardRef.current) {
       cardRef.current.style.animation = "none";

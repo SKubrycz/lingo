@@ -32,9 +32,11 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
   if (!correct)
     return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
-  if (correct.length !== 2)
-    return res.status(400).send("Przesłano nieprawidłową zawartość");
-  if (typeof correct[0] !== "boolean" && typeof correct[1] !== "boolean")
+  if (
+    correct.forEach((el: boolean) => {
+      if (typeof el !== "boolean") return false;
+    })
+  )
     return res.status(400).send("Przesłano nieprawidłową zawartość");
   if (!timeSpent)
     return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
@@ -73,10 +75,18 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
   if (!exerciseResult)
     return res.status(500).send("Nie udało się pobrać danych");
 
-  if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
-    correct = false;
-  } else {
-    correct = true;
+  if (exerciseResult.type === "input") {
+    if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
+      correct = false;
+    } else {
+      correct = true;
+    }
+  } else if (exerciseResult.type === "choice") {
+    if (word.answer !== exerciseResult.answer) {
+      correct = false;
+    } else {
+      correct = true;
+    }
   }
 
   return res.status(200).send({ correct: correct });

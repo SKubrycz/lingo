@@ -22,27 +22,20 @@ interface Correct {
 interface FillWordProps {
   lessonId: number;
   exerciseId: number;
-  isLastExercise?: boolean;
+  lessonInfo: any;
+  isLastExercise: boolean;
 }
 
 export default function FillWord({
   lessonId,
   exerciseId,
+  lessonInfo,
   isLastExercise = false,
 }: FillWordProps) {
   const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
   );
-  const [lessonInfo, setLessonInfo] = useState<InputExerciseData>({
-    exercise: {
-      exerciseId: 0,
-      question: "",
-      task: "",
-      missingWords: "",
-    },
-    exerciseCount: 0,
-  });
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [disableNext, setDisableNext] = useState<boolean>(true);
 
@@ -53,34 +46,6 @@ export default function FillWord({
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-
-  const handleAuth = async () => {
-    await axios
-      .get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setLessonInfo(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
-        navigate("/");
-      });
-  };
 
   const finishLesson = async () => {
     try {
@@ -120,8 +85,6 @@ export default function FillWord({
     if (exerciseId && exerciseId > 2 && !state) {
       navigate("/lessons");
     }
-
-    handleAuth();
 
     if (cardRef.current) {
       cardRef.current.style.animation = "none";

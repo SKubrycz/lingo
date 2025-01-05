@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { setAlert } from "../../../state/alertSnackbarSlice";
 import FillWord from "./FillWord";
 import NewWord from "./NewWord";
+import ChooseWord from "./ChooseWord";
+import MatchWords from "./MatchWords";
 
 interface LessonExerciseProps {}
 
@@ -69,6 +71,7 @@ export default function LessonExercise({}: LessonExerciseProps) {
         <NewWord
           lessonId={numLessonId}
           exerciseId={numExerciseId}
+          lessonInfo={lessonInfo}
           isLastExercise={lastExercise}
         ></NewWord>
       );
@@ -77,8 +80,28 @@ export default function LessonExercise({}: LessonExerciseProps) {
         <FillWord
           lessonId={numLessonId}
           exerciseId={numExerciseId}
+          lessonInfo={lessonInfo}
           isLastExercise={lastExercise}
         ></FillWord>
+      );
+
+    case "choice":
+      return (
+        <ChooseWord
+          lessonId={numLessonId}
+          exerciseId={numExerciseId}
+          lessonInfo={lessonInfo}
+          isLastExercise={lastExercise}
+        ></ChooseWord>
+      );
+    case "match":
+      return (
+        <MatchWords
+          lessonId={numLessonId}
+          exerciseId={numExerciseId}
+          lessonInfo={lessonInfo}
+          isLastExercise={lastExercise}
+        ></MatchWords>
       );
     default:
       return <>Błąd wczytywania ćwiczenia</>;

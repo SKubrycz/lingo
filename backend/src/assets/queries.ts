@@ -1,6 +1,12 @@
 import { Db, UpdateResult, DeleteResult } from "mongodb";
 import { Document, ObjectId } from "bson";
 import { connectToDb, getDb, closeDbConnection } from "../assets/db";
+import {
+  CardExercise,
+  ChoiceExercise,
+  InputExercise,
+  MatchExercise,
+} from "./lessonsData";
 
 interface User {
   _id: ObjectId;
@@ -58,18 +64,23 @@ interface Exercise {
   description: string;
 }
 
-interface InputExercise extends Exercise {
-  task: string;
-  missingWords: string[] | string;
-}
-
 interface ExerciseData {
-  exercise: Exercise;
+  exercise:
+    | Exercise
+    | CardExercise
+    | InputExercise
+    | ChoiceExercise
+    | MatchExercise;
   exerciseCount: number;
 }
 
 interface Lesson extends LessonView {
-  exercises: Exercise[] | InputExercise[];
+  exercises:
+    | Exercise[]
+    | CardExercise[]
+    | InputExercise[]
+    | ChoiceExercise[]
+    | MatchExercise[];
 }
 
 interface LessonView {
@@ -507,7 +518,7 @@ export const findUsersLessonsById = async (
 export const findInputExerciseById = async (
   lessonId: number,
   exerciseId: number
-): Promise<InputExercise | null> => {
+): Promise<InputExercise | ChoiceExercise | null> => {
   await connectToDb();
   const db: Db = await getDb();
 

@@ -14,6 +14,7 @@ import Stepper from "./Stepper/Stepper";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 import { setTimeStart, TimeSpent } from "../../state/timeSpentSlice";
+import { setCorrectData } from "../../state/lessonSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
@@ -54,6 +55,7 @@ function LessonProcess({
 
   const endSession = async () => {
     try {
+      dispatch(setCorrectData({ correct: [] }));
       navigate("/lessons");
     } catch (err) {
       console.error(err);
