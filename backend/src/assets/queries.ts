@@ -542,10 +542,17 @@ export const findRoute = async (route: string, language: string) => {
 
   try {
     const routesCollection = db.collection("routes");
-    const routeResult = await routesCollection.findOne({
-      "metadata.route": { $eq: `/${route}` },
-      "metadata.language": { $eq: language },
-    });
+    const routeResult = await routesCollection.findOne(
+      {
+        "metadata.route": { $eq: `/${route}` },
+        "metadata.language": { $eq: language },
+      },
+      {
+        projection: {
+          _id: 0,
+        },
+      }
+    );
 
     console.log(routeResult);
 
@@ -564,7 +571,9 @@ export const findAllRoutesMetadata = async () => {
 
   try {
     const routesCollection = db.collection("routes");
-    const routesResult = await routesCollection.find({}).toArray();
+    const routesResult = await routesCollection
+      .find({}, { projection: { _id: 0 } })
+      .toArray();
 
     if (!routesResult) return null;
 

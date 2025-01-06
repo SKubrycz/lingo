@@ -18,6 +18,7 @@ import {
 import { Add, Edit } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import getBackground from "../../getBackground";
 
 interface Metadata {
   route: string;
@@ -110,6 +111,11 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
       navigate("/admin/panel/subpages/edit", { state: stateData });
     }
   };
+
+  useEffect(() => {
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
+  }, []);
 
   return (
     <>

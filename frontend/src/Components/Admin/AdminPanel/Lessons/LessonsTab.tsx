@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import getBackground from "../../getBackground";
 
 interface LessonsTabProps {
   lessonsData: any;
@@ -35,6 +36,9 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
 
   useEffect(() => {
     convertLessonsData();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   useEffect(() => {

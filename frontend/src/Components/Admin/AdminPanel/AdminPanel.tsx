@@ -7,6 +7,7 @@ import { adminTheme } from "../../../adminTheme";
 import SubpagesTab from "./Subpages/SubpagesTab";
 import LessonsTab from "./Lessons/LessonsTab";
 import AdminPanelNavbar from "./AdminPanelNavbar";
+import getBackground from "../getBackground";
 
 interface ChooseIndexProps {
   currentIndex: number;
@@ -100,6 +101,9 @@ export default function AdminPanel() {
     handleAuth();
     fetchSubpages();
     fetchLessons();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
