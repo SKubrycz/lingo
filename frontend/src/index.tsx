@@ -20,6 +20,8 @@ import DeleteAccount from "./Components/DeleteAccount/DeleteAccount";
 import Admin from "./Components/Admin/Admin";
 import AdminPanel from "./Components/Admin/AdminPanel/AdminPanel";
 import LessonExercise from "./Components/LessonProcess/AllLessons/LessonExercise";
+import SubpagesEdit from "./Components/Admin/AdminPanel/Subpages/SubpagesEdit";
+import SubpagesAdd from "./Components/Admin/AdminPanel/Subpages/SubpagesAdd";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -46,44 +48,18 @@ createRoot(document.getElementById("root")!).render(
             path="/lesson/:lessonId/:exerciseId"
             element={<LessonExercise></LessonExercise>}
           ></Route>
-          {/* <Route
-            path="/lesson/1/2"
-            element={<L1NewWord lessonId={1} exerciseId={2}></L1NewWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/3"
-            element={<L1NewWord lessonId={1} exerciseId={3}></L1NewWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/4"
-            element={<L1NewWord lessonId={1} exerciseId={4}></L1NewWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/5"
-            element={<L1NewWord lessonId={1} exerciseId={5}></L1NewWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/6"
-            element={<L1NewWord lessonId={1} exerciseId={6}></L1NewWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/7"
-            element={<L1FillWord lessonId={1} exerciseId={7}></L1FillWord>}
-          ></Route>
-          <Route
-            path="/lesson/1/8"
-            element={
-              <L1FillWord
-                lessonId={1}
-                exerciseId={8}
-                isLastExercise
-              ></L1FillWord>
-            }
-          ></Route> */}
           <Route path="/admin" element={<Admin></Admin>}></Route>
           <Route
             path="/admin/panel"
             element={<AdminPanel></AdminPanel>}
+          ></Route>
+          <Route
+            path="/admin/panel/subpages/edit"
+            element={<SubpagesEdit></SubpagesEdit>}
+          ></Route>
+          <Route
+            path="/admin/panel/subpages/add"
+            element={<SubpagesAdd></SubpagesAdd>}
           ></Route>
           <Route path="/logout" element={<Logout></Logout>}></Route>
         </Routes>

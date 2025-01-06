@@ -536,6 +536,28 @@ export const findInputExerciseById = async (
   }
 };
 
+export const findRoute = async (route: string, language: string) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const routesCollection = db.collection("routes");
+    const routeResult = await routesCollection.findOne({
+      "metadata.route": { $eq: `/${route}` },
+      "metadata.language": { $eq: language },
+    });
+
+    console.log(routeResult);
+
+    if (!routeResult) return null;
+
+    return routeResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+  }
+};
+
 export const findAllRoutesMetadata = async () => {
   await connectToDb();
   const db: Db = await getDb();

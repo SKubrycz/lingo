@@ -1,11 +1,11 @@
 import { ThemeProvider } from "@emotion/react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { adminTheme } from "../../../adminTheme";
-import SubpagesTab from "./SubpagesTab";
-import LessonsTab from "./LessonsTab";
+import SubpagesTab from "./Subpages/SubpagesTab";
+import LessonsTab from "./Lessons/LessonsTab";
 import AdminPanelNavbar from "./AdminPanelNavbar";
 
 interface ChooseIndexProps {

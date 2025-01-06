@@ -7,6 +7,7 @@ import {
   findAllRoutesMetadata,
   findLessonsList,
   findOneUserByLogin,
+  findRoute,
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
@@ -109,6 +110,24 @@ const getAdminPanelSubpagesController = async (
   return res.status(200).send(routesResult);
 };
 
+const getAdminPanelSubpagesEditController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const query = await req.query;
+
+  if (typeof query.route === "string" && query.language) {
+    const routeResult = await findRoute(
+      String(query.route),
+      String(query.language)
+    );
+    if (!routeResult)
+      return res.status(500).send({ message: "Nie udało się pobrać danych" });
+
+    return res.status(200).send(routeResult);
+  } else return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+};
+
 const getAdminPanelLessonsController = async (
   req: RequestLogin,
   res: Response
@@ -197,6 +216,7 @@ export {
   getAdminController,
   getAdminPanelController,
   getAdminPanelSubpagesController,
+  getAdminPanelSubpagesEditController,
   getAdminPanelLessonsController,
   postAdminController,
   postAdminLogoutController,

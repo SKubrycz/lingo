@@ -6,6 +6,7 @@ import {
   getAdminPanelController,
   getAdminPanelLessonsController,
   getAdminPanelSubpagesController,
+  getAdminPanelSubpagesEditController,
   postAdminController,
   postAdminLogoutController,
 } from "../controllers/adminController";
@@ -26,6 +27,7 @@ router.get(
   isAdminWithCode,
   getAdminPanelLessonsController
 );
+router.get("/admin/panel/subpages/edit", getAdminPanelSubpagesEditController);
 
 router.post("/admin", checkAuth, isAdmin, postAdminController);
 router.post("/admin/logout", checkAuth, isAdmin, postAdminLogoutController);
