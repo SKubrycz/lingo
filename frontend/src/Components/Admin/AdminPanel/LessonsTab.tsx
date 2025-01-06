@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -62,7 +62,10 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
                 </TableCell>
               );
             })}
-            <TableCell>Edytuj</TableCell>
+            <TableCell sx={{ borderRight: "1px solid rgb(224,224,224)" }}>
+              Edytuj
+            </TableCell>
+            <TableCell>Dodaj tłumaczenie</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -70,7 +73,7 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
             return (
               <TableRow key={i}>
                 {tableData[i].map((el, i) => {
-                  if (Array.isArray(el))
+                  if (Array.isArray(el) && el.length > 0)
                     return (
                       <TableCell
                         key={i}
@@ -89,9 +92,17 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
                       </TableCell>
                     );
                 })}
-                <TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ borderRight: "1px solid rgb(224,224,224)" }}
+                >
                   <IconButton>
                     <Edit></Edit>
+                  </IconButton>
+                </TableCell>
+                <TableCell align="center">
+                  <IconButton>
+                    <Add></Add>
                   </IconButton>
                 </TableCell>
               </TableRow>

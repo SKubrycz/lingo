@@ -2,6 +2,10 @@ import { MongoClient, Db, ObjectId } from "mongodb";
 import colors from "colors";
 
 import { lesson1, lesson2 } from "./lessonsData";
+import { aboutLangData } from "./routeLangData/about";
+import { homeLangData } from "./routeLangData/home";
+import { loginLangData } from "./routeLangData/login";
+import { registerLangData } from "./routeLangData/register";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -9,6 +13,7 @@ let client: MongoClient;
 let db: Db;
 
 interface CollectionsObj {
+  routes: boolean;
   lessons: boolean;
   users: boolean;
   usersLessons: boolean;
@@ -16,15 +21,35 @@ interface CollectionsObj {
 }
 
 const collectionsObj: CollectionsObj = {
+  routes: false,
   lessons: false,
   users: false,
   usersLessons: false,
   usersLessonsSessions: false,
 };
 
-const insertToLessons = (db: Db) => {
+const insertToRoutes = async (db: Db) => {
+  const routesCollection = db.collection("routes");
+  const result = await routesCollection.insertMany([
+    aboutLangData[0],
+    aboutLangData[1],
+    homeLangData[0],
+    homeLangData[1],
+    loginLangData[0],
+    loginLangData[1],
+    registerLangData[0],
+    registerLangData[1],
+  ]);
+
+  console.log(`routes inserted:`);
+  console.log(result);
+};
+
+const insertToLessons = async (db: Db) => {
   const lessonsCollection = db.collection("lessons");
-  lessonsCollection.insertMany([lesson1, lesson2]);
+  const result = await lessonsCollection.insertMany([lesson1, lesson2]);
+  console.log(`lessons inserted:`);
+  console.log(result);
 };
 
 export const connectToDb = async (): Promise<void> => {
@@ -37,15 +62,22 @@ export const connectToDb = async (): Promise<void> => {
 
     const collections = await db.collections({ nameOnly: true });
     collections.forEach((col) => {
+      if (col.collectionName === "routes") collectionsObj.routes = true;
       if (col.collectionName === "lessons") collectionsObj.lessons = true;
       if (col.collectionName === "users-lessons")
         collectionsObj.usersLessons = true;
       if (col.collectionName === "users") collectionsObj.users = true;
+      if (col.collectionName === "users-lessons-sessions")
+        collectionsObj.usersLessonsSessions = true;
     });
 
+    if (!collectionsObj.routes) {
+      db.createCollection("routes");
+      await insertToRoutes(db);
+    }
     if (!collectionsObj.lessons) {
       db.createCollection("lessons");
-      insertToLessons(db);
+      await insertToLessons(db);
     }
     if (!collectionsObj.users) {
       db.createCollection("users");

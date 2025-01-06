@@ -392,7 +392,6 @@ export const deleteOneUserById = async (
 export const findLessonsList = async (): Promise<LessonView[] | null> => {
   await connectToDb();
   const db: Db = await getDb();
-  let resultArr: LessonView[] = [];
 
   try {
     const lessonsCollection = db.collection<LessonView>("lessons");
@@ -402,7 +401,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
         {},
         {
           projection: {
-            _id: 1,
+            _id: 0,
             lessonId: 1,
             title: 1,
             description: 1,
@@ -413,17 +412,7 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
       )
       .toArray();
 
-    resultArr = result.map((res) => ({
-      id: res._id,
-      lessonId: res.lessonId,
-      title: res.title,
-      description: res.description,
-      newWords: res.newWords,
-      exerciseCount: res.exerciseCount,
-    }));
-
-    //console.log(resultArr);
-    return resultArr;
+    return result;
   } catch (error) {
     console.error(error);
     closeDbConnection();
@@ -547,6 +536,22 @@ export const findInputExerciseById = async (
   }
 };
 
+export const findAllRoutesMetadata = async () => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const routesCollection = db.collection("routes");
+    const routesResult = await routesCollection.find({}).toArray();
+
+    if (!routesResult) return null;
+
+    return routesResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+  }
+};
 export const getTimeSpent = async (
   id: ObjectId | undefined
 ): Promise<number | null | undefined> => {

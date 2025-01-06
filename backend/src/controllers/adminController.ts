@@ -4,6 +4,7 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import {
+  findAllRoutesMetadata,
   findLessonsList,
   findOneUserByLogin,
   upsertAdminCode,
@@ -36,7 +37,7 @@ const constructRegisterMail = (verificationCode: string): string => {
         "
       >
         <h1 style="color: rgb(100, 149, 237)">LINGO</h1>
-        <h3>Twój jednorazowy kod dostępu do Panelu Administratora:</h3>
+        <h3>Twój kod dostępu do Panelu Administratora:</h3>
         <h2 style="color: rgb(100, 149, 237)">${verificationCode}</h2>
       </div>
     </body>
@@ -103,9 +104,9 @@ const getAdminPanelSubpagesController = async (
   req: RequestLogin,
   res: Response
 ) => {
-  const data = aboutLangData[0];
+  const routesResult = await findAllRoutesMetadata();
 
-  return res.status(200).send(data);
+  return res.status(200).send(routesResult);
 };
 
 const getAdminPanelLessonsController = async (
