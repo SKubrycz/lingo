@@ -173,7 +173,7 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
             fromAdmin: true,
           };
 
-          navigate("/admin/panel/subpages/add", { state: stateData });
+          navigate(0);
         } catch (error) {
           console.error(error);
 

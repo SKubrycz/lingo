@@ -7,15 +7,18 @@ import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import {
   findAllRoutesMetadata,
-  findLessonsList,
+  findLessonsMetadata,
   findOneUserByLogin,
+  findRangeLessons,
   findRoute,
+  insertLesson,
   insertRoute,
   updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
 import readCodesFile from "../utilities/readCodesFile";
+import { LessonPanel } from "../assets/lessonsData";
 
 const constructRegisterMail = (verificationCode: string): string => {
   const htmlString = `<!DOCTYPE html>
@@ -137,7 +140,7 @@ const getAdminPanelLessonsController = async (
   req: RequestLogin,
   res: Response
 ) => {
-  const lessonsResult = await findLessonsList();
+  const lessonsResult = await findLessonsMetadata();
   if (!lessonsResult)
     return res
       .status(500)
@@ -255,6 +258,58 @@ const postAdminPanelSubpagesAddController = async (
       .send({ message: "Dodanie nowego języka przebiegło prawidłowo" });
   }
 };
+
+const postAdminPanelLessonsAddController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId } = await req.params;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(lessonId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (typeof Number(lessonId) !== "number")
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const rangeLessonsResult = await findRangeLessons(
+    Number(lessonId) - 1,
+    Number(lessonId) + 1
+  );
+  if (!rangeLessonsResult)
+    res.status(404).send({ message: "Nie udało się pobrać danych" });
+
+  if (rangeLessonsResult && rangeLessonsResult[0].lessonId) {
+    if (rangeLessonsResult[0].lessonId !== Number(lessonId) - 1)
+      return res
+        .status(500)
+        .send({ message: "Nastąpił problem z utworzeniem nowej lekcji" });
+  } else
+    return res
+      .status(500)
+      .send({ message: "Nastąpił problem z utworzeniem nowej lekcji" });
+
+  const newLessonTemplate: LessonPanel = {
+    lessonId: Number(lessonId),
+    language: "pl",
+    title: "",
+    description: "",
+    exercises: [],
+    newWords: [],
+    exerciseCount: 0,
+  };
+
+  const insertLessonResult = await insertLesson(newLessonTemplate);
+  if (!insertLessonResult)
+    return res
+      .status(500)
+      .send({ message: "Nastąpił problem z utworzeniem nowej lekcji" });
+
+  return res
+    .status(200)
+    .send({ message: "Pomyślnie przygotowano nową lekcję" });
+};
+
 const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
   if (req._id) {
     res.clearCookie("admin_token_lingo");
@@ -298,6 +353,7 @@ export {
   getAdminPanelLessonsController,
   postAdminController,
   postAdminPanelSubpagesAddController,
+  postAdminPanelLessonsAddController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
 };

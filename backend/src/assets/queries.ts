@@ -5,6 +5,7 @@ import {
   CardExercise,
   ChoiceExercise,
   InputExercise,
+  LessonPanel,
   MatchExercise,
 } from "./lessonsData";
 
@@ -422,6 +423,54 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
   }
 };
 
+export const findLessonsMetadata = async (): Promise<any | null> => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection<LessonView>("lessons");
+
+    const aggregation = [
+      {
+        $group: {
+          _id: "$lessonId",
+          languages: { $addToSet: "$language" },
+          title: { $first: "$title" },
+          description: { $first: "$description" },
+          exerciseCount: { $first: "$exerciseCount" },
+        },
+      },
+      {
+        $project: {
+          lessonId: "$_id",
+          languages: 1,
+          title: 1,
+          description: 1,
+          exerciseCount: 1,
+          _id: 0,
+        },
+      },
+    ];
+
+    const result = await lessonsCollection.aggregate(aggregation).toArray();
+    if (!result) return null;
+
+    const orderedResult = result.map((item) => ({
+      lessonId: item.lessonId,
+      languages: item.languages,
+      title: item.title,
+      description: item.description,
+      exerciseCount: item.exerciseCount,
+    }));
+
+    return orderedResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findLessonById = async (
   lessonId: number,
   exerciseId: number
@@ -466,6 +515,26 @@ export const findLessonById = async (
   }
 };
 
+export const findRangeLessons = async (start: number, end: number) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const lessonsResult = await lessonsCollection
+      .find({ lessonId: { $gte: start, $lte: end } })
+      .toArray();
+
+    if (!lessonsResult) return null;
+
+    return lessonsResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findUsersLessonsById = async (
   id: ObjectId
 ): Promise<FindUsersLessons[] | null> => {
@@ -501,6 +570,23 @@ export const findUsersLessonsById = async (
     return null;
   } finally {
     //closeDbConnection();
+  }
+};
+
+export const insertLesson = async (lesson: LessonPanel) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const insertLesson = await lessonsCollection.insertOne(lesson);
+    if (!insertLesson) return null;
+
+    return insertLesson;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
   }
 };
 

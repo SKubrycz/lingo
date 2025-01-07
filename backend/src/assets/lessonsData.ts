@@ -30,8 +30,9 @@ export interface MatchExercise {
   words: string[][]; // words = [["You", "Ty"], ...]
 }
 
-interface LessonPanel {
+export interface LessonPanel {
   lessonId: number;
+  language: string;
   title: string;
   description: string;
   exercises: (CardExercise | InputExercise | ChoiceExercise | MatchExercise)[];
@@ -121,6 +122,7 @@ const l1exercises: (
 
 export const lesson1: LessonPanel = {
   lessonId: 1,
+  language: "pl",
   title: "Wprowadzenie",
   description: "Nauczysz się jak przywitać się w języku angielskim",
   exercises: l1exercises,
@@ -204,6 +206,7 @@ const l2exercises: (
 
 export const lesson2: LessonPanel = {
   lessonId: 2,
+  language: "pl",
   title: "Zwroty w różnych osobach",
   description: "Poznasz odmianę przez osoby",
   exercises: l2exercises,
