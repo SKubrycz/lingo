@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import {
   findAllRoutesMetadata,
+  findLessonByIdAndLanguage,
   findLessonsMetadata,
   findOneUserByLogin,
   findRangeLessons,
@@ -147,6 +148,37 @@ const getAdminPanelLessonsController = async (
       .send({ message: "Nie udało się pobrać danych o lekcjach" });
 
   return res.status(200).send(lessonsResult);
+};
+
+const getAdminPanelLessonsEditController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId } = await req.params;
+  const query = await req.query;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (typeof Number(lessonId) !== "number")
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const lessonResult = await findLessonByIdAndLanguage(
+    Number(lessonId),
+    String(query.language)
+  );
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+
+  return res
+    .status(200)
+    .send({
+      message: "Pobieranie danych o lekcji przebiegło pomyślnie",
+      result: lessonResult,
+    });
 };
 
 const postAdminController = async (req: RequestLogin, res: Response) => {
@@ -351,6 +383,7 @@ export {
   getAdminPanelSubpagesController,
   getAdminPanelSubpagesEditController,
   getAdminPanelLessonsController,
+  getAdminPanelLessonsEditController,
   postAdminController,
   postAdminPanelSubpagesAddController,
   postAdminPanelLessonsAddController,

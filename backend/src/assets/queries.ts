@@ -515,6 +515,31 @@ export const findLessonById = async (
   }
 };
 
+export const findLessonByIdAndLanguage = async (
+  lessonId: number,
+  language: string
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const lessonResult = await lessonsCollection.findOne(
+      { lessonId: lessonId, language: language },
+      {
+        projection: { _id: 0 },
+      }
+    );
+    if (!lessonResult) return null;
+
+    return lessonResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findRangeLessons = async (start: number, end: number) => {
   await connectToDb();
   const db: Db = await getDb();
