@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import getBackground from "../../getBackground";
+import getBackground from "../../../../utilities/getBackground";
 
 interface LessonsTabProps {
   lessonsData: any;

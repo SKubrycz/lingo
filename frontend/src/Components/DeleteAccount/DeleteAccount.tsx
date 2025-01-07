@@ -6,6 +6,7 @@ import { setAlert } from "../../state/alertSnackbarSlice";
 import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { FormEvent, useEffect, useState } from "react";
 import { RootState } from "../../state/store";
+import getBackground from "../../utilities/getBackground";
 
 export default function DeleteAccount() {
   const { deleteId } = useParams<{ deleteId: string | undefined }>();
@@ -74,6 +75,9 @@ export default function DeleteAccount() {
 
   useEffect(() => {
     getDeleteAccount();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (

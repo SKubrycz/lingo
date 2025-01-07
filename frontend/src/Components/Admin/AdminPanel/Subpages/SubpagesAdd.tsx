@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
-import getBackground from "../../getBackground";
+import getBackground from "../../../../utilities/getBackground";
 import { ThemeProvider } from "@emotion/react";
 import { adminTheme } from "../../../../adminTheme";
 import AdminPanelNavbar from "../AdminPanelNavbar";

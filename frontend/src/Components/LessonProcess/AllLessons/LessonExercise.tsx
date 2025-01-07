@@ -7,6 +7,7 @@ import FillWord from "./FillWord";
 import NewWord from "./NewWord";
 import ChooseWord from "./ChooseWord";
 import MatchWords from "./MatchWords";
+import getBackground from "../../../utilities/getBackground";
 
 interface LessonExerciseProps {}
 
@@ -49,6 +50,11 @@ export default function LessonExercise({}: LessonExerciseProps) {
         navigate("/");
       });
   };
+
+  useEffect(() => {
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
+  }, []);
 
   useEffect(() => {
     if (lessonId && exerciseId) {

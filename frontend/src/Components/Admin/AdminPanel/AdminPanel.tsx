@@ -7,7 +7,7 @@ import { adminTheme } from "../../../adminTheme";
 import SubpagesTab from "./Subpages/SubpagesTab";
 import LessonsTab from "./Lessons/LessonsTab";
 import AdminPanelNavbar from "./AdminPanelNavbar";
-import getBackground from "../getBackground";
+import getBackground from "../../../utilities/getBackground";
 import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";

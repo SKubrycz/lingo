@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../state/alertSnackbarSlice";
+import getBackground from "../../utilities/getBackground";
 
 function Logout() {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ function Logout() {
 
   useEffect(() => {
     handleLogout();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   });
 
   return <></>;

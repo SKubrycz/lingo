@@ -10,6 +10,7 @@ import Footer from "../Reusables/Footer/Footer";
 
 import "./Register.scss";
 import handleLanguageURL from "../../utilities/handleLanguageURL";
+import getBackground from "../../utilities/getBackground";
 
 function Register() {
   const languageData = useSelector((state: RootState) => state.languageReducer);
@@ -52,6 +53,9 @@ function Register() {
 
   useEffect(() => {
     fetchLanguageData(languageData.lang);
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (

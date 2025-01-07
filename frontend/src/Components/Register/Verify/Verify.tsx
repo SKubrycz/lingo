@@ -13,6 +13,7 @@ import { setAlert } from "../../../state/alertSnackbarSlice";
 import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
 
 import "../Register.scss";
+import getBackground from "../../../utilities/getBackground";
 
 export default function Verify() {
   const [code, setCode] = useState<string>("");
@@ -149,6 +150,9 @@ export default function Verify() {
     }
 
     handleVerify();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (

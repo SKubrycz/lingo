@@ -9,6 +9,7 @@ import {
   getAdminPanelSubpagesEditController,
   postAdminController,
   postAdminLogoutController,
+  postAdminPanelSubpagesAddController,
   putAdminPanelSubpagesEditController,
 } from "../controllers/adminController";
 
@@ -31,6 +32,12 @@ router.get(
 router.get("/admin/panel/subpages/edit", getAdminPanelSubpagesEditController);
 
 router.post("/admin", checkAuth, isAdmin, postAdminController);
+router.post(
+  "/admin/panel/subpages/add",
+  checkAuth,
+  isAdmin,
+  postAdminPanelSubpagesAddController
+);
 router.post("/admin/logout", checkAuth, isAdmin, postAdminLogoutController);
 
 router.put(

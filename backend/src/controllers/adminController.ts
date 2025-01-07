@@ -1,4 +1,6 @@
 import { randomBytes } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import nodemailer from "nodemailer";
 import { Response } from "express";
 import jwt from "jsonwebtoken";
@@ -12,6 +14,7 @@ import {
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
+import readCodesFile from "../utilities/readCodesFile";
 
 const constructRegisterMail = (verificationCode: string): string => {
   const htmlString = `<!DOCTYPE html>
@@ -201,6 +204,33 @@ const postAdminController = async (req: RequestLogin, res: Response) => {
   return res.status(200).send({ message: "Weryfikacja przebiegła pomyślnie" });
 };
 
+const postAdminPanelSubpagesAddController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const query = await req.query;
+
+  if (typeof query.route === "string" && query.language) {
+    const codes = readCodesFile();
+    if (!codes)
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
+
+    const codesArr = codes.split(",");
+    let isFound = false;
+    for (let i = 0; i < codesArr.length - 1; i++) {
+      if (codesArr[i] === query.language) {
+        isFound = true;
+        break;
+      }
+    }
+    if (!isFound)
+      return res.status(400).send({ message: "Nieprawidłowy kod języka" });
+
+    return res
+      .status(200)
+      .send({ message: "Dodanie nowego języka przebiegło prawidłowo" });
+  }
+};
 const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
   if (req._id) {
     res.clearCookie("admin_token_lingo");
@@ -229,12 +259,10 @@ const putAdminPanelSubpagesEditController = async (
     if (!routeResult)
       return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
-    return res
-      .status(200)
-      .send({
-        message: "Zmiany zostały zapisane pomyślnie",
-        result: routeResult,
-      });
+    return res.status(200).send({
+      message: "Zmiany zostały zapisane pomyślnie",
+      result: routeResult,
+    });
   } else return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 };
 
@@ -245,6 +273,7 @@ export {
   getAdminPanelSubpagesEditController,
   getAdminPanelLessonsController,
   postAdminController,
+  postAdminPanelSubpagesAddController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
 };

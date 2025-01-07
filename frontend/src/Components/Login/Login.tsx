@@ -9,6 +9,7 @@ import "./Login.scss";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import handleLanguageURL from "../../utilities/handleLanguageURL";
+import getBackground from "../../utilities/getBackground";
 
 function Login() {
   const languageData = useSelector((state: RootState) => state.languageReducer);
@@ -51,6 +52,9 @@ function Login() {
 
   useEffect(() => {
     fetchLanguageData(languageData.lang);
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (

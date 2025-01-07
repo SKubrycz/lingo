@@ -3,7 +3,7 @@ import axios, { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminTheme } from "../../adminTheme";
-import getBackground from "./getBackground";
+import getBackground from "../../utilities/getBackground";
 
 export default function Admin() {
   const [code, setCode] = useState<string>("");

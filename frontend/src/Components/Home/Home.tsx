@@ -13,6 +13,7 @@ import "./Home.scss";
 import ScrollArrow from "../Reusables/ScrollArrow/ScrollArrow";
 
 import handleLanguageURL from "../../utilities/handleLanguageURL";
+import getBackground from "../../utilities/getBackground";
 
 interface HomeTitle {
   title: string;
@@ -117,6 +118,9 @@ function Home() {
 
   useEffect(() => {
     document.addEventListener("scroll", checkScroll);
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
 
     return () => {
       document.removeEventListener("scroll", checkScroll);

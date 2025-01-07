@@ -11,6 +11,7 @@ import MainProfile from "./MainProfile";
 import Footer from "../Reusables/Footer/Footer";
 
 import "./Profile.scss";
+import getBackground from "../../utilities/getBackground";
 
 export interface Stats {
   totalTimeSpent: DOMHighResTimeStamp;
@@ -117,6 +118,11 @@ function Profile() {
     //fetchCurrentUser();
     fetchUserData();
   }, [userId]);
+
+  useEffect(() => {
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
+  }, []);
 
   return (
     <>

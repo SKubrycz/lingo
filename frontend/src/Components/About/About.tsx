@@ -13,6 +13,7 @@ import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 
 import "./About.scss";
 import handleLanguageURL from "../../utilities/handleLanguageURL";
+import getBackground from "../../utilities/getBackground";
 
 function About() {
   const languageData = useSelector((state: RootState) => state.languageReducer);
@@ -123,6 +124,9 @@ function About() {
 
   useEffect(() => {
     handleAuth(languageData.lang);
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (

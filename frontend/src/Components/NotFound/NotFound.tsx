@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../Reusables/Navbar/Navbar";
 
 import "./NotFound.scss";
+import getBackground from "../../utilities/getBackground";
 
 function NotFound() {
   const [info, setInfo] = useState<string | null>(null);
@@ -24,6 +25,9 @@ function NotFound() {
 
   useEffect(() => {
     handleNotFound();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   //TODO: Refactor into MUI Components

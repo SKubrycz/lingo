@@ -13,12 +13,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { Add, Edit } from "@mui/icons-material";
+import { Add, Edit, HelpOutline } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getBackground from "../../getBackground";
+import getBackground from "../../../../utilities/getBackground";
+import axios, { isAxiosError } from "axios";
 
 interface Metadata {
   route: string;
@@ -39,6 +42,13 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<MergedMetadata | null>(null);
   const [radioValue, setRadioValue] = useState<string>("");
+
+  const [newLanguageModal, setNewLanguageModal] = useState<boolean>(false);
+  const [newLanguageModalData, setNewLanguageModalData] = useState<
+    string | null
+  >(null);
+
+  const [textField, setTextField] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -112,6 +122,67 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
     }
   };
 
+  const handleNewLanguageModalOpen = (route: string) => {
+    setNewLanguageModal(true);
+    setNewLanguageModalData(route);
+  };
+
+  const handleNewLanguageModalClose = () => {
+    setNewLanguageModal(false);
+    setNewLanguageModalData(null);
+  };
+
+  const handleLanguageTextField = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.value.length <= 2) {
+      setTextField(e.target.value);
+    } else {
+      const cut = e.target.value.slice(0, -1);
+      e.target.value = cut;
+      setTextField(e.target.value);
+    }
+  };
+
+  const submitNewLanguage = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (newLanguageModalData) {
+      const strippedRoute = newLanguageModalData.slice(1);
+
+      if (
+        typeof strippedRoute === "string" &&
+        strippedRoute !== null &&
+        strippedRoute !== undefined &&
+        textField.length == 2
+      ) {
+        try {
+          const res = await axios.post(
+            `http://localhost:${
+              import.meta.env.VITE_SERVER_PORT
+            }/admin/panel/subpages/add?route=${strippedRoute}&language=${textField}`,
+            {},
+            { withCredentials: true }
+          );
+
+          console.log(res.data);
+
+          const stateData: Metadata = {
+            route: strippedRoute,
+            language: textField,
+          };
+
+          navigate("/admin/panel/subpages/add", { state: stateData });
+        } catch (error) {
+          console.error(error);
+
+          if (isAxiosError(error)) {
+          }
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     const bg = getBackground(document.URL);
     document.body.style.backgroundColor = bg;
@@ -129,9 +200,15 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Podstrona</TableCell>
-              <TableCell>Języki</TableCell>
-              <TableCell>Edytuj</TableCell>
+              <TableCell sx={{ borderRight: "1px solid rgb(224,224,224)" }}>
+                Podstrona
+              </TableCell>
+              <TableCell sx={{ borderRight: "1px solid rgb(224,224,224)" }}>
+                Języki
+              </TableCell>
+              <TableCell sx={{ borderRight: "1px solid rgb(224,224,224)" }}>
+                Edytuj
+              </TableCell>
               <TableCell>Dodaj tłumaczenie</TableCell>
             </TableRow>
           </TableHead>
@@ -157,7 +234,9 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
                     </IconButton>
                   </TableCell>
                   <TableCell align="center">
-                    <IconButton>
+                    <IconButton
+                      onClick={() => handleNewLanguageModalOpen(el.route)}
+                    >
                       <Add></Add>
                     </IconButton>
                   </TableCell>
@@ -220,6 +299,53 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
             onClick={(e) => submitEdit(e)}
             sx={{ margin: "0.3em" }}
           >
+            Zatwierdź
+          </Button>
+        </Box>
+      </Dialog>
+      <Dialog open={newLanguageModal} onClose={handleNewLanguageModalClose}>
+        <Box
+          sx={{
+            padding: "1em",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ display: "flex" }}>
+            Dodaj tłumaczenie podstrony &nbsp;
+            <span>
+              <Typography variant="h6" color="primary.main">
+                {newLanguageModalData}
+              </Typography>
+            </span>
+          </Typography>
+          <Typography variant="body1" marginTop="0.5em" color="gray">
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Wprowadź kod języka
+              <Tooltip arrow title="Dwuliterowy kod języka wg. ISO 639-1">
+                <HelpOutline></HelpOutline>
+              </Tooltip>
+            </span>
+          </Typography>
+          <TextField
+            onChange={(e) => {
+              handleLanguageTextField(e);
+            }}
+            sx={{
+              "& .MuiInputBase-input": {
+                textAlign: "center",
+              },
+            }}
+          ></TextField>
+          <Button variant="contained" onClick={(e) => submitNewLanguage(e)}>
             Zatwierdź
           </Button>
         </Box>

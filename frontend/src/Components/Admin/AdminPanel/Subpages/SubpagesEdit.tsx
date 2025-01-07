@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { adminTheme } from "../../../../adminTheme";
 import { Done, Edit } from "@mui/icons-material";
-import getBackground from "../../getBackground";
+import getBackground from "../../../../utilities/getBackground";
 import AdminPanelNavbar from "../AdminPanelNavbar";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbarSlice";

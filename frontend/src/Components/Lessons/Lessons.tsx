@@ -16,6 +16,7 @@ import PageTitle from "../Reusables/PageTitle/PageTitle";
 import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 
 import "./Lessons.scss";
+import getBackground from "../../utilities/getBackground";
 
 interface LessonData {
   lessonId: number;
@@ -88,6 +89,9 @@ function Lessons() {
 
   useEffect(() => {
     handleAuth();
+
+    const bg = getBackground(document.URL);
+    document.body.style.backgroundColor = bg;
   }, []);
 
   return (
