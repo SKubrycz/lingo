@@ -8,6 +8,7 @@ import {
   findLessonsList,
   findOneUserByLogin,
   findRoute,
+  updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
@@ -212,6 +213,31 @@ const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
     .send({ message: "Nastąpiło wylogowanie z Panelu Administratora" });
 };
 
+const putAdminPanelSubpagesEditController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const data = await req.body;
+  const query = await req.query;
+
+  if (typeof query.route === "string" && query.language) {
+    const routeResult = await updateRoute(
+      String(query.route),
+      String(query.language),
+      data.routeData
+    );
+    if (!routeResult)
+      return res.status(500).send({ message: "Nie udało się pobrać danych" });
+
+    return res
+      .status(200)
+      .send({
+        message: "Zmiany zostały zapisane pomyślnie",
+        result: routeResult,
+      });
+  } else return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+};
+
 export {
   getAdminController,
   getAdminPanelController,
@@ -220,4 +246,5 @@ export {
   getAdminPanelLessonsController,
   postAdminController,
   postAdminLogoutController,
+  putAdminPanelSubpagesEditController,
 };

@@ -1,15 +1,34 @@
 import { ThemeProvider } from "@emotion/react";
-import { Box, Grid2, IconButton, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Grid2,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { adminTheme } from "../../../../adminTheme";
-import { Edit } from "@mui/icons-material";
+import { Done, Edit } from "@mui/icons-material";
 import getBackground from "../../getBackground";
+import AdminPanelNavbar from "../AdminPanelNavbar";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 export default function SubpagesEdit() {
   const [routeData, setRouteData] = useState<any>();
+  const [editing, setEditing] = useState<{
+    path: string[];
+    value: string;
+  } | null>(null);
   const { state } = useLocation();
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleAuth = async () => {
     if (
@@ -47,8 +66,11 @@ export default function SubpagesEdit() {
     document.body.style.backgroundColor = bg;
   }, []);
 
-  const mapData = (data: any, depth = 0) => {
-    if (!data) return;
+  const mapData = (data: any, depth = 0, path: string[] = []) => {
+    if (!data) {
+      console.log(data);
+      return;
+    }
 
     const indent = { marginLeft: `${depth * 20}px` };
 
@@ -56,7 +78,9 @@ export default function SubpagesEdit() {
       return (
         <Box sx={indent}>
           {data.map((el, i) => {
-            return <b key={i}>{mapData(el, depth + 1)}</b>;
+            return (
+              <b key={i}>{mapData(el, depth + 1, [...path, i.toString()])}</b>
+            );
           })}
         </Box>
       );
@@ -67,7 +91,7 @@ export default function SubpagesEdit() {
             if (key === "metadata") return;
             return (
               <div key={key}>
-                <b>{key}</b>: {mapData(value, depth + 1)}
+                <b>{key}</b>: {mapData(value, depth + 1, [...path, key])}
               </div>
             );
           })}
@@ -76,12 +100,83 @@ export default function SubpagesEdit() {
     } else {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography sx={indent}>{String(data)}</Typography>
-          <IconButton>
-            <Edit sx={{ fontSize: 14 }}></Edit>
-          </IconButton>
+          {editing?.path.join(".") === path.join(".") ? (
+            <>
+              <TextField
+                value={editing.value}
+                onChange={(e) =>
+                  setEditing({ ...editing, value: e.target.value })
+                }
+                size="small"
+                variant="outlined"
+                sx={{ marginRight: 1 }}
+              ></TextField>
+              <IconButton
+                onClick={() => {
+                  updateRouteData(path, editing.value);
+                  setEditing(null);
+                }}
+              >
+                <Done></Done>
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <Typography sx={indent}>{String(data)}</Typography>
+              <IconButton
+                onClick={() => setEditing({ path, value: String(data) })}
+              >
+                <Edit sx={{ fontSize: 14 }}></Edit>
+              </IconButton>
+            </>
+          )}
         </Box>
       );
+    }
+  };
+
+  const updateRouteData = (path: string[], newValue: string) => {
+    const updatedData = { ...routeData };
+    let current = updatedData;
+
+    for (let i = 0; i < path.length - 1; i++) {
+      current = current[path[i]];
+    }
+
+    current[path[path.length - 1]] = newValue;
+    setRouteData(updatedData);
+  };
+
+  const submitChanges = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.put(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/admin/panel/subpages/edit?route=${state.route}&language=${
+          state.language
+        }`,
+        { routeData },
+        { withCredentials: true }
+      );
+
+      console.log(res.data);
+
+      dispatch(
+        setAlert({
+          severity: "success",
+          variant: "filled",
+          title: "Sukces",
+          content: res.data.message,
+        })
+      );
+
+      navigate("/admin/panel");
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
     }
   };
 
@@ -95,10 +190,11 @@ export default function SubpagesEdit() {
           backgroundColor: "primary.contrastText",
         }}
       >
+        <AdminPanelNavbar></AdminPanelNavbar>
         <Box
           sx={{
             width: "100%",
-            height: "100%",
+            marginTop: "60px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -108,10 +204,30 @@ export default function SubpagesEdit() {
             Podstrona: {`/${state.route}`}, Język: {state.language}{" "}
             <span className={`fi fi-${state.language}`}></span>
           </Typography>
-          <Box sx={{ width: "80%", padding: "2em" }}>
+          <Box sx={{ width: "80%", marginBottom: "5em", padding: "2em" }}>
             {routeData && mapData(routeData)}
           </Box>
         </Box>
+        <AppBar
+          position="fixed"
+          sx={{
+            padding: "1em 1.5em",
+            top: "auto",
+            bottom: 0,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: "primary.contrastText",
+          }}
+        >
+          <Typography variant="body1" color="primary.main">
+            Zapisz zmiany:
+          </Typography>
+          <Button variant="contained" onClick={(e) => submitChanges(e)}>
+            Zatwierdź
+          </Button>
+        </AppBar>
       </Box>
     </ThemeProvider>
   );

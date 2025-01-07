@@ -565,6 +565,35 @@ export const findRoute = async (route: string, language: string) => {
   }
 };
 
+export const updateRoute = async (
+  route: string,
+  language: string,
+  data: any
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const routesCollection = db.collection("routes");
+    const routeResult = await routesCollection.findOneAndReplace(
+      {
+        "metadata.route": { $eq: `/${route}` },
+        "metadata.language": { $eq: language },
+      },
+      data
+    );
+
+    console.log(routeResult);
+
+    if (!routeResult) return null;
+
+    return routeResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+  }
+};
+
 export const findAllRoutesMetadata = async () => {
   await connectToDb();
   const db: Db = await getDb();

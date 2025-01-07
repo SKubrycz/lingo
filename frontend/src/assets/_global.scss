@@ -22,24 +22,24 @@ button {
 }
 
 //custom scrollbar
-::-webkit-scrollbar {
-  width: 15px;
+// ::-webkit-scrollbar {
+//   width: 15px;
 
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+//   overflow-y: auto;
+//   overflow-x: hidden;
+// }
 
-::-webkit-scrollbar-track {
-  background: $baseBg;
-}
+// ::-webkit-scrollbar-track {
+//   background: $baseBg;
+// }
 
-::-webkit-scrollbar-thumb {
-  background: $baseColor;
-}
+// ::-webkit-scrollbar-thumb {
+//   background: $baseColor;
+// }
 
-::-webkit-scrollbar-thumb:hover {
-  background: color.adjust($color: $baseColor, $blackness: 10%);
-}
+// ::-webkit-scrollbar-thumb:hover {
+//   background: color.adjust($color: $baseColor, $blackness: 10%);
+// }
 
 .wrapper {
   width: 100%;

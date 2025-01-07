@@ -9,6 +9,7 @@ import {
   getAdminPanelSubpagesEditController,
   postAdminController,
   postAdminLogoutController,
+  putAdminPanelSubpagesEditController,
 } from "../controllers/adminController";
 
 const router = express.Router();
@@ -31,5 +32,12 @@ router.get("/admin/panel/subpages/edit", getAdminPanelSubpagesEditController);
 
 router.post("/admin", checkAuth, isAdmin, postAdminController);
 router.post("/admin/logout", checkAuth, isAdmin, postAdminLogoutController);
+
+router.put(
+  "/admin/panel/subpages/edit",
+  checkAuth,
+  isAdmin,
+  putAdminPanelSubpagesEditController
+);
 
 export default router;

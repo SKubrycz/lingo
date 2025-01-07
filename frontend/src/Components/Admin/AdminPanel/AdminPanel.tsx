@@ -8,6 +8,9 @@ import SubpagesTab from "./Subpages/SubpagesTab";
 import LessonsTab from "./Lessons/LessonsTab";
 import AdminPanelNavbar from "./AdminPanelNavbar";
 import getBackground from "../getBackground";
+import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
 
 interface ChooseIndexProps {
   currentIndex: number;
@@ -31,6 +34,10 @@ function ChooseIndex({
 }
 
 export default function AdminPanel() {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
+
   const [subpagesData, setSubpagesData] = useState<any>();
   const [lessonsData, setLessonsData] = useState<any[][]>([]);
   const [value, setValue] = useState<number>(0);
@@ -158,6 +165,12 @@ export default function AdminPanel() {
             ></ChooseIndex>
           </Box>
         </Box>
+        <AlertSnackbar
+          severity={alertSnackbarData.severity}
+          variant={alertSnackbarData.variant}
+          title={alertSnackbarData.title}
+          content={alertSnackbarData.content}
+        ></AlertSnackbar>
       </Box>
     </ThemeProvider>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Link,
   ThemeProvider,
   Typography,
 } from "@mui/material";
@@ -69,31 +70,48 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              margin: 0,
-              fontFamily: "Fira Sans, sans-serif",
-              fontWeight: "500",
-              lineHeight: "initial",
-              color: "primary.main",
-            }}
+          <Link
+            to="/admin/panel"
+            component={RouterLink}
+            state={{ fromAdmin: true }}
+            underline="none"
+            color="primary.contrastText"
+            sx={{ margin: 0, padding: 0 }}
           >
-            LINGO
-          </Typography>
-          <Typography
-            variant="body1"
-            component="div"
-            sx={{
-              margin: "0 0.5em",
-              fontFamily: "Fira Sans, sans-serif",
-              fontWeight: "400",
-              color: "primary.main",
-            }}
-          >
-            Admin Panel
-          </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  margin: 0,
+                  fontFamily: "Fira Sans, sans-serif",
+                  fontWeight: "500",
+                  lineHeight: "initial",
+                  color: "primary.main",
+                }}
+              >
+                LINGO
+              </Typography>
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{
+                  margin: "0 0.5em",
+                  fontFamily: "Fira Sans, sans-serif",
+                  fontWeight: "400",
+                  color: "primary.main",
+                }}
+              >
+                Admin Panel
+              </Typography>
+            </Box>
+          </Link>
         </Box>
         <Typography
           component="div"
