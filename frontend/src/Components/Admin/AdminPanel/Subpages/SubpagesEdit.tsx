@@ -172,7 +172,13 @@ export default function SubpagesEdit() {
         })
       );
 
-      navigate("/admin/panel");
+      const stateData: any = {
+        route: state.route,
+        language: state.language,
+        fromAdmin: true,
+      };
+
+      navigate("/admin/panel", { state: stateData });
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {

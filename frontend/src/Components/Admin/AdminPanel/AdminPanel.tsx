@@ -146,7 +146,6 @@ export default function AdminPanel() {
               alignItems: "flex-start",
             }}
           >
-            <Typography>Admin Panel</Typography>
             <Tabs
               value={value}
               onChange={handleTabChange}

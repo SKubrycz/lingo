@@ -167,9 +167,10 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
 
           console.log(res.data);
 
-          const stateData: Metadata = {
+          const stateData: any = {
             route: strippedRoute,
             language: textField,
+            fromAdmin: true,
           };
 
           navigate("/admin/panel/subpages/add", { state: stateData });

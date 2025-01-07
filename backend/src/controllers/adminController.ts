@@ -10,6 +10,7 @@ import {
   findLessonsList,
   findOneUserByLogin,
   findRoute,
+  insertRoute,
   updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
@@ -225,6 +226,29 @@ const postAdminPanelSubpagesAddController = async (
     }
     if (!isFound)
       return res.status(400).send({ message: "Nieprawidłowy kod języka" });
+
+    //check if the language exists for the route
+    const routeResult = await findRoute(
+      String(query.route),
+      String(query.language)
+    );
+    if (routeResult)
+      return res
+        .status(400)
+        .send({ message: "Istnieje już takie tłumaczenie podstrony" });
+
+    const routeTemplate = await findRoute(String(query.route), "pl");
+    if (!routeTemplate)
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
+    if (!Object.keys(routeTemplate).includes("metadata"))
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
+    if (!Object.keys(routeTemplate.metadata).includes("language"))
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
+    routeTemplate.metadata.language = String(query.language);
+
+    const routeTemplateResult = await insertRoute(routeTemplate);
+    if (!routeTemplateResult)
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
 
     return res
       .status(200)

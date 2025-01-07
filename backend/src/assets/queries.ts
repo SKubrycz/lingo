@@ -562,6 +562,24 @@ export const findRoute = async (route: string, language: string) => {
   } catch (error) {
     console.error(error);
     closeDbConnection();
+    return null;
+  }
+};
+
+export const insertRoute = async (routeData: any) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const routeCollection = db.collection("routes");
+    const insertResult = await routeCollection.insertOne(routeData);
+    if (!insertResult) return null;
+
+    return insertResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
   }
 };
 
@@ -591,6 +609,7 @@ export const updateRoute = async (
   } catch (error) {
     console.error(error);
     closeDbConnection();
+    return null;
   }
 };
 
@@ -610,6 +629,7 @@ export const findAllRoutesMetadata = async () => {
   } catch (error) {
     console.error(error);
     closeDbConnection();
+    return null;
   }
 };
 export const getTimeSpent = async (
@@ -653,6 +673,7 @@ export const getTimeSpent = async (
   } catch (error) {
     console.error(error);
     closeDbConnection();
+    return null;
   } finally {
     //closeDbConnection();
   }
