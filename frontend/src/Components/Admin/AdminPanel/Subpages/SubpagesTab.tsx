@@ -178,6 +178,9 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
           console.error(error);
 
           if (isAxiosError(error)) {
+            if (error.response?.status === 403) {
+              navigate("/admin");
+            }
           }
         }
       }

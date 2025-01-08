@@ -32,6 +32,7 @@ export interface MatchExercise {
 
 export interface LessonPanel {
   lessonId: number;
+  language: string;
   title: string;
   description: string;
   exercises: (CardExercise | InputExercise | ChoiceExercise | MatchExercise)[];

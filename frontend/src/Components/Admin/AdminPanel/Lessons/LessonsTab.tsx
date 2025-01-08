@@ -125,6 +125,9 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
+          if (error.response?.status === 403) {
+            navigate("/admin");
+          }
         }
       }
     }

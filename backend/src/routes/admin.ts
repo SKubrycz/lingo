@@ -34,35 +34,47 @@ router.get(
 );
 router.get(
   "/admin/panel/lessons/edit/:lessonId",
+  checkAuth,
+  isAdminWithCode,
   getAdminPanelLessonsEditController
 );
-router.get("/admin/panel/subpages/edit", getAdminPanelSubpagesEditController);
+router.get(
+  "/admin/panel/subpages/edit",
+  checkAuth,
+  isAdminWithCode,
+  getAdminPanelSubpagesEditController
+);
 
 router.post("/admin", checkAuth, isAdmin, postAdminController);
 router.post(
   "/admin/panel/subpages/add",
   checkAuth,
-  isAdmin,
+  isAdminWithCode,
   postAdminPanelSubpagesAddController
 );
 router.post(
   "/admin/panel/lessons/edit/:lessonId",
   checkAuth,
-  isAdmin,
+  isAdminWithCode,
   postAdminPanelLessonsEditController
 );
 router.post(
   "/admin/panel/lessons/add/:lessonId",
   checkAuth,
-  isAdmin,
+  isAdminWithCode,
   postAdminPanelLessonsAddController
 );
-router.post("/admin/logout", checkAuth, isAdmin, postAdminLogoutController);
+router.post(
+  "/admin/logout",
+  checkAuth,
+  isAdminWithCode,
+  postAdminLogoutController
+);
 
 router.put(
   "/admin/panel/subpages/edit",
   checkAuth,
-  isAdmin,
+  isAdminWithCode,
   putAdminPanelSubpagesEditController
 );
 

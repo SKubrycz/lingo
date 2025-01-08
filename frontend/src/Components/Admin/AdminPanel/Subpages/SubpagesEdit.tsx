@@ -54,6 +54,9 @@ export default function SubpagesEdit() {
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
+          if (error.response?.status === 403) {
+            navigate("/admin");
+          }
         }
       }
     }
