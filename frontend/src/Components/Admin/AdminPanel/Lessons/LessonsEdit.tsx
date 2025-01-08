@@ -26,6 +26,7 @@ import { LessonPanel } from "./LessonsTypes";
 import { adminTheme } from "../../../../adminTheme";
 import AdminPanelNavbar from "../AdminPanelNavbar";
 import { Delete, Edit } from "@mui/icons-material";
+import ExerciseDialog from "./ExerciseDialog";
 
 interface DeleteDialogData {
   open: boolean;
@@ -40,6 +41,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
     open: false,
     exerciseId: null,
   });
+  const [exerciseDialog, setExerciseDialog] = useState<boolean>(false);
   const { lessonId } = useParams();
   const [query] = useSearchParams();
 
@@ -93,6 +95,22 @@ export default function LessonsEdit({}: LessonsEditProps) {
   const submitChanges = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
   };
+
+  const handleOpenExerciseDialog = () => {
+    setExerciseDialog(true);
+  };
+
+  const handleCloseExerciseDialog = () => {
+    setExerciseDialog(false);
+  };
+
+  useEffect(() => {
+    if (lessonData && lessonData?.exercises) {
+      const lessonDataClone = structuredClone(lessonData);
+      lessonDataClone.exerciseCount = lessonDataClone?.exercises.length;
+      setLessonData(lessonDataClone);
+    }
+  }, []);
 
   useEffect(() => {
     handleAuth();
@@ -159,7 +177,10 @@ export default function LessonsEdit({}: LessonsEditProps) {
                 <b>Język:</b> {lessonData?.language}
               </Typography>
               <Typography>
-                <b>Nowe słowa:</b> {lessonData?.newWords.join(", ")}
+                <b>Nowe słowa:</b>{" "}
+                {lessonData && lessonData?.newWords.length > 0
+                  ? lessonData?.newWords.join(", ")
+                  : "-"}
               </Typography>
             </Box>
           </Box>
@@ -224,6 +245,13 @@ export default function LessonsEdit({}: LessonsEditProps) {
                       </TableRow>
                     );
                   })}
+                <TableRow>
+                  <TableCell>
+                    <Button onClick={() => handleOpenExerciseDialog()}>
+                      Dodaj ćwiczenie
+                    </Button>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </Box>
@@ -245,6 +273,10 @@ export default function LessonsEdit({}: LessonsEditProps) {
               </Typography>
             </Box>
           </Dialog>
+          <ExerciseDialog
+            open={exerciseDialog}
+            onClose={handleCloseExerciseDialog}
+          ></ExerciseDialog>
         </Box>
       </Box>
       <AppBar
