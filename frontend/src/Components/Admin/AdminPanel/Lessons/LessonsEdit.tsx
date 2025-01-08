@@ -63,7 +63,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
 
         console.log(res.data);
 
-        setLessonData(res.data?.result);
+        setLessonData(res.data.result);
       } catch (error) {
         console.error(error);
 
@@ -92,8 +92,28 @@ export default function LessonsEdit({}: LessonsEditProps) {
     setDeleteDialog(dialogData);
   };
 
-  const submitChanges = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const submitChanges = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    const language = query.get("language");
+
+    if (lessonData && lessonId && language) {
+      try {
+        const res = await axios.put(
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/admin/panel/lessons/edit/${lessonId}?language=${language}`,
+          lessonData,
+          { withCredentials: true }
+        );
+
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+        if (isAxiosError(error)) {
+        }
+      }
+    }
   };
 
   const handleOpenExerciseDialog = () => {
@@ -102,6 +122,26 @@ export default function LessonsEdit({}: LessonsEditProps) {
 
   const handleCloseExerciseDialog = () => {
     setExerciseDialog(false);
+  };
+
+  const updateLessonData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string
+  ) => {
+    if (!lessonData) return;
+    if (Object.keys(lessonData).includes(key)) {
+      const clone: LessonPanel = structuredClone(lessonData);
+      switch (key) {
+        case "title":
+        case "description":
+          clone[key] = e.target.value;
+          break;
+        default:
+          break;
+      }
+
+      setLessonData(clone);
+    }
   };
 
   useEffect(() => {
@@ -150,13 +190,15 @@ export default function LessonsEdit({}: LessonsEditProps) {
             <Box sx={{ width: "70%", marginRight: "2em" }}>
               <Typography fontWeight={600}>Tytuł:</Typography>
               <TextField
-                value={lessonData?.title}
+                value={lessonData ? lessonData?.title : ""}
+                onChange={(e) => updateLessonData(e, "title")}
                 fullWidth
                 sx={{ margin: "0 0 1em 0", padding: 0 }}
               ></TextField>
               <Typography fontWeight={600}>Opis:</Typography>
               <TextField
-                value={lessonData?.description}
+                value={lessonData ? lessonData?.description : ""}
+                onChange={(e) => updateLessonData(e, "description")}
                 multiline
                 rows={3}
                 fullWidth
@@ -171,10 +213,11 @@ export default function LessonsEdit({}: LessonsEditProps) {
               }}
             >
               <Typography>
-                <b>Ilość ćwiczeń:</b> {lessonData?.exerciseCount}
+                <b>Ilość ćwiczeń:</b>{" "}
+                {lessonData ? lessonData?.exerciseCount : 0}
               </Typography>
               <Typography>
-                <b>Język:</b> {lessonData?.language}
+                <b>Język:</b> {lessonData ? lessonData?.language : "pl"}
               </Typography>
               <Typography>
                 <b>Nowe słowa:</b>{" "}

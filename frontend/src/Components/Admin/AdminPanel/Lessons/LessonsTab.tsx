@@ -70,7 +70,7 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
 
       console.log(res.data);
 
-      navigate(`/admin/panel/lessons/edit/${newLessonId}`, {
+      navigate(`/admin/panel/lessons/edit/${newLessonId}?language=pl`, {
         state: { language: "pl" },
       });
     } catch (error) {

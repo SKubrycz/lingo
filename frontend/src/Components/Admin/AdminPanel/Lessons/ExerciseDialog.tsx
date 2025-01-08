@@ -23,7 +23,7 @@ interface ExerciseDialogProps {
 }
 
 export default function ExerciseDialog({ open, onClose }: ExerciseDialogProps) {
-  const [radioValue, setRadioValue] = useState<string | null>(null);
+  const [radioValue, setRadioValue] = useState<string>("");
 
   const possibleExerciseTypes: ExerciseType[] = [
     {
@@ -48,7 +48,8 @@ export default function ExerciseDialog({ open, onClose }: ExerciseDialogProps) {
   ];
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRadioValue(e.target.value);
+    const target = e.target as HTMLInputElement;
+    setRadioValue(target.value);
   };
 
   return (
@@ -75,7 +76,7 @@ export default function ExerciseDialog({ open, onClose }: ExerciseDialogProps) {
                     return (
                       <FormControlLabel
                         key={i}
-                        value={el}
+                        value={el.name}
                         control={<Radio></Radio>}
                         label={
                           <Box sx={{ display: "flex" }}>

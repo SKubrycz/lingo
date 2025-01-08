@@ -14,6 +14,7 @@ import {
   findRoute,
   insertLesson,
   insertRoute,
+  replaceLesson,
   updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
@@ -402,6 +403,32 @@ const putAdminPanelSubpagesEditController = async (
   } else return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 };
 
+const putAdminPanelLessonsEditController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const data = await req.body;
+  const query = await req.query;
+  const { lessonId } = await req.params;
+
+  if (!lessonId || typeof Number(lessonId) !== "number")
+    return res.status(400).send({ message: "Nieprawidłowy formularz" });
+  if (!query || !query.language)
+    return res.status(400).send({ message: "Nieprawidłowy formularz" });
+  if (!data)
+    return res.status(400).send({ message: "Nieprawidłowy formularz" });
+
+  const lessonResult = await replaceLesson(
+    data,
+    Number(lessonId),
+    String(query.language)
+  );
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się zapisać danych" });
+
+  return res.status(200).send({ message: "Dane zapisane pomyślnie" });
+};
+
 export {
   getAdminController,
   getAdminPanelController,
@@ -415,4 +442,5 @@ export {
   postAdminPanelLessonsAddController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
+  putAdminPanelLessonsEditController,
 };

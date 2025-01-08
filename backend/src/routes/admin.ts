@@ -13,6 +13,7 @@ import {
   postAdminPanelLessonsAddController,
   postAdminPanelLessonsEditController,
   postAdminPanelSubpagesAddController,
+  putAdminPanelLessonsEditController,
   putAdminPanelSubpagesEditController,
 } from "../controllers/adminController";
 
@@ -76,6 +77,12 @@ router.put(
   checkAuth,
   isAdminWithCode,
   putAdminPanelSubpagesEditController
+);
+router.put(
+  "/admin/panel/lessons/edit/:lessonId",
+  checkAuth,
+  isAdminWithCode,
+  putAdminPanelLessonsEditController
 );
 
 export default router;

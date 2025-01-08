@@ -657,6 +657,31 @@ export const insertLesson = async (lesson: LessonPanel) => {
   }
 };
 
+export const replaceLesson = async (
+  lesson: LessonPanel,
+  lessonId: number,
+  language: string
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const replaceResult = await lessonsCollection.replaceOne(
+      { lessonId: lessonId, language: language },
+      lesson
+    );
+
+    if (!replaceResult) return null;
+
+    return replaceResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findInputExerciseById = async (
   lessonId: number,
   exerciseId: number
