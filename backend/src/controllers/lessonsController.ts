@@ -2,13 +2,13 @@ import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
 import {
-  findLessonsList,
+  findFilledLessonsList,
   findOneUserByLogin,
   findUsersLessonsById,
 } from "../assets/queries";
 
 const getLessons = async (req: RequestLogin, res: Response) => {
-  const lessonsResult = await findLessonsList();
+  const lessonsResult = await findFilledLessonsList();
 
   if (!req.login)
     return res.status(500).send("Coś poszło nie tak po stronie serwera");

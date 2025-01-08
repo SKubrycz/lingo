@@ -11,6 +11,7 @@ import {
   postAdminController,
   postAdminLogoutController,
   postAdminPanelLessonsAddController,
+  postAdminPanelLessonsEditController,
   postAdminPanelSubpagesAddController,
   putAdminPanelSubpagesEditController,
 } from "../controllers/adminController";
@@ -43,6 +44,12 @@ router.post(
   checkAuth,
   isAdmin,
   postAdminPanelSubpagesAddController
+);
+router.post(
+  "/admin/panel/lessons/edit/:lessonId",
+  checkAuth,
+  isAdmin,
+  postAdminPanelLessonsEditController
 );
 router.post(
   "/admin/panel/lessons/add/:lessonId",

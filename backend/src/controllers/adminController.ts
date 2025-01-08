@@ -173,12 +173,10 @@ const getAdminPanelLessonsEditController = async (
   if (!lessonResult)
     return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
-  return res
-    .status(200)
-    .send({
-      message: "Pobieranie danych o lekcji przebiegło pomyślnie",
-      result: lessonResult,
-    });
+  return res.status(200).send({
+    message: "Pobieranie danych o lekcji przebiegło pomyślnie",
+    result: lessonResult,
+  });
 };
 
 const postAdminController = async (req: RequestLogin, res: Response) => {
@@ -291,6 +289,33 @@ const postAdminPanelSubpagesAddController = async (
   }
 };
 
+const postAdminPanelLessonsEditController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId } = await req.params;
+  const query = await req.query;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(lessonId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (typeof Number(lessonId) !== "number")
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  if (
+    typeof query.language !== "string" ||
+    query.language === "null" ||
+    query.language.length > 2
+  ) {
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  }
+
+  return res
+    .status(200)
+    .send({ message: "Prawidłowo wybrano język dla edytowanej lekcji" });
+};
+
 const postAdminPanelLessonsAddController = async (
   req: RequestLogin,
   res: Response
@@ -386,6 +411,7 @@ export {
   getAdminPanelLessonsEditController,
   postAdminController,
   postAdminPanelSubpagesAddController,
+  postAdminPanelLessonsEditController,
   postAdminPanelLessonsAddController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,

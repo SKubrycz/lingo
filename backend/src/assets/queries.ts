@@ -423,6 +423,48 @@ export const findLessonsList = async (): Promise<LessonView[] | null> => {
   }
 };
 
+export const findFilledLessonsList = async () => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const lessonsResult = await lessonsCollection
+      .find(
+        {
+          $expr: {
+            $and: [
+              { $gt: [{ $strLenCP: "$title" }, 0] },
+              { $gt: [{ $strLenCP: "$description" }, 0] },
+              { $gt: [{ $size: "$exercises" }, 0] },
+              { $gt: [{ $size: "$newWords" }, 0] },
+            ],
+          },
+          exerciseCount: { $gt: 0 },
+        },
+        {
+          projection: {
+            _id: 0,
+            lessonId: 1,
+            title: 1,
+            description: 1,
+            newWords: 1,
+            exerciseCount: 1,
+          },
+        }
+      )
+      .toArray();
+
+    if (!lessonsResult) return null;
+
+    return lessonsResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findLessonsMetadata = async (): Promise<any | null> => {
   await connectToDb();
   const db: Db = await getDb();

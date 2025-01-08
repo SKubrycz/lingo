@@ -81,7 +81,10 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   };
 
   const handleDialogOpen = (index: number) => {
-    setModalData(tableData[index][1]);
+    setModalData({
+      lessonId: tableData[index][0],
+      languages: tableData[index][1],
+    });
     setOpen(true);
   };
 
@@ -95,10 +98,36 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
     setRadioValue(e.target.value);
   };
 
-  const handleLanguageSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLanguageSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
+    if (modalData && modalData?.lessonId && radioValue) {
+      try {
+        const res = await axios.post(
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/admin/panel/lessons/edit/${
+            modalData?.lessonId
+          }?language=${radioValue}`,
+          {},
+          { withCredentials: true }
+        );
 
-    console.log(radioValue);
+        console.log(res.data);
+
+        navigate(
+          `/admin/panel/lessons/edit/${modalData?.lessonId}?language=${radioValue}`,
+          {
+            state: { language: radioValue },
+          }
+        );
+      } catch (error) {
+        console.error(error);
+        if (isAxiosError(error)) {
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -208,14 +237,22 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleDialogClose}>
-        <Box sx={{ margin: "0.7em" }}>
+        <Box
+          sx={{
+            margin: "0.7em",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="body1" fontWeight={600}>
-            Wybierz język:
+            Wybierz język dla lekcji nr {modalData?.lessonId}:
           </Typography>
           <RadioGroup value={radioValue} onChange={handleRadioChange}>
             <FormControl>
               {modalData &&
-                modalData.map((el: string, i: number) => {
+                modalData?.languages.map((el: string, i: number) => {
                   return (
                     <FormControlLabel
                       key={i}
