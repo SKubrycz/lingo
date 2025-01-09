@@ -21,7 +21,7 @@ const constructDeleteEmail = (deletionCode: string) => {
       href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
-    <title>Document</title>
+    <title>Kod usunięcia konta Lingo</title>
   </head>
   <body
     style="
@@ -114,7 +114,7 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
       const mailInfo = await transporter.sendMail({
         from: "noreply@auth.localhost",
         to: user.email,
-        subject: "Weryfikacja konta Lingo",
+        subject: "Kod usunięcia konta Lingo",
         html: htmlMessage,
       });
     } else {

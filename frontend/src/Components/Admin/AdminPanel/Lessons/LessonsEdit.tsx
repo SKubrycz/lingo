@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useLocation,
   useNavigate,
@@ -26,7 +26,6 @@ import { LessonPanel } from "./LessonsTypes";
 import { adminTheme } from "../../../../adminTheme";
 import AdminPanelNavbar from "../AdminPanelNavbar";
 import { Delete, Edit } from "@mui/icons-material";
-import ExerciseDialog from "./ExerciseDialog";
 
 interface DeleteDialogData {
   open: boolean;
@@ -41,7 +40,6 @@ export default function LessonsEdit({}: LessonsEditProps) {
     open: false,
     exerciseId: null,
   });
-  const [exerciseDialog, setExerciseDialog] = useState<boolean>(false);
   const { lessonId } = useParams();
   const [query] = useSearchParams();
 
@@ -116,14 +114,6 @@ export default function LessonsEdit({}: LessonsEditProps) {
     }
   };
 
-  const handleOpenExerciseDialog = () => {
-    setExerciseDialog(true);
-  };
-
-  const handleCloseExerciseDialog = () => {
-    setExerciseDialog(false);
-  };
-
   const updateLessonData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     key: string
@@ -141,6 +131,26 @@ export default function LessonsEdit({}: LessonsEditProps) {
       }
 
       setLessonData(clone);
+    }
+  };
+
+  const handleExerciseCreator = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const language = query.get("language");
+
+    if (lessonData && language) {
+      try {
+        navigate(
+          `/admin/panel/lessons/creator/${lessonId}/${
+            lessonData?.exercises.length + 1
+          }?language=${language}`
+        );
+      } catch (error) {
+        console.error(error);
+        if (isAxiosError(error)) {
+        }
+      }
     }
   };
 
@@ -221,8 +231,15 @@ export default function LessonsEdit({}: LessonsEditProps) {
               </Typography>
               <Typography>
                 <b>Nowe słowa:</b>{" "}
-                {lessonData && lessonData?.newWords.length > 0
-                  ? lessonData?.newWords.join(", ")
+                {lessonData && lessonData?.exercises.length > 0
+                  ? lessonData?.exercises.map((el, i) => {
+                      if (el.type === "card") {
+                        if (i - 1 !== lessonData?.exercises.length)
+                          return `${el.word}, `;
+                        if (i - 1 === lessonData?.exercises.length)
+                          return `${el.word}`;
+                      }
+                    })
                   : "-"}
               </Typography>
             </Box>
@@ -290,7 +307,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
                   })}
                 <TableRow>
                   <TableCell>
-                    <Button onClick={() => handleOpenExerciseDialog()}>
+                    <Button onClick={(e) => handleExerciseCreator(e)}>
                       Dodaj ćwiczenie
                     </Button>
                   </TableCell>
@@ -316,10 +333,6 @@ export default function LessonsEdit({}: LessonsEditProps) {
               </Typography>
             </Box>
           </Dialog>
-          <ExerciseDialog
-            open={exerciseDialog}
-            onClose={handleCloseExerciseDialog}
-          ></ExerciseDialog>
         </Box>
       </Box>
       <AppBar

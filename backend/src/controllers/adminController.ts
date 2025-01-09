@@ -28,7 +28,7 @@ const constructRegisterMail = (verificationCode: string): string => {
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Document</title>
+      <title>Kod dostępu do Panel Administratora</title>
     </head>
     <body
       style="
@@ -93,9 +93,9 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
       const htmlMessage = constructRegisterMail(verificationCode);
 
       const mailInfo = await transporter.sendMail({
-        from: "noreply@auth.localhost",
+        from: "noreply@admin.localhost",
         to: userResult?.email,
-        subject: "Weryfikacja konta Lingo",
+        subject: "Kod dostępu do Panel Administratora",
         html: htmlMessage,
       });
     }
@@ -178,6 +178,25 @@ const getAdminPanelLessonsEditController = async (
     message: "Pobieranie danych o lekcji przebiegło pomyślnie",
     result: lessonResult,
   });
+};
+
+const getAdminPanelLessonsCreatorController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId, exerciseId } = await req.params;
+  const query = await req.query;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!exerciseId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  return res.status(200).send({ message: "Prawidłowo pobrano dane" });
 };
 
 const postAdminController = async (req: RequestLogin, res: Response) => {
@@ -436,6 +455,7 @@ export {
   getAdminPanelSubpagesEditController,
   getAdminPanelLessonsController,
   getAdminPanelLessonsEditController,
+  getAdminPanelLessonsCreatorController,
   postAdminController,
   postAdminPanelSubpagesAddController,
   postAdminPanelLessonsEditController,

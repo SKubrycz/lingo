@@ -23,6 +23,7 @@ import LessonExercise from "./Components/LessonProcess/AllLessons/LessonExercise
 import SubpagesEdit from "./Components/Admin/AdminPanel/Subpages/SubpagesEdit";
 import SubpagesAdd from "./Components/Admin/AdminPanel/Subpages/SubpagesAdd";
 import LessonsEdit from "./Components/Admin/AdminPanel/Lessons/LessonsEdit";
+import ExerciseCreator from "./Components/Admin/AdminPanel/Lessons/ExerciseCreator";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -65,6 +66,10 @@ createRoot(document.getElementById("root")!).render(
           <Route
             path="/admin/panel/lessons/edit/:lessonId"
             element={<LessonsEdit></LessonsEdit>}
+          ></Route>
+          <Route
+            path="/admin/panel/lessons/creator/:lessonId/:exerciseId"
+            element={<ExerciseCreator></ExerciseCreator>}
           ></Route>
           <Route path="/logout" element={<Logout></Logout>}></Route>
         </Routes>
