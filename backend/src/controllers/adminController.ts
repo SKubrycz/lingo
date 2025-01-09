@@ -187,13 +187,27 @@ const getAdminPanelLessonsCreatorController = async (
   const { lessonId, exerciseId } = await req.params;
   const query = await req.query;
 
-  if (!lessonId)
+  if (!lessonId || Number.isNaN(Number(lessonId)))
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
-  if (!exerciseId)
+  if (!exerciseId || Number.isNaN(Number(exerciseId)))
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
   if (!query)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
-  if (!query.language)
+  if (
+    !query.language ||
+    typeof query.language !== "string" ||
+    query.language.length !== 2
+  )
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const lessonResult = await findLessonByIdAndLanguage(
+    Number(lessonId),
+    String(query.language)
+  );
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+
+  if (lessonResult && lessonResult.exercises.length !== Number(exerciseId) - 1)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   return res.status(200).send({ message: "Prawidłowo pobrano dane" });

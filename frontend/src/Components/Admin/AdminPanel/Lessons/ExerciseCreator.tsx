@@ -1,12 +1,13 @@
 import {
   Box,
+  Button,
   TextField,
   ThemeProvider,
   Tooltip,
   Typography,
 } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useLocation,
   useNavigate,
@@ -17,8 +18,20 @@ import ExerciseRadio from "./ExerciseRadio";
 import { adminTheme } from "../../../../adminTheme";
 import getBackground from "../../../../utilities/getBackground";
 import { HelpOutline } from "@mui/icons-material";
+import {
+  CardExercise,
+  ChoiceExercise,
+  InputExercise,
+  MatchExercise,
+} from "./LessonsTypes";
 
 export type ExerciseType = "card" | "input" | "match" | "choice";
+type Exercises = CardExercise | InputExercise | ChoiceExercise | MatchExercise;
+type ExercisesKeys =
+  | keyof CardExercise
+  | keyof InputExercise
+  | keyof ChoiceExercise
+  | keyof MatchExercise;
 
 interface ChooseExerciseTypeProps {
   type: ExerciseType | null;
@@ -26,6 +39,83 @@ interface ChooseExerciseTypeProps {
 }
 
 function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
+  const [exercise, setExercise] = useState<Exercises | null>(null);
+
+  const formatToArray = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.value.length > 0) {
+      if (exercise && exercise.type === "match") {
+        if (exercise.words.length < 5) {
+          const splitArr = e.target.value
+            .replace(/[^a-zA-Z, ]/g, "")
+            .split(",");
+          let pairedArr: string[][] = [];
+          splitArr.forEach((el, i) => {
+            if (i % 2 === 1) pairedArr.push([splitArr[i], splitArr[i + 1]]);
+          });
+
+          console.log(pairedArr);
+
+          setExercise((prev) => ({
+            ...(prev as MatchExercise),
+            words: pairedArr,
+          }));
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (type && exerciseId) {
+      if (type === "card") {
+        const cardExercise: CardExercise = {
+          exerciseId: Number(exerciseId),
+          type: type,
+          word: "",
+          translation: "",
+          description: "",
+        };
+
+        setExercise(cardExercise);
+      }
+      if (type === "input") {
+        const inputExercise: InputExercise = {
+          exerciseId: Number(exerciseId),
+          type: type,
+          question: "",
+          task: "",
+          missingWords: "",
+        };
+
+        setExercise(inputExercise);
+      }
+      if (type === "choice") {
+        const choiceExercise: ChoiceExercise = {
+          exerciseId: Number(exerciseId),
+          type: type,
+          task: "",
+          word: "",
+          words: [],
+          answer: "",
+        };
+
+        setExercise(choiceExercise);
+      }
+      if (type === "match") {
+        const matchExercise: MatchExercise = {
+          exerciseId: Number(exerciseId),
+          type: type,
+          task: "",
+          words: [],
+        };
+
+        setExercise(matchExercise);
+      }
+    }
+  }, [type]);
+
+  if (!exerciseId) return <></>;
   switch (type) {
     case "card":
       return (
@@ -37,17 +127,40 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
             <b>Typ ćwiczenia:</b> {type}
           </Typography>
           <Typography>
-            <b>Pytanie:</b>{" "}
+            <b>Słowo:</b>{" "}
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as CardExercise),
+                word: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Tłumaczenie:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as CardExercise),
+                translation: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Opis:</b>
           </Typography>
-          <TextField multiline rows={3}></TextField>
+          <TextField
+            multiline
+            rows={3}
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as CardExercise),
+                description: e.target.value,
+              }))
+            }
+          ></TextField>
         </Box>
       );
     case "input":
@@ -62,15 +175,36 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
           <Typography>
             <b>Pytanie:</b>{" "}
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as InputExercise),
+                question: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Zadanie:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as InputExercise),
+                task: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Brakujące słowa:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as InputExercise),
+                missingWords: e.target.value,
+              }))
+            }
+          ></TextField>
         </Box>
       );
     case "choice":
@@ -85,23 +219,74 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
           <Typography>
             <b>Zadanie:</b>{" "}
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as ChoiceExercise),
+                task: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Słowo:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as InputExercise),
+                word: e.target.value,
+              }))
+            }
+          ></TextField>
           <Typography>
             <b>Słowa do wyboru:</b>
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            1: <TextField></TextField>
-            2: <TextField></TextField>
-            3: <TextField></TextField>
+            1:{" "}
+            <TextField
+              onChange={(e) =>
+                setExercise((prev) => ({
+                  ...(prev as ChoiceExercise),
+                  words: (prev as ChoiceExercise).words.map((el, i) =>
+                    i === 0 ? e.target.value : el
+                  ),
+                }))
+              }
+            ></TextField>
+            2:{" "}
+            <TextField
+              onChange={(e) =>
+                setExercise((prev) => ({
+                  ...(prev as ChoiceExercise),
+                  words: (prev as ChoiceExercise).words.map((el, i) =>
+                    i === 1 ? e.target.value : el
+                  ),
+                }))
+              }
+            ></TextField>
+            3:{" "}
+            <TextField
+              onChange={(e) =>
+                setExercise((prev) => ({
+                  ...(prev as ChoiceExercise),
+                  words: (prev as ChoiceExercise).words.map((el, i) =>
+                    i === 2 ? e.target.value : el
+                  ),
+                }))
+              }
+            ></TextField>
           </Box>
           <Typography>
             <b>Prawidłowa odpowiedź:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as InputExercise),
+                answer: e.target.value,
+              }))
+            }
+          ></TextField>
         </Box>
       );
     case "match":
@@ -116,17 +301,29 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
           <Typography>
             <b>Zadanie:</b>
           </Typography>
-          <TextField></TextField>
+          <TextField
+            onChange={(e) =>
+              setExercise((prev) => ({
+                ...(prev as MatchExercise),
+                task: e.target.value,
+              }))
+            }
+          ></TextField>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <b>Słowa: &nbsp;</b>
             <Tooltip
               arrow
               placement="right"
-              title="Pary słów (słowo, tłumaczenie)"
+              title="Pięć par słów (słowo, tłumaczenie)"
             >
               <HelpOutline></HelpOutline>
             </Tooltip>
           </Box>
+          <TextField
+            multiline
+            rows={5}
+            onChange={(e) => formatToArray(e)}
+          ></TextField>
         </Box>
       );
 
@@ -194,36 +391,72 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
             width: "100%",
             height: "100%",
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <Box
             sx={{
-              width: "60%",
+              width: "fit-content",
               display: "flex",
-              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <ChooseExerciseType
-              type={exerciseType}
-              exerciseId={exerciseId}
-            ></ChooseExerciseType>
+            <Box
+              sx={{
+                width: "60%",
+                margin: "1em",
+                padding: "0.5em",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ChooseExerciseType
+                type={exerciseType}
+                exerciseId={exerciseId}
+              ></ChooseExerciseType>
+            </Box>
+            <Box
+              sx={{
+                width: "30%",
+                margin: "1em",
+                padding: "0.5em",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                borderLeft: "1px solid rgb(224, 224, 224)",
+              }}
+            >
+              <ExerciseRadio
+                handleExerciseType={handleExerciseType}
+              ></ExerciseRadio>
+            </Box>
           </Box>
           <Box
             sx={{
-              width: "30%",
+              width: "100%",
               display: "flex",
-              flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <ExerciseRadio
-              handleExerciseType={handleExerciseType}
-            ></ExerciseRadio>
+            <Box
+              sx={{
+                width: "50%",
+                padding: "0.5em",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderTop: "1px solid rgb(224, 224, 224)",
+              }}
+            >
+              <Typography color="primary.main">Zapisz ćwiczenie:</Typography>
+              <Button variant="contained">Zapisz</Button>
+            </Box>
           </Box>
         </Box>
       </Box>
