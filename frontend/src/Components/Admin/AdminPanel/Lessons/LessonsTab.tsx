@@ -1,4 +1,4 @@
-import { Add, Edit } from "@mui/icons-material";
+import { Add, Edit, HelpOutline } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -14,6 +14,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -33,6 +35,12 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   const [radioValue, setRadioValue] = useState<string | null>(null);
 
   const [modalData, setModalData] = useState<any | null>(null);
+
+  const [textField, setTextField] = useState<string>("");
+  const [newLanguageModal, setNewLanguageModal] = useState<boolean>(false);
+  const [newLanguageModalData, setNewLanguageModalData] = useState<
+    number | null
+  >(null);
 
   const { state } = useLocation();
 
@@ -56,7 +64,7 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   };
 
   const prepareNewLesson = async () => {
-    const newLessonId = lessonsData[lessonsData.length - 1].lessonId + 1;
+    const newLessonId = lessonsData.length + 1;
     if (!newLessonId) return;
 
     try {
@@ -130,6 +138,34 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
           }
         }
       }
+    }
+  };
+
+  const handleNewLanguageModalOpen = (lessonId: number) => {
+    setNewLanguageModalData(lessonId);
+    setNewLanguageModal(true);
+  };
+
+  const handleNewLanguageModalClose = () => {
+    setNewLanguageModal(false);
+    setNewLanguageModalData(null);
+  };
+
+  const handleLanguageDialogSubmit = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+  };
+
+  const handleLanguageTextField = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.value.length <= 2) {
+      setTextField(e.target.value);
+    } else {
+      const cut = e.target.value.slice(0, -1);
+      e.target.value = cut;
+      setTextField(e.target.value);
     }
   };
 
@@ -222,7 +258,9 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
                     </IconButton>
                   </TableCell>
                   <TableCell align="center">
-                    <IconButton>
+                    <IconButton
+                      onClick={() => handleNewLanguageModalOpen(el[0])}
+                    >
                       <Add></Add>
                     </IconButton>
                   </TableCell>
@@ -276,6 +314,56 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
             </FormControl>
           </RadioGroup>
           <Button variant="contained" onClick={(e) => handleLanguageSubmit(e)}>
+            Zatwierdź
+          </Button>
+        </Box>
+      </Dialog>
+      <Dialog open={newLanguageModal} onClose={handleNewLanguageModalClose}>
+        <Box
+          sx={{
+            padding: "1em",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ display: "flex" }}>
+            Dodaj tłumaczenie lekcji nr&nbsp;
+            <span>
+              <Typography variant="h6" color="primary.main">
+                {newLanguageModalData}
+              </Typography>
+            </span>
+          </Typography>
+          <Typography variant="body1" marginTop="0.5em" color="gray">
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Wprowadź kod języka
+              <Tooltip arrow title="Dwuliterowy kod języka wg. ISO 639-1">
+                <HelpOutline></HelpOutline>
+              </Tooltip>
+            </span>
+          </Typography>
+          <TextField
+            onChange={(e) => {
+              handleLanguageTextField(e);
+            }}
+            sx={{
+              "& .MuiInputBase-input": {
+                textAlign: "center",
+              },
+            }}
+          ></TextField>
+          <Button
+            variant="contained"
+            onClick={(e) => handleLanguageDialogSubmit(e)}
+          >
             Zatwierdź
           </Button>
         </Box>
