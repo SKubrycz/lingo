@@ -7,7 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   useLocation,
   useNavigate,
@@ -24,43 +30,73 @@ import {
   InputExercise,
   MatchExercise,
 } from "./LessonsTypes";
+import AdminPanelNavbar from "../AdminPanelNavbar";
 
 export type ExerciseType = "card" | "input" | "match" | "choice";
 type Exercises = CardExercise | InputExercise | ChoiceExercise | MatchExercise;
-type ExercisesKeys =
-  | keyof CardExercise
-  | keyof InputExercise
-  | keyof ChoiceExercise
-  | keyof MatchExercise;
 
 interface ChooseExerciseTypeProps {
   type: ExerciseType | null;
+  lessonId: string | undefined;
   exerciseId: string | undefined;
+  language: string | null;
 }
 
-function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
+interface ChooseExerciseTypeHandle {
+  runSaveExercise: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const ChooseExerciseType = forwardRef<
+  ChooseExerciseTypeHandle,
+  ChooseExerciseTypeProps
+>(({ type, lessonId, exerciseId, language }, ref) => {
   const [exercise, setExercise] = useState<Exercises | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    runSaveExercise: saveExercise,
+  }));
+
+  const saveExercise = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (lessonId && exerciseId && language) {
+      try {
+        const res = await axios.post(
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/admin/panel/lessons/creator/${lessonId}/${exerciseId}?language=${language}`,
+          exercise,
+          { withCredentials: true }
+        );
+
+        console.log(res.data);
+      } catch (error) {
+        console.error(error);
+        if (isAxiosError(error)) {
+        }
+      }
+    }
+  };
 
   const formatToArray = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (e.target.value.length > 0) {
+    if (e.target.value.length >= 0) {
       if (exercise && exercise.type === "match") {
-        if (exercise.words.length < 5) {
-          const splitArr = e.target.value
-            .replace(/[^a-zA-Z, ]/g, "")
-            .split(",");
-          let pairedArr: string[][] = [];
-          splitArr.forEach((el, i) => {
-            if (i % 2 === 1) pairedArr.push([splitArr[i], splitArr[i + 1]]);
-          });
+        const splitArr = e.target.value.replace(/[^a-zA-Z, ]/g, "").split(",");
+        let pairedArr: string[][] = [];
+        splitArr.forEach((el, i) => {
+          if (i !== 0 && i % 2 === 0)
+            pairedArr.push([splitArr[i - 2], splitArr[i - 1]]);
+        });
 
-          console.log(pairedArr);
+        setExercise((prev) => ({
+          ...(prev as MatchExercise),
+          words: pairedArr,
+        }));
 
-          setExercise((prev) => ({
-            ...(prev as MatchExercise),
-            words: pairedArr,
-          }));
+        if (exercise.words.length >= 5) {
+          e.target.value = e.target.value.slice(0, -1);
         }
       }
     }
@@ -318,10 +354,12 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
             >
               <HelpOutline></HelpOutline>
             </Tooltip>
+            <b>&nbsp;Ilość par: </b>&nbsp;
+            {exercise ? (exercise as MatchExercise)?.words.length : 0}
           </Box>
           <TextField
             multiline
-            rows={5}
+            rows={4}
             onChange={(e) => formatToArray(e)}
           ></TextField>
         </Box>
@@ -336,12 +374,15 @@ function ChooseExerciseType({ type, exerciseId }: ChooseExerciseTypeProps) {
         </Box>
       );
   }
-}
+});
 
 interface ExerciseCreatorProps {}
 
 export default function ExerciseCreator({}: ExerciseCreatorProps) {
   const [exerciseType, setExerciseType] = useState<ExerciseType | null>(null);
+
+  const chooseExerciseRef = useRef<ChooseExerciseTypeHandle>(null);
+
   const { lessonId, exerciseId } = useParams();
   const [query] = useSearchParams();
   const { state } = useLocation();
@@ -376,6 +417,12 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
     setExerciseType(type);
   };
 
+  const handleSaveExercise = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (chooseExerciseRef.current) {
+      chooseExerciseRef.current.runSaveExercise(e);
+    }
+  };
+
   useEffect(() => {
     handleAuth();
 
@@ -396,6 +443,7 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
             alignItems: "center",
           }}
         >
+          <AdminPanelNavbar></AdminPanelNavbar>
           <Box
             sx={{
               width: "fit-content",
@@ -417,7 +465,10 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
             >
               <ChooseExerciseType
                 type={exerciseType}
+                lessonId={lessonId}
                 exerciseId={exerciseId}
+                language={query.get("language")}
+                ref={chooseExerciseRef}
               ></ChooseExerciseType>
             </Box>
             <Box
@@ -455,7 +506,9 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
               }}
             >
               <Typography color="primary.main">Zapisz ćwiczenie:</Typography>
-              <Button variant="contained">Zapisz</Button>
+              <Button variant="contained" onClick={handleSaveExercise}>
+                Zapisz
+              </Button>
             </Box>
           </Box>
         </Box>

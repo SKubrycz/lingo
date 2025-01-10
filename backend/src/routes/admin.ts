@@ -12,6 +12,7 @@ import {
   postAdminController,
   postAdminLogoutController,
   postAdminPanelLessonsAddController,
+  postAdminPanelLessonsCreatorController,
   postAdminPanelLessonsEditController,
   postAdminPanelSubpagesAddController,
   putAdminPanelLessonsEditController,
@@ -71,6 +72,12 @@ router.post(
   checkAuth,
   isAdminWithCode,
   postAdminPanelLessonsAddController
+);
+router.post(
+  "/admin/panel/lessons/creator/:lessonId/:exerciseId",
+  checkAuth,
+  isAdminWithCode,
+  postAdminPanelLessonsCreatorController
 );
 router.post(
   "/admin/logout",

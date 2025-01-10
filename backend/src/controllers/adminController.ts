@@ -15,12 +15,14 @@ import {
   insertLesson,
   insertRoute,
   replaceLesson,
+  updateExercise,
   updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
 import readCodesFile from "../utilities/readCodesFile";
-import { LessonPanel } from "../assets/lessonsData";
+import { CardExercise, LessonPanel } from "../assets/lessonsData";
+import { verifyExercise } from "../utilities/verifyExercise";
 
 const constructRegisterMail = (verificationCode: string): string => {
   const htmlString = `<!DOCTYPE html>
@@ -413,6 +415,65 @@ const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
     .send({ message: "Nastąpiło wylogowanie z Panelu Administratora" });
 };
 
+const postAdminPanelLessonsCreatorController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const data = await req.body;
+  const { lessonId, exerciseId } = await req.params;
+  const query = await req.query;
+
+  if (!data)
+    return res.status(400).send({ message: "Nieprawidłowe dane ćwiczeń" });
+  const verifyData = verifyExercise(data);
+  if (!verifyData)
+    return res.status(400).send({ message: "Nieprawidłowe dane ćwiczeń" });
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(lessonId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!exerciseId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(exerciseId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  if (
+    !query.language ||
+    typeof query.language !== "string" ||
+    query.language.length !== 2
+  )
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const lessonResult = await findLessonByIdAndLanguage(
+    Number(lessonId),
+    String(query.language)
+  );
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+
+  if (lessonResult && lessonResult.exercises.length !== Number(exerciseId) - 1)
+    return res
+      .status(400)
+      .send({ message: "Nieprawidłowy identyfikator ćwiczenia" });
+
+  const exercisePushResult = await updateExercise(
+    Number(lessonId),
+    Number(exerciseId),
+    String(query.language),
+    data
+  );
+  if (!exercisePushResult)
+    return res
+      .status(500)
+      .send({ message: "Nastąpił problem z utworzeniem nowego ćwiczenia" });
+
+  return res.status(200).send({ message: "Ćwiczenie zapisane pomyślnie" });
+};
+
 const putAdminPanelSubpagesEditController = async (
   req: RequestLogin,
   res: Response
@@ -474,6 +535,7 @@ export {
   postAdminPanelSubpagesAddController,
   postAdminPanelLessonsEditController,
   postAdminPanelLessonsAddController,
+  postAdminPanelLessonsCreatorController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
   putAdminPanelLessonsEditController,

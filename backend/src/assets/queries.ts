@@ -682,6 +682,47 @@ export const replaceLesson = async (
   }
 };
 
+export const updateExercise = async (
+  lessonId: number,
+  exerciseId: number,
+  language: string,
+  exerciseData: any
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  console.log(exerciseData);
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const updateResult = await lessonsCollection.updateOne(
+      { lessonId: lessonId, language: language },
+      [
+        {
+          $set: {
+            exercises: { $concatArrays: ["$exercises", [exerciseData]] },
+          },
+        },
+        {
+          $set: {
+            exerciseCount: {
+              $size: "$exercises",
+            },
+          },
+        },
+      ],
+      { upsert: true }
+    );
+    if (!updateResult) return null;
+
+    return updateResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findInputExerciseById = async (
   lessonId: number,
   exerciseId: number
