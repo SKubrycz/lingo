@@ -40,6 +40,7 @@ interface ChooseExerciseTypeProps {
   lessonId: string | undefined;
   exerciseId: string | undefined;
   language: string | null;
+  result: Exercises | null;
 }
 
 interface ChooseExerciseTypeHandle {
@@ -49,7 +50,7 @@ interface ChooseExerciseTypeHandle {
 const ChooseExerciseType = forwardRef<
   ChooseExerciseTypeHandle,
   ChooseExerciseTypeProps
->(({ type, lessonId, exerciseId, language }, ref) => {
+>(({ type, lessonId, exerciseId, language, result }, ref) => {
   const [exercise, setExercise] = useState<Exercises | null>(null);
 
   useImperativeHandle(ref, () => ({
@@ -101,6 +102,10 @@ const ChooseExerciseType = forwardRef<
       }
     }
   };
+
+  useEffect(() => {
+    if (result) setExercise(result);
+  }, [result]);
 
   useEffect(() => {
     if (type && exerciseId) {
@@ -380,6 +385,7 @@ interface ExerciseCreatorProps {}
 
 export default function ExerciseCreator({}: ExerciseCreatorProps) {
   const [exerciseType, setExerciseType] = useState<ExerciseType | null>(null);
+  const [result, setResult] = useState<Exercises | null>(null);
 
   const chooseExerciseRef = useRef<ChooseExerciseTypeHandle>(null);
 
@@ -405,6 +411,10 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
       );
 
       console.log(res.data);
+
+      if (res.data.result) {
+        setResult(res.data.result);
+      }
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
@@ -425,6 +435,8 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
 
   useEffect(() => {
     handleAuth();
+
+    if (result) handleExerciseType(result.type);
 
     const bg = getBackground(document.URL);
     document.body.style.backgroundColor = bg;
@@ -468,6 +480,7 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
                 lessonId={lessonId}
                 exerciseId={exerciseId}
                 language={query.get("language")}
+                result={result}
                 ref={chooseExerciseRef}
               ></ChooseExerciseType>
             </Box>
@@ -485,6 +498,7 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
             >
               <ExerciseRadio
                 handleExerciseType={handleExerciseType}
+                type={result?.type}
               ></ExerciseRadio>
             </Box>
           </Box>

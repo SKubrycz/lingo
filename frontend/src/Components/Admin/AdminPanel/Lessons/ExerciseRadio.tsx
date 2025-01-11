@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { adminTheme } from "../../../../adminTheme";
 import type { ExerciseType } from "./ExerciseCreator";
 
@@ -20,10 +20,12 @@ interface ExerciseInfo {
 
 interface ExerciseDialogProps {
   handleExerciseType: (type: ExerciseType) => void;
+  type: string | null | undefined;
 }
 
 export default function ExerciseRadio({
   handleExerciseType,
+  type,
 }: ExerciseDialogProps) {
   const [radioValue, setRadioValue] = useState<ExerciseType | string>("");
 
@@ -49,11 +51,27 @@ export default function ExerciseRadio({
     },
   ];
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    setRadioValue(target.value);
-    handleExerciseType(target.value as ExerciseType);
+  const handleRadioChangeWithType = (type: string | null | undefined) => {
+    if (type) {
+      setRadioValue(type);
+      handleExerciseType(type as ExerciseType);
+    }
   };
+
+  const handleRadioChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: string | null | undefined
+  ) => {
+    if (!type) {
+      const target = e.target as HTMLInputElement;
+      setRadioValue(target.value);
+      handleExerciseType(target.value as ExerciseType);
+    }
+  };
+
+  useEffect(() => {
+    handleRadioChangeWithType(type);
+  }, [type]);
 
   return (
     <ThemeProvider theme={adminTheme}>
@@ -69,7 +87,7 @@ export default function ExerciseRadio({
         >
           <RadioGroup
             value={radioValue}
-            onChange={handleRadioChange}
+            onChange={(e) => handleRadioChange(e, type)}
             sx={{ margin: "0.5em" }}
           >
             <FormControl>
@@ -80,6 +98,7 @@ export default function ExerciseRadio({
                       key={i}
                       value={el.name}
                       control={<Radio></Radio>}
+                      disabled={type ? true : false}
                       label={
                         <Box sx={{ display: "flex" }}>
                           <Typography>{el.name}</Typography>&nbsp;

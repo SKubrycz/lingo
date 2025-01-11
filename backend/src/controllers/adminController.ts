@@ -209,8 +209,19 @@ const getAdminPanelLessonsCreatorController = async (
   if (!lessonResult)
     return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
-  if (lessonResult && lessonResult.exercises.length !== Number(exerciseId) - 1)
-    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (lessonResult) {
+    if (lessonResult.exercises.length < Number(exerciseId) - 1)
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+    // if (lessonResult.exercises.length !== Number(exerciseId) - 1)
+    if (lessonResult.exercises.length > Number(exerciseId) - 1) {
+      return res
+        .status(200)
+        .send({
+          message: "Informacje o ćwiczeniu zostały prawidłowo pobrane",
+          result: lessonResult.exercises[Number(exerciseId) - 1],
+        });
+    }
+  }
 
   return res.status(200).send({ message: "Prawidłowo pobrano dane" });
 };
