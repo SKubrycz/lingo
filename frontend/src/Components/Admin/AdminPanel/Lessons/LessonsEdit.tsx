@@ -253,8 +253,8 @@ export default function LessonsEdit({}: LessonsEditProps) {
           </Typography>
           <Box sx={{ width: "50%", marginBottom: "1em" }}>
             <Button onClick={handleGoToAdminPanel}>
-              <ArrowBackIos sx={{ fontSize: "16px" }}></ArrowBackIos>Wróć
-              głównego menu Panelu Administratora
+              <ArrowBackIos sx={{ fontSize: "16px" }}></ArrowBackIos>Wróć do
+              głównego menu
             </Button>
           </Box>
           <Box

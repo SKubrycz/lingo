@@ -54,15 +54,21 @@ function Lessons() {
   const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
+  const languageData = useSelector((state: RootState) => state.languageReducer);
   const alertSnackbarDataDispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const handleAuth = async () => {
     await axios
-      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/lessons`, {
-        withCredentials: true,
-      })
+      .get(
+        `http://localhost:${
+          import.meta.env.VITE_SERVER_PORT
+        }/lessons?language=${languageData.lang}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setLessons(res.data.lessonsResult);
         setUserLessons(res.data.usersLessonsResult);

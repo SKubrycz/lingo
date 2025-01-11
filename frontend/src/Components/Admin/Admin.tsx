@@ -4,11 +4,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminTheme } from "../../adminTheme";
 import getBackground from "../../utilities/getBackground";
+import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import { setAlert } from "../../state/alertSnackbarSlice";
 
 export default function Admin() {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
   const [code, setCode] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleAuth = async () => {
     try {
@@ -17,7 +26,7 @@ export default function Admin() {
         { withCredentials: true }
       );
 
-      console.log(res);
+      console.log(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
@@ -42,6 +51,30 @@ export default function Admin() {
 
       console.log(res.data);
 
+      if (
+        alertSnackbarData.severity === "error" ||
+        alertSnackbarData.severity === "warning"
+      ) {
+        dispatch(
+          setAlert({
+            severity: "info",
+            variant: "standard",
+            title: "Informacja",
+            content: null,
+          })
+        );
+      }
+      if (res.status >= 200 && res.status < 300) {
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
+      }
+
       navigate("/admin/panel", {
         state: {
           fromAdmin: true,
@@ -50,6 +83,16 @@ export default function Admin() {
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status && error.status > 399) {
+          dispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: error.response?.data.message,
+            })
+          );
+        }
       }
     }
   };
@@ -92,6 +135,12 @@ export default function Admin() {
           Zatwierdź
         </Button>
       </Box>
+      <AlertSnackbar
+        severity={alertSnackbarData.severity}
+        variant={alertSnackbarData.variant}
+        title={alertSnackbarData.title}
+        content={alertSnackbarData.content}
+      ></AlertSnackbar>
     </ThemeProvider>
   );
 }
