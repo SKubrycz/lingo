@@ -13,6 +13,7 @@ import {
   postAdminController,
   postAdminLogoutController,
   postAdminPanelLessonsAddController,
+  postAdminPanelLessonsAddLanguageController,
   postAdminPanelLessonsCreatorController,
   postAdminPanelLessonsEditController,
   postAdminPanelSubpagesAddController,
@@ -73,6 +74,12 @@ router.post(
   checkAuth,
   isAdminWithCode,
   postAdminPanelLessonsAddController
+);
+router.post(
+  "/admin/panel/lessons/add/language/:lessonId",
+  checkAuth,
+  isAdminWithCode,
+  postAdminPanelLessonsAddLanguageController
 );
 router.post(
   "/admin/panel/lessons/creator/:lessonId/:exerciseId",

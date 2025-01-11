@@ -25,7 +25,7 @@ import getBackground from "../../../../utilities/getBackground";
 import { LessonPanel } from "./LessonsTypes";
 import { adminTheme } from "../../../../adminTheme";
 import AdminPanelNavbar from "../AdminPanelNavbar";
-import { Delete, Edit } from "@mui/icons-material";
+import { ArrowBackIos, Delete, Edit } from "@mui/icons-material";
 
 interface DeleteDialogData {
   open: boolean;
@@ -203,6 +203,18 @@ export default function LessonsEdit({}: LessonsEditProps) {
     }
   };
 
+  const handleGoToAdminPanel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      navigate(`/admin/panel/`, { state: { fromAdmin: true } });
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
   useEffect(() => {
     if (lessonData && lessonData?.exercises) {
       const lessonDataClone = structuredClone(lessonData);
@@ -231,6 +243,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
           }}
         >
           <AdminPanelNavbar></AdminPanelNavbar>
+
           <Typography
             variant="h6"
             fontWeight={600}
@@ -238,6 +251,12 @@ export default function LessonsEdit({}: LessonsEditProps) {
           >
             Lekcja nr {lessonData?.lessonId}
           </Typography>
+          <Box sx={{ width: "50%", marginBottom: "1em" }}>
+            <Button onClick={handleGoToAdminPanel}>
+              <ArrowBackIos sx={{ fontSize: "16px" }}></ArrowBackIos>Wróć
+              głównego menu Panelu Administratora
+            </Button>
+          </Box>
           <Box
             sx={{
               width: "50%",
@@ -276,8 +295,16 @@ export default function LessonsEdit({}: LessonsEditProps) {
                 {lessonData ? lessonData?.exerciseCount : 0}
               </Typography>
               <Typography>
-                <b>Język:</b> {lessonData ? lessonData?.language : "pl"}
+                <b>Język:</b> {lessonData ? lessonData?.language : "pl"}{" "}
+                <span>
+                  <Typography
+                    className={`fi fi-${
+                      lessonData ? lessonData?.language : "pl"
+                    }`}
+                  ></Typography>
+                </span>
               </Typography>
+
               <Typography>
                 <b>Nowe słowa:</b>{" "}
                 {lessonData && lessonData?.exercises.length > 0

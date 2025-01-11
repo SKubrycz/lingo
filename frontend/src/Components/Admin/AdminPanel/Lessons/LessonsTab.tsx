@@ -151,10 +151,32 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
     setNewLanguageModalData(null);
   };
 
-  const handleLanguageDialogSubmit = (
+  const handleLanguageDialogSubmit = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+
+    if (newLanguageModalData && textField) {
+      try {
+        const res = await axios.post(
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/admin/panel/lessons/add/language/${newLanguageModalData}?language=${textField}`,
+          {},
+          { withCredentials: true }
+        );
+
+        console.log(res.data);
+
+        navigate(
+          `/admin/panel/lessons/edit/${newLanguageModalData}?language=${textField}`
+        );
+      } catch (error) {
+        console.error(error);
+        if (isAxiosError(error)) {
+        }
+      }
+    }
   };
 
   const handleLanguageTextField = (
@@ -302,10 +324,10 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
                       label={
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
                           <Typography
-                            className={`fi fi-pl`}
+                            className={`fi fi-${el}`}
                             margin="0 0.5em"
                           ></Typography>
-                          <Typography>pl</Typography>
+                          <Typography>{el}</Typography>
                         </Box>
                       }
                     ></FormControlLabel>

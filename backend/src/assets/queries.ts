@@ -560,12 +560,12 @@ export const findLessonById = async (
 export const findLessonByIdAndLanguage = async (
   lessonId: number,
   language: string
-) => {
+): Promise<LessonPanel | null> => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
-    const lessonsCollection = db.collection("lessons");
+    const lessonsCollection = db.collection<LessonPanel>("lessons");
     const lessonResult = await lessonsCollection.findOne(
       { lessonId: lessonId, language: language },
       {

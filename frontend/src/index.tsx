@@ -56,7 +56,7 @@ createRoot(document.getElementById("root")!).render(
             element={<AdminPanel></AdminPanel>}
           ></Route>
           <Route
-            path="/admin/panel/subpages/edit/:lessonId"
+            path="/admin/panel/subpages/edit"
             element={<SubpagesEdit></SubpagesEdit>}
           ></Route>
           <Route

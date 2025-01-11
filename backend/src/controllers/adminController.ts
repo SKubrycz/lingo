@@ -356,6 +356,20 @@ const postAdminPanelLessonsEditController = async (
   ) {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
   }
+  const codes = readCodesFile();
+  if (!codes)
+    return res.status(500).send({ message: "Nie udało się zapisać danych" });
+
+  const codesArr = codes.split(",");
+  let isFound = false;
+  for (let i = 0; i < codesArr.length - 1; i++) {
+    if (codesArr[i] === query.language) {
+      isFound = true;
+      break;
+    }
+  }
+  if (!isFound)
+    return res.status(400).send({ message: "Nieprawidłowy kod języka" });
 
   return res
     .status(200)
@@ -411,6 +425,58 @@ const postAdminPanelLessonsAddController = async (
   return res
     .status(200)
     .send({ message: "Pomyślnie przygotowano nową lekcję" });
+};
+
+const postAdminPanelLessonsAddLanguageController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId } = await req.params;
+  const query = await req.query;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(lessonId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (
+    !query.language ||
+    typeof query.language !== "string" ||
+    query.language.length !== 2
+  )
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const lessonResult = await findLessonByIdAndLanguage(Number(lessonId), "pl");
+  if (!lessonResult)
+    return res
+      .status(500)
+      .send({
+        message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
+      });
+
+  if (lessonResult && lessonResult.language) {
+    lessonResult.language = query.language;
+    const insertLessonResult = await insertLesson(lessonResult);
+    if (!insertLessonResult)
+      return res
+        .status(500)
+        .send({
+          message:
+            "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
+        });
+  } else
+    return res
+      .status(500)
+      .send({
+        message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
+      });
+
+  return res
+    .status(200)
+    .send({ message: "Pomyślnie dodano nowy język dla lekcji" });
 };
 
 const postAdminLogoutController = async (req: RequestLogin, res: Response) => {
@@ -596,6 +662,7 @@ export {
   postAdminPanelSubpagesAddController,
   postAdminPanelLessonsEditController,
   postAdminPanelLessonsAddController,
+  postAdminPanelLessonsAddLanguageController,
   postAdminPanelLessonsCreatorController,
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
