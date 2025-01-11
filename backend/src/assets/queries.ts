@@ -723,6 +723,51 @@ export const updateExercise = async (
   }
 };
 
+export const deleteExercise = async (
+  lessonId: number,
+  exerciseId: number,
+  language: string
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const findResult = await lessonsCollection.findOne({
+      lessonId: lessonId,
+      language: language,
+    });
+    if (!findResult) return null;
+    if (exerciseId < 0 || exerciseId - 1 > findResult.exercises.length)
+      return null;
+
+    findResult.exercises.splice(exerciseId - 1, 1);
+
+    const updateResult = await lessonsCollection.updateOne(
+      { lessonId: lessonId, language: language },
+      [
+        {
+          $set: { exercises: findResult.exercises },
+        },
+        {
+          $set: {
+            exerciseCount: {
+              $size: "$exercises",
+            },
+          },
+        },
+      ]
+    );
+    if (!updateResult) return null;
+
+    return updateResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findInputExerciseById = async (
   lessonId: number,
   exerciseId: number

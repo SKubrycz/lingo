@@ -23,7 +23,7 @@ import {
 import ExerciseRadio from "./ExerciseRadio";
 import { adminTheme } from "../../../../adminTheme";
 import getBackground from "../../../../utilities/getBackground";
-import { HelpOutline } from "@mui/icons-material";
+import { ArrowBackIos, HelpOutline } from "@mui/icons-material";
 import {
   CardExercise,
   ChoiceExercise,
@@ -433,6 +433,22 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
     }
   };
 
+  const handleGoToEditLesson = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const language = query.get("language");
+
+    try {
+      if (lessonId && language) {
+        navigate(`/admin/panel/lessons/edit/${lessonId}?language=${language}`);
+      }
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
   useEffect(() => {
     handleAuth();
 
@@ -456,6 +472,29 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
           }}
         >
           <AdminPanelNavbar></AdminPanelNavbar>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                width: "50%",
+                padding: "0.5em",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottom: "1px solid rgb(224, 224, 224)",
+              }}
+            >
+              <Button onClick={handleGoToEditLesson}>
+                <ArrowBackIos sx={{ fontSize: "16px" }}></ArrowBackIos>Wróć do
+                edycji lekcji
+              </Button>
+            </Box>
+          </Box>
           <Box
             sx={{
               width: "fit-content",

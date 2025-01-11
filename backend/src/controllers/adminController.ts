@@ -6,6 +6,7 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import {
+  deleteExercise,
   findAllRoutesMetadata,
   findLessonByIdAndLanguage,
   findLessonsMetadata,
@@ -214,12 +215,10 @@ const getAdminPanelLessonsCreatorController = async (
       return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
     // if (lessonResult.exercises.length !== Number(exerciseId) - 1)
     if (lessonResult.exercises.length > Number(exerciseId) - 1) {
-      return res
-        .status(200)
-        .send({
-          message: "Informacje o ćwiczeniu zostały prawidłowo pobrane",
-          result: lessonResult.exercises[Number(exerciseId) - 1],
-        });
+      return res.status(200).send({
+        message: "Informacje o ćwiczeniu zostały prawidłowo pobrane",
+        result: lessonResult.exercises[Number(exerciseId) - 1],
+      });
     }
   }
 
@@ -534,6 +533,57 @@ const putAdminPanelLessonsEditController = async (
   return res.status(200).send({ message: "Dane zapisane pomyślnie" });
 };
 
+const deleteAdminPanelLessonsCreatorController = async (
+  req: RequestLogin,
+  res: Response
+) => {
+  const { lessonId, exerciseId } = await req.params;
+  const query = await req.query;
+
+  if (!lessonId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(lessonId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!exerciseId)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (Number.isNaN(exerciseId))
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+  if (!query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  if (
+    !query.language ||
+    typeof query.language !== "string" ||
+    query.language.length !== 2
+  )
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const lessonResult = await findLessonByIdAndLanguage(
+    Number(lessonId),
+    String(query.language)
+  );
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się zapisać danych" });
+
+  if (lessonResult) {
+    if (lessonResult.exercises.length !== Number(exerciseId))
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+    const deleteExerciseResult = await deleteExercise(
+      Number(lessonId),
+      Number(exerciseId),
+      String(query.language)
+    );
+    if (!deleteExerciseResult)
+      return res.status(500).send({ message: "Nie udało się zapisać danych" });
+  }
+
+  return res
+    .status(200)
+    .send({ message: `Ćwiczenie ${exerciseId} zostało pomyślnie usunięte` });
+};
+
 export {
   getAdminController,
   getAdminPanelController,
@@ -550,4 +600,5 @@ export {
   postAdminLogoutController,
   putAdminPanelSubpagesEditController,
   putAdminPanelLessonsEditController,
+  deleteAdminPanelLessonsCreatorController,
 };

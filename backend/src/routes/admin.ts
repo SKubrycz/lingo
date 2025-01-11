@@ -2,6 +2,7 @@ import express from "express";
 
 import { checkAuth, isAdmin, isAdminWithCode } from "../middleware/auth";
 import {
+  deleteAdminPanelLessonsCreatorController,
   getAdminController,
   getAdminPanelController,
   getAdminPanelLessonsController,
@@ -97,6 +98,13 @@ router.put(
   checkAuth,
   isAdminWithCode,
   putAdminPanelLessonsEditController
+);
+
+router.delete(
+  "/admin/panel/lessons/creator/:lessonId/:exerciseId",
+  checkAuth,
+  isAdminWithCode,
+  deleteAdminPanelLessonsCreatorController
 );
 
 export default router;

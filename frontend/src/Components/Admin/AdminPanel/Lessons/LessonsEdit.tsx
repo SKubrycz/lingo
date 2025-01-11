@@ -90,6 +90,34 @@ export default function LessonsEdit({}: LessonsEditProps) {
     setDeleteDialog(dialogData);
   };
 
+  const handleDeleteExercise = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    exerciseId: number | null
+  ) => {
+    e.preventDefault();
+
+    const language = query.get("language");
+
+    try {
+      if (language && lessonId && exerciseId) {
+        const res = await axios.delete(
+          `http://localhost:${
+            import.meta.env.VITE_SERVER_PORT
+          }/admin/panel/lessons/creator/${lessonId}/${exerciseId}?language=${language}`,
+          { withCredentials: true }
+        );
+
+        console.log(res.data);
+
+        navigate(0);
+      }
+    } catch (error) {
+      console.error(error);
+      if (isAxiosError(error)) {
+      }
+    }
+  };
+
   const submitChanges = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -139,12 +167,33 @@ export default function LessonsEdit({}: LessonsEditProps) {
 
     const language = query.get("language");
 
-    if (lessonData && language) {
+    if (lessonData && language && lessonId) {
       try {
         navigate(
           `/admin/panel/lessons/creator/${lessonId}/${
             lessonData?.exercises.length + 1
           }?language=${language}`
+        );
+      } catch (error) {
+        console.error(error);
+        if (isAxiosError(error)) {
+        }
+      }
+    }
+  };
+
+  const handleEditExercise = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    exerciseId: number
+  ) => {
+    e.preventDefault();
+
+    const language = query.get("language");
+
+    if (lessonData && language && lessonId && exerciseId) {
+      try {
+        navigate(
+          `/admin/panel/lessons/creator/${lessonId}/${exerciseId}?language=${language}`
         );
       } catch (error) {
         console.error(error);
@@ -288,7 +337,11 @@ export default function LessonsEdit({}: LessonsEditProps) {
                         <TableCell
                           sx={{ borderRight: "1px solid rgb(224, 224, 224)" }}
                         >
-                          <IconButton>
+                          <IconButton
+                            onClick={(e) =>
+                              handleEditExercise(e, el.exerciseId)
+                            }
+                          >
                             <Edit></Edit>
                           </IconButton>
                         </TableCell>
@@ -296,6 +349,11 @@ export default function LessonsEdit({}: LessonsEditProps) {
                           <IconButton
                             onClick={() =>
                               handleDeleteDialogOpen(el.exerciseId)
+                            }
+                            disabled={
+                              lessonData?.exercises.length - 1 !== i
+                                ? true
+                                : false
                             }
                             sx={{ "&:hover": { color: "red" } }}
                           >
@@ -331,6 +389,22 @@ export default function LessonsEdit({}: LessonsEditProps) {
                 <b>{deleteDialog?.exerciseId}</b>? <br></br>Ta akcja jest{" "}
                 <b>bezpowrotna!</b>
               </Typography>
+              <Box marginTop="1em">
+                <Button
+                  variant="contained"
+                  onClick={(e) =>
+                    handleDeleteExercise(e, deleteDialog?.exerciseId)
+                  }
+                >
+                  Tak
+                </Button>
+                <Button
+                  onClick={handleDeleteDialogClose}
+                  sx={{ color: "secondary.light" }}
+                >
+                  Nie
+                </Button>
+              </Box>
             </Box>
           </Dialog>
         </Box>
