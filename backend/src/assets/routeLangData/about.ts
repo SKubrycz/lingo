@@ -1,4 +1,4 @@
-import { Metadata } from "./routeTypes";
+import { Alerts, Metadata } from "./routeTypes";
 
 interface AboutNavbar {
   tooltip: string;
@@ -36,6 +36,7 @@ interface AboutLangData {
   titles: AboutTitle[];
   footer: AboutFooter;
   footerLogin: AboutFooterLogin;
+  alerts: Alerts;
 }
 
 export const aboutLangData: AboutLangData[] = [
@@ -89,6 +90,11 @@ export const aboutLangData: AboutLangData[] = [
       profile: "Profil",
       logout: "Wyloguj",
     },
+    alerts: {
+      ok: "Nie zalogowany",
+      notFound: "Nie znaleziono użytkownika",
+      internalServerError: "Coś poszło nie tak po naszej stronie",
+    },
   },
   {
     metadata: { route: "/about", language: "de" },
@@ -130,6 +136,11 @@ nur passives Schreiben oder Lesen. Solche Lösungen beim Sprachenlernen ermögli
       lessons: "Unterricht",
       profile: "Profil",
       logout: "Ausloggen",
+    },
+    alerts: {
+      ok: "Nicht eingeloggt",
+      notFound: "Benutzer nicht gefunden",
+      internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
     },
   },
 ];

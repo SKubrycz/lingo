@@ -5,12 +5,11 @@ import nodemailer from "nodemailer";
 import {
   findAllRouteLanguages,
   findOneUser,
+  findRoute,
   insertOneUser,
 } from "../assets/queries";
 
 import hashData from "../utilities/hashData";
-import { registerLangData } from "../assets/routeLangData/register";
-import { setLangIndex } from "../utilities/setLangIndex";
 
 interface RequestBody {
   email: string;
@@ -66,23 +65,44 @@ const constructRegisterMail = (verificationCode: string): string => {
 const getRegister = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  let langIndex = setLangIndex(String(query.lang));
+  if (!query || !query.lang)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const routeResult = await findRoute("register", String(query.lang));
+  if (!routeResult)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   const languagesResult = await findAllRouteLanguages("/register");
   if (!languagesResult || languagesResult.length === 0)
     return res
       .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
+      .send({
+        message: routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po naszej stronie",
+      });
 
   res.status(200).send({
-    languageData: langIndex != null ? registerLangData[langIndex] : null,
+    languageData: routeResult,
     languages: languagesResult,
   });
 };
 
 const postRegister = async (req: RegisterRequest, res: Response) => {
   try {
+    const query = await req.query;
     const { email, login, password, passwordAgain } = await req.body;
+
+    if (!query || !query.lang)
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+    const routeResult = await findRoute("register", String(query.lang));
+    if (!routeResult)
+      return res
+        .status(500)
+        .send({ message: "Coś poszło nie tak po naszej stronie" });
 
     const regex: RegExp =
       /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -90,25 +110,56 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
     const hash: string = await hashData(password);
 
     if (email === "" || !email || login === "" || !login)
-      return res.status(422).send("Należy wypełnić wszystkie pola formularza");
+      return res
+        .status(422)
+        .send(
+          routeResult.alerts.unprocessableContent[0]
+            ? routeResult.alerts.unprocessableContent[0]
+            : "Należy wypełnić wszystkie pola formularza"
+        );
 
     const findUserQuery = await findOneUser(email, login);
     console.log(findUserQuery);
-    if (findUserQuery) return res.status(422).send("Użytkownik już istnieje");
+    if (findUserQuery)
+      return res
+        .status(422)
+        .send(
+          routeResult.alerts.unprocessableContent[1]
+            ? routeResult.alerts.unprocessableContent[1]
+            : "Użytkownik już istnieje"
+        );
     if (login.length <= 3)
       return res
         .status(422)
-        .send("Nazwa użytkownika musi być dłuższa niż 3 znaki");
+        .send(
+          routeResult.alerts.unprocessableContent[2]
+            ? routeResult.alerts.unprocessableContent[2]
+            : "Nazwa użytkownika musi być dłuższa niż 3 znaki"
+        );
 
     if (password === "" || !password)
-      return res.status(422).send("Hasło niepoprawne");
+      return res
+        .status(422)
+        .send(
+          routeResult.alerts.unprocessableContent[3]
+            ? routeResult.alerts.unprocessableContent[3]
+            : "Hasło niepoprawne"
+        );
     if (passwordAgain === "" || !passwordAgain)
-      return res.status(422).send("Powtórzone hasło niepoprawne");
+      return res
+        .status(422)
+        .send(
+          routeResult.alerts.unprocessableContent[4]
+            ? routeResult.alerts.unprocessableContent[4]
+            : "Powtórzone hasło niepoprawne"
+        );
     if (regex.test(password) === false)
       return res
         .status(422)
         .send(
-          "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
+          routeResult.alerts.unprocessableContent[5]
+            ? routeResult.alerts.unprocessableContent[5]
+            : "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
         );
     if (password === passwordAgain) {
       console.log(
@@ -142,12 +193,25 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         html: htmlMessage,
       });
 
-      return res.status(200).send({ message: "Zarejestrowano", uuid: uuid });
+      return res
+        .status(200)
+        .send({
+          message: routeResult.alerts.ok
+            ? routeResult.alerts.ok
+            : "Zarejestrowano",
+          uuid: uuid,
+        });
     } else {
-      return res.status(400).send("Hasła nie są takie same");
+      return res
+        .status(400)
+        .send(
+          routeResult.alerts.badRequest
+            ? routeResult.alerts.badRequest
+            : "Hasła nie są takie same"
+        );
     }
   } catch (error) {
-    return res.status(500).send(`Error /register ${error}`);
+    return res.status(500).send(`Error /register`);
   }
 };
 

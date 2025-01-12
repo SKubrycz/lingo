@@ -14,6 +14,7 @@ import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import PageTitle from "../Reusables/PageTitle/PageTitle";
 
 import { LoginState, LoginActions, ActionType } from "../Login/loginTypes";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 const loginReducer = (state: LoginState, action: LoginActions) => {
   const { type, payload } = action;
@@ -38,6 +39,9 @@ interface MainLoginProps {
 }
 
 function MainLogin({ languageData }: MainLoginProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const [loginData, loginDispatch] = useReducer(loginReducer, {
     login: "",
     password: "",
@@ -53,14 +57,12 @@ function MainLogin({ languageData }: MainLoginProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const route = handleLanguageURL("/login", stateLanguageData.lang);
+
     await axios
-      .post(
-        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/login`,
-        loginData,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(route, loginData, {
+        withCredentials: true,
+      })
       .then(() => {
         alertSnackbarDataDispatch(
           setAlert({

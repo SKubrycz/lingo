@@ -1,6 +1,6 @@
 // indexes: 0 -> de; _fallback: pl;
 
-import { Metadata } from "./routeTypes";
+import { Alerts, Metadata } from "./routeTypes";
 
 interface HomeNavbar {
   tooltip: string;
@@ -31,6 +31,7 @@ interface HomeLangData {
   titles: HomeTitle[];
   buttonContainer: HomeButtonContainer;
   footer: HomeFooter;
+  alerts: Alerts;
 }
 
 export const homeLangData: HomeLangData[] = [
@@ -62,6 +63,9 @@ export const homeLangData: HomeLangData[] = [
       login: "Logowanie",
       register: "Rejestracja",
     },
+    alerts: {
+      internalServerError: "Coś poszło nie tak po naszej stronie",
+    },
   },
   {
     metadata: { route: "/", language: "de" },
@@ -87,33 +91,8 @@ export const homeLangData: HomeLangData[] = [
       button: "Fangen Sie an zu lernen",
     },
     footer: { about: "Über die App", login: "Login", register: "Registrieren" },
+    alerts: {
+      internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
+    },
   },
 ];
-
-// Over here IDEA 1
-// export const homeLangData: HomeLangData = {
-//   navbar: [
-//     {
-//       about: "Über die App",
-//       login: "Login",
-//       register: "Registrieren",
-//     },
-//   ],
-//   titles: [
-//     [
-//       { title: "LINGO", desc: "Eine Sprache zu lernen war nie einfacher" },
-//       {
-//         title: "Effizientes Lernen",
-//         desc: "Lernen Sie die Grundlagen und fangen Sie an zu reden",
-//       },
-//       {
-//         title: "Sichtbarer Fortschritt",
-//         desc: "Überwachen Sie Ihren Lernfortschritt dank umfangreicher Statistiken",
-//       },
-//     ],
-//   ],
-//   buttonContainer: [
-//     { subtitle: "Jetzt lernen!", button: "Fangen Sie an zu lernen" },
-//   ],
-//   footer: [{ about: "Über die App", login: "Login", register: "Registrieren" }],
-// };

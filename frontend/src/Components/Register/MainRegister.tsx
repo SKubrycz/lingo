@@ -18,6 +18,7 @@ import {
   RegisterActions,
   ActionType,
 } from "../Register/registerTypes";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 const registerReducer = (state: RegisterState, action: RegisterActions) => {
   const { type, payload } = action;
@@ -52,6 +53,9 @@ interface MainRegisterProps {
 }
 
 function MainRegister({ languageData }: MainRegisterProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const [registerData, registerDispatch] = useReducer(registerReducer, {
     email: "",
     login: "",
@@ -69,11 +73,10 @@ function MainRegister({ languageData }: MainRegisterProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const route = handleLanguageURL("/register", stateLanguageData.lang);
+
     await axios
-      .post(
-        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/register`,
-        registerData
-      )
+      .post(route, registerData)
       .then((res) => {
         alertSnackbarDataDispatch(
           setAlert({

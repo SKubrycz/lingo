@@ -861,8 +861,6 @@ export const findRoute = async (route: string, language: string) => {
       }
     );
 
-    console.log(routeResult);
-
     if (!routeResult) return null;
 
     return routeResult;

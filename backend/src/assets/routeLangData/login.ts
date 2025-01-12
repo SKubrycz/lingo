@@ -1,4 +1,4 @@
-import { Metadata } from "./routeTypes";
+import { Alerts, Metadata } from "./routeTypes";
 
 interface LoginNavbar {
   tooltip: string;
@@ -24,6 +24,7 @@ interface LoginLangData {
   navbar: LoginNavbar;
   main: LoginMain;
   footer: LoginFooter;
+  alerts: Alerts;
 }
 
 export const loginLangData: LoginLangData[] = [
@@ -45,6 +46,12 @@ export const loginLangData: LoginLangData[] = [
       login: "Logowanie",
       register: "Rejestracja",
     },
+    alerts: {
+      ok: "Zalogowano",
+      badRequest: "Niepoprawne hasło",
+      notFound: "Nie znaleziono użytkownika",
+      internalServerError: "Coś poszło nie tak po naszej stronie",
+    },
   },
   {
     metadata: { route: "/login", language: "de" },
@@ -63,6 +70,12 @@ export const loginLangData: LoginLangData[] = [
       about: "Über die App",
       login: "Login",
       register: "Registrieren",
+    },
+    alerts: {
+      ok: "Eingeloggt",
+      badRequest: "Falsches Passwort",
+      notFound: "Benutzer nicht gefunden",
+      internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
     },
   },
 ];

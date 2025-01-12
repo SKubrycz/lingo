@@ -1,32 +1,35 @@
 import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
-
-import { homeLangData } from "../assets/routeLangData/home";
-import { setLangIndex } from "../utilities/setLangIndex";
-import { findAllRouteLanguages } from "../assets/queries";
+import { findAllRouteLanguages, findRoute } from "../assets/queries";
 
 const getHome = async (req: RequestLogin, res: Response) => {
   console.log(`req.login ${req.login}`);
 
   const query = await req.query;
 
-  let langIndex = setLangIndex(String(query.lang));
+  if (!query || !query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   let sessionUser: boolean = false;
 
-  console.log(query.lang);
-  console.log(langIndex);
-
-  const languagesResult = await findAllRouteLanguages("/");
-  if (!languagesResult || languagesResult.length === 0)
+  const routeResult = await findRoute("", String(query.language));
+  if (!routeResult)
     return res
       .status(500)
       .send({ message: "Coś poszło nie tak po naszej stronie" });
 
+  const languagesResult = await findAllRouteLanguages("/");
+  if (!languagesResult || languagesResult.length === 0)
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po naszej stronie",
+    });
+
   const data = {
     sessionUser: sessionUser,
-    languageData: langIndex != null ? homeLangData[langIndex] : null,
+    languageData: routeResult,
     languages: languagesResult,
   };
 
@@ -36,8 +39,6 @@ const getHome = async (req: RequestLogin, res: Response) => {
   } else {
     res.status(200).send(data);
   }
-
-  console.log(`sessionUser ${sessionUser}`);
 };
 
 export { getHome };

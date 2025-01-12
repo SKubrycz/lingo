@@ -1,4 +1,4 @@
-import { Metadata } from "./routeTypes";
+import { Alerts, Metadata } from "./routeTypes";
 
 interface RegisterNavbar {
   tooltip: string;
@@ -30,6 +30,7 @@ interface RegisterLangData {
   navbar: RegisterNavbar;
   main: RegisterMain;
   footer: RegisterFooter;
+  alerts: Alerts;
 }
 
 export const registerLangData: RegisterLangData[] = [
@@ -64,6 +65,19 @@ export const registerLangData: RegisterLangData[] = [
       login: "Logowanie",
       register: "Rejestracja",
     },
+    alerts: {
+      ok: "Zarejestrowano",
+      badRequest: "Hasła nie są takie same",
+      unprocessableContent: [
+        "Należy wypełnić wszystkie pola formularza",
+        "Użytkownik już istnieje",
+        "Nazwa użytkownika musi być dłuższa niż 3 znaki",
+        "Hasło niepoprawne",
+        "Powtórzone hasło niepoprawne",
+        "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny",
+      ],
+      internalServerError: "Coś poszło nie tak po naszej stronie",
+    },
   },
   {
     metadata: { route: "/register", language: "de" },
@@ -95,6 +109,19 @@ export const registerLangData: RegisterLangData[] = [
       about: "Über die App",
       login: "Login",
       register: "Registrieren",
+    },
+    alerts: {
+      ok: "Registriert",
+      badRequest: "Passwörter sind nicht dasselbe",
+      unprocessableContent: [
+        "Alle Felder des Formulars müssen ausgefüllt werden",
+        "Benutzer existiert bereits",
+        "Der Nutzername muss länger als 3 Zeichen sein",
+        "Passwort falsch",
+        "Wiederholtes Passwort falsch",
+        "Das Passwort muss länger als 7 Zeichen sein, mindestens einen Groß- und Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten",
+      ],
+      internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
     },
   },
 ];

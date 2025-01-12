@@ -2,45 +2,80 @@ import { Request, Response } from "express";
 
 import jwt from "jsonwebtoken";
 
-import { findAllRouteLanguages, findOneUserByLogin } from "../assets/queries";
+import {
+  findAllRouteLanguages,
+  findOneUserByLogin,
+  findRoute,
+} from "../assets/queries";
 import comparePassword from "../utilities/comparePassword";
-import { loginLangData } from "../assets/routeLangData/login";
-import { setLangIndex } from "../utilities/setLangIndex";
 
 const getLogin = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  let langIndex = setLangIndex(String(query.lang));
+  if (!query || !query.lang)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-  const languagesResult = await findAllRouteLanguages("/login");
-  if (!languagesResult || languagesResult.length === 0)
+  const routeResult = await findRoute("login", String(query.lang));
+  if (!routeResult)
     return res
       .status(500)
       .send({ message: "Coś poszło nie tak po naszej stronie" });
 
+  const languagesResult = await findAllRouteLanguages("/login");
+  if (!languagesResult || languagesResult.length === 0)
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po naszej stronie",
+    });
+
   res.status(200).send({
-    languageData: langIndex != null ? loginLangData[langIndex] : null,
+    languageData: routeResult,
     languages: languagesResult,
   });
 };
 
 const postLogin = async (req: Request, res: Response) => {
   try {
+    const query = await req.query;
     const { login, password } = await req.body;
+
+    if (!query || !query.language)
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
     console.log(`req.body in ${req.originalUrl} ${login}, ${password}`);
 
     if (!process.env.REFRESH_TOKEN_SECRET || !process.env.ACCESS_TOKEN_SECRET)
       return;
 
+    const routeResult = await findRoute("login", String(query.language));
+    if (!routeResult)
+      return res
+        .status(500)
+        .send({ message: "Coś poszło nie tak po naszej stronie" });
+
     const result = await findOneUserByLogin(login);
-    if (!result) return res.status(404).send("Nie znaleziono użytkownika");
+    if (!result)
+      return res
+        .status(404)
+        .send(
+          routeResult.alerts.notFound
+            ? routeResult.alerts.notFound
+            : "Nie znaleziono użytkownika"
+        );
 
     const comparison: boolean = await comparePassword(
       password,
       result.password
     );
-    if (comparison === false) return res.status(400).send("Niepoprawne hasło");
+    if (comparison === false)
+      return res
+        .status(400)
+        .send(
+          routeResult.alerts.badRequest
+            ? routeResult.alerts.badRequest
+            : "Niepoprawne hasło"
+        );
 
     const accessTokenExpiry: number = 1000 * 60 * 60;
     const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
@@ -68,9 +103,11 @@ const postLogin = async (req: Request, res: Response) => {
       sameSite: "strict",
     });
 
-    return res.status(200).send("Zalogowano");
+    return res
+      .status(200)
+      .send(routeResult.alerts.ok ? routeResult.alerts.ok : "Zalogowano");
   } catch (error) {
-    res.status(500).send(`Error /login ${error}`);
+    res.status(500).send(`Error /login`);
   }
 };
 
