@@ -12,10 +12,10 @@ import comparePassword from "../utilities/comparePassword";
 const getLogin = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  if (!query || !query.lang)
+  if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-  const routeResult = await findRoute("login", String(query.lang));
+  const routeResult = await findRoute("login", String(query.language));
   if (!routeResult)
     return res
       .status(500)

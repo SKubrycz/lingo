@@ -2,9 +2,10 @@ import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
 import {
-  findFilledLessonsList,
+  findAllRouteLanguages,
   findFilledLessonsListWithLanguage,
   findOneUserByLogin,
+  findRoute,
   findUsersLessonsById,
 } from "../assets/queries";
 
@@ -15,6 +16,21 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
   if (!query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const routeResult = await findRoute("lessons", String(query.language));
+  if (!routeResult)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+
+  const languagesResult = await findAllRouteLanguages("/lessons");
+  if (!languagesResult || languagesResult.length === 0)
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po naszej stronie",
+    });
+
   const lessonsResult = await findFilledLessonsListWithLanguage(
     String(query.language)
   );
@@ -33,6 +49,8 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     const results = {
       lessonsResult: lessonsResult,
       usersLessonsResult: usersLessonsResult,
+      languageData: routeResult,
+      languages: languagesResult,
       login: userResult.login,
     };
 

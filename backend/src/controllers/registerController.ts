@@ -65,10 +65,10 @@ const constructRegisterMail = (verificationCode: string): string => {
 const getRegister = async (req: Request, res: Response) => {
   const query = await req.query;
 
-  if (!query || !query.lang)
+  if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-  const routeResult = await findRoute("register", String(query.lang));
+  const routeResult = await findRoute("register", String(query.language));
   if (!routeResult)
     return res
       .status(500)
@@ -76,13 +76,11 @@ const getRegister = async (req: Request, res: Response) => {
 
   const languagesResult = await findAllRouteLanguages("/register");
   if (!languagesResult || languagesResult.length === 0)
-    return res
-      .status(500)
-      .send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : "Coś poszło nie tak po naszej stronie",
-      });
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po naszej stronie",
+    });
 
   res.status(200).send({
     languageData: routeResult,
@@ -95,10 +93,10 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
     const query = await req.query;
     const { email, login, password, passwordAgain } = await req.body;
 
-    if (!query || !query.lang)
+    if (!query || !query.language)
       return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-    const routeResult = await findRoute("register", String(query.lang));
+    const routeResult = await findRoute("register", String(query.language));
     if (!routeResult)
       return res
         .status(500)
@@ -193,14 +191,12 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         html: htmlMessage,
       });
 
-      return res
-        .status(200)
-        .send({
-          message: routeResult.alerts.ok
-            ? routeResult.alerts.ok
-            : "Zarejestrowano",
-          uuid: uuid,
-        });
+      return res.status(200).send({
+        message: routeResult.alerts.ok
+          ? routeResult.alerts.ok
+          : "Zarejestrowano",
+        uuid: uuid,
+      });
     } else {
       return res
         .status(400)

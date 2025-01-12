@@ -44,26 +44,11 @@ function Profile() {
   const { userId } = useParams<{ userId: string | undefined }>();
   const [user, setUser] = useState<User | null>(null);
 
-  const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
+  const footerOptionsArray: string[] = ["O aplikacji", "Lekcje"];
 
   const navigate = useNavigate();
 
   const alertSnackbarDataDispatch = useDispatch();
-
-  /*   const fetchCurrentUser = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8000/profile`, {
-        withCredentials: true,
-      });
-      if (res.data.sessionUser === true) {
-        // setLinkArray(['/about', '/lessons', '/logout']);
-        // setOptionsArray(['O aplikacji', 'Lekcje', 'Wyloguj']);
-      }
-    } catch (error) {
-      console.log("Failed to fetch current user data: ", error);
-      navigate("/");
-    }
-  }; */
 
   const fetchUserData = async () => {
     try {
@@ -76,7 +61,7 @@ function Profile() {
       setLinkArray(["/about", "/lessons", "/logout"]);
       setOptionsArray(["O aplikacji", "Lekcje", "Wyloguj"]);
 
-      setFooterLinkArray(["/about", "/lessons", `/profile/${res.data.login}`]);
+      setFooterLinkArray(["/about", "/lessons"]);
 
       if (res.data.sessionUser === true) {
         console.log(res.data);

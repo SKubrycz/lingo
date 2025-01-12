@@ -7,6 +7,7 @@ import { Done } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { setTimeStart } from "../../state/timeSpentSlice";
+import { Buttons } from "./Lessons";
 
 interface LessonData {
   lessonId: number;
@@ -18,9 +19,10 @@ interface LessonData {
 interface LessonProps {
   lessonData: LessonData;
   finished: boolean;
+  buttons: Buttons;
 }
 
-function Lesson({ lessonData, finished }: LessonProps) {
+function Lesson({ lessonData, finished, buttons }: LessonProps) {
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
   );
@@ -57,7 +59,7 @@ function Lesson({ lessonData, finished }: LessonProps) {
             }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            Powtórz lekcję
+            {buttons.repeat ? buttons.repeat : "Powtórz lekcję"}
           </Button>
         ) : (
           <Button
@@ -68,7 +70,7 @@ function Lesson({ lessonData, finished }: LessonProps) {
             }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            Rozpocznij
+            {buttons.begin ? buttons.begin : "Rozpocznij"}
           </Button>
         )}
       </Container>

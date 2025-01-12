@@ -6,6 +6,8 @@ import { aboutLangData } from "./routeLangData/about";
 import { homeLangData } from "./routeLangData/home";
 import { loginLangData } from "./routeLangData/login";
 import { registerLangData } from "./routeLangData/register";
+import { lessonLangData } from "./routeLangData/lessons";
+import { profileLangData } from "./routeLangData/profile";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -39,6 +41,10 @@ const insertToRoutes = async (db: Db) => {
     loginLangData[1],
     registerLangData[0],
     registerLangData[1],
+    lessonLangData[0],
+    lessonLangData[1],
+    profileLangData[0],
+    profileLangData[1],
   ]);
 
   console.log(`routes inserted:`);

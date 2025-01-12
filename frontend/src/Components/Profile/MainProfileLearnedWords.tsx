@@ -100,7 +100,7 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
             leftValue: 50 + 5 * 200,
           },
         ]
-      : "Ukończ swoją pierwszą lekcję aby wyświetlić nauczone słowa!"
+      : "Ukończ swoją pierwszą lekcję aby wyświetlić nauczone słowa"
   );
 
   const [leftOffset, setLeftOffset] = useState<number>(0);

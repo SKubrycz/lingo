@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -18,6 +18,11 @@ import { AlertSnackbarState } from "../../state/alertSnackbarSlice";
 import "./Lessons.scss";
 import getBackground from "../../utilities/getBackground";
 
+export interface Buttons {
+  begin: string;
+  repeat: string;
+}
+
 interface LessonData {
   lessonId: number;
   title: string;
@@ -36,6 +41,8 @@ function Lessons() {
   const [lessons, setLessons] = useState<LessonData[]>([]);
   const [usersLessons, setUserLessons] = useState<UsersLessonsData[]>([]);
 
+  const [languages, setLanguages] = useState<string[] | null>(null);
+
   const [linkArray, setLinkArray] = useState<string[]>([
     "/about",
     "/profile",
@@ -43,13 +50,23 @@ function Lessons() {
   ]);
   const [footerLinkArray, setFooterLinkArray] = useState<string[]>([
     "/about",
-    "/lessons",
     "/profile",
   ]);
 
-  const optionsArray: string[] = ["O aplikacji", "Profil", "Wyloguj"];
+  const [optionsArray, setOptionsArray] = useState<string[]>([
+    "O aplikacji",
+    "Profil",
+    "Wyloguj",
+  ]);
 
-  const footerOptionsArray: string[] = ["O aplikacji", "Lekcje", "Profil"];
+  const [footerOptionsArray, setFooterOptionsArray] = useState<string[]>([
+    "O aplikacji",
+    "Profil",
+  ]);
+
+  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const [buttons, setButtons] = useState<Buttons | null>(null);
 
   const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -78,6 +95,28 @@ function Lessons() {
           "/lessons",
           `/profile/${res.data.login}`,
         ]);
+
+        console.log(res.data);
+
+        if (res.data.languageData) {
+          setOptionsArray([
+            res.data.languageData.navbar.about,
+            res.data.languageData.navbar.profile,
+            res.data.languageData.navbar.logout,
+          ]);
+          setFooterOptionsArray([
+            res.data.languageData.footer.about,
+            res.data.languageData.footer.profile,
+          ]);
+
+          setTooltip(res.data.languageData.navbar.tooltip);
+          setTitle(res.data.languageData.title);
+          setButtons(res.data.languageData.buttons);
+        }
+
+        if (res.data.languages) {
+          setLanguages(res.data.languages);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -89,7 +128,9 @@ function Lessons() {
             content: "Sesja wygasła. Proszę zalogować się ponownie",
           })
         );
-        navigate("/");
+        if (isAxiosError(error)) {
+          if (error.status === 403) navigate("/");
+        }
       });
   };
 
@@ -103,9 +144,14 @@ function Lessons() {
   return (
     <>
       <Container component="div" className="wrapper">
-        <Navbar link={linkArray} options={optionsArray}></Navbar>
+        <Navbar
+          link={linkArray}
+          options={optionsArray}
+          tooltip={tooltip}
+          languages={languages}
+        ></Navbar>
         <Box className="lessons-wrapper">
-          <PageTitle title="Wszystkie lekcje"></PageTitle>
+          <PageTitle title={title ? title : "Wszystkie lekcje"}></PageTitle>
           <Stack
             spacing={4}
             divider={<Divider orientation="horizontal"></Divider>}
@@ -116,6 +162,7 @@ function Lessons() {
                 <Lesson
                   key={index}
                   lessonData={value}
+                  buttons={buttons}
                   finished={usersLessons[index]?.finished}
                 ></Lesson>
               );

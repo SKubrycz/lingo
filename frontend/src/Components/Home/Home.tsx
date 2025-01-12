@@ -101,7 +101,6 @@ function Home() {
       })
       .catch((error) => {
         console.log(error);
-        navigate("/lessons");
       });
   };
 

@@ -122,7 +122,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
       return res.status(404).send(`Nie znaleziono użytkownika`);
     }
   } catch (error) {
-    res.status(500).send(`Error ${req.originalUrl} ${error}`);
+    res.status(500).send(`Error ${req.originalUrl}`);
   }
 };
 
