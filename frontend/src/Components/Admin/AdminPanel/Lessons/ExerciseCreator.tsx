@@ -31,6 +31,10 @@ import {
   MatchExercise,
 } from "./LessonsTypes";
 import AdminPanelNavbar from "../AdminPanelNavbar";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
+import { RootState } from "../../../../state/store";
+import AlertSnackbar from "../../../Reusables/Informational/AlertSnackbar";
 
 export type ExerciseType = "card" | "input" | "match" | "choice";
 type Exercises = CardExercise | InputExercise | ChoiceExercise | MatchExercise;
@@ -53,6 +57,8 @@ const ChooseExerciseType = forwardRef<
 >(({ type, lessonId, exerciseId, language, result }, ref) => {
   const [exercise, setExercise] = useState<Exercises | null>(null);
 
+  const dispatch = useDispatch();
+
   useImperativeHandle(ref, () => ({
     runSaveExercise: saveExercise,
   }));
@@ -70,10 +76,27 @@ const ChooseExerciseType = forwardRef<
           { withCredentials: true }
         );
 
-        console.log(res.data);
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
         }
       }
     }
@@ -384,6 +407,9 @@ const ChooseExerciseType = forwardRef<
 interface ExerciseCreatorProps {}
 
 export default function ExerciseCreator({}: ExerciseCreatorProps) {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
   const [exerciseType, setExerciseType] = useState<ExerciseType | null>(null);
   const [result, setResult] = useState<Exercises | null>(null);
 
@@ -394,6 +420,8 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
   const { state } = useLocation();
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleAuth = async () => {
     const language = query.get("language");
@@ -410,15 +438,28 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
         { withCredentials: true }
       );
 
-      console.log(res.data);
-
       if (res.data.result) {
         setResult(res.data.result);
       }
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
-        if (error.response?.status === 403) navigate("/admin");
+        if (error.status === 403) {
+          navigate("/admin");
+        } else {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
+
+          navigate("/admin");
+        }
       }
     }
   };
@@ -565,6 +606,12 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
             </Box>
           </Box>
         </Box>
+        <AlertSnackbar
+          severity={alertSnackbarData.severity}
+          variant={alertSnackbarData.variant}
+          title={alertSnackbarData.title}
+          content={alertSnackbarData.content}
+        ></AlertSnackbar>
       </Box>
     </ThemeProvider>
   );

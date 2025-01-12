@@ -22,6 +22,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getBackground from "../../../../utilities/getBackground";
 import axios, { isAxiosError } from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../state/store";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 interface Metadata {
   route: string;
@@ -38,6 +41,9 @@ interface SubpagesTabProps {
 }
 
 export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
   const [metadata, setMetadata] = useState<MergedMetadata[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<MergedMetadata | null>(null);
@@ -51,6 +57,8 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
   const [textField, setTextField] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const extractMetadata = (data: any[]) => {
     let metadata: Metadata[] = [];
@@ -178,8 +186,15 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
           console.error(error);
 
           if (isAxiosError(error)) {
-            if (error.response?.status === 403) {
-              navigate("/admin");
+            if (error.status && error.status > 399) {
+              dispatch(
+                setAlert({
+                  severity: "error",
+                  variant: "filled",
+                  title: "Błąd",
+                  content: error.response?.data.message,
+                })
+              );
             }
           }
         }

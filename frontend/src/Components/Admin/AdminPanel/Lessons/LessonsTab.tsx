@@ -22,6 +22,8 @@ import React, { useEffect, useState } from "react";
 import getBackground from "../../../../utilities/getBackground";
 import axios, { isAxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 interface LessonsTabProps {
   lessonsData: any;
@@ -45,6 +47,8 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   const { state } = useLocation();
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const convertLessonsData = () => {
     const keys = Object.keys(lessonsData[0]);
@@ -76,7 +80,14 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
         { withCredentials: true }
       );
 
-      console.log(res.data);
+      dispatch(
+        setAlert({
+          severity: "success",
+          variant: "filled",
+          title: "Sukces",
+          content: res.data.message,
+        })
+      );
 
       navigate(`/admin/panel/lessons/edit/${newLessonId}?language=pl`, {
         state: { language: "pl" },
@@ -84,6 +95,16 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status && error.status > 399) {
+          dispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: error.response?.data.message,
+            })
+          );
+        }
       }
     }
   };
@@ -122,7 +143,14 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
           { withCredentials: true }
         );
 
-        console.log(res.data);
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
 
         navigate(
           `/admin/panel/lessons/edit/${modalData?.lessonId}?language=${radioValue}`,
@@ -133,8 +161,15 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
-          if (error.response?.status === 403) {
-            navigate("/admin");
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
           }
         }
       }
@@ -166,7 +201,14 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
           { withCredentials: true }
         );
 
-        console.log(res.data);
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
 
         navigate(
           `/admin/panel/lessons/edit/${newLanguageModalData}?language=${textField}`
@@ -174,6 +216,16 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
         }
       }
     }

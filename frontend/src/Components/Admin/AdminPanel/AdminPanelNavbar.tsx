@@ -14,6 +14,8 @@ import {
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import axios, { isAxiosError } from "axios";
 import { adminTheme } from "../../../adminTheme";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../../state/alertSnackbarSlice";
 
 interface AdminPanelNavbarProps {}
 
@@ -21,6 +23,8 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -45,12 +49,26 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
         { withCredentials: true }
       );
 
-      console.log(res.data);
-
       navigate("/lessons");
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status === 403) {
+          navigate("/not-found");
+        } else {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
+
+          navigate("/admin");
+        }
       }
     }
   };

@@ -15,10 +15,15 @@ import { adminTheme } from "../../../../adminTheme";
 import { Done, Edit } from "@mui/icons-material";
 import getBackground from "../../../../utilities/getBackground";
 import AdminPanelNavbar from "../AdminPanelNavbar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbarSlice";
+import { RootState } from "../../../../state/store";
+import AlertSnackbar from "../../../Reusables/Informational/AlertSnackbar";
 
 export default function SubpagesEdit() {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
   const [routeData, setRouteData] = useState<any>();
   const [editing, setEditing] = useState<{
     path: string[];
@@ -48,13 +53,24 @@ export default function SubpagesEdit() {
           { withCredentials: true }
         );
 
-        console.log(res.data);
-
         setRouteData(res.data);
       } catch (error) {
         console.error(error);
         if (isAxiosError(error)) {
-          if (error.response?.status === 403) {
+          if (error.status === 403) {
+            navigate("/admin");
+          } else {
+            if (error.status && error.status > 399) {
+              dispatch(
+                setAlert({
+                  severity: "error",
+                  variant: "filled",
+                  title: "Błąd",
+                  content: error.response?.data.message,
+                })
+              );
+            }
+
             navigate("/admin");
           }
         }
@@ -164,8 +180,6 @@ export default function SubpagesEdit() {
         { withCredentials: true }
       );
 
-      console.log(res.data);
-
       dispatch(
         setAlert({
           severity: "success",
@@ -185,6 +199,16 @@ export default function SubpagesEdit() {
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status && error.status > 399) {
+          dispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: error.response?.data.message,
+            })
+          );
+        }
       }
     }
   };
@@ -237,6 +261,12 @@ export default function SubpagesEdit() {
             Zatwierdź
           </Button>
         </AppBar>
+        <AlertSnackbar
+          severity={alertSnackbarData.severity}
+          variant={alertSnackbarData.variant}
+          title={alertSnackbarData.title}
+          content={alertSnackbarData.content}
+        ></AlertSnackbar>
       </Box>
     </ThemeProvider>
   );

@@ -9,8 +9,9 @@ import LessonsTab from "./Lessons/LessonsTab";
 import AdminPanelNavbar from "./AdminPanelNavbar";
 import getBackground from "../../../utilities/getBackground";
 import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
+import { setAlert } from "../../../state/alertSnackbarSlice";
 
 interface ChooseIndexProps {
   currentIndex: number;
@@ -46,20 +47,31 @@ export default function AdminPanel() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleAuth = async () => {
     try {
       const res = await axios.get(
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/admin/panel`,
         { withCredentials: true }
       );
-
-      console.log(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
         if (error.status === 403) {
           navigate("/not-found");
         } else {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
+
           navigate("/admin");
         }
       }
@@ -75,11 +87,26 @@ export default function AdminPanel() {
         { withCredentials: true }
       );
 
-      console.log(res.data);
       setSubpagesData(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status === 403) {
+          navigate("/not-found");
+        } else {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
+
+          navigate("/admin");
+        }
       }
     }
   };
@@ -93,13 +120,24 @@ export default function AdminPanel() {
         { withCredentials: true }
       );
 
-      console.log(res.data);
-
       setLessonsData(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
-        if (error.response?.status === 403) {
+        if (error.status === 403) {
+          navigate("/not-found");
+        } else {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
+
           navigate("/admin");
         }
       }

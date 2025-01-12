@@ -26,6 +26,10 @@ import { LessonPanel } from "./LessonsTypes";
 import { adminTheme } from "../../../../adminTheme";
 import AdminPanelNavbar from "../AdminPanelNavbar";
 import { ArrowBackIos, Delete, Edit } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../state/store";
+import { setAlert } from "../../../../state/alertSnackbarSlice";
+import AlertSnackbar from "../../../Reusables/Informational/AlertSnackbar";
 
 interface DeleteDialogData {
   open: boolean;
@@ -35,6 +39,9 @@ interface DeleteDialogData {
 interface LessonsEditProps {}
 
 export default function LessonsEdit({}: LessonsEditProps) {
+  const alertSnackbarData = useSelector(
+    (state: RootState) => state.alertSnackbarReducer
+  );
   const [lessonData, setLessonData] = useState<LessonPanel | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogData>({
     open: false,
@@ -46,6 +53,8 @@ export default function LessonsEdit({}: LessonsEditProps) {
   const { state } = useLocation();
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleAuth = async () => {
     const language = query.get("language");
@@ -59,14 +68,25 @@ export default function LessonsEdit({}: LessonsEditProps) {
           { withCredentials: true }
         );
 
-        console.log(res.data);
-
         setLessonData(res.data.result);
       } catch (error) {
         console.error(error);
 
         if (isAxiosError(error)) {
-          if (error.response?.status === 403) {
+          if (error.status === 403) {
+            navigate("/admin");
+          } else {
+            if (error.status && error.status > 399) {
+              dispatch(
+                setAlert({
+                  severity: "error",
+                  variant: "filled",
+                  title: "Błąd",
+                  content: error.response?.data.message,
+                })
+              );
+            }
+
             navigate("/admin");
           }
         }
@@ -107,13 +127,30 @@ export default function LessonsEdit({}: LessonsEditProps) {
           { withCredentials: true }
         );
 
-        console.log(res.data);
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
 
         navigate(0);
       }
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
+        if (error.status && error.status > 399) {
+          dispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              title: "Błąd",
+              content: error.response?.data.message,
+            })
+          );
+        }
       }
     }
   };
@@ -133,10 +170,27 @@ export default function LessonsEdit({}: LessonsEditProps) {
           { withCredentials: true }
         );
 
-        console.log(res.data);
+        dispatch(
+          setAlert({
+            severity: "success",
+            variant: "filled",
+            title: "Sukces",
+            content: res.data.message,
+          })
+        );
       } catch (error) {
         console.log(error);
         if (isAxiosError(error)) {
+          if (error.status && error.status > 399) {
+            dispatch(
+              setAlert({
+                severity: "error",
+                variant: "filled",
+                title: "Błąd",
+                content: error.response?.data.message,
+              })
+            );
+          }
         }
       }
     }
@@ -456,6 +510,12 @@ export default function LessonsEdit({}: LessonsEditProps) {
           Zatwierdź
         </Button>
       </AppBar>
+      <AlertSnackbar
+        severity={alertSnackbarData.severity}
+        variant={alertSnackbarData.variant}
+        title={alertSnackbarData.title}
+        content={alertSnackbarData.content}
+      ></AlertSnackbar>
     </ThemeProvider>
   );
 }
