@@ -37,6 +37,8 @@ function About() {
 
   const [aboutData, setAboutData] = useState<any>();
 
+  const [languages, setLanguages] = useState<string[] | null>(null);
+
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
   );
@@ -107,6 +109,10 @@ function About() {
             setFooterOptionsArray(footer);
           }
         }
+
+        if (res.data.languages) {
+          setLanguages(res.data.languages);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -136,6 +142,7 @@ function About() {
           link={linkArray}
           options={optionsArray}
           tooltip={tooltip}
+          languages={languages}
         ></Navbar>
         <MainAbout languageData={aboutData}></MainAbout>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>

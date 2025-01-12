@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import jwt from "jsonwebtoken";
 
-import { findOneUserByLogin } from "../assets/queries";
+import { findAllRouteLanguages, findOneUserByLogin } from "../assets/queries";
 import comparePassword from "../utilities/comparePassword";
 import { loginLangData } from "../assets/routeLangData/login";
 import { setLangIndex } from "../utilities/setLangIndex";
@@ -12,8 +12,15 @@ const getLogin = async (req: Request, res: Response) => {
 
   let langIndex = setLangIndex(String(query.lang));
 
+  const languagesResult = await findAllRouteLanguages("/login");
+  if (!languagesResult || languagesResult.length === 0)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+
   res.status(200).send({
     languageData: langIndex != null ? loginLangData[langIndex] : null,
+    languages: languagesResult,
   });
 };
 

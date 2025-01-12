@@ -23,9 +23,10 @@ interface NavbarProps {
   link: string[];
   options: string[];
   tooltip: string | null;
+  languages: string[] | null;
 }
 
-function Navbar({ link, options, tooltip }: NavbarProps) {
+function Navbar({ link, options, tooltip, languages }: NavbarProps) {
   const languageData = useSelector((state: RootState) => state.languageReducer);
 
   const [display, setDisplay] = useState<string>("none");
@@ -91,13 +92,14 @@ function Navbar({ link, options, tooltip }: NavbarProps) {
                   }}
                 >
                   {tooltip ?? "Zmień język strony"} <br></br>
-                  {languageData.languages.map((el, i) => {
-                    if (el != languageData.lang) {
-                      return (
-                        <Language key={i} lang={el} fontSize="9px"></Language>
-                      );
-                    }
-                  })}
+                  {languages &&
+                    languages.map((el, i) => {
+                      if (el != languageData.lang) {
+                        return (
+                          <Language key={i} lang={el} fontSize="9px"></Language>
+                        );
+                      }
+                    })}
                 </Typography>
               }
               slotProps={{

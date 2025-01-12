@@ -32,6 +32,8 @@ function Register() {
     "Rejestracja",
   ]);
 
+  const [languages, setLanguages] = useState<string[] | null>(null);
+
   const fetchLanguageData = async (lang: string) => {
     const route = handleLanguageURL("/register", lang);
 
@@ -47,6 +49,10 @@ function Register() {
         setRegisterData(main);
 
         setFooterOptionsArray([footer.about, footer.login, footer.register]);
+      }
+
+      if (res.data.languages) {
+        setLanguages(res.data.languages);
       }
     });
   };
@@ -65,6 +71,7 @@ function Register() {
           link={linkArray}
           options={optionsArray}
           tooltip={tooltip}
+          languages={languages}
         ></Navbar>
         <MainRegister languageData={registerData}></MainRegister>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>

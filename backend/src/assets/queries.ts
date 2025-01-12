@@ -939,6 +939,47 @@ export const findAllRoutesMetadata = async () => {
     return null;
   }
 };
+
+export const findAllRouteLanguages = async (route: string) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const routesCollection = db.collection("routes");
+
+    const aggregation = [
+      {
+        $match: {
+          "metadata.route": route,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          languages: { $addToSet: "$metadata.language" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          languages: 1,
+        },
+      },
+    ];
+
+    const languagesResult = await routesCollection
+      .aggregate(aggregation)
+      .toArray();
+    if (!languagesResult) return null;
+
+    return languagesResult.length > 0 ? languagesResult[0].languages : [];
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const getTimeSpent = async (
   id: ObjectId | undefined
 ): Promise<number | null | undefined> => {

@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import { randomBytes } from "node:crypto";
 import nodemailer from "nodemailer";
 
-import { findOneUser, insertOneUser } from "../assets/queries";
+import {
+  findAllRouteLanguages,
+  findOneUser,
+  insertOneUser,
+} from "../assets/queries";
 
 import hashData from "../utilities/hashData";
 import { registerLangData } from "../assets/routeLangData/register";
@@ -64,8 +68,15 @@ const getRegister = async (req: Request, res: Response) => {
 
   let langIndex = setLangIndex(String(query.lang));
 
+  const languagesResult = await findAllRouteLanguages("/register");
+  if (!languagesResult || languagesResult.length === 0)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+
   res.status(200).send({
     languageData: langIndex != null ? registerLangData[langIndex] : null,
+    languages: languagesResult,
   });
 };
 

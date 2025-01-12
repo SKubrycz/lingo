@@ -51,6 +51,8 @@ function Home() {
 
   const [visible, setVisible] = useState<boolean>(true);
 
+  const [languages, setLanguages] = useState<string[] | null>(null);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
@@ -91,6 +93,10 @@ function Home() {
           };
 
           setHomeData(homeData);
+        }
+
+        if (res.data.languages) {
+          setLanguages(res.data.languages);
         }
       })
       .catch((error) => {
@@ -133,6 +139,7 @@ function Home() {
         link={linkArray}
         options={optionsArray}
         tooltip={tooltip}
+        languages={languages}
       ></Navbar>
       <MainHome languageData={homeData}></MainHome>
       {visible && <ScrollArrow></ScrollArrow>}

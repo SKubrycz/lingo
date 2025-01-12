@@ -4,6 +4,7 @@ import { RequestLogin } from "../middleware/auth";
 
 import { homeLangData } from "../assets/routeLangData/home";
 import { setLangIndex } from "../utilities/setLangIndex";
+import { findAllRouteLanguages } from "../assets/queries";
 
 const getHome = async (req: RequestLogin, res: Response) => {
   console.log(`req.login ${req.login}`);
@@ -17,9 +18,16 @@ const getHome = async (req: RequestLogin, res: Response) => {
   console.log(query.lang);
   console.log(langIndex);
 
+  const languagesResult = await findAllRouteLanguages("/");
+  if (!languagesResult || languagesResult.length === 0)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+
   const data = {
     sessionUser: sessionUser,
     languageData: langIndex != null ? homeLangData[langIndex] : null,
+    languages: languagesResult,
   };
 
   if (req.login) {

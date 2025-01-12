@@ -31,6 +31,8 @@ function Login() {
     "Rejestracja",
   ]);
 
+  const [languages, setLanguages] = useState<string[] | null>(null);
+
   const fetchLanguageData = async (lang: string) => {
     const route = handleLanguageURL("/login", lang);
 
@@ -46,6 +48,10 @@ function Login() {
         setLoginData(main);
 
         setFooterOptionsArray([footer.about, footer.login, footer.register]);
+      }
+
+      if (res.data.languages) {
+        setLanguages(res.data.languages);
       }
     });
   };
@@ -64,6 +70,7 @@ function Login() {
           link={linkArray}
           options={optionsArray}
           tooltip={tooltip}
+          languages={languages}
         ></Navbar>
         <MainLogin languageData={loginData}></MainLogin>
         <Footer link={footerLinkArray} options={footerOptionsArray}></Footer>
