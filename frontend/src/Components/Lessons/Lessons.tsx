@@ -129,7 +129,7 @@ function Lessons() {
           })
         );
         if (isAxiosError(error)) {
-          if (error.status === 403) navigate("/");
+          if (error.status === 401) navigate("/");
         }
       });
   };

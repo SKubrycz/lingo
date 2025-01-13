@@ -53,9 +53,13 @@ const formatTimeSpent = (timeSpent: number | undefined): string => {
 
 interface MainProfileStatsProps {
   stats: Stats | undefined;
+  languageData: any;
 }
 
-export default function MainProfileStats({ stats }: MainProfileStatsProps) {
+export default function MainProfileStats({
+  stats,
+  languageData,
+}: MainProfileStatsProps) {
   // IDEA: For stats add a tooltip with more information
 
   const myTime = useRef<number>(
@@ -78,35 +82,47 @@ export default function MainProfileStats({ stats }: MainProfileStatsProps) {
     },
   };
 
-  //later to be replaced with API data
   const statsData: Stat[] = [
     {
       id: 1,
       type: "time_spent",
-      name: "Czas spędzony na nauce",
+      name: languageData?.timeSpent?.title
+        ? languageData?.timeSpent?.title
+        : "Czas spędzony na nauce",
       desc: "",
       data: formatTimeSpent(stats?.totalTimeSpent),
     },
     {
       id: 2,
       type: "lessons_finished",
-      name: "Liczba ukończonych lekcji",
+      name: languageData?.finishedLessons
+        ? languageData?.finishedLessons
+        : "Liczba ukończonych lekcji",
       desc: "",
-      data: (stats?.finishedLessonsCount) ? stats?.finishedLessonsCount : 0,
+      data: stats?.finishedLessonsCount ? stats?.finishedLessonsCount : 0,
     },
     {
       id: 3,
       type: "accuracy",
-      name: "Dokładność w lekcjach",
-      desc: "Procent poprawnych odpowiedzi (ze wszystkich lekcji)",
-      data: (stats?.accuracy && stats?.accuracy > 0) ? `${String(stats?.accuracy).slice(0, 5)}%` : "-",
+      name: languageData?.accuracy?.title
+        ? languageData?.accuracy?.title
+        : "Dokładność w lekcjach",
+      desc: languageData?.accuracy?.tooltip
+        ? languageData?.accuracy?.tooltip
+        : "Procent poprawnych odpowiedzi (ze wszystkich lekcji)",
+      data:
+        stats?.accuracy && stats?.accuracy > 0
+          ? `${String(stats?.accuracy).slice(0, 5)}%`
+          : "-",
     },
     {
       id: 4,
       type: "words_learned",
-      name: "Nauczone słowa",
+      name: languageData?.wordsLearned
+        ? languageData?.wordsLearned
+        : "Nauczone słowa",
       desc: "",
-      data: (stats?.wordsLearned) ? stats?.wordsLearned : 0,
+      data: stats?.wordsLearned ? stats?.wordsLearned : 0,
     },
     //{ id: 5, type: "something", name: "Coś", desc: "", data: 5863895672 },
   ]; //[1500, 123, "99%", 12.5, 5863895672];

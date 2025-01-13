@@ -2,11 +2,16 @@ import { LineChart } from "@mui/x-charts";
 
 import { defaultTheme } from "../../defaultTheme";
 import { Stats } from "./Profile";
-import { useEffect } from "react";
-import { AxisValueFormatterContext } from "@mui/x-charts/internals";
+import { useEffect, useState } from "react";
+
+interface Labels {
+  x: string;
+  y: string;
+}
 
 interface MainProfileChartProps {
-  stats: Stats;
+  stats: Stats | undefined;
+  languageData: any;
 }
 
 const dateFromNow = (days: number) => {
@@ -17,8 +22,14 @@ const dateFromNow = (days: number) => {
   return new Date(today.getTime() - DAY * days);
 };
 
-export default function MainProfileChart({ stats }: MainProfileChartProps) {
-  let tempDate = new Date();
+export default function MainProfileChart({
+  stats,
+  languageData,
+}: MainProfileChartProps) {
+  const [labels, setLabels] = useState<Labels>({
+    y: "Ilość ukończonych lekcji",
+    x: "Data",
+  });
 
   const dataset = [
     {
@@ -72,10 +83,6 @@ export default function MainProfileChart({ stats }: MainProfileChartProps) {
     },
   ];
 
-  useEffect(() => {
-    console.log(dataset);
-  }, []);
-
   const valueFormatter = (date: Date) => {
     return date.toLocaleDateString(undefined, {
       month: "short",
@@ -88,20 +95,31 @@ export default function MainProfileChart({ stats }: MainProfileChartProps) {
     else return "";
   };
 
+  useEffect(() => {
+    if (languageData && languageData.x && languageData.y) {
+      const labelsObj: Labels = {
+        x: languageData?.x,
+        y: languageData?.y,
+      };
+
+      setLabels(labelsObj);
+    }
+  }, [languageData]);
+
   return (
     <LineChart
       dataset={dataset}
       xAxis={[
         {
           dataKey: "date",
-          label: "Data",
+          label: labels.x,
           scaleType: "point",
           valueFormatter,
         },
       ]}
       yAxis={[
         {
-          label: "Ilość ukończonych lekcji",
+          label: labels.y,
           min: 0,
           valueFormatter: formatYAxis,
         },

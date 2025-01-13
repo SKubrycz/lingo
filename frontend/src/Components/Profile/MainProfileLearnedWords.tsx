@@ -16,6 +16,7 @@ interface WordsProps {
 
 interface MainProfileLearnedWordsProps {
   user: User;
+  languageData: any;
 }
 
 function Words({ wordData }: WordsProps) {
@@ -64,7 +65,10 @@ function Words({ wordData }: WordsProps) {
   }
 }
 
-function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
+function MainProfileLearnedWords({
+  user,
+  languageData,
+}: MainProfileLearnedWordsProps) {
   // And here static data for now
   const [wordData, setWordData] = useState<WordData[] | string>(
     user?.words.length > 0
@@ -100,6 +104,8 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
             leftValue: 50 + 5 * 200,
           },
         ]
+      : languageData?.fallback
+      ? languageData?.fallback
       : "Ukończ swoją pierwszą lekcję aby wyświetlić nauczone słowa"
   );
 
@@ -239,7 +245,9 @@ function MainProfileLearnedWords({ user }: MainProfileLearnedWordsProps) {
           overflow: "hidden",
         }}
       >
-        <Typography variant="body1">Nowo poznane słowa</Typography>
+        <Typography variant="body1">
+          {languageData?.title ? languageData?.title : "Nowo poznane słowa"}
+        </Typography>
         <Box sx={{ width: "100%", height: "100%" }}>
           <Words wordData={wordData}></Words>
         </Box>

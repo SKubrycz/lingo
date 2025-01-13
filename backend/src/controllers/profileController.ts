@@ -10,6 +10,8 @@ import {
   getLessonsTimeStamps,
   getAllLessonsTimestamps,
   getFinishedLessonsWords,
+  findAllRouteLanguages,
+  findRoute,
 } from "../assets/queries";
 import { RequestLogin } from "../middleware/auth";
 
@@ -17,7 +19,7 @@ interface FindUser {
   _id: ObjectId;
   login: string;
   createdDate: Date;
-} // !not equal to the one in queries.ts
+}
 
 interface Stats {
   totalTimeSpent: number;
@@ -31,6 +33,8 @@ interface SentUser {
   login: string;
   createdDate: string; // parsed
   sessionUser: boolean;
+  languageData: any;
+  languages: string[];
   stats: Stats;
   words: UsersLessons[] | string[];
 }
@@ -42,6 +46,26 @@ const getProfile = async (req: Request, res: Response) => {
 const getProfileId = async (req: RequestLogin, res: Response) => {
   try {
     let login: string | undefined = await req.params.id;
+    const query = await req.query;
+
+    if (!query)
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+    if (!query.language)
+      return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+    const routeResult = await findRoute("profile", String(query.language));
+    if (!routeResult)
+      return res
+        .status(500)
+        .send({ message: "Coś poszło nie tak po naszej stronie" });
+
+    const languagesResult = await findAllRouteLanguages("/profile");
+    if (!languagesResult || languagesResult.length === 0)
+      return res.status(500).send({
+        message: routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera",
+      });
 
     console.log(`login in ${req.originalUrl} ${login}`);
 
@@ -66,14 +90,18 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
       const timeSpentResult = await getTimeSpent(req._id);
       console.log(`timeSpentResult: ${timeSpentResult}`);
       if (!timeSpentResult && timeSpentResult != 0)
-        return res
-          .status(500)
-          .send({ message: "Coś poszło nie tak po naszej stronie" });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
       const accuracyResult = await getAccuracy(req._id);
       if (!accuracyResult)
-        return res
-          .status(500)
-          .send({ message: "Coś poszło nie tak po naszej stronie" });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
 
       let startDate = new Date(Date.now());
       let endDate = new Date(Date.now());
@@ -83,20 +111,26 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         endDate,
       ]);
       if (!getTimestamps)
-        return res
-          .status(500)
-          .send({ message: "Coś poszło nie tak po naszej stronie" });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
       const getTimestampCount = await getAllLessonsTimestamps(req._id);
       if (getTimestampCount != 0 && !getTimestampCount) {
-        return res
-          .status(500)
-          .send({ message: "Coś poszło nie tak po naszej stronie" });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
       }
       const getWordsLearned = await getFinishedLessonsWords(req._id);
       if (getWordsLearned !== 0 && !getWordsLearned)
-        return res
-          .status(500)
-          .send({ message: "Coś poszło nie tak po naszej stronie" });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
 
       let sessionUser = false;
       if (req.login === result.login) sessionUser = true;
@@ -107,6 +141,8 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
         login: result.login,
         createdDate: parseDate,
         sessionUser: sessionUser,
+        languageData: routeResult,
+        languages: languagesResult,
         stats: {
           totalTimeSpent: timeSpentResult,
           accuracy: accuracyResult,
@@ -119,7 +155,13 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
 
       return res.status(200).send(fetched);
     } else {
-      return res.status(404).send(`Nie znaleziono użytkownika`);
+      return res
+        .status(404)
+        .send(
+          routeResult.alerts.notFound
+            ? routeResult.alerts.notFound
+            : `Nie znaleziono użytkownika`
+        );
     }
   } catch (error) {
     res.status(500).send(`Error ${req.originalUrl}`);

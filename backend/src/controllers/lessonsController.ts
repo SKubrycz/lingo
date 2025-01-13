@@ -28,17 +28,46 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     return res.status(500).send({
       message: routeResult.alerts.internalServerError
         ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po naszej stronie",
+        : "Coś poszło nie tak po stronie serwera",
     });
 
-  const lessonsResult = await findFilledLessonsListWithLanguage(
+  let lessonsResult = await findFilledLessonsListWithLanguage(
     String(query.language)
   );
+  if (!lessonsResult)
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po stronie serwera",
+    });
+
+  //fallback lessons language
+  if (lessonsResult.length < 1) {
+    lessonsResult = await findFilledLessonsListWithLanguage("pl");
+    if (!lessonsResult)
+      return res.status(500).send({
+        message: routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera",
+      });
+  }
 
   if (!req.login)
-    return res.status(500).send("Coś poszło nie tak po stronie serwera");
+    return res
+      .status(500)
+      .send(
+        routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera"
+      );
   if (!req._id)
-    return res.status(500).send("Coś poszło nie tak po stronie serwera");
+    return res
+      .status(500)
+      .send(
+        routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera"
+      );
 
   const userResult = await findOneUserByLogin(req.login);
   if (userResult) {
@@ -56,7 +85,13 @@ const getLessons = async (req: RequestLogin, res: Response) => {
 
     res.status(200).send(results);
   } else {
-    res.status(404).send("Nie znaleziono użytkownika");
+    res
+      .status(404)
+      .send(
+        routeResult.alerts.notFound
+          ? routeResult.alerts.notFound
+          : "Nie znaleziono użytkownika"
+      );
   }
 };
 

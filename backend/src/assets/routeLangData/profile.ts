@@ -17,10 +17,18 @@ export const profileLangData = [
       dialog: {
         title: "Ustawienia",
         button: "Usuń konto",
+        confirm: {
+          title: "Czy na pewno chcesz usunąć konto?",
+          yes: "Tak",
+          no: "Nie",
+        },
       },
     },
     stats: {
-      timeSpent: "Czas spędzony na nauce",
+      timeSpent: {
+        title: "Czas spędzony na nauce",
+        units: ["s", "min.", "godz."],
+      },
       finishedLessons: "Liczba ukończonych lekcji",
       accuracy: {
         title: "Dokładność w lekcjach",
@@ -63,10 +71,18 @@ export const profileLangData = [
       dialog: {
         title: "Einstellungen",
         button: "Benutzerkonto löschen",
+        confirm: {
+          title: "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
+          yes: "Ja",
+          no: "Nein",
+        },
       },
     },
     stats: {
-      timeSpent: "Zeit zum Lernen",
+      timeSpent: {
+        title: "Zeit zum Lernen",
+        units: ["Sek.", "Min.", "Std."],
+      },
       finishedLessons: "Anzahl der absolvierten Lektionen",
       accuracy: {
         title: "Akkuratesse im Unterricht",

@@ -11,7 +11,12 @@ import MainProfileSettings from "./MainProfileSettings";
 import MainProfileLearnedWords from "./MainProfileLearnedWords";
 import { User } from "./Profile";
 
-function MainProfile({ user }: { user: User | null }) {
+interface MainProfileProps {
+  user: User | null;
+  languageData: any | null;
+}
+
+function MainProfile({ user, languageData }: MainProfileProps) {
   const [openSettings, setOpenSettings] = useState<boolean>(false);
 
   const handleOpenSettings = () => {
@@ -27,15 +32,15 @@ function MainProfile({ user }: { user: User | null }) {
       <Container className="main-profile">
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           <Box sx={{ padding: "2em", display: "flex" }}>
-          <Avatar
-                sx={{
-                  width: 50,
-                  height: 50,
-                  bgcolor: "primary.dark",
-                }}
-              >
-                {user?.login.charAt(0)}
-              </Avatar>
+            <Avatar
+              sx={{
+                width: 50,
+                height: 50,
+                bgcolor: "primary.dark",
+              }}
+            >
+              {user?.login.charAt(0)}
+            </Avatar>
 
             <Box
               component="div"
@@ -51,21 +56,33 @@ function MainProfile({ user }: { user: User | null }) {
                   fontWeight: 500,
                 }}
               >
-                {user?.login} {user?.sessionUser ? "(Ty)" : undefined}
+                {user?.login}{" "}
+                {user?.sessionUser
+                  ? languageData.user.you
+                    ? languageData.user.you
+                    : "(Ty)"
+                  : undefined}
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 400, color: "primary.dark" }}
               >
-                {`Data założenia konta:
+                {`${
+                  languageData?.user?.date
+                    ? languageData?.user?.date
+                    : "Data założenia konta"
+                }:
                 ${user?.createdDate ? user?.createdDate : "-"}`}
               </Typography>
             </Box>
             {user && user?.sessionUser && (
-              /* Implement user settings, for example delete account, customization (also put Settings into other file) */
               <>
                 <Tooltip
-                  title="Otwórz ustawienia użytkownika"
+                  title={
+                    languageData?.settings?.tooltip
+                      ? languageData?.settings?.tooltip
+                      : "Otwórz ustawienia użytkownika"
+                  }
                   arrow={true}
                   onClick={() => handleOpenSettings()}
                 >
@@ -83,16 +100,26 @@ function MainProfile({ user }: { user: User | null }) {
                 <MainProfileSettings
                   open={openSettings}
                   onClose={() => handleCloseSettings()}
+                  languageData={languageData?.settings}
                 ></MainProfileSettings>
               </>
             )}
           </Box>
-          <MainProfileChart stats={user?.stats}></MainProfileChart>
+          <MainProfileChart
+            stats={user?.stats}
+            languageData={languageData?.chart}
+          ></MainProfileChart>
         </Box>
         <Box sx={{ width: "66%", display: "flex", flexDirection: "column" }}>
-          <MainProfileStats stats={user?.stats}></MainProfileStats>
+          <MainProfileStats
+            stats={user?.stats}
+            languageData={languageData?.stats}
+          ></MainProfileStats>
           {user?.sessionUser && (
-            <MainProfileLearnedWords user={user}></MainProfileLearnedWords>
+            <MainProfileLearnedWords
+              user={user}
+              languageData={languageData?.newlyLearnedWords}
+            ></MainProfileLearnedWords>
           )}
         </Box>
       </Container>

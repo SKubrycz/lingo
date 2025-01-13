@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../state/alertSnackbarSlice";
-import { renderToStaticNodeStream } from "react-dom/server";
 
 interface PrepareAccount {
   message: string;
@@ -15,11 +14,13 @@ interface PrepareAccount {
 interface MainProfileSettingsProps {
   open: boolean;
   onClose: () => void;
+  languageData: any;
 }
 
 export default function MainProfileSettings({
   open,
   onClose,
+  languageData,
 }: MainProfileSettingsProps) {
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
 
@@ -69,19 +70,29 @@ export default function MainProfileSettings({
   return (
     <>
       <Dialog open={open} onClose={() => onClose()}>
-        <DialogTitle sx={{ textAlign: "center" }}>Ustawienia</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }}>
+          {languageData?.dialog?.title
+            ? languageData?.dialog?.title
+            : "Ustawienia"}
+        </DialogTitle>
         <DialogContent>
           <Button
             variant="contained"
             color="error"
             onClick={() => handleConfirmOpen()}
           >
-            Usuń konto
+            {languageData?.dialog?.button
+              ? languageData?.dialog?.button
+              : "Usuń konto"}
           </Button>
         </DialogContent>
       </Dialog>
       <Dialog open={confirmOpen} onClose={() => handleConfirmClose()}>
-        <DialogTitle>Czy na pewno chcesz usunąć konto?</DialogTitle>
+        <DialogTitle>
+          {languageData?.dialog?.confirm?.title
+            ? languageData?.dialog?.confirm?.title
+            : "Czy na pewno chcesz usunąć konto?"}
+        </DialogTitle>
         <DialogContent>
           <Box
             component="form"
@@ -98,14 +109,18 @@ export default function MainProfileSettings({
             }}
           >
             <Button type="submit" variant="contained" color="error">
-              Tak
+              {languageData?.dialog?.confirm?.yes
+                ? languageData?.dialog?.confirm?.yes
+                : "Tak"}
             </Button>
             <Button
               variant="text"
               color="error"
               onClick={() => handleConfirmClose()}
             >
-              Nie
+              {languageData?.dialog?.confirm?.no
+                ? languageData?.dialog?.confirm?.no
+                : "Nie"}
             </Button>
           </Box>
         </DialogContent>
