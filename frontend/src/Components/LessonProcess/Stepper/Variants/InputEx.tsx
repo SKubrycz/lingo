@@ -5,14 +5,19 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 interface InputMessageProps {
   correct: boolean | null;
   missingWords: string;
+  exerciseUI: any | null;
 }
 
-function InputMessage({ correct, missingWords }: InputMessageProps) {
+function InputMessage({
+  correct,
+  missingWords,
+  exerciseUI,
+}: InputMessageProps) {
   switch (correct) {
     case true:
       return (
         <Typography variant="body1" color="success" sx={{ padding: "0.5em" }}>
-          Dobrze!
+          {exerciseUI?.correct ? exerciseUI?.correct : "Dobrze!"}
         </Typography>
       );
     case false:
@@ -22,7 +27,9 @@ function InputMessage({ correct, missingWords }: InputMessageProps) {
           color="error"
           sx={{ padding: "0.5em", textAlign: "center" }}
         >
-          Źle, prawidłowa odpowiedź to:{" "}
+          {exerciseUI?.incorrect
+            ? exerciseUI?.incorrect
+            : "Źle, prawidłowa odpowiedź to:"}{" "}
           <Typography
             variant="body1"
             component="span"
@@ -41,7 +48,7 @@ function InputMessage({ correct, missingWords }: InputMessageProps) {
 
 interface InputExProps {
   question: string;
-  task: string;
+  exerciseUI: any | null;
   missingWords: string;
   correct: boolean | null;
   textRef: React.Ref<HTMLInputElement | null>;
@@ -50,7 +57,7 @@ interface InputExProps {
 
 export default function InputEx({
   question,
-  task,
+  exerciseUI,
   missingWords,
   correct,
   textRef,
@@ -84,10 +91,12 @@ export default function InputEx({
           {question}
         </Typography>
         <Typography variant="body2" sx={{ color: "secondary.main" }}>
-          {task}
+          {exerciseUI?.task}
         </Typography>
         <TextField
-          placeholder="Wypełnij pole"
+          placeholder={
+            exerciseUI?.placeholder ? exerciseUI?.placeholder : "Wypełnij pole"
+          }
           variant="standard"
           inputRef={textRef}
           autoFocus={true}
@@ -108,11 +117,12 @@ export default function InputEx({
             backgroundColor: "primary.contrastText",
           }}
         >
-          Sprawdź
+          {exerciseUI?.submit ? exerciseUI?.submit : "Sprawdź"}
         </Button>
         <InputMessage
           correct={correct}
           missingWords={missingWords}
+          exerciseUI={exerciseUI}
         ></InputMessage>
       </Container>
     </Box>

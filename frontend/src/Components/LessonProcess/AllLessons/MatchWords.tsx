@@ -8,11 +8,14 @@ import { RootState } from "../../../state/store";
 import axios, { AxiosError } from "axios";
 import { setCorrectData } from "../../../state/lessonSlice";
 import { setAlert } from "../../../state/alertSnackbarSlice";
+import handleLanguageURL from "../../../utilities/handleLanguageURL";
 
 interface MatchWordsProps {
   lessonId: number;
   exerciseId: number;
   lessonInfo: any;
+  languageData: any;
+  exerciseUI: any;
   isLastExercise: boolean;
 }
 
@@ -20,8 +23,13 @@ export default function MatchWords({
   lessonId,
   exerciseId,
   lessonInfo,
+  languageData,
+  exerciseUI,
   isLastExercise = false,
 }: MatchWordsProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
@@ -37,11 +45,14 @@ export default function MatchWords({
   const dispatch = useDispatch();
 
   const finishLesson = async () => {
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}`,
+      stateLanguageData.lang
+    );
+
     try {
       const response = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
+        route,
         {
           correct: lessonData.correct,
           timeSpent: performance.now() - timeSpentData.timeStart,
@@ -71,6 +82,11 @@ export default function MatchWords({
   };
 
   const checkWords = async (words: string[], pairsMatched: number) => {
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}/checkword`,
+      stateLanguageData.lang
+    );
+
     if (
       !correct &&
       words.length === 2 &&
@@ -78,9 +94,7 @@ export default function MatchWords({
       typeof words[1] === "string"
     ) {
       const res = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}/checkword`,
+        route,
         { words: words },
         { withCredentials: true }
       );
@@ -110,7 +124,11 @@ export default function MatchWords({
   };
 
   return (
-    <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
+    <LessonProcess
+      lessonInfo={lessonInfo}
+      languageData={languageData}
+      lessonId={lessonId}
+    >
       <Box
         sx={{
           width: "7%",
@@ -130,7 +148,7 @@ export default function MatchWords({
           onClick={() => finishLesson()}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
-          Zakończ
+          {exerciseUI?.finish ? exerciseUI?.finish : "Zakończ"}
         </Button>
       ) : (
         <Button
@@ -140,7 +158,7 @@ export default function MatchWords({
           disabled={disableNext}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
-          Dalej
+          {exerciseUI?.next ? exerciseUI?.next : "Dalej"}
         </Button>
       )}
     </LessonProcess>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { setAlert } from "../../../state/alertSnackbarSlice";
 import FillWord from "./FillWord";
@@ -8,12 +8,19 @@ import NewWord from "./NewWord";
 import ChooseWord from "./ChooseWord";
 import MatchWords from "./MatchWords";
 import getBackground from "../../../utilities/getBackground";
+import handleLanguageURL from "../../../utilities/handleLanguageURL";
+import { RootState } from "../../../state/store";
 
 interface LessonExerciseProps {}
 
 export default function LessonExercise({}: LessonExerciseProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const { lessonId, exerciseId } = useParams();
   const [lessonInfo, setLessonInfo] = useState<any>();
+  const [languageData, setLanguageData] = useState<any | null>(null);
+  const [exerciseUI, setExerciseUI] = useState<any | null>(null);
   const [lastExercise, setLastExercise] = useState<boolean>(false);
 
   let numLessonId = Number(lessonId);
@@ -24,18 +31,26 @@ export default function LessonExercise({}: LessonExerciseProps) {
   const dispatch = useDispatch();
 
   const handleAuth = async () => {
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}`,
+      stateLanguageData.lang
+    );
+
     await axios
-      .get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
-        {
-          withCredentials: true,
-        }
-      )
+      .get(route, {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
-        setLessonInfo(res.data);
+
+        const lessonStateInfo = {
+          exercise: res.data.exercise,
+          exerciseCount: res.data.exerciseCount,
+        };
+
+        setLessonInfo(lessonStateInfo);
+        setLanguageData(res.data.languageData);
+        setExerciseUI(res.data.exerciseUI);
       })
       .catch((error) => {
         console.log(error);
@@ -78,6 +93,8 @@ export default function LessonExercise({}: LessonExerciseProps) {
           lessonId={numLessonId}
           exerciseId={numExerciseId}
           lessonInfo={lessonInfo}
+          languageData={languageData}
+          exerciseUI={exerciseUI}
           isLastExercise={lastExercise}
         ></NewWord>
       );
@@ -87,6 +104,8 @@ export default function LessonExercise({}: LessonExerciseProps) {
           lessonId={numLessonId}
           exerciseId={numExerciseId}
           lessonInfo={lessonInfo}
+          languageData={languageData}
+          exerciseUI={exerciseUI}
           isLastExercise={lastExercise}
         ></FillWord>
       );
@@ -97,6 +116,8 @@ export default function LessonExercise({}: LessonExerciseProps) {
           lessonId={numLessonId}
           exerciseId={numExerciseId}
           lessonInfo={lessonInfo}
+          languageData={languageData}
+          exerciseUI={exerciseUI}
           isLastExercise={lastExercise}
         ></ChooseWord>
       );
@@ -106,6 +127,8 @@ export default function LessonExercise({}: LessonExerciseProps) {
           lessonId={numLessonId}
           exerciseId={numExerciseId}
           lessonInfo={lessonInfo}
+          languageData={languageData}
+          exerciseUI={exerciseUI}
           isLastExercise={lastExercise}
         ></MatchWords>
       );

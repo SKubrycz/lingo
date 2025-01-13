@@ -14,6 +14,7 @@ import InputEx from "../Stepper/Variants/InputEx";
 import type { InputExerciseData } from "./exerciseTypes";
 import { RootState } from "../../../state/store";
 import { setCorrectData } from "../../../state/lessonSlice";
+import handleLanguageURL from "../../../utilities/handleLanguageURL";
 
 interface Correct {
   correct: boolean;
@@ -23,6 +24,8 @@ interface FillWordProps {
   lessonId: number;
   exerciseId: number;
   lessonInfo: any;
+  languageData: any;
+  exerciseUI: any;
   isLastExercise: boolean;
 }
 
@@ -30,8 +33,13 @@ export default function FillWord({
   lessonId,
   exerciseId,
   lessonInfo,
+  languageData,
+  exerciseUI,
   isLastExercise = false,
 }: FillWordProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
@@ -48,11 +56,14 @@ export default function FillWord({
   const dispatch = useDispatch();
 
   const finishLesson = async () => {
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}`,
+      stateLanguageData.lang
+    );
+
     try {
       const response = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
+        route,
         {
           correct: lessonData.correct,
           timeSpent: performance.now() - timeSpentData.timeStart,
@@ -98,14 +109,15 @@ export default function FillWord({
   ) => {
     e.preventDefault();
 
-    console.log("checkwords running");
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}/checkword`,
+      stateLanguageData.lang
+    );
 
     if (!correct && textRef.current) {
       // check word server-side
       const res: AxiosResponse<Correct> = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}/checkword`,
+        route,
         { missingWord: textRef.current.value },
         { withCredentials: true }
       );
@@ -136,7 +148,11 @@ export default function FillWord({
 
   return (
     <>
-      <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
+      <LessonProcess
+        lessonInfo={lessonInfo}
+        languageData={languageData}
+        lessonId={lessonId}
+      >
         <Box
           sx={{
             width: "7%",
@@ -145,7 +161,7 @@ export default function FillWord({
         ></Box>
         <InputEx
           question={lessonInfo?.exercise?.question}
-          task={lessonInfo?.exercise?.task}
+          exerciseUI={exerciseUI}
           missingWords={lessonInfo?.exercise?.missingWords}
           correct={correct}
           textRef={textRef}
@@ -159,7 +175,7 @@ export default function FillWord({
             onClick={() => finishLesson()}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            Zakończ
+            {exerciseUI?.finish ? exerciseUI?.finish : "Zakończ"}
           </Button>
         ) : (
           <Button
@@ -169,7 +185,7 @@ export default function FillWord({
             disabled={disableNext}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            Dalej
+            {exerciseUI?.next ? exerciseUI?.next : "Dalej"}
           </Button>
         )}
       </LessonProcess>

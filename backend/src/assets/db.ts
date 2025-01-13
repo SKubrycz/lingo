@@ -1,13 +1,24 @@
 import { MongoClient, Db, ObjectId } from "mongodb";
 import colors from "colors";
 
-import { lesson1, lesson2 } from "./lessonsData";
+import { lesson1Pl, lesson1De, lesson2Pl, lesson2De } from "./lessonsData";
 import { aboutLangData } from "./routeLangData/about";
 import { homeLangData } from "./routeLangData/home";
 import { loginLangData } from "./routeLangData/login";
 import { registerLangData } from "./routeLangData/register";
-import { lessonLangData } from "./routeLangData/lessons";
+import { lessonsLangData } from "./routeLangData/lessons";
 import { profileLangData } from "./routeLangData/profile";
+import { lessonLangData } from "./routeLangData/lesson";
+import {
+  cardExercisePl,
+  cardExerciseDe,
+  choiceExercisePl,
+  choiceExerciseDe,
+  inputExercisePl,
+  inputExerciseDe,
+  matchExercisePl,
+  matchExerciseDe,
+} from "./exerciseUIData";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -15,6 +26,7 @@ let client: MongoClient;
 let db: Db;
 
 interface CollectionsObj {
+  exerciseUI: boolean;
   routes: boolean;
   lessons: boolean;
   users: boolean;
@@ -23,11 +35,29 @@ interface CollectionsObj {
 }
 
 const collectionsObj: CollectionsObj = {
+  exerciseUI: false,
   routes: false,
   lessons: false,
   users: false,
   usersLessons: false,
   usersLessonsSessions: false,
+};
+
+const insertToExerciseUI = async (db: Db) => {
+  const exerciseUICollection = db.collection("exercise-ui");
+  const result = await exerciseUICollection.insertMany([
+    cardExercisePl,
+    cardExerciseDe,
+    choiceExercisePl,
+    choiceExerciseDe,
+    inputExercisePl,
+    inputExerciseDe,
+    matchExercisePl,
+    matchExerciseDe,
+  ]);
+
+  console.log(`exercise-ui inserted:`);
+  console.log(result);
 };
 
 const insertToRoutes = async (db: Db) => {
@@ -41,10 +71,12 @@ const insertToRoutes = async (db: Db) => {
     loginLangData[1],
     registerLangData[0],
     registerLangData[1],
-    lessonLangData[0],
-    lessonLangData[1],
+    lessonsLangData[0],
+    lessonsLangData[1],
     profileLangData[0],
     profileLangData[1],
+    lessonLangData[0],
+    lessonLangData[1],
   ]);
 
   console.log(`routes inserted:`);
@@ -53,7 +85,12 @@ const insertToRoutes = async (db: Db) => {
 
 const insertToLessons = async (db: Db) => {
   const lessonsCollection = db.collection("lessons");
-  const result = await lessonsCollection.insertMany([lesson1, lesson2]);
+  const result = await lessonsCollection.insertMany([
+    lesson1Pl,
+    lesson1De,
+    lesson2Pl,
+    lesson2De,
+  ]);
   console.log(`lessons inserted:`);
   console.log(result);
 };
@@ -68,6 +105,8 @@ export const connectToDb = async (): Promise<void> => {
 
     const collections = await db.collections({ nameOnly: true });
     collections.forEach((col) => {
+      if (col.collectionName === "exercise-ui")
+        collectionsObj.exerciseUI = true;
       if (col.collectionName === "routes") collectionsObj.routes = true;
       if (col.collectionName === "lessons") collectionsObj.lessons = true;
       if (col.collectionName === "users-lessons")
@@ -77,6 +116,10 @@ export const connectToDb = async (): Promise<void> => {
         collectionsObj.usersLessonsSessions = true;
     });
 
+    if (!collectionsObj.exerciseUI) {
+      db.createCollection("exercise-ui");
+      await insertToExerciseUI(db);
+    }
     if (!collectionsObj.routes) {
       db.createCollection("routes");
       await insertToRoutes(db);

@@ -3,13 +3,14 @@ import { forwardRef } from "react";
 
 interface CardExProps {
   exerciseId: number | undefined;
+  exerciseUI: any | undefined;
   word: string | undefined;
   translation: string | undefined;
   description: string | undefined;
 }
 
 const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
-  { exerciseId, word, translation, description },
+  { exerciseId, exerciseUI, word, translation, description },
   cardRef
 ) {
   return (
@@ -44,7 +45,7 @@ const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
             fontWeight: 300,
           }}
         >
-          Nowe słowo
+          {exerciseUI?.title ? exerciseUI?.title : "Nowe słowo"}
         </Typography>
         <Box
           sx={{

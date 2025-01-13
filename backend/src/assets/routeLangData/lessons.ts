@@ -1,4 +1,4 @@
-export const lessonLangData = [
+export const lessonsLangData = [
   {
     metadata: { route: "/lessons", language: "pl" },
     navbar: {

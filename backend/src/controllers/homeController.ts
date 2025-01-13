@@ -33,12 +33,7 @@ const getHome = async (req: RequestLogin, res: Response) => {
     languages: languagesResult,
   };
 
-  if (req.login) {
-    sessionUser = true;
-    res.status(403).send(data);
-  } else {
-    res.status(200).send(data);
-  }
+  return res.status(200).send(data);
 };
 
 export { getHome };

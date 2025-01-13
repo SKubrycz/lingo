@@ -556,6 +556,48 @@ export const findLessonsMetadata = async (): Promise<any | null> => {
   }
 };
 
+export const findExerciseByIdsAndLanguage = async (
+  lessonId: number,
+  exerciseId: number,
+  language: string
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const aggregation = [
+      {
+        $match: { lessonId: lessonId, language: language },
+      },
+      {
+        $unwind: "$exercises",
+      },
+      {
+        $match: {
+          "exercises.exerciseId": exerciseId,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          exercise: "$exercises",
+        },
+      },
+    ];
+    const exerciseResult = await lessonsCollection
+      .aggregate(aggregation)
+      .toArray();
+    if (!exerciseResult) return null;
+
+    return exerciseResult.length > 0 ? exerciseResult[0].exercise : null;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
 export const findLessonById = async (
   lessonId: number,
   exerciseId: number
@@ -813,7 +855,8 @@ export const deleteExercise = async (
 
 export const findInputExerciseById = async (
   lessonId: number,
-  exerciseId: number
+  exerciseId: number,
+  language: string
 ): Promise<InputExercise | ChoiceExercise | MatchExercise | null> => {
   await connectToDb();
   const db: Db = await getDb();
@@ -821,7 +864,7 @@ export const findInputExerciseById = async (
   try {
     const lessonsCollection = db.collection("lessons");
     const exerciseResult = await lessonsCollection.findOne(
-      { lessonId: { $eq: lessonId } },
+      { lessonId: { $eq: lessonId }, language: language },
       {
         projection: {
           exercises: 1,
@@ -838,8 +881,6 @@ export const findInputExerciseById = async (
     console.error(error);
     closeDbConnection();
     return null;
-  } finally {
-    //closeDbConnection();
   }
 };
 
@@ -971,6 +1012,33 @@ export const findAllRouteLanguages = async (route: string) => {
     if (!languagesResult) return null;
 
     return languagesResult.length > 0 ? languagesResult[0].languages : [];
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
+export const findExerciseUI = async (
+  type: "card" | "input" | "choice" | "match",
+  language: string
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const exerciseUICollection = db.collection("exercise-ui");
+    const exerciseResult = await exerciseUICollection.findOne(
+      { type: type, language: language },
+      {
+        projection: {
+          _id: 0,
+        },
+      }
+    );
+    if (!exerciseResult) return null;
+
+    return exerciseResult;
   } catch (error) {
     console.error(error);
     closeDbConnection();

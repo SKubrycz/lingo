@@ -23,6 +23,7 @@ export interface LessonData {
 interface LessonDataWithSession {
   exerciseId: number;
   exerciseCount: number;
+  languageData: any;
   endSession: () => void;
   children: React.ReactNode;
 }
@@ -30,6 +31,7 @@ interface LessonDataWithSession {
 function Stepper({
   exerciseId,
   exerciseCount,
+  languageData,
   endSession,
   children,
 }: LessonDataWithSession) {
@@ -48,7 +50,11 @@ function Stepper({
     <>
       <Container component="div" sx={{ display: "flex" }}>
         <Tooltip
-          title="Zakończ lekcję"
+          title={
+            languageData?.tooltips?.close
+              ? languageData?.tooltips?.close
+              : "Zakończ lekcję"
+          }
           arrow
           slotProps={{
             popper: {
@@ -72,10 +78,16 @@ function Stepper({
         </Tooltip>
         <Dialog onClose={() => handleCloseDialog()} open={openDialog}>
           <Box component="div" padding="1em" textAlign="center">
-            <DialogTitle>Czy na pewno chcesz opuścić lekcję?</DialogTitle>
+            <DialogTitle>
+              {languageData?.dialog?.title
+                ? languageData?.dialog?.title
+                : "Czy na pewno chcesz opuścić lekcję?"}
+            </DialogTitle>
             <DialogContent>
               <Typography variant="body2">
-                Postęp nie zostanie zapisany
+                {languageData?.dialog?.subtitle
+                  ? languageData?.dialog?.subtitle
+                  : "Postęp nie zostanie zapisany"}
               </Typography>
             </DialogContent>
             <Box display="flex" justifyContent="space-around">
@@ -86,10 +98,14 @@ function Stepper({
                   endSession();
                 }}
               >
-                Zakończ
+                {languageData?.dialog?.buttons?.finish
+                  ? languageData?.dialog?.buttons?.finish
+                  : "Zakończ"}
               </Button>
               <Button variant="text" onClick={() => handleCloseDialog()}>
-                Anuluj
+                {languageData?.dialog?.buttons?.cancel
+                  ? languageData?.dialog?.buttons?.cancel
+                  : "Anuluj"}
               </Button>
             </Box>
           </Box>
@@ -124,7 +140,11 @@ function Stepper({
           }}
         >
           <Tooltip
-            title="Postęp lekcji"
+            title={
+              languageData?.tooltips?.progress
+                ? languageData?.tooltips?.progress
+                : "Postęp lekcji"
+            }
             arrow
             slotProps={{
               popper: {

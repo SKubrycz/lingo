@@ -3,14 +3,15 @@ import { Box, Button, Typography } from "@mui/material";
 interface ChoiceMessageProps {
   correct: boolean | null;
   answer: string;
+  exerciseUI: any | null;
 }
 
-function ChoiceMessage({ correct, answer }: ChoiceMessageProps) {
+function ChoiceMessage({ correct, answer, exerciseUI }: ChoiceMessageProps) {
   switch (correct) {
     case true:
       return (
         <Typography variant="body1" color="success" sx={{ padding: "0.5em" }}>
-          Dobrze!
+          {exerciseUI?.correct ? exerciseUI?.correct : "Dobrze!"}
         </Typography>
       );
     case false:
@@ -20,7 +21,9 @@ function ChoiceMessage({ correct, answer }: ChoiceMessageProps) {
           color="error"
           sx={{ padding: "0.5em", textAlign: "center" }}
         >
-          Źle, prawidłowa odpowiedź to:{" "}
+          {exerciseUI?.incorrect
+            ? exerciseUI?.incorrect
+            : "Źle, prawidłowa odpowiedź to:"}{" "}
           <Typography
             variant="body1"
             component="span"
@@ -38,7 +41,7 @@ function ChoiceMessage({ correct, answer }: ChoiceMessageProps) {
 }
 
 interface ChoiceExProps {
-  task: string;
+  exerciseUI: any | null;
   word: string;
   words: string[];
   answer: string;
@@ -47,7 +50,7 @@ interface ChoiceExProps {
 }
 
 export default function ChoiceEx({
-  task,
+  exerciseUI,
   word,
   words,
   answer,
@@ -67,7 +70,7 @@ export default function ChoiceEx({
       }}
     >
       <Typography variant="h6" sx={{ padding: "1.5em 0 0.7em 0" }}>
-        {task}:
+        {exerciseUI?.task ? exerciseUI?.task : ""}:
       </Typography>
       <Typography
         variant="h5"
@@ -96,7 +99,11 @@ export default function ChoiceEx({
             );
           })}
       </Box>
-      <ChoiceMessage correct={correct} answer={answer}></ChoiceMessage>
+      <ChoiceMessage
+        correct={correct}
+        answer={answer}
+        exerciseUI={exerciseUI}
+      ></ChoiceMessage>
     </Box>
   );
 }

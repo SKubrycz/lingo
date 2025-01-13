@@ -1,6 +1,7 @@
 export interface CardExercise {
   exerciseId: number;
   type: "card";
+  title: string;
   word: string;
   translation: string;
   description: string;
@@ -40,7 +41,7 @@ export interface LessonPanel {
   exerciseCount: number;
 }
 
-const l1exercises: (
+const l1ExercisesPl: (
   | CardExercise
   | InputExercise
   | ChoiceExercise
@@ -49,6 +50,7 @@ const l1exercises: (
   {
     exerciseId: 1,
     type: "card",
+    title: "Nowe słowo",
     word: "Good morning",
     translation: "Dzień dobry",
     description: "o poranku",
@@ -56,6 +58,7 @@ const l1exercises: (
   {
     exerciseId: 2,
     type: "card",
+    title: "Nowe słowo",
     word: "Good afternoon",
     translation: "Dzień dobry",
     description: "po południu",
@@ -63,6 +66,7 @@ const l1exercises: (
   {
     exerciseId: 3,
     type: "card",
+    title: "Nowe słowo",
     word: "Good evening",
     translation: "Dobry wieczór",
     description: "",
@@ -70,6 +74,7 @@ const l1exercises: (
   {
     exerciseId: 4,
     type: "card",
+    title: "Nowe słowo",
     word: "Good night",
     translation: "Dobranoc",
     description: "",
@@ -77,6 +82,7 @@ const l1exercises: (
   {
     exerciseId: 5,
     type: "card",
+    title: "Nowe słowo",
     word: "Hi",
     translation: "Cześć",
     description: "nieformalne przywitanie",
@@ -84,6 +90,7 @@ const l1exercises: (
   {
     exerciseId: 6,
     type: "card",
+    title: "Nowe słowo",
     word: "Hello",
     translation: "Cześć",
     description: "bardziej formalne przywitanie",
@@ -120,22 +127,22 @@ const l1exercises: (
   },
 ];
 
-export const lesson1: LessonPanel = {
+export const lesson1Pl: LessonPanel = {
   lessonId: 1,
   language: "pl",
   title: "Wprowadzenie",
   description: "Nauczysz się jak przywitać się w języku angielskim",
-  exercises: l1exercises,
+  exercises: l1ExercisesPl,
   newWords: [],
-  exerciseCount: l1exercises.length,
+  exerciseCount: l1ExercisesPl.length,
 };
-l1exercises.forEach((el, i) => {
+l1ExercisesPl.forEach((el, i) => {
   if ("word" in el && el.type === "card") {
-    lesson1.newWords.push(el.word);
+    lesson1Pl.newWords.push(el.word);
   }
 });
 
-const l2exercises: (
+const l1ExercisesDe: (
   | CardExercise
   | InputExercise
   | ChoiceExercise
@@ -144,6 +151,108 @@ const l2exercises: (
   {
     exerciseId: 1,
     type: "card",
+    title: "Neues Wort",
+    word: "Good morning",
+    translation: "Guten Morgen",
+    description: "am Vormittag",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Neues Wort",
+    word: "Good afternoon",
+    translation: "Guten Tag",
+    description: "Nachmittag",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Neues Wort",
+    word: "Good evening",
+    translation: "Guten Abend",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Neues Wort",
+    word: "Good night",
+    translation: "Gute Nacht",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "card",
+    title: "Neues Wort",
+    word: "Hi",
+    translation: "Hi",
+    description: "informelle Begrüßung",
+  },
+  {
+    exerciseId: 6,
+    type: "card",
+    title: "Neues Wort",
+    word: "Hello",
+    translation: "Hallo",
+    description: "eine formellere Begrüßung",
+  },
+  {
+    exerciseId: 7,
+    type: "input",
+    question: "Wie begrüßt man jemanden vor dem Mittag?",
+    task: "Füllen Sie das Feld aus",
+    missingWords: "good morning",
+  },
+  {
+    exerciseId: 8,
+    type: "input",
+    question: "Wie grüßt man einen Freund? (informeller Gruß)",
+    task: "Füllen Sie das Feld aus",
+    missingWords: "hi",
+  },
+  {
+    exerciseId: 9,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung des Wortes",
+    word: "Good night",
+    words: ["Gute Nacht", "Hallo", "Guten Abend"],
+    answer: "Gute Nacht",
+  },
+  {
+    exerciseId: 10,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "Good evening",
+    words: ["Guten Abend", "Guten Tag", "Gute Nacht"],
+    answer: "Guten Abend",
+  },
+];
+
+export const lesson1De: LessonPanel = {
+  lessonId: 1,
+  language: "de",
+  title: "Einführung",
+  description: "Begrüßungen auf Englisch lernen",
+  exercises: l1ExercisesDe,
+  newWords: [],
+  exerciseCount: l1ExercisesDe.length,
+};
+l1ExercisesDe.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson1De.newWords.push(el.word);
+  }
+});
+
+const l2ExercisesPl: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Nowe słowo",
     word: "I am",
     translation: "Ja jestem",
     description: "",
@@ -151,6 +260,7 @@ const l2exercises: (
   {
     exerciseId: 2,
     type: "card",
+    title: "Nowe słowo",
     word: "You are",
     translation: "Ty jesteś/Wy jesteście",
     description: "Używane zarówno w liczbie pojedynczej oraz mnogiej",
@@ -158,6 +268,7 @@ const l2exercises: (
   {
     exerciseId: 3,
     type: "card",
+    title: "Nowe słowo",
     word: "He is",
     translation: "On jest",
     description: "",
@@ -165,6 +276,7 @@ const l2exercises: (
   {
     exerciseId: 4,
     type: "card",
+    title: "Nowe słowo",
     word: "She is",
     translation: "Ona jest",
     description: "",
@@ -172,6 +284,7 @@ const l2exercises: (
   {
     exerciseId: 5,
     type: "card",
+    title: "Nowe słowo",
     word: "It is",
     translation: "To/Ono jest",
     description: "",
@@ -179,6 +292,7 @@ const l2exercises: (
   {
     exerciseId: 6,
     type: "card",
+    title: "Nowe słowo",
     word: "We are",
     translation: "My jesteśmy",
     description: "",
@@ -186,6 +300,7 @@ const l2exercises: (
   {
     exerciseId: 7,
     type: "card",
+    title: "Nowe słowo",
     word: "They are",
     translation: "Oni/One są",
     description: "",
@@ -204,17 +319,108 @@ const l2exercises: (
   },
 ];
 
-export const lesson2: LessonPanel = {
+export const lesson2Pl: LessonPanel = {
   lessonId: 2,
   language: "pl",
   title: "Zwroty w różnych osobach",
   description: "Poznasz odmianę przez osoby",
-  exercises: l2exercises,
+  exercises: l2ExercisesPl,
   newWords: [],
-  exerciseCount: l2exercises.length,
+  exerciseCount: l2ExercisesPl.length,
 };
-l2exercises.forEach((el, i) => {
+l2ExercisesPl.forEach((el, i) => {
   if ("word" in el && el.type === "card") {
-    lesson2.newWords.push(el.word);
+    lesson2Pl.newWords.push(el.word);
+  }
+});
+
+const l2ExercisesDe: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Neues Wort",
+    word: "I am",
+    translation: "Ich bin",
+    description: "",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Neues Wort",
+    word: "You are",
+    translation: "Du bist/Ihr seid",
+    description: "Sowohl im Singular als auch im Plural verwendet",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Neues Wort",
+    word: "He is",
+    translation: "Er ist",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Neues Wort",
+    word: "She is",
+    translation: "Sie ist",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "card",
+    title: "Neues Wort",
+    word: "It is",
+    translation: "Es ist",
+    description: "",
+  },
+  {
+    exerciseId: 6,
+    type: "card",
+    title: "Neues Wort",
+    word: "We are",
+    translation: "Wir sind",
+    description: "",
+  },
+  {
+    exerciseId: 7,
+    type: "card",
+    title: "Neues Wort",
+    word: "They are",
+    translation: "Sie sind",
+    description: "",
+  },
+  {
+    exerciseId: 8,
+    type: "match",
+    task: "Paare finden",
+    words: [
+      ["I am", "Ich bin"],
+      ["You are", "Du bist/Ihr seid"],
+      ["He is", "Er ist"],
+      ["We are", "Wir sind"],
+      ["They are", "Sie sind"],
+    ],
+  },
+];
+
+export const lesson2De: LessonPanel = {
+  lessonId: 2,
+  language: "de",
+  title: "Phrasen in verschiedenen Personas",
+  description: "Sie lernen, mit Personen zu konjugieren",
+  exercises: l2ExercisesDe,
+  newWords: [],
+  exerciseCount: l2ExercisesDe.length,
+};
+l2ExercisesDe.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson2De.newWords.push(el.word);
   }
 });

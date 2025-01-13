@@ -14,11 +14,14 @@ import { Box, Button } from "@mui/material";
 import type { CardExerciseData } from "./exerciseTypes";
 import { setCorrectData } from "../../../state/lessonSlice";
 import { RootState } from "../../../state/store";
+import handleLanguageURL from "../../../utilities/handleLanguageURL";
 
 interface NewWordProps {
   lessonId: number;
   exerciseId: number;
   lessonInfo: any;
+  languageData: any;
+  exerciseUI: any;
   isLastExercise: boolean;
 }
 
@@ -26,8 +29,13 @@ export default function NewWord({
   lessonId,
   exerciseId,
   lessonInfo,
+  languageData,
+  exerciseUI,
   isLastExercise = false,
 }: NewWordProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const lessonData = useSelector((state: RootState) => state.lessonReducer);
   const timeSpentData = useSelector(
     (state: RootState) => state.timeSpentReducer
@@ -40,11 +48,14 @@ export default function NewWord({
   const dispatch = useDispatch();
 
   const finishLesson = async () => {
+    const route = handleLanguageURL(
+      `/lesson/${lessonId}/${exerciseId}`,
+      stateLanguageData.lang
+    );
+
     try {
       const response = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/lesson/${lessonId}/${exerciseId}`,
+        route,
         {
           correct: lessonData.correct,
           timeSpent: performance.now() - timeSpentData.timeStart,
@@ -86,7 +97,11 @@ export default function NewWord({
   }, [exerciseId]);
 
   return (
-    <LessonProcess lessonInfo={lessonInfo} lessonId={lessonId}>
+    <LessonProcess
+      lessonInfo={lessonInfo}
+      languageData={languageData}
+      lessonId={lessonId}
+    >
       <Box
         sx={{
           width: "7%",
@@ -96,6 +111,7 @@ export default function NewWord({
       <CardEx
         ref={cardRef}
         exerciseId={lessonInfo?.exercise?.exerciseId}
+        exerciseUI={exerciseUI}
         word={lessonInfo?.exercise?.word}
         translation={lessonInfo?.exercise?.translation}
         description={lessonInfo?.exercise?.description}
@@ -107,7 +123,7 @@ export default function NewWord({
           onClick={() => finishLesson()}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}
         >
-          Zakończ
+          {exerciseUI?.finish ? exerciseUI?.finish : "Zakończ"}
         </Button>
       ) : (
         <Button
@@ -119,7 +135,7 @@ export default function NewWord({
             textDecoration: "none",
           }}
         >
-          Dalej
+          {exerciseUI?.next ? exerciseUI?.next : "Dalej"}
         </Button>
       )}
     </LessonProcess>

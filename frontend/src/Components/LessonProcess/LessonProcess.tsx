@@ -18,12 +18,14 @@ import { setCorrectData } from "../../state/lessonSlice";
 
 interface LessonsProcessProps {
   lessonInfo: any;
+  languageData: any;
   lessonId: number;
   children: React.ReactNode;
 }
 
 function LessonProcess({
   lessonInfo,
+  languageData,
   lessonId,
   children,
 }: LessonsProcessProps) {
@@ -61,12 +63,6 @@ function LessonProcess({
       console.error(err);
     }
   };
-
-  // useEffect(() => {
-  //   console.log("lesson time measurement has been started");
-  //   dispatch(setTimeStart({ timeStart: performance.now() }));
-  // }, []);
-
   return (
     <>
       <Container component="div" className="wrapper">
@@ -75,6 +71,7 @@ function LessonProcess({
         <Stepper
           exerciseId={lessonInfo.exercise.exerciseId}
           exerciseCount={lessonInfo.exerciseCount}
+          languageData={languageData}
           endSession={endSession}
         >
           {children}

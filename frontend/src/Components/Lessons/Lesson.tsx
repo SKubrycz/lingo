@@ -19,7 +19,7 @@ interface LessonData {
 interface LessonProps {
   lessonData: LessonData;
   finished: boolean;
-  buttons: Buttons;
+  buttons: Buttons | null;
 }
 
 function Lesson({ lessonData, finished, buttons }: LessonProps) {
@@ -59,7 +59,7 @@ function Lesson({ lessonData, finished, buttons }: LessonProps) {
             }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            {buttons.repeat ? buttons.repeat : "Powtórz lekcję"}
+            {buttons?.repeat ? buttons.repeat : "Powtórz lekcję"}
           </Button>
         ) : (
           <Button
@@ -70,7 +70,7 @@ function Lesson({ lessonData, finished, buttons }: LessonProps) {
             }}
             sx={{ color: "primary.contrastText", textDecoration: "none" }}
           >
-            {buttons.begin ? buttons.begin : "Rozpocznij"}
+            {buttons?.begin ? buttons.begin : "Rozpocznij"}
           </Button>
         )}
       </Container>
