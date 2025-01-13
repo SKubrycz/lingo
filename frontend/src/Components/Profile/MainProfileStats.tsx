@@ -29,7 +29,10 @@ interface Stat {
   data: StatData;
 }
 
-const formatTimeSpent = (timeSpent: number | undefined): string => {
+const formatTimeSpent = (
+  timeSpent: number | undefined,
+  units: string[] | null
+): string => {
   if (timeSpent) {
     const seconds = 1000;
     const minutes = 60 * 1000;
@@ -38,11 +41,17 @@ const formatTimeSpent = (timeSpent: number | undefined): string => {
     let timeStr = "";
 
     if (timeSpent < minutes) {
-      timeStr = `${Math.floor(timeSpent / seconds)}s`;
+      timeStr = `${Math.floor(timeSpent / seconds)}${
+        units && units[0] ? units[0] : "s"
+      }`;
     } else if (timeSpent >= minutes && timeSpent < hours) {
-      timeStr = `${Math.floor(timeSpent / minutes)} min.`;
+      timeStr = `${Math.floor(timeSpent / minutes)} ${
+        units && units[1] ? units[1] : "min."
+      }`;
     } else if (timeSpent >= hours) {
-      timeStr = `${Math.floor(timeSpent / hours)} godz.`;
+      timeStr = `${Math.floor(timeSpent / hours)} ${
+        units && units[2] ? units[2] : "godz."
+      }`;
     }
 
     return timeStr;
@@ -90,7 +99,10 @@ export default function MainProfileStats({
         ? languageData?.timeSpent?.title
         : "Czas spędzony na nauce",
       desc: "",
-      data: formatTimeSpent(stats?.totalTimeSpent),
+      data: formatTimeSpent(
+        stats?.totalTimeSpent,
+        languageData?.timeSpent?.units
+      ),
     },
     {
       id: 2,
