@@ -1,4 +1,4 @@
-import { Alerts, Metadata } from "./routeTypes";
+import { Alerts, Logout, Metadata } from "./routeTypes";
 
 interface AboutNavbar {
   tooltip: string;
@@ -10,7 +10,7 @@ interface AboutNavbarLogin {
   tooltip: string;
   lessons: string;
   profile: string;
-  logout: string;
+  logout: Logout;
 }
 
 interface AboutTitle {
@@ -26,7 +26,7 @@ interface AboutFooter {
 interface AboutFooterLogin {
   lessons: string;
   profile: string;
-  logout: string;
+  logout: Logout;
 }
 
 interface AboutLangData {
@@ -51,7 +51,17 @@ export const aboutLangData: AboutLangData[] = [
       tooltip: "Zmień język strony",
       lessons: "Lekcje",
       profile: "Profil",
-      logout: "Wyloguj",
+      logout: {
+        title: "Wyloguj",
+        dialog: {
+          title: "Wylogowanie",
+          subtitle: "Czy na pewno chcesz się wylogować?",
+          buttons: {
+            submit: "Wyloguj",
+            cancel: "Anuluj",
+          },
+        },
+      },
     },
     titles: [
       {
@@ -88,7 +98,17 @@ export const aboutLangData: AboutLangData[] = [
     footerLogin: {
       lessons: "Lekcje",
       profile: "Profil",
-      logout: "Wyloguj",
+      logout: {
+        title: "Wyloguj",
+        dialog: {
+          title: "Wylogowanie",
+          subtitle: "Czy na pewno chcesz się wylogować?",
+          buttons: {
+            submit: "Wyloguj",
+            cancel: "Anuluj",
+          },
+        },
+      },
     },
     alerts: {
       ok: "Nie zalogowany",
@@ -107,7 +127,17 @@ export const aboutLangData: AboutLangData[] = [
       tooltip: "Ändern Sie die Sprache der Website",
       lessons: "Unterricht",
       profile: "Profil",
-      logout: "Ausloggen",
+      logout: {
+        title: "Ausloggen",
+        dialog: {
+          title: "Ausloggen",
+          subtitle: "Sind Sie sicher, dass Sie sich ausloggen wollen?",
+          buttons: {
+            submit: "Ausloggen",
+            cancel: "Stornieren",
+          },
+        },
+      },
     },
     titles: [
       {
@@ -135,7 +165,17 @@ nur passives Schreiben oder Lesen. Solche Lösungen beim Sprachenlernen ermögli
     footerLogin: {
       lessons: "Unterricht",
       profile: "Profil",
-      logout: "Ausloggen",
+      logout: {
+        title: "Ausloggen",
+        dialog: {
+          title: "Ausloggen",
+          subtitle: "Sind Sie sicher, dass Sie sich ausloggen wollen?",
+          buttons: {
+            submit: "Ausloggen",
+            cancel: "Stornieren",
+          },
+        },
+      },
     },
     alerts: {
       ok: "Nicht eingeloggt",

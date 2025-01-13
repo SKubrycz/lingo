@@ -5,7 +5,17 @@ export const profileLangData = [
       tooltip: "Zmień język strony",
       about: "O aplikacji",
       lessons: "Lekcje",
-      logout: "Wyloguj",
+      logout: {
+        title: "Wyloguj",
+        dialog: {
+          title: "Wylogowanie",
+          subtitle: "Czy na pewno chcesz się wylogować?",
+          buttons: {
+            submit: "Wyloguj",
+            cancel: "Anuluj",
+          },
+        },
+      },
     },
     title: "Profil",
     user: {
@@ -59,7 +69,17 @@ export const profileLangData = [
       tooltip: "Ändern Sie die Sprache der Seite",
       about: "Über die App",
       lessons: "Unterricht",
-      logout: "Ausloggen",
+      logout: {
+        title: "Ausloggen",
+        dialog: {
+          title: "Ausloggen",
+          subtitle: "Sind Sie sicher, dass Sie sich ausloggen wollen?",
+          buttons: {
+            submit: "Ausloggen",
+            cancel: "Stornieren",
+          },
+        },
+      },
     },
     title: "Profil",
     user: {

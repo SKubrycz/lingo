@@ -23,10 +23,11 @@ interface NavbarProps {
   link: string[];
   options: string[];
   tooltip: string | null;
+  dialog?: any | null;
   languages: string[] | null;
 }
 
-function Navbar({ link, options, tooltip, languages }: NavbarProps) {
+function Navbar({ link, options, tooltip, dialog, languages }: NavbarProps) {
   const languageData = useSelector((state: RootState) => state.languageReducer);
 
   const [display, setDisplay] = useState<string>("none");
@@ -163,10 +164,14 @@ function Navbar({ link, options, tooltip, languages }: NavbarProps) {
       </AppBar>
       <div style={{ width: "100%", height: "64px" }}></div>
       <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle align="center">Wylogowanie</DialogTitle>
+        <DialogTitle align="center">
+          {dialog?.title ? dialog?.title : "Wylogowanie"}
+        </DialogTitle>
         <DialogContent>
           <Typography variant="body2" align="center">
-            Czy na pewno chcesz się wylogować?
+            {dialog?.subtitle
+              ? dialog?.subtitle
+              : "Czy na pewno chcesz się wylogować?"}
           </Typography>
           <Box
             display="flex"
@@ -190,10 +195,12 @@ function Navbar({ link, options, tooltip, languages }: NavbarProps) {
                 margin="none"
                 padding="none"
               >
-                Wyloguj
+                {dialog?.buttons?.submit ? dialog?.buttons?.submit : "Wyloguj"}
               </Link>
             </Button>
-            <Button onClick={() => handleDialogClose()}>Anuluj</Button>
+            <Button onClick={() => handleDialogClose()}>
+              {dialog?.buttons?.cancel ? dialog?.buttons?.cancel : "Anuluj"}
+            </Button>
           </Box>
         </DialogContent>
       </Dialog>

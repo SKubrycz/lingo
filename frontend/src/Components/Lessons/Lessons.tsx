@@ -67,6 +67,7 @@ function Lessons() {
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [title, setTitle] = useState<string | null>(null);
   const [buttons, setButtons] = useState<Buttons | null>(null);
+  const [logoutDialog, setLogoutDialog] = useState<any | null>(null);
 
   const alertSnackbarData: AlertSnackbarState = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -90,11 +91,7 @@ function Lessons() {
         setLessons(res.data.lessonsResult);
         setUserLessons(res.data.usersLessonsResult);
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
-        setFooterLinkArray([
-          "/about",
-          "/lessons",
-          `/profile/${res.data.login}`,
-        ]);
+        setFooterLinkArray(["/about", `/profile/${res.data.login}`]);
 
         console.log(res.data);
 
@@ -102,7 +99,7 @@ function Lessons() {
           setOptionsArray([
             res.data.languageData.navbar.about,
             res.data.languageData.navbar.profile,
-            res.data.languageData.navbar.logout,
+            res.data.languageData.navbar.logout.title,
           ]);
           setFooterOptionsArray([
             res.data.languageData.footer.about,
@@ -112,6 +109,8 @@ function Lessons() {
           setTooltip(res.data.languageData.navbar.tooltip);
           setTitle(res.data.languageData.title);
           setButtons(res.data.languageData.buttons);
+
+          setLogoutDialog(res.data.languageData.navbar.logout.dialog);
         }
 
         if (res.data.languages) {
@@ -148,6 +147,7 @@ function Lessons() {
           link={linkArray}
           options={optionsArray}
           tooltip={tooltip}
+          dialog={logoutDialog}
           languages={languages}
         ></Navbar>
         <Box className="lessons-wrapper">

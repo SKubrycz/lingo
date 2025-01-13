@@ -5,7 +5,17 @@ export const lessonsLangData = [
       tooltip: "Zmień język strony",
       about: "O aplikacji",
       profile: "Profil",
-      logout: "Wyloguj",
+      logout: {
+        title: "Wyloguj",
+        dialog: {
+          title: "Wylogowanie",
+          subtitle: "Czy na pewno chcesz się wylogować?",
+          buttons: {
+            submit: "Wyloguj",
+            cancel: "Anuluj",
+          },
+        },
+      },
     },
     title: "Wszystkie lekcje",
     buttons: {
@@ -27,7 +37,17 @@ export const lessonsLangData = [
       tooltip: "Ändern Sie die Sprache der Seite",
       about: "Über die App",
       profile: "Profil",
-      logout: "Ausloggen",
+      logout: {
+        title: "Ausloggen",
+        dialog: {
+          title: "Ausloggen",
+          subtitle: "Sind Sie sicher, dass Sie sich ausloggen wollen?",
+          buttons: {
+            submit: "Ausloggen",
+            cancel: "Stornieren",
+          },
+        },
+      },
     },
     title: "Alle Lektionen",
     buttons: {

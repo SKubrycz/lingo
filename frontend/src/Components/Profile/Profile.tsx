@@ -56,6 +56,7 @@ function Profile() {
   const [user, setUser] = useState<User | null>(null);
   const [languageData, setLanguageData] = useState<any | null>(null);
   const [languages, setLanguages] = useState<string[] | null>(null);
+  const [logoutDialog, setLogoutDialog] = useState<any | null>(null);
 
   const navigate = useNavigate();
 
@@ -76,8 +77,10 @@ function Profile() {
         setOptionsArray([
           res.data.languageData.navbar.about,
           res.data.languageData.navbar.lessons,
-          res.data.languageData.navbar.logout,
+          res.data.languageData.navbar.logout.title,
         ]);
+
+        setLogoutDialog(res.data.languageData.navbar.logout.dialog);
       } else {
         setOptionsArray(["O aplikacji", "Lekcje", "Wyloguj"]);
       }
@@ -152,6 +155,7 @@ function Profile() {
           link={linkArray}
           options={optionsArray}
           tooltip={languageData?.navbar?.tooltip}
+          dialog={logoutDialog}
           languages={languages}
         ></Navbar>
         <MainProfile user={user} languageData={languageData}></MainProfile>

@@ -37,6 +37,7 @@ function About() {
 
   const [aboutData, setAboutData] = useState<any>();
 
+  const [logoutDialog, setLogoutDialog] = useState<any | null>(null);
   const [languages, setLanguages] = useState<string[] | null>(null);
 
   const alertSnackbarData = useSelector(
@@ -56,29 +57,26 @@ function About() {
       .then((res) => {
         if (res.data.login) {
           setLinkArray(["/lessons", `/profile/${res.data.login}`, "/logout"]);
-          setFooterLinkArray([
-            "/about",
-            "/lessons",
-            `/profile/${res.data.login}`,
-          ]);
+          setFooterLinkArray(["/lessons", `/profile/${res.data.login}`]);
 
           if (res.data.languageData) {
             const navbar = [
               res.data.languageData.navbarLogin.lessons,
               res.data.languageData.navbarLogin.profile,
-              res.data.languageData.navbarLogin.logout,
+              res.data.languageData.navbarLogin.logout.title,
             ];
 
             setOptionsArray(navbar);
 
-            setTooltip(res.data.languageData.navbar.tooltip);
+            setTooltip(res.data.languageData.navbarLogin.tooltip);
 
             setAboutData(res.data.languageData.titles);
+
+            setLogoutDialog(res.data.languageData.navbarLogin.logout.dialog);
 
             const footer = [
               res.data.languageData.footerLogin.lessons,
               res.data.languageData.footerLogin.profile,
-              res.data.languageData.footerLogin.logout,
             ];
 
             setFooterOptionsArray(footer);
@@ -142,6 +140,7 @@ function About() {
           link={linkArray}
           options={optionsArray}
           tooltip={tooltip}
+          dialog={logoutDialog}
           languages={languages}
         ></Navbar>
         <MainAbout languageData={aboutData}></MainAbout>
