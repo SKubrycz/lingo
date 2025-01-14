@@ -20,6 +20,7 @@ import {
   matchExerciseDe,
 } from "./exerciseUIData";
 import { logoutLangData } from "./routeLangData/logout";
+import { verifyLangData } from "./routeLangData/verify";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -80,6 +81,8 @@ const insertToRoutes = async (db: Db) => {
     lessonLangData[1],
     logoutLangData[0],
     logoutLangData[1],
+    verifyLangData[0],
+    verifyLangData[1],
   ]);
 
   console.log(`routes inserted:`);

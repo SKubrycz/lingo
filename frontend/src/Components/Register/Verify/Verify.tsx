@@ -14,9 +14,14 @@ import AlertSnackbar from "../../Reusables/Informational/AlertSnackbar";
 
 import "../Register.scss";
 import getBackground from "../../../utilities/getBackground";
+import handleLanguageURL from "../../../utilities/handleLanguageURL";
 
 export default function Verify() {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const [code, setCode] = useState<string>("");
+  const [languageData, setLanguageData] = useState<any | null>(null);
   const { verifyId } = useParams<{ verifyId: string | undefined }>();
 
   const navigate = useNavigate();
@@ -27,22 +32,18 @@ export default function Verify() {
   const alertSnackbarDataDispatch = useDispatch();
 
   const handleVerify = async () => {
+    const route = handleLanguageURL(
+      `/verify/${verifyId}`,
+      stateLanguageData.lang
+    );
+
     await axios
-      .get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/verify/${verifyId}`
-      )
+      .get(route)
       .then((res) => {
-        // alertSnackbarDataDispatch(
-        //   setAlert({
-        //     severity: "info",
-        //     variant: "standard",
-        //     title: "Informacja",
-        //     content: res.data,
-        //   })
-        // );
-        // navigate("/login");
+        console.log(res.data);
+        if (res.data.languageData) {
+          setLanguageData(res.data.languageData);
+        }
       })
       .catch((err) => {
         if (err.status == 308) {
@@ -50,8 +51,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
 
@@ -61,8 +61,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
 
@@ -72,8 +71,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
 
@@ -85,24 +83,22 @@ export default function Verify() {
   const submitCode = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const route = handleLanguageURL(
+      `/verify/${verifyId}`,
+      stateLanguageData.lang
+    );
+
     await axios
-      .post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/verify/${verifyId}`,
-        {
-          verificationCode: code,
-        }
-      )
+      .post(route, {
+        verificationCode: code,
+      })
       .then((res) => {
         console.log(res.data);
-        console.log(`code ${code} submitted`);
         alertSnackbarDataDispatch(
           setAlert({
             severity: "success",
             variant: "standard",
-            title: "Sukces",
-            content: res.data,
+            content: res.data.message,
           })
         );
         navigate("/login");
@@ -113,8 +109,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
 
@@ -124,8 +119,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
         } else {
@@ -133,8 +127,7 @@ export default function Verify() {
             setAlert({
               severity: "error",
               variant: "filled",
-              title: "Błąd",
-              content: err.response.data,
+              content: err.response.data.message,
             })
           );
 
@@ -184,11 +177,13 @@ export default function Verify() {
         }}
       >
         <Typography variant="h6" sx={{ margin: "0.6em" }}>
-          Zweryfikuj swoje konto
+          {languageData?.title ? languageData?.title : "Zweryfikuj swoje konto"}
         </Typography>
         <Typography>
-          Podaj kod weryfikacyjny, który wysłaliśmy Ci na Twój email podany
-          podczas rejestracji:
+          {languageData?.subtitle
+            ? languageData?.subtitle
+            : `Podaj kod weryfikacyjny, który wysłaliśmy Ci na Twój email podany podczas rejestracji`}
+          :
         </Typography>
         <Input
           type="text"
@@ -207,13 +202,13 @@ export default function Verify() {
           type="submit"
           variant="contained"
           name="submit"
-          value="Zatwierdź"
+          value={languageData?.submit ? languageData?.submit : "Zatwierdź"}
           sx={{
             margin: "1.5em .5em",
             backgroundColor: "primary.contrastText",
           }}
         >
-          Zatwierdź
+          {languageData?.submit ? languageData?.submit : "Zatwierdź"}
         </Button>
       </Box>
       <AlertSnackbar

@@ -118,7 +118,6 @@ function About() {
           setAlert({
             severity: "info",
             variant: "standard",
-            title: "Informacja",
             content: "Sesja wygasła. Proszę zalogować się ponownie",
           })
         );

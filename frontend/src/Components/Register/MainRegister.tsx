@@ -82,7 +82,6 @@ function MainRegister({ languageData }: MainRegisterProps) {
           setAlert({
             severity: "success",
             variant: "standard",
-            title: "Sukces",
             content: "Rejestracja przebiegła pomyślnie",
           })
         );
@@ -95,7 +94,6 @@ function MainRegister({ languageData }: MainRegisterProps) {
           setAlert({
             severity: "error",
             variant: "filled",
-            title: "Błąd",
             content: error.response.data,
           })
         );

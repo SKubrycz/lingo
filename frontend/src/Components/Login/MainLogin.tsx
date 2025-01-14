@@ -68,7 +68,6 @@ function MainLogin({ languageData }: MainLoginProps) {
           setAlert({
             severity: "info",
             variant: "standard",
-            title: "",
             content: res.data.message,
           })
         );
@@ -79,7 +78,6 @@ function MainLogin({ languageData }: MainLoginProps) {
           setAlert({
             severity: "error",
             variant: "filled",
-            title: "",
             content: error.response.data.message,
           })
         );
