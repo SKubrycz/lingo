@@ -21,6 +21,7 @@ import {
 } from "./exerciseUIData";
 import { logoutLangData } from "./routeLangData/logout";
 import { verifyLangData } from "./routeLangData/verify";
+import { deleteAccountLangData } from "./routeLangData/delete";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -83,6 +84,8 @@ const insertToRoutes = async (db: Db) => {
     logoutLangData[1],
     verifyLangData[0],
     verifyLangData[1],
+    deleteAccountLangData[0],
+    deleteAccountLangData[1],
   ]);
 
   console.log(`routes inserted:`);

@@ -23,28 +23,24 @@ const getVerify = async (req: Request, res: Response) => {
   const result = await findOneUserByUUID(verifyId);
   if (result) {
     if (result.verified)
-      return res
-        .status(308)
-        .send({
-          message: routeResult.alerts.permanentRedirect
-            ? routeResult.alerts.permanentRedirect
-            : `Konto zostało już zweryfikowane`,
-        });
+      return res.status(308).send({
+        message: routeResult.alerts.permanentRedirect
+          ? routeResult.alerts.permanentRedirect
+          : `Konto zostało już zweryfikowane`,
+      });
     console.log(`${verifyId} === ${result.uuid}`);
     return res.status(200).send({
-      message: routeResult.alerts.ok
-        ? routeResult.alerts.ok
+      message: routeResult.alerts.ok[0]
+        ? routeResult.alerts.ok[0]
         : `Znaleziono użytkownika`,
       languageData: routeResult,
     });
   } else {
-    return res
-      .status(404)
-      .send({
-        message: routeResult.alerts.notFound
-          ? routeResult.alerts.notFound
-          : `Nie ma takiego uuid`,
-      });
+    return res.status(404).send({
+      message: routeResult.alerts.notFound[0]
+        ? routeResult.alerts.notFound[0]
+        : `Nie ma takiego uuid`,
+    });
   }
 };
 
@@ -101,8 +97,8 @@ const postVerify = async (req: Request, res: Response) => {
     const updateResult = await updateOneUserByUUID(result.email, result.uuid);
     if (updateResult) {
       return res.status(200).send({
-        message: routeResult.alerts.ok
-          ? routeResult.alerts.ok
+        message: routeResult.alerts.ok[1]
+          ? routeResult.alerts.ok[1]
           : `Weryfikacja przebiegła pomyślnie`,
       });
     } else {
@@ -120,8 +116,8 @@ const postVerify = async (req: Request, res: Response) => {
     });
   } else {
     return res.status(404).send({
-      message: routeResult.alerts.notFound
-        ? routeResult.alerts.notFound
+      message: routeResult.alerts.notFound[1]
+        ? routeResult.alerts.notFound[1]
         : `Nie udało się zweryfikować emaila`,
     });
   }

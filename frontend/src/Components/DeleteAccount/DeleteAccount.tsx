@@ -7,11 +7,16 @@ import AlertSnackbar from "../Reusables/Informational/AlertSnackbar";
 import { FormEvent, useEffect, useState } from "react";
 import { RootState } from "../../state/store";
 import getBackground from "../../utilities/getBackground";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 export default function DeleteAccount() {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const { deleteId } = useParams<{ deleteId: string | undefined }>();
 
   const [deletionCode, setDeletionCode] = useState<string>("");
+  const [languageData, setLanguageData] = useState<any | null>(null);
 
   const alertSnackbarData = useSelector(
     (state: RootState) => state.alertSnackbarReducer
@@ -21,22 +26,24 @@ export default function DeleteAccount() {
   const navigate = useNavigate();
 
   const getDeleteAccount = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/delete-account/${deleteId}`,
-        { withCredentials: true }
-      );
+    const route = handleLanguageURL(
+      `/delete-account/${deleteId}`,
+      stateLanguageData.lang
+    );
 
-      console.log(res);
+    try {
+      const res = await axios.get(route, { withCredentials: true });
+
+      if (res.data.languageData) {
+        setLanguageData(res.data.languageData);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alertSnackbarDataDispatch(
           setAlert({
             severity: "error",
             variant: "filled",
-            title: "Błąd",
+            title: "",
             content: error?.response?.data.message,
           })
         );
@@ -47,16 +54,17 @@ export default function DeleteAccount() {
   const postDeleteAccount = async (e: FormEvent) => {
     e.preventDefault();
 
+    const route = handleLanguageURL(
+      `/delete-account/${deleteId}`,
+      stateLanguageData.lang
+    );
+
     try {
       const res = await axios.post(
-        `http://localhost:${
-          import.meta.env.VITE_SERVER_PORT
-        }/delete-account/${deleteId}`,
+        route,
         { deletionCode: deletionCode },
         { withCredentials: true }
       );
-
-      console.log(res);
 
       navigate("/");
     } catch (error) {
@@ -65,7 +73,7 @@ export default function DeleteAccount() {
           setAlert({
             severity: "error",
             variant: "filled",
-            title: "Błąd",
+            title: "",
             content: error?.response?.data.message,
           })
         );
@@ -98,7 +106,10 @@ export default function DeleteAccount() {
         }}
       >
         <Typography>
-          Aby usunąć konto wprowadź kod otrzymany w wiadomości email:
+          {languageData?.subtitle
+            ? languageData?.subtitle
+            : "Aby usunąć konto wprowadź kod otrzymany w wiadomości email"}
+          :
         </Typography>
         <Input
           type="text"
@@ -118,12 +129,12 @@ export default function DeleteAccount() {
           variant="contained"
           color="error"
           name="submit"
-          value="Zatwierdź"
+          value={languageData?.submit ? languageData?.submit : "Zatwierdź"}
           sx={{
             margin: "1.5em .5em",
           }}
         >
-          Zatwierdź
+          {languageData?.submit ? languageData?.submit : "Zatwierdź"}
         </Button>
         <AlertSnackbar
           severity={alertSnackbarData.severity}
