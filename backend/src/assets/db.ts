@@ -19,6 +19,7 @@ import {
   matchExercisePl,
   matchExerciseDe,
 } from "./exerciseUIData";
+import { logoutLangData } from "./routeLangData/logout";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -77,6 +78,8 @@ const insertToRoutes = async (db: Db) => {
     profileLangData[1],
     lessonLangData[0],
     lessonLangData[1],
+    logoutLangData[0],
+    logoutLangData[1],
   ]);
 
   console.log(`routes inserted:`);

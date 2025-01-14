@@ -63,27 +63,26 @@ function MainLogin({ languageData }: MainLoginProps) {
       .post(route, loginData, {
         withCredentials: true,
       })
-      .then(() => {
+      .then((res) => {
         alertSnackbarDataDispatch(
           setAlert({
             severity: "info",
             variant: "standard",
-            title: "Informacja",
-            content: "Zalogowano pomyślnie",
+            title: "",
+            content: res.data.message,
           })
         );
-        navigate("/lessons", { state: "Zalogowano pomyślnie" });
+        navigate("/lessons", { state: res.data.message });
       })
       .catch((error) => {
         alertSnackbarDataDispatch(
           setAlert({
             severity: "error",
             variant: "filled",
-            title: "Błąd",
-            content: error.response.data,
+            title: "",
+            content: error.response.data.message,
           })
         );
-        console.log(error.response.data);
       });
   };
 
