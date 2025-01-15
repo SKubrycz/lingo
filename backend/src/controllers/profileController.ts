@@ -96,7 +96,7 @@ const getProfileId = async (req: RequestLogin, res: Response) => {
             : "Coś poszło nie tak po naszej stronie",
         });
       const accuracyResult = await getAccuracy(req._id);
-      if (!accuracyResult)
+      if (accuracyResult != 0 && !accuracyResult)
         return res.status(500).send({
           message: routeResult.alerts.internalServerError
             ? routeResult.alerts.internalServerError

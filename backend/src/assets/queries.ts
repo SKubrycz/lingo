@@ -1293,6 +1293,9 @@ export const getLessonsTimeStamps = async (
       timestampsArr[diff] = el.count;
     });
 
+    console.log("getLessonsTimeStamps:");
+    console.log(timestampsArr);
+
     return timestampsArr;
   } catch (error) {
     console.error(error);
