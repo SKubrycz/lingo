@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,6 +36,14 @@ export default function LessonExercise({}: LessonExerciseProps) {
       stateLanguageData.lang
     );
 
+    dispatch(
+      setAlert({
+        severity: "info",
+        variant: "standard",
+        content: "",
+      })
+    );
+
     await axios
       .get(route, {
         withCredentials: true,
@@ -54,15 +62,16 @@ export default function LessonExercise({}: LessonExerciseProps) {
       })
       .catch((error) => {
         console.log(error);
-        dispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
-        navigate("/");
+        if (isAxiosError(error)) {
+          dispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              content: error?.response?.data.message,
+            })
+          );
+        }
+        navigate("/lessons");
       });
   };
 

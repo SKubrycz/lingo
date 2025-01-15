@@ -6,6 +6,7 @@ import {
   findExerciseUI,
   findInputExerciseById,
   findLessonByIdAndLanguage,
+  findRangeUsersLessons,
   findRoute,
   updateLessonOnFinish,
 } from "../assets/queries";
@@ -23,15 +24,39 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
       .status(500)
       .send({ message: "Coś poszło nie tak po naszej stronie" });
 
-  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!lessonId)
+    return res.status(404).send({ message: "Nie znaleziono lekcji" });
   if (!exerciseId)
-    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+    return res
+      .status(404)
+      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
+
+  const usersLessonsRangeResult = await findRangeUsersLessons(
+    1,
+    Number(lessonId)
+  );
+  if (!usersLessonsRangeResult)
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+  let unfinishedLesson = false;
+  for (let i = 0; i < usersLessonsRangeResult.length; i++) {
+    if (usersLessonsRangeResult[i].lessonId < Number(lessonId)) {
+      if (!usersLessonsRangeResult[i].finished) {
+        unfinishedLesson = true;
+        break;
+      }
+    }
+  }
+  if (unfinishedLesson)
+    return res
+      .status(400)
+      .send({ message: "Należy ukończyć wcześniejsze lekcje" });
 
   const lessonResult = await findLessonByIdAndLanguage(
     Number(lessonId),
     String(query.language)
   );
-  if (!lessonResult) return res.status(500).send("Nie udało się pobrać danych");
+  if (!lessonResult)
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
   let result: any;
 
@@ -44,7 +69,7 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
       String(query.language)
     );
     if (!exerciseUIResult)
-      return res.status(500).send("Nie udało się pobrać danych");
+      return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
     result = {
       exercise: exercise[0],
@@ -65,21 +90,32 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!lessonId)
+    return res.status(404).send({ message: "Nie znaleziono lekcji" });
   if (!exerciseId)
-    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+    return res
+      .status(404)
+      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
   if (!correct)
-    return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
+    return res
+      .status(404)
+      .send({ message: "Serwer nie otrzymał wymaganej zawartości" });
   if (
     correct.forEach((el: boolean) => {
       if (typeof el !== "boolean") return false;
     })
   )
-    return res.status(400).send("Przesłano nieprawidłową zawartość");
+    return res
+      .status(400)
+      .send({ message: "Przesłano nieprawidłową zawartość" });
   if (!timeSpent)
-    return res.status(404).send("Serwer nie otrzymał wymaganej zawartości");
+    return res
+      .status(404)
+      .send({ message: "Serwer nie otrzymał wymaganej zawartości" });
   if (typeof timeSpent !== "number")
-    return res.status(400).send("Przesłano nieprawidłową zawartość");
+    return res
+      .status(400)
+      .send({ message: "Przesłano nieprawidłową zawartość" });
 
   if (req._id) {
     const usersLessonsSave = await updateLessonOnFinish(
@@ -90,7 +126,9 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     );
 
     if (!usersLessonsSave)
-      return res.status(500).send("Nie udało się zapisać postępu lekcji");
+      return res
+        .status(500)
+        .send({ message: "Nie udało się zapisać postępu lekcji" });
   }
 
   return res.status(200).send({ message: "Lekcja zakończona pomyślnie" });
@@ -106,9 +144,12 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
-  if (!lessonId) return res.status(404).send("Nie znaleziono lekcji");
+  if (!lessonId)
+    return res.status(404).send({ message: "Nie znaleziono lekcji" });
   if (!exerciseId)
-    return res.status(404).send("Nie znaleziono ćwiczenia w zażądanej lekcji");
+    return res
+      .status(404)
+      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
 
   const exerciseResult = await findInputExerciseById(
     Number(lessonId),
@@ -116,7 +157,7 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     String(query.language)
   );
   if (!exerciseResult)
-    return res.status(500).send("Nie udało się pobrać danych");
+    return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
   if (exerciseResult.type === "input") {
     if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
@@ -137,7 +178,9 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     });
   }
 
-  return res.status(200).send({ correct: correct });
+  return res
+    .status(200)
+    .send({ message: "Odpowiedź zweryfikowana", correct: correct });
 };
 
 export { getLessonId, postLessonId, postExerciseAnswer };

@@ -119,16 +119,15 @@ function Lessons() {
       })
       .catch((error) => {
         console.log(error);
-        alertSnackbarDataDispatch(
-          setAlert({
-            severity: "info",
-            variant: "standard",
-            title: "Informacja",
-            content: "Sesja wygasła. Proszę zalogować się ponownie",
-          })
-        );
         if (isAxiosError(error)) {
           if (error.status === 401) navigate("/");
+          alertSnackbarDataDispatch(
+            setAlert({
+              severity: "error",
+              variant: "filled",
+              content: error?.response?.data.message,
+            })
+          );
         }
       });
   };
