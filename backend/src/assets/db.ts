@@ -21,7 +21,7 @@ import {
 } from "./exerciseUIData";
 import { logoutLangData } from "./routeLangData/logout";
 import { verifyLangData } from "./routeLangData/verify";
-import { deleteAccountLangData } from "./routeLangData/delete";
+import { deleteAccountLangData } from "./routeLangData/deleteAccount";
 
 const uri: string = "mongodb://localhost:27017/";
 
