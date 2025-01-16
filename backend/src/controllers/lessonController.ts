@@ -127,6 +127,7 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     const usersLessonsSave = await updateLessonOnFinish(
       req._id,
       Number(lessonId),
+      String(query.language),
       correct,
       timeSpent
     );

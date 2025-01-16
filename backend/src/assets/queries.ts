@@ -7,7 +7,7 @@ import {
   InputExercise,
   LessonPanel,
   MatchExercise,
-} from "./lessonsData";
+} from "./lessonsDataTypes";
 
 interface User {
   _id: ObjectId;
@@ -1203,6 +1203,7 @@ export const getAccuracy = async (
 export const updateLessonOnFinish = async (
   id: ObjectId | undefined,
   lessonId: number,
+  language: string,
   correct: boolean[],
   timeSpent: DOMHighResTimeStamp
 ) => {
@@ -1210,10 +1211,17 @@ export const updateLessonOnFinish = async (
   const db: Db = await getDb();
 
   try {
+    const lessonsCollection = db.collection("lessons");
     const usersLessonsCollection = db.collection<UsersLessons>("users-lessons");
     const usersLessonsSessionsCollection = db.collection<UsersLessonsSessions>(
       "users-lessons-sessions"
     );
+
+    const findLessonResult = await lessonsCollection.findOne({
+      lessonId: lessonId,
+      language: language,
+    });
+    if (!findLessonResult) return null;
 
     const findResult = await usersLessonsCollection.findOneAndUpdate(
       {
@@ -1224,7 +1232,14 @@ export const updateLessonOnFinish = async (
         $set: { finished: true },
       }
     );
-    if (!findResult) return null;
+    if (findLessonResult && !findResult) {
+      const insertResult = await usersLessonsCollection.insertOne({
+        userId: new ObjectId(id),
+        lessonId: lessonId,
+        finished: true,
+      });
+      if (!insertResult) return null;
+    } else if (!findResult) return null;
 
     const sessionResult = await usersLessonsSessionsCollection.insertOne({
       userId: new ObjectId(id),

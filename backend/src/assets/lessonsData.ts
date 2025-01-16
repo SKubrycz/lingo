@@ -1,45 +1,10 @@
-export interface CardExercise {
-  exerciseId: number;
-  type: "card";
-  title: string;
-  word: string;
-  translation: string;
-  description: string;
-}
-
-export interface InputExercise {
-  exerciseId: number;
-  type: "input";
-  question: string;
-  task: string;
-  missingWords: string;
-}
-
-export interface ChoiceExercise {
-  exerciseId: number;
-  type: "choice";
-  task: string;
-  word: string;
-  words: string[];
-  answer: string;
-}
-
-export interface MatchExercise {
-  exerciseId: number;
-  type: "match";
-  task: string;
-  words: string[][]; // words = [["You", "Ty"], ...]
-}
-
-export interface LessonPanel {
-  lessonId: number;
-  language: string;
-  title: string;
-  description: string;
-  exercises: (CardExercise | InputExercise | ChoiceExercise | MatchExercise)[];
-  newWords: string[];
-  exerciseCount: number;
-}
+import type {
+  LessonPanel,
+  CardExercise,
+  InputExercise,
+  ChoiceExercise,
+  MatchExercise,
+} from "./lessonsDataTypes";
 
 const l1ExercisesPl: (
   | CardExercise
@@ -422,5 +387,279 @@ export const lesson2De: LessonPanel = {
 l2ExercisesDe.forEach((el, i) => {
   if ("word" in el && el.type === "card") {
     lesson2De.newWords.push(el.word);
+  }
+});
+
+const l3ExercisesPl: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Nowe słowo",
+    word: "have",
+    translation: "mieć",
+    description: "forma bezosobowa",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Nowe słowo",
+    word: "I have",
+    translation: "Ja mam",
+    description: "",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Nowe słowo",
+    word: "You have",
+    translation: "Ty masz/Wy macie",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Nowe słowo",
+    word: "He has",
+    translation: "On ma",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "card",
+    title: "Nowe słowo",
+    word: "She has",
+    translation: "Ona ma",
+    description: "",
+  },
+  {
+    exerciseId: 6,
+    type: "card",
+    title: "Nowe słowo",
+    word: "It has",
+    translation: "To/Ono ma",
+    description: "",
+  },
+  {
+    exerciseId: 7,
+    type: "card",
+    title: "Nowe słowo",
+    word: "We have",
+    translation: "My mamy",
+    description: "",
+  },
+  {
+    exerciseId: 8,
+    type: "card",
+    title: "Nowe słowo",
+    word: "They have",
+    translation: "Oni/One mają",
+    description: "",
+  },
+  {
+    exerciseId: 9,
+    type: "input",
+    question: `Jak powiemy: "Oni mają"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "they have",
+  },
+  {
+    exerciseId: 10,
+    type: "input",
+    question: `Jak powiemy: "Ja mam"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "i have",
+  },
+  {
+    exerciseId: 11,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "I have",
+    words: ["On ma", "Ty masz", "Ja mam"],
+    answer: "Ja mam",
+  },
+  {
+    exerciseId: 12,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "He has",
+    words: ["On ma", "Ona ma", "Wy macie"],
+    answer: "On ma",
+  },
+  {
+    exerciseId: 13,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie słowa",
+    word: "You have",
+    words: ["To/Ono ma", "Ona ma", "Ty masz/Wy macie"],
+    answer: "Ty masz/Wy macie",
+  },
+  {
+    exerciseId: 14,
+    type: "match",
+    task: "Dobierz w pary",
+    words: [
+      ["I have", "Ja mam"],
+      ["You have", "Ty masz/Wy macie"],
+      ["He has", "On ma"],
+      ["She has", "Ona ma"],
+      ["It has", "To/Ono ma"],
+    ],
+  },
+];
+
+export const lesson3Pl: LessonPanel = {
+  lessonId: 3,
+  language: "pl",
+  title: "Odmiana czasownika",
+  description: `Poznasz odmianę czasownika "mieć" przez osoby`,
+  exercises: l3ExercisesPl,
+  newWords: [],
+  exerciseCount: l3ExercisesPl.length,
+};
+l3ExercisesPl.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson3Pl.newWords.push(el.word);
+  }
+});
+
+const l3ExercisesDe: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Neues Wort",
+    word: "Have",
+    translation: "Haben",
+    description: "unpersönliche Form",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Neues Wort",
+    word: "I have",
+    translation: "Ich habe",
+    description: "",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Neues Wort",
+    word: "You have",
+    translation: "Du hast/Ihr habt",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Neues Wort",
+    word: "He has",
+    translation: "Er hat",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "card",
+    title: "Neues Wort",
+    word: "She has",
+    translation: "Sie hat",
+    description: "",
+  },
+  {
+    exerciseId: 6,
+    type: "card",
+    title: "Neues Wort",
+    word: "It has",
+    translation: "Es hat",
+    description: "",
+  },
+  {
+    exerciseId: 7,
+    type: "card",
+    title: "Neues Wort",
+    word: "We have",
+    translation: "Wir haben",
+    description: "",
+  },
+  {
+    exerciseId: 8,
+    type: "card",
+    title: "Neues Wort",
+    word: "They have",
+    translation: "Sie haben",
+    description: "",
+  },
+  {
+    exerciseId: 9,
+    type: "input",
+    question: `Wie sagt man: "Sie haben"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "they have",
+  },
+  {
+    exerciseId: 10,
+    type: "input",
+    question: `Wie sagt man: "Ich habe"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "i have",
+  },
+  {
+    exerciseId: 11,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung des Wortes",
+    word: "I have",
+    words: ["Er hat", "Du hast", "Ich habe"],
+    answer: "Ich habe",
+  },
+  {
+    exerciseId: 12,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung des Wortes",
+    word: "He has",
+    words: ["Er hat", "Sie hat", "Ihr habt"],
+    answer: "Er hat",
+  },
+  {
+    exerciseId: 13,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung des Wortes",
+    word: "You have",
+    words: ["Es hat", "Sie hat", "Du hast/Ihr habt"],
+    answer: "Du hast/Ihr habt",
+  },
+  {
+    exerciseId: 14,
+    type: "match",
+    task: "Paare finden",
+    words: [
+      ["I have", "Ich habe"],
+      ["You have", "Du hast/Ihr habt"],
+      ["He has", "Er hat"],
+      ["She has", "Sie hat"],
+      ["It has", "Es hat"],
+    ],
+  },
+];
+
+export const lesson3De: LessonPanel = {
+  lessonId: 3,
+  language: "de",
+  title: "Variante des Verbs",
+  description: `Sie lernen die Konjugation des Verbs "haben" mit Personen`,
+  exercises: l3ExercisesDe,
+  newWords: [],
+  exerciseCount: l3ExercisesDe.length,
+};
+l3ExercisesDe.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson3De.newWords.push(el.word);
   }
 });

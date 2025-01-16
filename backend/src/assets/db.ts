@@ -1,7 +1,14 @@
 import { MongoClient, Db, ObjectId } from "mongodb";
 import colors from "colors";
 
-import { lesson1Pl, lesson1De, lesson2Pl, lesson2De } from "./lessonsData";
+import {
+  lesson1Pl,
+  lesson1De,
+  lesson2Pl,
+  lesson2De,
+  lesson3De,
+  lesson3Pl,
+} from "./lessonsData";
 import { aboutLangData } from "./routeLangData/about";
 import { homeLangData } from "./routeLangData/home";
 import { loginLangData } from "./routeLangData/login";
@@ -99,6 +106,8 @@ const insertToLessons = async (db: Db) => {
     lesson1De,
     lesson2Pl,
     lesson2De,
+    lesson3Pl,
+    lesson3De,
   ]);
   console.log(`lessons inserted:`);
   console.log(result);
