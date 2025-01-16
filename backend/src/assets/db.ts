@@ -8,6 +8,7 @@ import {
   lesson2De,
   lesson3De,
   lesson3Pl,
+  lesson4Pl,
 } from "./lessonsData";
 import { aboutLangData } from "./routeLangData/about";
 import { homeLangData } from "./routeLangData/home";
@@ -108,6 +109,8 @@ const insertToLessons = async (db: Db) => {
     lesson2De,
     lesson3Pl,
     lesson3De,
+    lesson4Pl,
+    lesson4Pl,
   ]);
   console.log(`lessons inserted:`);
   console.log(result);

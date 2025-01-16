@@ -71,7 +71,7 @@ export const inputExerciseDe: InputExerciseUI = {
 export const choiceExercisePl: ChoiceExerciseUI = {
   type: "choice",
   language: "pl",
-  task: "Wybierz odpowiednie tłumaczenie słowa",
+  task: "Wybierz odpowiednie tłumaczenie",
   correct: "Dobrze!",
   incorrect: "Źle, prawidłowa odpowiedź to:",
   next: "Dalej",
@@ -80,7 +80,7 @@ export const choiceExercisePl: ChoiceExerciseUI = {
 export const choiceExerciseDe: ChoiceExerciseUI = {
   type: "choice",
   language: "de",
-  task: "Wählen Sie die passende Übersetzung des Wortes",
+  task: "Wählen Sie die passende Übersetzung",
   correct: "Richtig!",
   incorrect: "Falsch, die richtige Antwort ist:",
   next: "Nächste",

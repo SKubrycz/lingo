@@ -77,7 +77,7 @@ const l1ExercisesPl: (
   {
     exerciseId: 9,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "Good night",
     words: ["Dobranoc", "Cześć", "Dobry wieczór"],
     answer: "Dobranoc",
@@ -85,7 +85,7 @@ const l1ExercisesPl: (
   {
     exerciseId: 10,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "Good evening",
     words: ["Dobry wieczór", "Dzień dobry", "Dobranoc"],
     answer: "Dobry wieczór",
@@ -178,7 +178,7 @@ const l1ExercisesDe: (
   {
     exerciseId: 9,
     type: "choice",
-    task: "Wählen Sie die passende Übersetzung des Wortes",
+    task: "Wählen Sie die passende Übersetzung",
     word: "Good night",
     words: ["Gute Nacht", "Hallo", "Guten Abend"],
     answer: "Gute Nacht",
@@ -186,7 +186,7 @@ const l1ExercisesDe: (
   {
     exerciseId: 10,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "Good evening",
     words: ["Guten Abend", "Guten Tag", "Gute Nacht"],
     answer: "Guten Abend",
@@ -400,8 +400,8 @@ const l3ExercisesPl: (
     exerciseId: 1,
     type: "card",
     title: "Nowe słowo",
-    word: "have",
-    translation: "mieć",
+    word: "Have",
+    translation: "Mieć",
     description: "forma bezosobowa",
   },
   {
@@ -477,7 +477,7 @@ const l3ExercisesPl: (
   {
     exerciseId: 11,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "I have",
     words: ["On ma", "Ty masz", "Ja mam"],
     answer: "Ja mam",
@@ -485,7 +485,7 @@ const l3ExercisesPl: (
   {
     exerciseId: 12,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "He has",
     words: ["On ma", "Ona ma", "Wy macie"],
     answer: "On ma",
@@ -493,7 +493,7 @@ const l3ExercisesPl: (
   {
     exerciseId: 13,
     type: "choice",
-    task: "Wybierz odpowiednie tłumaczenie słowa",
+    task: "Wybierz odpowiednie tłumaczenie",
     word: "You have",
     words: ["To/Ono ma", "Ona ma", "Ty masz/Wy macie"],
     answer: "Ty masz/Wy macie",
@@ -614,7 +614,7 @@ const l3ExercisesDe: (
   {
     exerciseId: 11,
     type: "choice",
-    task: "Wählen Sie die passende Übersetzung des Wortes",
+    task: "Wählen Sie die passende Übersetzung",
     word: "I have",
     words: ["Er hat", "Du hast", "Ich habe"],
     answer: "Ich habe",
@@ -622,7 +622,7 @@ const l3ExercisesDe: (
   {
     exerciseId: 12,
     type: "choice",
-    task: "Wählen Sie die passende Übersetzung des Wortes",
+    task: "Wählen Sie die passende Übersetzung",
     word: "He has",
     words: ["Er hat", "Sie hat", "Ihr habt"],
     answer: "Er hat",
@@ -630,7 +630,7 @@ const l3ExercisesDe: (
   {
     exerciseId: 13,
     type: "choice",
-    task: "Wählen Sie die passende Übersetzung des Wortes",
+    task: "Wählen Sie die passende Übersetzung",
     word: "You have",
     words: ["Es hat", "Sie hat", "Du hast/Ihr habt"],
     answer: "Du hast/Ihr habt",
@@ -661,5 +661,203 @@ export const lesson3De: LessonPanel = {
 l3ExercisesDe.forEach((el, i) => {
   if ("word" in el && el.type === "card") {
     lesson3De.newWords.push(el.word);
+  }
+});
+
+const l4ExercisesPl: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Nowe słowo",
+    word: "Car",
+    translation: "Samochód",
+    description: "",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Nowe słowo",
+    word: "Rower",
+    translation: "Bike",
+    description: "",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Nowe słowo",
+    word: "House",
+    translation: "Dom",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Nowe słowo",
+    word: "Garden",
+    translation: "Ogród",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "input",
+    question: `Jak powiemy: "Samochód"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "car",
+  },
+  {
+    exerciseId: 6,
+    type: "input",
+    question: `Jak powiemy: "Ogród"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "garden",
+  },
+  {
+    exerciseId: 7,
+    type: "input",
+    question: `Jak powiemy: "Rower"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "bike",
+  },
+  {
+    exerciseId: 8,
+    type: "input",
+    question: `Jak powiemy: "Dom"?`,
+    task: "Wypełnij puste pole",
+    missingWords: "House",
+  },
+  {
+    exerciseId: 9,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie",
+    word: "I have a bike",
+    words: ["Mam rower", "Ty masz rower", "Mam samochód"],
+    answer: "Mam rower",
+  },
+  {
+    exerciseId: 10,
+    type: "choice",
+    task: "Wybierz odpowiednie tłumaczenie",
+    word: "They have a car",
+    words: ["Oni/one mają samochód", "Ona ma ogród", "Wy macie dom"],
+    answer: "Oni/one mają samochód",
+  },
+];
+
+export const lesson4Pl: LessonPanel = {
+  lessonId: 4,
+  language: "pl",
+  title: "Rzeczowniki oraz zdania",
+  description: `Nauczysz się układać proste zdania`,
+  exercises: l4ExercisesPl,
+  newWords: [],
+  exerciseCount: l4ExercisesPl.length,
+};
+l4ExercisesPl.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson4Pl.newWords.push(el.word);
+  }
+});
+
+const l4ExercisesDe: (
+  | CardExercise
+  | InputExercise
+  | ChoiceExercise
+  | MatchExercise
+)[] = [
+  {
+    exerciseId: 1,
+    type: "card",
+    title: "Neues Wort",
+    word: "Car",
+    translation: "Auto",
+    description: "",
+  },
+  {
+    exerciseId: 2,
+    type: "card",
+    title: "Neues Wort",
+    word: "Bike",
+    translation: "Fahrrad",
+    description: "",
+  },
+  {
+    exerciseId: 3,
+    type: "card",
+    title: "Neues Wort",
+    word: "House",
+    translation: "Haus",
+    description: "",
+  },
+  {
+    exerciseId: 4,
+    type: "card",
+    title: "Neues Wort",
+    word: "Garden",
+    translation: "Garten",
+    description: "",
+  },
+  {
+    exerciseId: 5,
+    type: "input",
+    question: `Wie sagt man: "Auto"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "car",
+  },
+  {
+    exerciseId: 6,
+    type: "input",
+    question: `Wie sagt man: "Garten"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "garden",
+  },
+  {
+    exerciseId: 7,
+    type: "input",
+    question: `Wie sagt man: "Fahrrad"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "bike",
+  },
+  {
+    exerciseId: 8,
+    type: "input",
+    question: `Wie sagt man: "Haus"?`,
+    task: "Füllen Sie das Feld aus",
+    missingWords: "house",
+  },
+  {
+    exerciseId: 9,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung",
+    word: "I have a bike",
+    words: ["Ich habe ein Fahrrad", "Du hast ein Fahrrad", "Ich habe ein Auto"],
+    answer: "Ich habe ein Fahrrad",
+  },
+  {
+    exerciseId: 10,
+    type: "choice",
+    task: "Wählen Sie die passende Übersetzung",
+    word: "They have a car",
+    words: ["Er/Sie hat ein Auto", "Sie hat einen Garten", "Ihr habt ein Haus"],
+    answer: "Er/Sie hat ein Auto",
+  },
+];
+
+export const lesson4De: LessonPanel = {
+  lessonId: 4,
+  language: "de",
+  title: "Substantive und Sätze",
+  description: `Sie werden lernen, einfache Sätze zu bilden`,
+  exercises: l4ExercisesDe,
+  newWords: [],
+  exerciseCount: l4ExercisesDe.length,
+};
+l4ExercisesDe.forEach((el, i) => {
+  if ("word" in el && el.type === "card") {
+    lesson4De.newWords.push(el.word);
   }
 });
