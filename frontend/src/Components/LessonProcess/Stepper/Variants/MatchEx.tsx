@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { shuffleArray } from "../../../../utilities/shuffleArray";
 
 interface MatchExProps {
   task: string;
@@ -14,19 +15,6 @@ export default function MatchEx({ task, words, checkWords }: MatchExProps) {
   );
   const [highlighted, setHighlighted] = useState<number[]>([]);
   const [disabled, setDisabled] = useState<number[][]>([[], []]);
-
-  const shuffleArray = (array: any[]) => {
-    let currentIndex = array.length;
-    while (currentIndex != 0) {
-      let randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
-    }
-  };
 
   const shuffleWords = () => {
     if (words && words.length > 0) {

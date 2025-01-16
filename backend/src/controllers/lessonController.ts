@@ -31,13 +31,19 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
       .status(404)
       .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
 
+  if (!req._id)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
   const usersLessonsRangeResult = await findRangeUsersLessons(
+    req._id,
     1,
     Number(lessonId)
   );
   if (!usersLessonsRangeResult)
     return res.status(500).send({ message: "Nie udało się pobrać danych" });
   let unfinishedLesson = false;
+  console.log(usersLessonsRangeResult);
   for (let i = 0; i < usersLessonsRangeResult.length; i++) {
     if (usersLessonsRangeResult[i].lessonId < Number(lessonId)) {
       if (!usersLessonsRangeResult[i].finished) {

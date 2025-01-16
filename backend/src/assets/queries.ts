@@ -687,14 +687,18 @@ export const findRangeLessons = async (start: number, end: number) => {
   }
 };
 
-export const findRangeUsersLessons = async (start: number, end: number) => {
+export const findRangeUsersLessons = async (
+  id: ObjectId,
+  start: number,
+  end: number
+) => {
   await connectToDb();
   const db: Db = await getDb();
 
   try {
     const usersLessonsCollection = db.collection("users-lessons");
     const usersLessonsResult = await usersLessonsCollection
-      .find({ lessonId: { $gte: start, $lte: end } })
+      .find({ userId: new ObjectId(id), lessonId: { $gte: start, $lte: end } })
       .toArray();
 
     if (!usersLessonsResult) return null;

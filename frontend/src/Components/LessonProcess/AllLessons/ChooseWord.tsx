@@ -9,6 +9,7 @@ import { setCorrectData } from "../../../state/lessonSlice";
 import { RootState } from "../../../state/store";
 import { setAlert } from "../../../state/alertSnackbarSlice";
 import handleLanguageURL from "../../../utilities/handleLanguageURL";
+import { shuffleArray } from "../../../utilities/shuffleArray";
 
 interface ChooseWordProps {
   lessonId: number;
@@ -36,6 +37,7 @@ export default function ChooseWord({
   );
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [disableNext, setDisableNext] = useState<boolean>(true);
+  const [words, setWords] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -115,6 +117,14 @@ export default function ChooseWord({
     setCorrect(null);
     setDisableNext(true);
   }, [lessonInfo?.exercise?.answer]);
+
+  useEffect(() => {
+    if (lessonInfo?.exercise?.words) {
+      let words = lessonInfo?.exercise?.words;
+      shuffleArray(words);
+      setWords(words);
+    }
+  }, [lessonInfo?.exercise?.words]);
 
   return (
     <LessonProcess
