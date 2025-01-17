@@ -164,12 +164,6 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         `req.body in ${req.originalUrl}: ${email} ${login} ${password} ${passwordAgain}, ${hash}`
       );
 
-      const transporter = nodemailer.createTransport({
-        host: "localhost",
-        port: 1025,
-        secure: false,
-      });
-
       const uuid = crypto.randomUUID();
       const verificationCode = randomBytes(3).toString("hex").toUpperCase();
 
@@ -184,12 +178,27 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
 
       const htmlMessage = constructRegisterMail(verificationCode);
 
+      const transporter = nodemailer.createTransport({
+        host: "localhost",
+        port: 1025,
+        secure: false,
+      });
+
       const mailInfo = await transporter.sendMail({
         from: "noreply@auth.localhost",
         to: email,
         subject: "Weryfikacja konta Lingo",
         html: htmlMessage,
       });
+
+      if (!mailInfo)
+        return res
+          .status(500)
+          .send({
+            message: routeResult.alerts.internalServerError
+              ? routeResult.alerts.internalServerError
+              : "Coś poszło nie tak po naszej stronie",
+          });
 
       return res.status(200).send({
         message: routeResult.alerts.ok

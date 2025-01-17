@@ -3,8 +3,10 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Box, Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../state/alertSnackbarSlice";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
+import { RootState } from "../../state/store";
 
 interface PrepareAccount {
   message: string;
@@ -22,6 +24,9 @@ export default function MainProfileSettings({
   onClose,
   languageData,
 }: MainProfileSettingsProps) {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
 
   const handleConfirmOpen = () => {
@@ -39,9 +44,11 @@ export default function MainProfileSettings({
   const prepareAccountDeletion = async (e: FormEvent) => {
     e.preventDefault();
 
+    const route = handleLanguageURL(`/delete-account`, stateLanguageData.lang);
+
     try {
       const res: AxiosResponse<PrepareAccount> = await axios.post(
-        `http://localhost:${import.meta.env.VITE_SERVER_PORT}/delete-account`,
+        route,
         undefined,
         { withCredentials: true }
       );

@@ -20,7 +20,7 @@ function MainHome({ languageData }: MainHomeProps) {
 
   return (
     <>
-      <Container maxWidth={false} sx={{ maxWidth: "75%" }}>
+      <Container maxWidth={false} sx={{ maxWidth: "80%" }}>
         <Box className="home-main">
           <AlertSnackbar
             severity={alertSnackbarData.severity}

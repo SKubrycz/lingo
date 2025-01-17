@@ -24,10 +24,9 @@ function Login() {
 
   const [loginData, setLoginData] = useState<any>();
 
-  const footerLinkArray: string[] = ["/about", "/login", "/register"];
+  const footerLinkArray: string[] = ["/about", "/register"];
   const [footerOptionsArray, setFooterOptionsArray] = useState<string[]>([
     "O aplikacji",
-    "Logowanie",
     "Rejestracja",
   ]);
 
@@ -47,7 +46,7 @@ function Login() {
 
         setLoginData(main);
 
-        setFooterOptionsArray([footer.about, footer.login, footer.register]);
+        setFooterOptionsArray([footer.about, footer.register]);
       }
 
       if (res.data.languages) {

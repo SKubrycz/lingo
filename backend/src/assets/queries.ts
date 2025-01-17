@@ -150,7 +150,7 @@ export const insertOneUser = async ({
 
     const lessonsResult = await lessonsCollection
       .find(
-        {},
+        { language: "pl" },
         {
           projection: {
             _id: 1,
