@@ -1412,6 +1412,11 @@ export const getFinishedLessonsWords = async (
         },
       },
       {
+        $match: {
+          "lessonDetails.language": "pl",
+        },
+      },
+      {
         $group: {
           _id: null,
           totalNewWords: {

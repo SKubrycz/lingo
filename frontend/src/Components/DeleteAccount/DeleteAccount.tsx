@@ -97,7 +97,7 @@ export default function DeleteAccount() {
         onSubmit={(e) => postDeleteAccount(e)}
         sx={{
           width: "100%",
-          height: "100%",
+          height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -105,37 +105,56 @@ export default function DeleteAccount() {
           wordWrap: "break-word",
         }}
       >
-        <Typography>
-          {languageData?.subtitle
-            ? languageData?.subtitle
-            : "Aby usunąć konto wprowadź kod otrzymany w wiadomości email"}
-          :
-        </Typography>
-        <Input
-          type="text"
-          autoFocus
-          required
-          onChange={(e) => setDeletionCode(e.target.value)}
+        <Box
           sx={{
-            margin: "0.5em",
-            fontSize: "18px",
-            ".MuiInput-input": {
-              textAlign: "center",
-            },
-          }}
-        ></Input>
-        <Button
-          type="submit"
-          variant="contained"
-          color="error"
-          name="submit"
-          value={languageData?.submit ? languageData?.submit : "Zatwierdź"}
-          sx={{
-            margin: "1.5em .5em",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          {languageData?.submit ? languageData?.submit : "Zatwierdź"}
-        </Button>
+          <Typography>
+            {languageData?.subtitle
+              ? languageData?.subtitle
+              : "Aby usunąć konto wprowadź kod otrzymany w wiadomości email"}
+            :
+          </Typography>
+          <Box
+            sx={{
+              width: "fit-content",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Input
+              type="text"
+              autoFocus
+              required
+              onChange={(e) => setDeletionCode(e.target.value)}
+              sx={{
+                margin: "0.5em",
+                fontSize: "18px",
+                ".MuiInput-input": {
+                  textAlign: "center",
+                },
+              }}
+            ></Input>
+            <Button
+              type="submit"
+              variant="contained"
+              color="error"
+              name="submit"
+              value={languageData?.submit ? languageData?.submit : "Zatwierdź"}
+              sx={{
+                margin: "1.5em .5em",
+              }}
+            >
+              {languageData?.submit ? languageData?.submit : "Zatwierdź"}
+            </Button>
+          </Box>
+        </Box>
         <AlertSnackbar
           severity={alertSnackbarData.severity}
           variant={alertSnackbarData.variant}
