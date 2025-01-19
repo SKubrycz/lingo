@@ -21,8 +21,8 @@ import {
   upsertAdminCode,
 } from "../assets/queries";
 import { aboutLangData } from "../assets/routeLangData/about";
+import type { LessonPanel } from "../assets/lessonsDataTypes";
 import readCodesFile from "../utilities/readCodesFile";
-import { CardExercise, LessonPanel } from "../assets/lessonsData";
 import { verifyExercise } from "../utilities/verifyExercise";
 
 const constructRegisterMail = (verificationCode: string): string => {
@@ -62,6 +62,18 @@ const constructRegisterMail = (verificationCode: string): string => {
 
 const getAdminController = async (req: RequestLogin, res: Response) => {
   if (req.login) {
+    const verificationCode = randomBytes(5).toString("hex").toUpperCase();
+    const expiry = new Date(Date.now() + 20 * 60 * 1000);
+    const insertVerificationCode = await upsertAdminCode(
+      req._id,
+      "",
+      undefined
+    );
+    if (!insertVerificationCode)
+      return res
+        .status(500)
+        .send({ message: "Nie udało się zweryfikować tożsamości" });
+
     const userResult = await findOneUserByLogin(req.login);
     if (!userResult)
       return res
@@ -69,20 +81,17 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
         .send({ message: "Nie udało się zweryfikować tożsamości" });
 
     const now = new Date(Date.now());
-    if (
-      (userResult.adminCode && !userResult.adminCode.expiry) ||
-      (userResult.adminCode &&
-        userResult.adminCode.expiry &&
-        userResult.adminCode?.expiry < now)
-    ) {
+    if (!userResult.adminCode)
+      return res
+        .status(500)
+        .send({ message: "Nie udało się zweryfikować tożsamości" });
+    if (!userResult.adminCode.expiry || userResult.adminCode?.expiry < now) {
       const transporter = nodemailer.createTransport({
         host: "localhost",
         port: 1025,
         secure: false,
       });
 
-      const verificationCode = randomBytes(5).toString("hex").toUpperCase();
-      const expiry = new Date(Date.now() + 20 * 60 * 1000);
       const insertVerificationCode = await upsertAdminCode(
         req._id,
         verificationCode,
@@ -451,28 +460,21 @@ const postAdminPanelLessonsAddLanguageController = async (
 
   const lessonResult = await findLessonByIdAndLanguage(Number(lessonId), "pl");
   if (!lessonResult)
-    return res
-      .status(500)
-      .send({
-        message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
-      });
+    return res.status(500).send({
+      message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
+    });
 
   if (lessonResult && lessonResult.language) {
     lessonResult.language = query.language;
     const insertLessonResult = await insertLesson(lessonResult);
     if (!insertLessonResult)
-      return res
-        .status(500)
-        .send({
-          message:
-            "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
-        });
-  } else
-    return res
-      .status(500)
-      .send({
+      return res.status(500).send({
         message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
       });
+  } else
+    return res.status(500).send({
+      message: "Nastąpił problem z utworzeniem nowego tłumaczenia dla lekcji",
+    });
 
   return res
     .status(200)

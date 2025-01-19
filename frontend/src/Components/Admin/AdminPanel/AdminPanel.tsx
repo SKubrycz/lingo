@@ -181,6 +181,7 @@ export default function AdminPanel() {
             sx={{
               width: "fit-content",
               height: "100%",
+              padding: "4em",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",

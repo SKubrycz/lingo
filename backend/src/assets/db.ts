@@ -9,6 +9,7 @@ import {
   lesson3De,
   lesson3Pl,
   lesson4Pl,
+  lesson4De,
 } from "./lessonsData";
 import { aboutLangData } from "./routeLangData/about";
 import { homeLangData } from "./routeLangData/home";
@@ -110,7 +111,7 @@ const insertToLessons = async (db: Db) => {
     lesson3Pl,
     lesson3De,
     lesson4Pl,
-    lesson4Pl,
+    lesson4De,
   ]);
   console.log(`lessons inserted:`);
   console.log(result);

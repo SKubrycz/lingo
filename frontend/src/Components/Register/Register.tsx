@@ -11,6 +11,7 @@ import Footer from "../Reusables/Footer/Footer";
 import "./Register.scss";
 import handleLanguageURL from "../../utilities/handleLanguageURL";
 import getBackground from "../../utilities/getBackground";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const languageData = useSelector((state: RootState) => state.languageReducer);
@@ -34,6 +35,8 @@ function Register() {
 
   const [languages, setLanguages] = useState<string[] | null>(null);
 
+  const navigate = useNavigate();
+
   const fetchLanguageData = async (lang: string) => {
     const route = handleLanguageURL("/register", lang);
 
@@ -53,6 +56,10 @@ function Register() {
 
       if (res.data.languages) {
         setLanguages(res.data.languages);
+      }
+
+      if (res.data.sessionUser) {
+        navigate("/lessons");
       }
     });
   };

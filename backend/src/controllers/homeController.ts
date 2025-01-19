@@ -12,6 +12,7 @@ const getHome = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   let sessionUser: boolean = false;
+  if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("", String(query.language));
   if (!routeResult)

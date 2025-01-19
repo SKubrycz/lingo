@@ -10,6 +10,7 @@ import {
 } from "../assets/queries";
 
 import hashData from "../utilities/hashData";
+import { RequestLogin } from "../middleware/auth";
 
 interface RequestBody {
   email: string;
@@ -62,11 +63,14 @@ const constructRegisterMail = (verificationCode: string): string => {
   return htmlString;
 };
 
-const getRegister = async (req: Request, res: Response) => {
+const getRegister = async (req: RequestLogin, res: Response) => {
   const query = await req.query;
 
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  let sessionUser: boolean = false;
+  if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("register", String(query.language));
   if (!routeResult)
@@ -83,6 +87,7 @@ const getRegister = async (req: Request, res: Response) => {
     });
 
   res.status(200).send({
+    sessionUser: sessionUser,
     languageData: routeResult,
     languages: languagesResult,
   });
@@ -192,13 +197,11 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       });
 
       if (!mailInfo)
-        return res
-          .status(500)
-          .send({
-            message: routeResult.alerts.internalServerError
-              ? routeResult.alerts.internalServerError
-              : "Coś poszło nie tak po naszej stronie",
-          });
+        return res.status(500).send({
+          message: routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
+        });
 
       return res.status(200).send({
         message: routeResult.alerts.ok

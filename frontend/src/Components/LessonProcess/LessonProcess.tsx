@@ -67,7 +67,6 @@ function LessonProcess({
     <>
       <Container component="div" className="wrapper">
         <div style={{ width: "100%", height: "64px" }}></div>
-        {/* <Navbar link={linkArray} options={optionsArray}></Navbar> */}
         <Stepper
           exerciseId={lessonInfo.exercise.exerciseId}
           exerciseCount={lessonInfo.exerciseCount}
@@ -76,7 +75,6 @@ function LessonProcess({
         >
           {children}
         </Stepper>
-        {/* <Footer link={footerLinkArray} options={footerOptionsArray}></Footer> */}
       </Container>
       <AlertSnackbar
         severity={alertSnackbarData.severity}

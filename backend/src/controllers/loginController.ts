@@ -8,12 +8,16 @@ import {
   findRoute,
 } from "../assets/queries";
 import comparePassword from "../utilities/comparePassword";
+import { RequestLogin } from "../middleware/auth";
 
-const getLogin = async (req: Request, res: Response) => {
+const getLogin = async (req: RequestLogin, res: Response) => {
   const query = await req.query;
 
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  let sessionUser: boolean = false;
+  if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("login", String(query.language));
   if (!routeResult)
@@ -30,6 +34,7 @@ const getLogin = async (req: Request, res: Response) => {
     });
 
   res.status(200).send({
+    sessionUser: sessionUser,
     languageData: routeResult,
     languages: languagesResult,
   });
@@ -56,26 +61,22 @@ const postLogin = async (req: Request, res: Response) => {
 
     const result = await findOneUserByLogin(login);
     if (!result)
-      return res
-        .status(404)
-        .send({
-          message: routeResult.alerts.notFound
-            ? routeResult.alerts.notFound
-            : "Nie znaleziono użytkownika",
-        });
+      return res.status(404).send({
+        message: routeResult.alerts.notFound
+          ? routeResult.alerts.notFound
+          : "Nie znaleziono użytkownika",
+      });
 
     const comparison: boolean = await comparePassword(
       password,
       result.password
     );
     if (comparison === false)
-      return res
-        .status(400)
-        .send({
-          message: routeResult.alerts.badRequest
-            ? routeResult.alerts.badRequest
-            : "Niepoprawne hasło",
-        });
+      return res.status(400).send({
+        message: routeResult.alerts.badRequest
+          ? routeResult.alerts.badRequest
+          : "Niepoprawne hasło",
+      });
 
     const accessTokenExpiry: number = 1000 * 60 * 60;
     const refreshTokenExpiry: number = 1000 * 60 * 60 * 24 * 30;
@@ -103,11 +104,9 @@ const postLogin = async (req: Request, res: Response) => {
       sameSite: "strict",
     });
 
-    return res
-      .status(200)
-      .send({
-        message: routeResult.alerts.ok ? routeResult.alerts.ok : "Zalogowano",
-      });
+    return res.status(200).send({
+      message: routeResult.alerts.ok ? routeResult.alerts.ok : "Zalogowano",
+    });
   } catch (error) {
     res.status(500).send(`Error /login`);
   }
