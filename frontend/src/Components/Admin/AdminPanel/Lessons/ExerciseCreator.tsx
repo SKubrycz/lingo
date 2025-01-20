@@ -194,6 +194,7 @@ const ChooseExerciseType = forwardRef<
             <b>Słowo:</b>{" "}
           </Typography>
           <TextField
+            value={exercise && "word" in exercise ? exercise.word : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as CardExercise),
@@ -205,6 +206,9 @@ const ChooseExerciseType = forwardRef<
             <b>Tłumaczenie:</b>
           </Typography>
           <TextField
+            value={
+              exercise && "translation" in exercise ? exercise.translation : ""
+            }
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as CardExercise),
@@ -218,6 +222,9 @@ const ChooseExerciseType = forwardRef<
           <TextField
             multiline
             rows={3}
+            value={
+              exercise && "description" in exercise ? exercise.description : ""
+            }
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as CardExercise),
@@ -240,6 +247,7 @@ const ChooseExerciseType = forwardRef<
             <b>Pytanie:</b>{" "}
           </Typography>
           <TextField
+            value={exercise && "question" in exercise ? exercise.question : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as InputExercise),
@@ -251,6 +259,7 @@ const ChooseExerciseType = forwardRef<
             <b>Zadanie:</b>
           </Typography>
           <TextField
+            value={exercise && "task" in exercise ? exercise.task : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as InputExercise),
@@ -262,6 +271,11 @@ const ChooseExerciseType = forwardRef<
             <b>Brakujące słowa:</b>
           </Typography>
           <TextField
+            value={
+              exercise && "missingWords" in exercise
+                ? exercise.missingWords
+                : ""
+            }
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as InputExercise),
@@ -284,6 +298,7 @@ const ChooseExerciseType = forwardRef<
             <b>Zadanie:</b>{" "}
           </Typography>
           <TextField
+            value={exercise && "task" in exercise ? exercise.task : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as ChoiceExercise),
@@ -295,6 +310,7 @@ const ChooseExerciseType = forwardRef<
             <b>Słowo:</b>
           </Typography>
           <TextField
+            value={exercise && "word" in exercise ? exercise.word : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as InputExercise),
@@ -308,6 +324,7 @@ const ChooseExerciseType = forwardRef<
           <Box sx={{ display: "flex", alignItems: "center" }}>
             1:{" "}
             <TextField
+              value={exercise && "words" in exercise ? exercise.words[0] : ""}
               onChange={(e) =>
                 setExercise((prev) => ({
                   ...(prev as ChoiceExercise),
@@ -319,6 +336,7 @@ const ChooseExerciseType = forwardRef<
             ></TextField>
             2:{" "}
             <TextField
+              value={exercise && "words" in exercise ? exercise.words[1] : ""}
               onChange={(e) =>
                 setExercise((prev) => ({
                   ...(prev as ChoiceExercise),
@@ -330,6 +348,7 @@ const ChooseExerciseType = forwardRef<
             ></TextField>
             3:{" "}
             <TextField
+              value={exercise && "words" in exercise ? exercise.words[2] : ""}
               onChange={(e) =>
                 setExercise((prev) => ({
                   ...(prev as ChoiceExercise),
@@ -344,6 +363,7 @@ const ChooseExerciseType = forwardRef<
             <b>Prawidłowa odpowiedź:</b>
           </Typography>
           <TextField
+            value={exercise && "answer" in exercise ? exercise.answer : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as InputExercise),
@@ -366,6 +386,7 @@ const ChooseExerciseType = forwardRef<
             <b>Zadanie:</b>
           </Typography>
           <TextField
+            value={exercise && "task" in exercise ? exercise.task : ""}
             onChange={(e) =>
               setExercise((prev) => ({
                 ...(prev as MatchExercise),
@@ -388,6 +409,7 @@ const ChooseExerciseType = forwardRef<
           <TextField
             multiline
             rows={4}
+            value={exercise && "words" in exercise ? exercise.words : ""}
             onChange={(e) => formatToArray(e)}
           ></TextField>
         </Box>
@@ -437,6 +459,8 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
         }/admin/panel/lessons/creator/${lessonId}/${exerciseId}?language=${language}`,
         { withCredentials: true }
       );
+
+      console.log(res.data);
 
       if (res.data.result) {
         setResult(res.data.result);

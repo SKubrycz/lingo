@@ -67,11 +67,8 @@ function About() {
             ];
 
             setOptionsArray(navbar);
-
             setTooltip(res.data.languageData.navbarLogin.tooltip);
-
             setAboutData(res.data.languageData.titles);
-
             setLogoutDialog(res.data.languageData.navbarLogin.logout.dialog);
 
             const footer = [

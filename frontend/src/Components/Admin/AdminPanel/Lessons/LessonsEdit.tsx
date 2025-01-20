@@ -355,6 +355,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
                     className={`fi fi-${
                       lessonData ? lessonData?.language : "pl"
                     }`}
+                    component="span"
                   ></Typography>
                 </span>
               </Typography>

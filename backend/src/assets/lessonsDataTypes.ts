@@ -28,7 +28,7 @@ export interface MatchExercise {
   exerciseId: number;
   type: "match";
   task: string;
-  words: string[][]; // words = [["You", "Ty"], ...]
+  words: string[][];
 }
 
 export interface LessonPanel {
