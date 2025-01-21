@@ -102,6 +102,10 @@ const ChooseExerciseType = forwardRef<
     }
   };
 
+  const check2DStringArray = (array: string[] | string[][]): boolean => {
+    return Array.isArray(array) && array.every(Array.isArray);
+  };
+
   const formatToArray = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -136,9 +140,11 @@ const ChooseExerciseType = forwardRef<
         const cardExercise: CardExercise = {
           exerciseId: Number(exerciseId),
           type: type,
-          word: "",
-          translation: "",
-          description: "",
+          word: result && "word" in result ? result.word : "",
+          translation:
+            result && "translation" in result ? result.translation : "",
+          description:
+            result && "description" in result ? result.description : "",
         };
 
         setExercise(cardExercise);
@@ -147,9 +153,10 @@ const ChooseExerciseType = forwardRef<
         const inputExercise: InputExercise = {
           exerciseId: Number(exerciseId),
           type: type,
-          question: "",
-          task: "",
-          missingWords: "",
+          question: result && "question" in result ? result.question : "",
+          task: result && "task" in result ? result.task : "",
+          missingWords:
+            result && "missingWords" in result ? result.missingWords : "",
         };
 
         setExercise(inputExercise);
@@ -158,10 +165,10 @@ const ChooseExerciseType = forwardRef<
         const choiceExercise: ChoiceExercise = {
           exerciseId: Number(exerciseId),
           type: type,
-          task: "",
-          word: "",
+          task: result && "task" in result ? result.task : "",
+          word: result && "word" in result ? result.word : "",
           words: [],
-          answer: "",
+          answer: result && "answer" in result ? result.answer : "",
         };
 
         setExercise(choiceExercise);
@@ -170,8 +177,8 @@ const ChooseExerciseType = forwardRef<
         const matchExercise: MatchExercise = {
           exerciseId: Number(exerciseId),
           type: type,
-          task: "",
-          words: [],
+          task: result && "task" in result ? result.task : "",
+          words: [[]],
         };
 
         setExercise(matchExercise);
@@ -409,7 +416,6 @@ const ChooseExerciseType = forwardRef<
           <TextField
             multiline
             rows={4}
-            value={exercise && "words" in exercise ? exercise.words : ""}
             onChange={(e) => formatToArray(e)}
           ></TextField>
         </Box>
