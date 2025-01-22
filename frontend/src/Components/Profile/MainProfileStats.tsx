@@ -41,7 +41,7 @@ const formatTimeSpent = (
     let timeStr = "";
 
     if (timeSpent < minutes) {
-      timeStr = `${Math.floor(timeSpent / seconds)}${
+      timeStr = `${Math.floor(timeSpent / seconds)} ${
         units && units[0] ? units[0] : "s"
       }`;
     } else if (timeSpent >= minutes && timeSpent < hours) {

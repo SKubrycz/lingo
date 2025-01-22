@@ -25,12 +25,24 @@ interface RegisterFooter {
   login: string;
   register: string;
 }
+
+export interface RegisterMail {
+  subject: string;
+  content: RegisterMailContent;
+}
+
+interface RegisterMailContent {
+  verifyTitle: string;
+  instruction: string;
+}
+
 interface RegisterLangData {
   metadata: Metadata;
   navbar: RegisterNavbar;
   main: RegisterMain;
   footer: RegisterFooter;
   alerts: Alerts;
+  mail: RegisterMail;
 }
 
 export const registerLangData: RegisterLangData[] = [
@@ -78,6 +90,14 @@ export const registerLangData: RegisterLangData[] = [
       ],
       internalServerError: "Coś poszło nie tak po naszej stronie",
     },
+    mail: {
+      subject: "Weryfikacja konta Lingo",
+      content: {
+        verifyTitle: "Twój kod weryfikacyjny",
+        instruction: `Należy go wpisać w okienku weryfikacji
+        <i style="color: rgb(230, 92, 0)">Lingo</i>`,
+      },
+    },
   },
   {
     metadata: { route: "/register", language: "de" },
@@ -122,6 +142,13 @@ export const registerLangData: RegisterLangData[] = [
         "Das Passwort muss länger als 7 Zeichen sein, mindestens einen Groß- und Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten",
       ],
       internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
+    },
+    mail: {
+      subject: "Lingo-Kontoüberprüfung",
+      content: {
+        verifyTitle: "Ihr Verifizierungscode",
+        instruction: `Es sollte in das Feld für die <i style="color: rgb(230, 92, 0)">Lingo</i>-Überprüfung eingegeben werden`,
+      },
     },
   },
 ];

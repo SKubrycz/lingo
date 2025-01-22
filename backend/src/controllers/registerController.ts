@@ -11,6 +11,7 @@ import {
 
 import hashData from "../utilities/hashData";
 import { RequestLogin } from "../middleware/auth";
+import { RegisterMail } from "../assets/routeLangData/register";
 
 interface RequestBody {
   email: string;
@@ -23,7 +24,10 @@ interface RegisterRequest extends Request {
   body: RequestBody;
 }
 
-const constructRegisterMail = (verificationCode: string): string => {
+const constructRegisterMail = (
+  verificationCode: string,
+  mailContent: RegisterMail
+): string => {
   const htmlString = `  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +37,7 @@ const constructRegisterMail = (verificationCode: string): string => {
       href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
-    <title>Document</title>
+    <title>Lingo</title>
   </head>
   <body
     style="
@@ -52,11 +56,19 @@ const constructRegisterMail = (verificationCode: string): string => {
       "
     >
       <h1 style="color: rgb(230, 92, 0)">LINGO</h1>
-      <h3>Twój kod weryfikacyjny:</h3>
+      <h3>${
+        mailContent.content.verifyTitle
+          ? mailContent.content.verifyTitle
+          : "Twój kod weryfikacyjny"
+      }:</h3>
       <h2 style="color: rgb(230, 92, 0)">${verificationCode}</h2>
       <h6>
-        Należy go wpisać w okienku weryfikacji
-        <i style="color: rgb(230, 92, 0)">Lingo</i>
+        ${
+          mailContent.content.instruction
+            ? mailContent.content.instruction
+            : `Należy go wpisać w okienku weryfikacji
+        <i style="color: rgb(230, 92, 0)">Lingo</i>`
+        }
       </h6>
     </div>
   </body>`;
@@ -181,7 +193,10 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
         verified: false,
       });
 
-      const htmlMessage = constructRegisterMail(verificationCode);
+      const htmlMessage = constructRegisterMail(
+        verificationCode,
+        routeResult.mail
+      );
 
       const transporter = nodemailer.createTransport({
         host: "localhost",
@@ -192,7 +207,9 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       const mailInfo = await transporter.sendMail({
         from: "noreply@auth.localhost",
         to: email,
-        subject: "Weryfikacja konta Lingo",
+        subject: routeResult.mail.subject
+          ? routeResult.mail.subject
+          : "Weryfikacja konta Lingo",
         html: htmlMessage,
       });
 
