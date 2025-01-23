@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import axios, { isAxiosError } from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { adminTheme } from "../../../adminTheme";
 import SubpagesTab from "./Subpages/SubpagesTab";
@@ -51,7 +51,7 @@ export default function AdminPanel() {
 
   const handleAuth = async () => {
     try {
-      const res = await axios.get(
+      await axios.get(
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/admin/panel`,
         { withCredentials: true }
       );
@@ -154,7 +154,7 @@ export default function AdminPanel() {
     document.body.style.backgroundColor = bg;
   }, []);
 
-  const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (newValue: number) => {
     setValue(newValue);
   };
 
@@ -190,7 +190,7 @@ export default function AdminPanel() {
           >
             <Tabs
               value={value}
-              onChange={handleTabChange}
+              onChange={(_, newValue) => handleTabChange(newValue)}
               sx={{
                 width: "100%",
                 borderBottom: "1px solid rgb(224, 224, 224)",

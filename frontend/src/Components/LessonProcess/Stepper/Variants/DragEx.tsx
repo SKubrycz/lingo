@@ -24,7 +24,6 @@ export default function DragEx({ id }: LessonData) {
   const dropInput = useRef<HTMLElement | null>(null);
 
   const dragWord = (e: React.DragEvent<HTMLElement>, item: string) => {
-    console.log(`dragWord`);
     if (e.dataTransfer && dropInput.current) {
       e.dataTransfer.setData("text/plain", JSON.stringify(item));
     }
@@ -32,23 +31,21 @@ export default function DragEx({ id }: LessonData) {
 
   const dropWord = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
-    console.log(`dropWord`);
     if (e.dataTransfer) {
       const data = JSON.parse(e.dataTransfer.getData("text"));
-      console.log(data);
       setSentenceArr([...sentenceArr, data]);
       setWordBlocks(wordBlocks.filter((w) => w != data));
     }
   };
 
   const handleAddWord = (word: string) => {
-    setWordBlocks(wordBlocks.filter((item, i) => item != word));
-    setSentenceArr([...sentenceArr, word]); //LATER: change the whole array system to a map and keep the wordBlock order e.g. map[1]"I am"
+    setWordBlocks(wordBlocks.filter((item) => item != word));
+    setSentenceArr([...sentenceArr, word]);
   };
 
   const handleRemoveWord = (word: string) => {
-    setSentenceArr(sentenceArr.filter((item, i) => item != word));
-    setWordBlocks([...wordBlocks, word]); //LATER: change the whole array system to a map and keep the wordBlock order e.g. map[1]"I am"
+    setSentenceArr(sentenceArr.filter((item) => item != word));
+    setWordBlocks([...wordBlocks, word]);
     console.log(`onclick filtered`);
   };
 

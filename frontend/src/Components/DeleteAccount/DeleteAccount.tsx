@@ -60,7 +60,7 @@ export default function DeleteAccount() {
     );
 
     try {
-      const res = await axios.post(
+      await axios.post(
         route,
         { deletionCode: deletionCode },
         { withCredentials: true }

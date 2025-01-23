@@ -14,12 +14,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ExerciseRadio from "./ExerciseRadio";
 import { adminTheme } from "../../../../adminTheme";
 import getBackground from "../../../../utilities/getBackground";
@@ -102,10 +97,6 @@ const ChooseExerciseType = forwardRef<
     }
   };
 
-  const check2DStringArray = (array: string[] | string[][]): boolean => {
-    return Array.isArray(array) && array.every(Array.isArray);
-  };
-
   const formatToArray = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -114,8 +105,10 @@ const ChooseExerciseType = forwardRef<
         const splitArr = e.target.value.replace(/[^a-zA-Z, ]/g, "").split(",");
         let pairedArr: string[][] = [];
         splitArr.forEach((el, i) => {
-          if (i !== 0 && i % 2 === 0)
-            pairedArr.push([splitArr[i - 2], splitArr[i - 1]]);
+          if (el != undefined) {
+            if (i !== 0 && i % 2 === 0)
+              pairedArr.push([splitArr[i - 2], splitArr[i - 1]]);
+          }
         });
 
         setExercise((prev) => ({
@@ -445,7 +438,6 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
 
   const { lessonId, exerciseId } = useParams();
   const [query] = useSearchParams();
-  const { state } = useLocation();
 
   const navigate = useNavigate();
 

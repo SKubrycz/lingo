@@ -22,8 +22,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getBackground from "../../../../utilities/getBackground";
 import axios, { isAxiosError } from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../../state/store";
+import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbarSlice";
 
 interface Metadata {
@@ -41,9 +40,6 @@ interface SubpagesTabProps {
 }
 
 export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
-  const alertSnackbarData = useSelector(
-    (state: RootState) => state.alertSnackbarReducer
-  );
   const [metadata, setMetadata] = useState<MergedMetadata[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [modalData, setModalData] = useState<MergedMetadata | null>(null);
@@ -165,21 +161,13 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
         textField.length == 2
       ) {
         try {
-          const res = await axios.post(
+          await axios.post(
             `http://localhost:${
               import.meta.env.VITE_SERVER_PORT
             }/admin/panel/subpages/add?route=${strippedRoute}&language=${textField}`,
             {},
             { withCredentials: true }
           );
-
-          console.log(res.data);
-
-          const stateData: any = {
-            route: strippedRoute,
-            language: textField,
-            fromAdmin: true,
-          };
 
           navigate(0);
         } catch (error) {

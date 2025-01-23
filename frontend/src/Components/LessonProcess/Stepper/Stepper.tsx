@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import {
   Container,
   Dialog,
@@ -36,8 +34,6 @@ function Stepper({
   children,
 }: LessonDataWithSession) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-
-  const navigate = useNavigate();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);

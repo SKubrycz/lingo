@@ -2,7 +2,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import ChoiceEx from "../Stepper/Variants/ChoiceEx";
 import LessonProcess from "../LessonProcess";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setCorrectData } from "../../../state/lessonSlice";
@@ -37,7 +37,7 @@ export default function ChooseWord({
   );
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [disableNext, setDisableNext] = useState<boolean>(true);
-  const [words, setWords] = useState<string[]>([]);
+  //const [words, setWords] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export default function ChooseWord({
     );
 
     try {
-      const response = await axios.post(
+      await axios.post(
         route,
         {
           correct: lessonData.correct,
@@ -58,8 +58,6 @@ export default function ChooseWord({
         },
         { withCredentials: true }
       );
-
-      console.log(response.data);
 
       dispatch(setCorrectData({ correct: [] }));
 
@@ -100,14 +98,12 @@ export default function ChooseWord({
       if (res.data.correct) {
         setCorrect(true);
         setDisableNext(false);
-        console.log("correct!");
       } else {
         setCorrect(false);
         setDisableNext(false);
       }
 
       const correctArr = Array.from(lessonData.correct);
-      console.log(correctArr);
       correctArr.push(res.data.correct);
       dispatch(setCorrectData({ correct: correctArr }));
     }
@@ -122,16 +118,12 @@ export default function ChooseWord({
     if (lessonInfo?.exercise?.words) {
       let words = lessonInfo?.exercise?.words;
       shuffleArray(words);
-      setWords(words);
+      //setWords(words);
     }
   }, [lessonInfo?.exercise?.words]);
 
   return (
-    <LessonProcess
-      lessonInfo={lessonInfo}
-      languageData={languageData}
-      lessonId={lessonId}
-    >
+    <LessonProcess lessonInfo={lessonInfo} languageData={languageData}>
       <Box
         sx={{
           width: "7%",
@@ -148,8 +140,6 @@ export default function ChooseWord({
       ></ChoiceEx>
       {isLastExercise ? (
         <Button
-          //to={`/lessons`}
-          //component={RouterLink}
           disabled={disableNext}
           onClick={() => finishLesson()}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}

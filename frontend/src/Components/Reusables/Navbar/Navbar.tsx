@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
@@ -30,17 +30,12 @@ interface NavbarProps {
 function Navbar({ link, options, tooltip, dialog, languages }: NavbarProps) {
   const languageData = useSelector((state: RootState) => state.languageReducer);
 
-  const [display, setDisplay] = useState<string>("none");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
   });
-
-  const handleDisplayOnResize = () => {
-    if (window.innerWidth > 768) setDisplay("none");
-  };
 
   const handleDialogOpen = () => {
     setOpenDialog(true);
@@ -49,12 +44,6 @@ function Navbar({ link, options, tooltip, dialog, languages }: NavbarProps) {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleDisplayOnResize);
-
-    return () => window.removeEventListener("resize", handleDisplayOnResize);
-  }, []);
 
   return (
     <>

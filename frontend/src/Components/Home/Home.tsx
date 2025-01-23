@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
@@ -54,8 +53,6 @@ function Home() {
   const [languages, setLanguages] = useState<string[] | null>(null);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const navigate = useNavigate();
 
   const languageData = useSelector((state: RootState) => state.languageReducer);
 

@@ -9,12 +9,14 @@ interface LanguageLang {
   lang: string;
 }
 
+const initialState: Language = {
+  lang: localStorage.getItem("language-lingo") ?? "pl",
+  languages: ["pl", "de"],
+};
+
 export const languageSlice = createSlice({
   name: "language",
-  initialState: {
-    lang: localStorage.getItem("language-lingo") ?? "pl",
-    languages: ["pl", "de"],
-  },
+  initialState: initialState,
   reducers: {
     setLanguage: (state, action: PayloadAction<LanguageLang>) => {
       return {

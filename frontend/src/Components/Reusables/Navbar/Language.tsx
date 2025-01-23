@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Typography } from "@mui/material";
 
@@ -23,7 +23,6 @@ const Language = forwardRef<HTMLElement, LanguageProps>(function Language(
     localStorage.setItem("language-lingo", lang);
     setLanguage({ lang: lang });
 
-    // refresh page after language change
     navigate(0);
   };
 

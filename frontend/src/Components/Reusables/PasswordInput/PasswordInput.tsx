@@ -3,18 +3,6 @@ import React, { useRef, useState } from "react";
 import { TextField, InputAdornment, IconButton, Tooltip } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-enum ActionType {
-  Email = "email",
-  Login = "login",
-  Password = "password",
-  PasswordAgain = "passwordAgain",
-}
-
-interface Actions {
-  type: ActionType;
-  payload?: string;
-}
-
 interface PasswordInputProps {
   label: string;
   name: string;

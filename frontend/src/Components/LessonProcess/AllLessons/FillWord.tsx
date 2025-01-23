@@ -11,7 +11,6 @@ import { setAlert } from "../../../state/alertSnackbarSlice";
 
 import LessonProcess from "../LessonProcess";
 import InputEx from "../Stepper/Variants/InputEx";
-import type { InputExerciseData } from "./exerciseTypes";
 import { RootState } from "../../../state/store";
 import { setCorrectData } from "../../../state/lessonSlice";
 import handleLanguageURL from "../../../utilities/handleLanguageURL";
@@ -148,11 +147,7 @@ export default function FillWord({
 
   return (
     <>
-      <LessonProcess
-        lessonInfo={lessonInfo}
-        languageData={languageData}
-        lessonId={lessonId}
-      >
+      <LessonProcess lessonInfo={lessonInfo} languageData={languageData}>
         <Box
           sx={{
             width: "7%",

@@ -10,7 +10,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
-import { isAuthenticated } from "./middleware/auth";
+import { isAuthenticated, RequestLogin } from "./middleware/auth";
 import routeLogger from "./middleware/routeLogger";
 
 import homeRoute from "./routes/home";
@@ -24,6 +24,7 @@ import aboutRoute from "./routes/about";
 import verifyRoute from "./routes/verify";
 import deleteAccountRoute from "./routes/deleteAccount";
 import adminRoute from "./routes/admin";
+import { findAllRouteLanguages, findRoute } from "./assets/queries";
 
 const app: Express = express();
 
@@ -71,8 +72,33 @@ app.use(routeLogger);
 
 app.use(routesArray);
 
-app.all("*", isAuthenticated, (req: Request, res: Response) => {
-  res.status(404).send("Błąd 404: Nie znaleziono zawartości");
+app.all("*", isAuthenticated, async (req: RequestLogin, res: Response) => {
+  const query = await req.query;
+
+  if (!query || !query.language)
+    return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
+
+  const routeResult = await findRoute("not-found", String(query.language));
+  if (!routeResult)
+    return res
+      .status(500)
+      .send({ message: "Coś poszło nie tak po naszej stronie" });
+
+  const languagesResult = await findAllRouteLanguages("/not-found");
+  if (!languagesResult || languagesResult.length === 0)
+    return res.status(500).send({
+      message: routeResult.alerts.internalServerError
+        ? routeResult.alerts.internalServerError
+        : "Coś poszło nie tak po stronie serwera",
+    });
+
+  res.status(200).send({
+    message: routeResult.alerts.notFound
+      ? routeResult.alerts.notFound
+      : "Błąd 404: Nie znaleziono zawartości",
+    languageData: routeResult,
+    languages: languagesResult,
+  });
 });
 
 app.listen(process.env.PORT, () => {

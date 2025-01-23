@@ -43,7 +43,7 @@ export default function AdminPanelNavbar({}: AdminPanelNavbarProps) {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/admin/logout`,
         {},
         { withCredentials: true }

@@ -31,6 +31,7 @@ import {
 import { logoutLangData } from "./routeLangData/logout";
 import { verifyLangData } from "./routeLangData/verify";
 import { deleteAccountLangData } from "./routeLangData/deleteAccount";
+import { notFoundLangData } from "./routeLangData/notFound";
 
 const uri: string = "mongodb://localhost:27017/";
 
@@ -95,6 +96,8 @@ const insertToRoutes = async (db: Db) => {
     verifyLangData[1],
     deleteAccountLangData[0],
     deleteAccountLangData[1],
+    notFoundLangData[0],
+    notFoundLangData[1],
   ]);
 
   console.log(`routes inserted:`);

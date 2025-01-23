@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../state/alertSnackbarSlice";
 import { Box, Button } from "@mui/material";
 
-import type { CardExerciseData } from "./exerciseTypes";
 import { setCorrectData } from "../../../state/lessonSlice";
 import { RootState } from "../../../state/store";
 import handleLanguageURL from "../../../utilities/handleLanguageURL";
@@ -97,11 +96,7 @@ export default function NewWord({
   }, [exerciseId]);
 
   return (
-    <LessonProcess
-      lessonInfo={lessonInfo}
-      languageData={languageData}
-      lessonId={lessonId}
-    >
+    <LessonProcess lessonInfo={lessonInfo} languageData={languageData}>
       <Box
         sx={{
           width: "7%",
@@ -110,7 +105,6 @@ export default function NewWord({
       ></Box>
       <CardEx
         ref={cardRef}
-        exerciseId={lessonInfo?.exercise?.exerciseId}
         exerciseUI={exerciseUI}
         word={lessonInfo?.exercise?.word}
         translation={lessonInfo?.exercise?.translation}

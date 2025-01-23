@@ -1,5 +1,3 @@
-import { useRef } from "react";
-
 import {
   ListItem,
   ListItemIcon,
@@ -69,15 +67,6 @@ export default function MainProfileStats({
   stats,
   languageData,
 }: MainProfileStatsProps) {
-  // IDEA: For stats add a tooltip with more information
-
-  const myTime = useRef<number>(
-    Math.floor(Math.random() * 1000 * 60 * 60 * 24)
-  );
-  const timeSpentLearning: number = Math.floor(
-    myTime.current / (1000 * 60 * 60)
-  );
-
   const listItemSx = {
     paddingTop: "1.5em",
     paddingBottom: "1.5em",

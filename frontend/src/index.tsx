@@ -13,8 +13,6 @@ import About from "./Components/About/About";
 import Profile from "./Components/Profile/Profile";
 import Lessons from "./Components/Lessons/Lessons";
 import Logout from "./Components/Logout/Logout";
-import L1NewWord from "./Components/LessonProcess/AllLessons/NewWord";
-import L1FillWord from "./Components/LessonProcess/AllLessons/FillWord";
 import Verify from "./Components/Register/Verify/Verify";
 import DeleteAccount from "./Components/DeleteAccount/DeleteAccount";
 import Admin from "./Components/Admin/Admin";

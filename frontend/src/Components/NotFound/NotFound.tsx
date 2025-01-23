@@ -7,20 +7,39 @@ import Navbar from "../Reusables/Navbar/Navbar";
 
 import "./NotFound.scss";
 import getBackground from "../../utilities/getBackground";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import handleLanguageURL from "../../utilities/handleLanguageURL";
 
 function NotFound() {
+  const stateLanguageData = useSelector(
+    (state: RootState) => state.languageReducer
+  );
   const [info, setInfo] = useState<string | null>(null);
+  const [languageData, setLanguageData] = useState<any | null>(null);
+  const [languages, setLanguages] = useState<string[] | null>(null);
 
   const linkArray: string[] = ["/"];
   const optionsArray: string[] = ["Strona główna"];
 
   const handleNotFound = async () => {
-    await axios
-      .get(`http://localhost:${import.meta.env.VITE_SERVER_PORT}/*`)
-      .catch((err) => {
-        console.log(err.response.data);
-        setInfo(err.response.data);
-      });
+    const route = handleLanguageURL("/*", stateLanguageData.lang);
+
+    try {
+      const res = await axios.get(route);
+
+      if (res.data.message) {
+        setInfo(res.data.message);
+      }
+      if (res.data.languageData) {
+        setLanguageData(res.data.languageData);
+      }
+      if (res.data.languages) {
+        setLanguages(res.data.languages);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -30,16 +49,28 @@ function NotFound() {
     document.body.style.backgroundColor = bg;
   }, []);
 
-  //TODO: Refactor into MUI Components
-
   return (
     <div className="wrapper">
-      <Navbar link={linkArray} options={optionsArray}></Navbar>
+      <Navbar
+        link={linkArray}
+        options={optionsArray}
+        tooltip={languageData?.navbar?.tooltip}
+        languages={languages}
+      ></Navbar>
       <main className="main-notfound">
         <h1>{info}</h1>
-        <h2>Powrót na stronę główną:</h2>
+        <h2>
+          {languageData?.main?.return
+            ? languageData.main.return
+            : "Powrót na stronę główną"}
+          :
+        </h2>
         <button className="main-notfound-button">
-          <Link to="/">Strona główna</Link>
+          <Link to="/">
+            {languageData?.main?.button
+              ? languageData.main.button
+              : "Strona główna"}
+          </Link>
         </button>
       </main>
     </div>

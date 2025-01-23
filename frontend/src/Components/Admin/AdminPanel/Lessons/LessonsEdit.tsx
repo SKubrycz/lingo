@@ -15,12 +15,7 @@ import {
 } from "@mui/material";
 import axios, { isAxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import getBackground from "../../../../utilities/getBackground";
 import { LessonPanel } from "./LessonsTypes";
 import { adminTheme } from "../../../../adminTheme";
@@ -49,8 +44,6 @@ export default function LessonsEdit({}: LessonsEditProps) {
   });
   const { lessonId } = useParams();
   const [query] = useSearchParams();
-
-  const { state } = useLocation();
 
   const navigate = useNavigate();
 

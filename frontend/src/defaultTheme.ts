@@ -1,7 +1,5 @@
 import { createTheme } from "@mui/material/styles";
 
-const navbarFontColor: string = "#fff0e6";
-
 const defaultThemePalette = createTheme({
   palette: {
     mode: "light",

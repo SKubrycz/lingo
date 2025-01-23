@@ -2,7 +2,6 @@ import { Box, Container, Typography } from "@mui/material";
 import { forwardRef } from "react";
 
 interface CardExProps {
-  exerciseId: number | undefined;
   exerciseUI: any | undefined;
   word: string | undefined;
   translation: string | undefined;
@@ -10,7 +9,7 @@ interface CardExProps {
 }
 
 const CardEx = forwardRef<HTMLDivElement, CardExProps>(function CardEx(
-  { exerciseId, exerciseUI, word, translation, description },
+  { exerciseUI, word, translation, description },
   cardRef
 ) {
   return (

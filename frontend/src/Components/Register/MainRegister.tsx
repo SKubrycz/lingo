@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../state/store";

@@ -21,7 +21,7 @@ import {
 import React, { useEffect, useState } from "react";
 import getBackground from "../../../../utilities/getBackground";
 import axios, { isAxiosError } from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../../../state/alertSnackbarSlice";
 
@@ -43,8 +43,6 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
   const [newLanguageModalData, setNewLanguageModalData] = useState<
     number | null
   >(null);
-
-  const { state } = useLocation();
 
   const navigate = useNavigate();
 
