@@ -4,8 +4,6 @@ import { RequestLogin } from "../middleware/auth";
 import { findAllRouteLanguages, findRoute } from "../assets/queries";
 
 const getHome = async (req: RequestLogin, res: Response) => {
-  console.log(`req.login ${req.login}`);
-
   const query = await req.query;
 
   if (!query || !query.language)

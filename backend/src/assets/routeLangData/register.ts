@@ -147,7 +147,8 @@ export const registerLangData: RegisterLangData[] = [
       subject: "Lingo-Kontoüberprüfung",
       content: {
         verifyTitle: "Ihr Verifizierungscode",
-        instruction: `Es sollte in das Feld für die <i style="color: rgb(230, 92, 0)">Lingo</i>-Überprüfung eingegeben werden`,
+        instruction: `Es sollte in das Feld für die 
+        <i style="color: rgb(230, 92, 0)">Lingo</i>-Überprüfung eingegeben werden`,
       },
     },
   },

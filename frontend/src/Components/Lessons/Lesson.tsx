@@ -4,8 +4,7 @@ import "./Lessons.scss";
 
 import { Button, Box, Container, Typography } from "@mui/material";
 import { Done } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state/store";
+import { useDispatch } from "react-redux";
 import { setTimeStart } from "../../state/timeSpentSlice";
 import { Buttons } from "./Lessons";
 
@@ -23,10 +22,6 @@ interface LessonProps {
 }
 
 function Lesson({ lessonData, finished, buttons }: LessonProps) {
-  const timeSpentData = useSelector(
-    (state: RootState) => state.timeSpentReducer
-  );
-
   const dispatch = useDispatch();
 
   const startTimer = () => {

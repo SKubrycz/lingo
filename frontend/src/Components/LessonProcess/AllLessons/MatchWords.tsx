@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import LessonProcess from "../LessonProcess";
 import MatchEx from "../Stepper/Variants/MatchEx";
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { RootState } from "../../../state/store";
 import axios, { AxiosError } from "axios";
@@ -39,7 +39,6 @@ export default function MatchWords({
 
   const correctArrRef = useRef<boolean[]>([]);
 
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -124,11 +123,7 @@ export default function MatchWords({
   };
 
   return (
-    <LessonProcess
-      lessonInfo={lessonInfo}
-      languageData={languageData}
-      lessonId={lessonId}
-    >
+    <LessonProcess lessonInfo={lessonInfo} languageData={languageData}>
       <Box
         sx={{
           width: "7%",

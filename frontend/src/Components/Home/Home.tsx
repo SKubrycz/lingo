@@ -64,7 +64,6 @@ function Home() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data.languageData) {
           const navbar = [
             res.data.languageData.navbar.about,

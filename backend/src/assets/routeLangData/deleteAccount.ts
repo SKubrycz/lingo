@@ -19,6 +19,15 @@ export const deleteAccountLangData = [
       forbidden: "Nieprawidłowa podstrona",
       internalServerError: "Coś poszło nie tak po naszej stronie",
     },
+    mail: {
+      subject: "Kod usunięcia konta Lingo",
+      content: {
+        title: "Szkoda nam, że odchodzisz",
+        verifyTitle: "Twój kod usunięcia konta to",
+        instruction: `Należy go wpisać w okienku weryfikacji
+        <i style="color: rgb(230, 92, 0)">Lingo</i>`,
+      },
+    },
   },
   {
     metadata: {
@@ -40,6 +49,15 @@ export const deleteAccountLangData = [
       ],
       forbidden: "Ungültige Unterseite",
       internalServerError: "Auf unserer Seite ist etwas schief gelaufen",
+    },
+    mail: {
+      subject: "Löschungscode für das Lingo-Benutzerkonto",
+      content: {
+        title: "Wir bedauern, Sie gehen zu sehen",
+        verifyTitle: "Ihr Code zum Löschen des Benutzerkontos lautet",
+        instruction: `Es sollte in das Feld für die 
+        <i style="color: rgb(230, 92, 0)">Lingo</i>-Überprüfung eingegeben werden`,
+      },
     },
   },
 ];

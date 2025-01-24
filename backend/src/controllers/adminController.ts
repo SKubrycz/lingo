@@ -1,6 +1,4 @@
 import { randomBytes } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import nodemailer from "nodemailer";
 import { Response } from "express";
 import jwt from "jsonwebtoken";
@@ -20,7 +18,6 @@ import {
   updateRoute,
   upsertAdminCode,
 } from "../assets/queries";
-import { aboutLangData } from "../assets/routeLangData/about";
 import type { LessonPanel } from "../assets/lessonsDataTypes";
 import readCodesFile from "../utilities/readCodesFile";
 import { verifyExercise } from "../utilities/verifyExercise";
@@ -110,6 +107,10 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
         subject: "Kod dostępu do Panel Administratora",
         html: htmlMessage,
       });
+      if (!mailInfo)
+        return res.status(500).send({
+          message: "Coś poszło nie tak po naszej stronie",
+        });
     }
   } else
     return res
