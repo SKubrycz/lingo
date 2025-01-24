@@ -4,6 +4,7 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { RequestLogin } from "../middleware/auth";
 import {
+  addExercise,
   deleteExercise,
   findAllRoutesMetadata,
   findLessonByIdAndLanguage,
@@ -534,21 +535,39 @@ const postAdminPanelLessonsCreatorController = async (
   if (!lessonResult)
     return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
-  if (lessonResult && lessonResult.exercises.length !== Number(exerciseId) - 1)
+  if (
+    lessonResult &&
+    lessonResult.exercises.length !== Number(exerciseId) - 1 &&
+    lessonResult.exercises.length !== Number(exerciseId)
+  ) {
     return res
       .status(400)
       .send({ message: "Nieprawidłowy identyfikator ćwiczenia" });
+  }
 
-  const exercisePushResult = await updateExercise(
-    Number(lessonId),
-    Number(exerciseId),
-    String(query.language),
-    data
-  );
-  if (!exercisePushResult)
-    return res
-      .status(500)
-      .send({ message: "Nastąpił problem z utworzeniem nowego ćwiczenia" });
+  if (lessonResult.exercises.length === Number(exerciseId)) {
+    const exerciseUpdateResult = await updateExercise(
+      Number(lessonId),
+      Number(exerciseId),
+      String(query.language),
+      data
+    );
+    if (!exerciseUpdateResult)
+      return res
+        .status(500)
+        .send({ message: "Nastąpił problem z utworzeniem nowego ćwiczenia" });
+  }
+  if (lessonResult.exercises.length === Number(exerciseId) - 1) {
+    const exercisePushResult = await addExercise(
+      Number(lessonId),
+      String(query.language),
+      data
+    );
+    if (!exercisePushResult)
+      return res
+        .status(500)
+        .send({ message: "Nastąpił problem z utworzeniem nowego ćwiczenia" });
+  }
 
   return res.status(200).send({ message: "Ćwiczenie zapisane pomyślnie" });
 };

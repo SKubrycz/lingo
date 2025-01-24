@@ -51,6 +51,7 @@ const ChooseExerciseType = forwardRef<
   ChooseExerciseTypeProps
 >(({ type, lessonId, exerciseId, language, result }, ref) => {
   const [exercise, setExercise] = useState<Exercises | null>(null);
+  const [matchWordsString, setMatchWordsString] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -63,6 +64,8 @@ const ChooseExerciseType = forwardRef<
 
     if (lessonId && exerciseId && language) {
       try {
+        console.log(exercise);
+
         const res = await axios.post(
           `http://localhost:${
             import.meta.env.VITE_SERVER_PORT
@@ -97,9 +100,15 @@ const ChooseExerciseType = forwardRef<
     }
   };
 
+  useEffect(() => {
+    console.log(exercise);
+  }, [exercise]);
+
   const formatToArray = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setMatchWordsString(e.target.value);
+
     if (e.target.value.length >= 0) {
       if (exercise && exercise.type === "match") {
         const splitArr = e.target.value.replace(/[^a-zA-Z, ]/g, "").split(",");
@@ -118,9 +127,32 @@ const ChooseExerciseType = forwardRef<
 
         if (exercise.words.length >= 5) {
           e.target.value = e.target.value.slice(0, -1);
+          setMatchWordsString(e.target.value);
         }
       }
     }
+  };
+
+  const formatFromArray = (arr: string[][] | undefined): string => {
+    if (arr) {
+      if (arr.length > 0) {
+        if (exercise && exercise.type === "match") {
+          let str = "";
+          arr.forEach((el, i) => {
+            if (el && !Array.isArray(el)) {
+              if (i !== arr.length - 1) {
+                str += `${el[0]}, ${el[1]}, `;
+              } else {
+                str += `${el[0]}, ${el[1]}, `;
+              }
+            }
+          });
+          return str;
+        }
+      }
+    }
+
+    return "";
   };
 
   useEffect(() => {
@@ -160,7 +192,7 @@ const ChooseExerciseType = forwardRef<
           type: type,
           task: result && "task" in result ? result.task : "",
           word: result && "word" in result ? result.word : "",
-          words: [],
+          words: ["", "", ""],
           answer: result && "answer" in result ? result.answer : "",
         };
 
@@ -171,10 +203,15 @@ const ChooseExerciseType = forwardRef<
           exerciseId: Number(exerciseId),
           type: type,
           task: result && "task" in result ? result.task : "",
-          words: [[]],
+          words: [],
         };
 
         setExercise(matchExercise);
+        setMatchWordsString(
+          exercise && "words" in exercise
+            ? formatFromArray((exercise as MatchExercise)?.words)
+            : ""
+        );
       }
     }
   }, [type]);
@@ -325,14 +362,14 @@ const ChooseExerciseType = forwardRef<
             1:{" "}
             <TextField
               value={exercise && "words" in exercise ? exercise.words[0] : ""}
-              onChange={(e) =>
+              onChange={(e) => {
                 setExercise((prev) => ({
                   ...(prev as ChoiceExercise),
                   words: (prev as ChoiceExercise).words.map((el, i) =>
                     i === 0 ? e.target.value : el
                   ),
-                }))
-              }
+                }));
+              }}
             ></TextField>
             2:{" "}
             <TextField
@@ -409,6 +446,7 @@ const ChooseExerciseType = forwardRef<
           <TextField
             multiline
             rows={4}
+            value={matchWordsString}
             onChange={(e) => formatToArray(e)}
           ></TextField>
         </Box>

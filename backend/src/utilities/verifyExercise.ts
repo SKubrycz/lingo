@@ -3,7 +3,7 @@ import {
   ChoiceExercise,
   InputExercise,
   MatchExercise,
-} from "../assets/lessonsData";
+} from "../assets/lessonsDataTypes";
 
 type Exercises = CardExercise | InputExercise | ChoiceExercise | MatchExercise;
 
@@ -41,8 +41,7 @@ export const verifyExercise = (exercise: Exercises): boolean => {
     const { task, word, words, answer } = exercise;
     if (!task || typeof task !== "string" || task.length < 1) return false;
     if (!word || typeof word !== "string" || word.length < 1) return false;
-    if (!words || !Array.isArray(words) || words.length < 1 || words.length > 3)
-      return false;
+    if (!words || !Array.isArray(words) || words.length !== 3) return false;
     let isEmpty = false;
     for (let i = 0; i < words.length; i++) {
       if (words[i].length < 1) {
@@ -56,8 +55,7 @@ export const verifyExercise = (exercise: Exercises): boolean => {
   } else if (exercise.type === "match") {
     const { task, words } = exercise;
     if (!task || typeof task !== "string" || task.length < 1) return false;
-    if (!words || !Array.isArray(words) || words.length < 1 || words.length > 3)
-      return false;
+    if (!words || !Array.isArray(words) || words.length < 5) return false;
     let isEmpty = false;
     for (let i = 0; i < words.length; i++) {
       if (words[i][0].length < 1 || words[i][1].length < 1) {

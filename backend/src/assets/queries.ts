@@ -801,29 +801,76 @@ export const updateExercise = async (
   await connectToDb();
   const db: Db = await getDb();
 
-  console.log(exerciseData);
-
   try {
     const lessonsCollection = db.collection("lessons");
-    const updateResult = await lessonsCollection.updateOne(
-      { lessonId: lessonId, language: language },
-      [
-        {
-          $set: {
-            exercises: { $concatArrays: ["$exercises", [exerciseData]] },
-          },
-        },
-        {
-          $set: {
-            exerciseCount: {
-              $size: "$exercises",
+    const updateResult = await lessonsCollection.aggregate([
+      { $match: { lessonId: lessonId } },
+      {
+        $set: {
+          exercises: {
+            $map: {
+              input: "$exercises",
+              as: "exercise",
+              in: {
+                $cond: {
+                  if: { $eq: ["$$exercise.exerciseId", exerciseId] },
+                  then: exerciseData,
+                  else: "$$exercise",
+                },
+              },
             },
           },
         },
-      ],
-      { upsert: true }
-    );
+      },
+      { $merge: { into: "lessons", whenMatched: "replace" } },
+    ]);
     if (!updateResult) return null;
+
+    return updateResult;
+  } catch (error) {
+    console.error(error);
+    closeDbConnection();
+    return null;
+  }
+};
+
+export const addExercise = async (
+  lessonId: number,
+  language: string,
+  exerciseData: any
+) => {
+  await connectToDb();
+  const db: Db = await getDb();
+
+  try {
+    const lessonsCollection = db.collection("lessons");
+    const updateResult = await lessonsCollection
+      .aggregate([
+        { $match: { lessonId: lessonId, language: language } },
+        {
+          $set: {
+            exercises: { $concatArrays: ["$exercises", [exerciseData]] },
+            exerciseCount: { $add: [{ $size: "$exercises" }, 1] },
+          },
+        },
+        { $merge: { into: "lessons", whenMatched: "merge" } },
+      ])
+      .toArray();
+
+    if (!updateResult) return null;
+
+    if (exerciseData.type === "card") {
+      const updateNewWordsResult = await lessonsCollection.aggregate([
+        { $match: { lessonId: lessonId } },
+        {
+          $set: {
+            newWords: { $size: "$exercises" },
+          },
+        },
+        { $merge: { into: "lessons", whenMatched: "merge" } },
+      ]);
+      if (!updateNewWordsResult) return null;
+    }
 
     return updateResult;
   } catch (error) {

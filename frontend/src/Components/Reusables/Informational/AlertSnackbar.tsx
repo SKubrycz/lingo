@@ -39,7 +39,11 @@ export default function AlertSnackbar({
     handleAcceptedState();
   }, [content]);
 
-  const handleCloseSnackbar = (reason?: string) => {
+  const handleCloseSnackbar = (
+    e: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (!e) return;
     if (reason === "clickaway") return;
     setShowSnackbar(false);
     alertSnackbarDataDispatch(
@@ -57,19 +61,19 @@ export default function AlertSnackbar({
       <Snackbar
         open={showSnackbar}
         autoHideDuration={4000}
-        onClose={(_) => handleCloseSnackbar}
+        onClose={handleCloseSnackbar}
         TransitionComponent={Fade}
         sx={{ boxShadow: 3 }}
       >
         <Alert
           severity={acceptedState?.severity}
           variant={acceptedState?.variant}
-          onClose={(_) => handleCloseSnackbar}
+          onClose={handleCloseSnackbar}
         >
           {acceptedState?.title ? (
             <AlertTitle>{acceptedState?.title}</AlertTitle>
           ) : null}
-          {acceptedState?.content /* {viewedContent} */}
+          {acceptedState?.content}
         </Alert>
       </Snackbar>
     </>
