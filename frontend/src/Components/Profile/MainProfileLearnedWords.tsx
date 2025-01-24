@@ -69,7 +69,6 @@ function MainProfileLearnedWords({
   user,
   languageData,
 }: MainProfileLearnedWordsProps) {
-  // And here static data for now
   const [wordData, setWordData] = useState<WordData[] | string>(
     user?.words.length > 0
       ? [
@@ -111,7 +110,7 @@ function MainProfileLearnedWords({
 
   const [leftOffset, setLeftOffset] = useState<number>(0);
   const offsetStep = 200;
-  const currentWord = useRef<number>(0); // wordData[i].id
+  const currentWord = useRef<number>(0);
 
   const interval = useRef<NodeJS.Timeout | null>(null);
   const timeout = useRef<NodeJS.Timeout | null>(null);

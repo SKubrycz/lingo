@@ -18,17 +18,14 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   const routeResult = await findRoute("lessons", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   const languagesResult = await findAllRouteLanguages("/lessons");
   if (!languagesResult || languagesResult.length === 0)
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po stronie serwera",
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera",
     });
 
   let lessonsResult = await findFilledLessonsListWithLanguage(
@@ -36,9 +33,10 @@ const getLessons = async (req: RequestLogin, res: Response) => {
   );
   if (!lessonsResult)
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po stronie serwera",
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po stronie serwera",
     });
 
   //fallback lessons language
@@ -46,9 +44,10 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     lessonsResult = await findFilledLessonsListWithLanguage("pl");
     if (!lessonsResult)
       return res.status(500).send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : "Coś poszło nie tak po stronie serwera",
+        message:
+          routeResult && routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po stronie serwera",
       });
   }
 
@@ -56,7 +55,7 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     return res
       .status(500)
       .send(
-        routeResult.alerts.internalServerError
+        routeResult && routeResult.alerts.internalServerError
           ? routeResult.alerts.internalServerError
           : "Coś poszło nie tak po stronie serwera"
       );
@@ -64,7 +63,7 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     return res
       .status(500)
       .send(
-        routeResult.alerts.internalServerError
+        routeResult && routeResult.alerts.internalServerError
           ? routeResult.alerts.internalServerError
           : "Coś poszło nie tak po stronie serwera"
       );
@@ -88,7 +87,7 @@ const getLessons = async (req: RequestLogin, res: Response) => {
     res
       .status(404)
       .send(
-        routeResult.alerts.notFound
+        routeResult && routeResult.alerts.notFound
           ? routeResult.alerts.notFound
           : "Nie znaleziono użytkownika"
       );

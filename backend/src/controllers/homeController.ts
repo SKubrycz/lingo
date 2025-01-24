@@ -13,17 +13,14 @@ const getHome = async (req: RequestLogin, res: Response) => {
   if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   const languagesResult = await findAllRouteLanguages("/");
   if (!languagesResult || languagesResult.length === 0)
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po naszej stronie",
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po naszej stronie",
     });
 
   const data = {

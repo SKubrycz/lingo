@@ -2,7 +2,6 @@ import { Response } from "express";
 
 import { RequestLogin } from "../middleware/auth";
 import {
-  findExerciseByIdsAndLanguage,
   findExerciseUI,
   findInputExerciseById,
   findLessonByIdAndLanguage,
@@ -19,29 +18,41 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   const routeResult = await findRoute("lesson", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   if (!lessonId)
-    return res.status(404).send({ message: "Nie znaleziono lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[0]
+          ? routeResult.alerts.notFound[0]
+          : "Nie znaleziono lekcji",
+    });
   if (!exerciseId)
-    return res
-      .status(404)
-      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[1]
+          ? routeResult.alerts.notFound[1]
+          : "Nie znaleziono ćwiczenia w zażądanej lekcji",
+    });
 
   if (!req._id)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
+    return res.status(500).send({
+      message:
+        routeResult && routeResult.alerts.internalServerError[0]
+          ? routeResult.alerts.internalServerError[0]
+          : "Coś poszło nie tak po naszej stronie",
+    });
   const usersLessonsRangeResult = await findRangeUsersLessons(
     req._id,
     1,
     Number(lessonId)
   );
   if (!usersLessonsRangeResult)
-    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+    return res.status(500).send({
+      message:
+        routeResult && routeResult.alerts.internalServerError[1]
+          ? routeResult.alerts.internalServerError[1]
+          : "Nie udało się pobrać danych",
+    });
   let unfinishedLesson = false;
   console.log(usersLessonsRangeResult);
   for (let i = 0; i < usersLessonsRangeResult.length; i++) {
@@ -53,16 +64,24 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
     }
   }
   if (unfinishedLesson)
-    return res
-      .status(400)
-      .send({ message: "Należy ukończyć wcześniejsze lekcje" });
+    return res.status(400).send({
+      message:
+        routeResult && routeResult.alerts.badRequest
+          ? routeResult.alerts.badRequest
+          : "Należy ukończyć wcześniejsze lekcje",
+    });
 
   const lessonResult = await findLessonByIdAndLanguage(
     Number(lessonId),
     String(query.language)
   );
   if (!lessonResult)
-    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+    return res.status(500).send({
+      message:
+        routeResult && routeResult.alerts.internalServerError[1]
+          ? routeResult.alerts.internalServerError[1]
+          : "Nie udało się pobrać danych",
+    });
 
   let result: any;
 
@@ -75,7 +94,12 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
       String(query.language)
     );
     if (!exerciseUIResult)
-      return res.status(500).send({ message: "Nie udało się pobrać danych" });
+      return res.status(500).send({
+        message:
+          routeResult && routeResult.alerts.internalServerError[1]
+            ? routeResult.alerts.internalServerError[1]
+            : "Nie udało się pobrać danych",
+      });
 
     result = {
       exercise: exercise[0],
@@ -96,32 +120,54 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
+  const routeResult = await findRoute("lesson", String(query.language));
+
   if (!lessonId)
-    return res.status(404).send({ message: "Nie znaleziono lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[0]
+          ? routeResult.alerts.notFound[0]
+          : "Nie znaleziono lekcji",
+    });
   if (!exerciseId)
-    return res
-      .status(404)
-      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[1]
+          ? routeResult.alerts.notFound[1]
+          : "Nie znaleziono ćwiczenia w zażądanej lekcji",
+    });
   if (!correct)
-    return res
-      .status(404)
-      .send({ message: "Serwer nie otrzymał wymaganej zawartości" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[2]
+          ? routeResult.alerts.notFound[2]
+          : "Serwer nie otrzymał wymaganej zawartości",
+    });
   if (
     correct.forEach((el: boolean) => {
       if (typeof el !== "boolean") return false;
     })
   )
-    return res
-      .status(400)
-      .send({ message: "Przesłano nieprawidłową zawartość" });
+    return res.status(400).send({
+      message:
+        routeResult && routeResult.alerts.badRequest[1]
+          ? routeResult.alerts.badRequest[1]
+          : "Przesłano nieprawidłową zawartość",
+    });
   if (!timeSpent)
-    return res
-      .status(404)
-      .send({ message: "Serwer nie otrzymał wymaganej zawartości" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[2]
+          ? routeResult.alerts.notFound[2]
+          : "Serwer nie otrzymał wymaganej zawartości",
+    });
   if (typeof timeSpent !== "number")
-    return res
-      .status(400)
-      .send({ message: "Przesłano nieprawidłową zawartość" });
+    return res.status(400).send({
+      message:
+        routeResult && routeResult.alerts.badRequest[1]
+          ? routeResult.alerts.badRequest[1]
+          : "Przesłano nieprawidłową zawartość",
+    });
 
   if (req._id) {
     const usersLessonsSave = await updateLessonOnFinish(
@@ -133,12 +179,20 @@ const postLessonId = async (req: RequestLogin, res: Response) => {
     );
 
     if (!usersLessonsSave)
-      return res
-        .status(500)
-        .send({ message: "Nie udało się zapisać postępu lekcji" });
+      return res.status(500).send({
+        message:
+          routeResult && routeResult.alerts.internalServerError[2]
+            ? routeResult.alerts.internalServerError[2]
+            : "Nie udało się zapisać postępu lekcji",
+      });
   }
 
-  return res.status(200).send({ message: "Lekcja zakończona pomyślnie" });
+  return res.status(200).send({
+    message:
+      routeResult && routeResult.alerts.ok[0]
+        ? routeResult.alerts.ok[0]
+        : "Lekcja zakończona pomyślnie",
+  });
 };
 
 const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
@@ -151,12 +205,22 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
   if (!query || !query.language)
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
+  const routeResult = await findRoute("lesson", String(query.language));
+
   if (!lessonId)
-    return res.status(404).send({ message: "Nie znaleziono lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[0]
+          ? routeResult.alerts.notFound[0]
+          : "Nie znaleziono lekcji",
+    });
   if (!exerciseId)
-    return res
-      .status(404)
-      .send({ message: "Nie znaleziono ćwiczenia w zażądanej lekcji" });
+    return res.status(404).send({
+      message:
+        routeResult && routeResult.alerts.notFound[1]
+          ? routeResult.alerts.notFound[1]
+          : "Nie znaleziono ćwiczenia w zażądanej lekcji",
+    });
 
   const exerciseResult = await findInputExerciseById(
     Number(lessonId),
@@ -164,7 +228,14 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     String(query.language)
   );
   if (!exerciseResult)
-    return res.status(500).send({ message: "Nie udało się pobrać danych" });
+    return res
+      .status(500)
+      .send({
+        message:
+          routeResult && routeResult.alerts.internalServerError[1]
+            ? routeResult.alerts.internalServerError[1]
+            : "Nie udało się pobrać danych",
+      });
 
   if (exerciseResult.type === "input") {
     if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
@@ -187,7 +258,13 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
 
   return res
     .status(200)
-    .send({ message: "Odpowiedź zweryfikowana", correct: correct });
+    .send({
+      message:
+        routeResult && routeResult.alerts.ok[1]
+          ? routeResult.alerts.ok[1]
+          : "Odpowiedź zweryfikowana",
+      correct: correct,
+    });
 };
 
 export { getLessonId, postLessonId, postExerciseAnswer };

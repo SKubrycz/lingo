@@ -13,7 +13,23 @@ export const lessonLangData = [
         cancel: "anuluj",
       },
     },
-    alerts: {},
+    alerts: {
+      ok: ["Lekcja zakończona pomyślnie", "Odpowiedź zweryfikowana"],
+      badRequest: [
+        "Należy ukończyć wcześniejsze lekcje",
+        "Przesłano nieprawidłową zawartość",
+      ],
+      notFound: [
+        "Nie znaleziono lekcji",
+        "Nie znaleziono ćwiczenia w zażądanej lekcji",
+        "Serwer nie otrzymał wymaganej zawartości",
+      ],
+      internalServerError: [
+        "Coś poszło nie tak po naszej stronie",
+        "Nie udało się pobrać danych",
+        "Nie udało się zapisać postępu lekcji",
+      ],
+    },
   },
   {
     metadata: { route: "/lesson", language: "de" },
@@ -29,6 +45,22 @@ export const lessonLangData = [
         cancel: "Stornieren",
       },
     },
-    alerts: {},
+    alerts: {
+      ok: ["Lektion erfolgreich abgeschlossen", "Antwort geprüft"],
+      badRequest: [
+        "Frühere Lektionen müssen abgeschlossen sein",
+        "Ungültiger Inhalt hochgeladen",
+      ],
+      notFound: [
+        "Lektionen nicht gefunden",
+        "Übung nicht in der gewünschten Lektion gefunde",
+        "Der Server hat den gewünschten Inhalt nicht erhalten",
+      ],
+      internalServerError: [
+        "Auf unserer Seite ist etwas schief gelaufen",
+        "Download fehlgeschlagen",
+        "Lektionsfortschritt konnte nicht gespeichert werden",
+      ],
+    },
   },
 ];

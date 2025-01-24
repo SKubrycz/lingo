@@ -125,8 +125,7 @@ export default function MainProfileStats({
       desc: "",
       data: stats?.wordsLearned ? stats?.wordsLearned : 0,
     },
-    //{ id: 5, type: "something", name: "Coś", desc: "", data: 5863895672 },
-  ]; //[1500, 123, "99%", 12.5, 5863895672];
+  ];
   const listIcons = [AccessTime, Done, Percent, Translate, QuestionMark];
 
   return (

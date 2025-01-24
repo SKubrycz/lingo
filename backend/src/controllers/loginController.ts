@@ -20,17 +20,14 @@ const getLogin = async (req: RequestLogin, res: Response) => {
   if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("login", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   const languagesResult = await findAllRouteLanguages("/login");
   if (!languagesResult || languagesResult.length === 0)
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po naszej stronie",
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po naszej stronie",
     });
 
   res.status(200).send({
@@ -54,17 +51,14 @@ const postLogin = async (req: Request, res: Response) => {
       return;
 
     const routeResult = await findRoute("login", String(query.language));
-    if (!routeResult)
-      return res
-        .status(500)
-        .send({ message: "Coś poszło nie tak po naszej stronie" });
 
     const result = await findOneUserByLogin(login);
     if (!result)
       return res.status(404).send({
-        message: routeResult.alerts.notFound
-          ? routeResult.alerts.notFound
-          : "Nie znaleziono użytkownika",
+        message:
+          routeResult && routeResult.alerts.notFound
+            ? routeResult.alerts.notFound
+            : "Nie znaleziono użytkownika",
       });
 
     const comparison: boolean = await comparePassword(
@@ -73,9 +67,10 @@ const postLogin = async (req: Request, res: Response) => {
     );
     if (comparison === false)
       return res.status(400).send({
-        message: routeResult.alerts.badRequest
-          ? routeResult.alerts.badRequest
-          : "Niepoprawne hasło",
+        message:
+          routeResult && routeResult.alerts.badRequest
+            ? routeResult.alerts.badRequest
+            : "Niepoprawne hasło",
       });
 
     const accessTokenExpiry: number = 1000 * 60 * 60;
@@ -105,7 +100,10 @@ const postLogin = async (req: Request, res: Response) => {
     });
 
     return res.status(200).send({
-      message: routeResult.alerts.ok ? routeResult.alerts.ok : "Zalogowano",
+      message:
+        routeResult && routeResult.alerts.ok
+          ? routeResult.alerts.ok
+          : "Zalogowano",
     });
   } catch (error) {
     res.status(500).send(`Error /login`);

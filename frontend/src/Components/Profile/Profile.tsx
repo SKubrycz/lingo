@@ -95,13 +95,10 @@ function Profile() {
       }
 
       if (res.data.sessionUser === true) {
-        console.log(res.data);
         setUser(res.data);
       } else {
         setUser(res.data);
       }
-
-      console.log(res.data);
 
       if (res.data.languageData) {
         setLanguageData(res.data.languageData);
@@ -132,14 +129,12 @@ function Profile() {
             })
           );
         }
-        //console.error("Failed to fetch user data:", error);
       }
       navigate("/lessons");
     }
   };
 
   useEffect(() => {
-    //fetchCurrentUser();
     fetchUserData();
   }, [userId]);
 

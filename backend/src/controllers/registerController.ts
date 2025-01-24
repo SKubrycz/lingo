@@ -85,17 +85,14 @@ const getRegister = async (req: RequestLogin, res: Response) => {
   if (req.login) sessionUser = true;
 
   const routeResult = await findRoute("register", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   const languagesResult = await findAllRouteLanguages("/register");
   if (!languagesResult || languagesResult.length === 0)
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : "Coś poszło nie tak po naszej stronie",
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : "Coś poszło nie tak po naszej stronie",
     });
 
   res.status(200).send({
@@ -114,10 +111,6 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
     const routeResult = await findRoute("register", String(query.language));
-    if (!routeResult)
-      return res
-        .status(500)
-        .send({ message: "Coś poszło nie tak po naszej stronie" });
 
     const regex: RegExp =
       /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -128,7 +121,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[0]
+          routeResult && routeResult.alerts.unprocessableContent[0]
             ? routeResult.alerts.unprocessableContent[0]
             : "Należy wypełnić wszystkie pola formularza"
         );
@@ -139,7 +132,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[1]
+          routeResult && routeResult.alerts.unprocessableContent[1]
             ? routeResult.alerts.unprocessableContent[1]
             : "Użytkownik już istnieje"
         );
@@ -147,7 +140,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[2]
+          routeResult && routeResult.alerts.unprocessableContent[2]
             ? routeResult.alerts.unprocessableContent[2]
             : "Nazwa użytkownika musi być dłuższa niż 3 znaki"
         );
@@ -156,7 +149,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[3]
+          routeResult && routeResult.alerts.unprocessableContent[3]
             ? routeResult.alerts.unprocessableContent[3]
             : "Hasło niepoprawne"
         );
@@ -164,7 +157,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[4]
+          routeResult && routeResult.alerts.unprocessableContent[4]
             ? routeResult.alerts.unprocessableContent[4]
             : "Powtórzone hasło niepoprawne"
         );
@@ -172,7 +165,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       return res
         .status(422)
         .send(
-          routeResult.alerts.unprocessableContent[5]
+          routeResult && routeResult.alerts.unprocessableContent[5]
             ? routeResult.alerts.unprocessableContent[5]
             : "Hasło musi być dłuższe niż 7 znaków, posiadać przynajmniej jedną dużą i małą literę, cyfrę oraz znak specjalny"
         );
@@ -195,7 +188,7 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
 
       const htmlMessage = constructRegisterMail(
         verificationCode,
-        routeResult.mail
+        routeResult && routeResult.mail ? routeResult.mail : null
       );
 
       const transporter = nodemailer.createTransport({
@@ -207,30 +200,33 @@ const postRegister = async (req: RegisterRequest, res: Response) => {
       const mailInfo = await transporter.sendMail({
         from: "noreply@auth.localhost",
         to: email,
-        subject: routeResult.mail.subject
-          ? routeResult.mail.subject
-          : "Weryfikacja konta Lingo",
+        subject:
+          routeResult && routeResult.mail.subject
+            ? routeResult.mail.subject
+            : "Weryfikacja konta Lingo",
         html: htmlMessage,
       });
 
       if (!mailInfo)
         return res.status(500).send({
-          message: routeResult.alerts.internalServerError
-            ? routeResult.alerts.internalServerError
-            : "Coś poszło nie tak po naszej stronie",
+          message:
+            routeResult && routeResult.alerts.internalServerError
+              ? routeResult.alerts.internalServerError
+              : "Coś poszło nie tak po naszej stronie",
         });
 
       return res.status(200).send({
-        message: routeResult.alerts.ok
-          ? routeResult.alerts.ok
-          : "Zarejestrowano",
+        message:
+          routeResult && routeResult.alerts.ok
+            ? routeResult.alerts.ok
+            : "Zarejestrowano",
         uuid: uuid,
       });
     } else {
       return res
         .status(400)
         .send(
-          routeResult.alerts.badRequest
+          routeResult && routeResult.alerts.badRequest
             ? routeResult.alerts.badRequest
             : "Hasła nie są takie same"
         );

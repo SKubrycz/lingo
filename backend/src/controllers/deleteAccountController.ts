@@ -11,7 +11,10 @@ import {
   findRoute,
 } from "../assets/queries";
 
-const constructDeleteEmail = (deletionCode: string, mailContent: any) => {
+const constructDeleteEmail = (
+  deletionCode: string,
+  mailContent: any | null
+) => {
   const emailString = `
   <head>
     <meta charset="UTF-8" />
@@ -41,8 +44,16 @@ const constructDeleteEmail = (deletionCode: string, mailContent: any) => {
       "
     >
       <h1 style="color: rgb(230, 92, 0)">LINGO</h1>
-      <h2 style="font-weight: 700">${mailContent.content.title}</h2>
-      <h3>${mailContent.content.verifyTitle}:</h3>
+      <h2 style="font-weight: 700">${
+        mailContent.content.title
+          ? mailContent.content.title
+          : "Szkoda nam, że odchodzisz"
+      }</h2>
+      <h3>${
+        mailContent.content.verifyTitle
+          ? mailContent.content.verifyTitle
+          : "Twój kod usunięcia konta to"
+      }:</h3>
       <h2
         style="
           padding: 0.5em;
@@ -54,7 +65,12 @@ const constructDeleteEmail = (deletionCode: string, mailContent: any) => {
         ${deletionCode}
       </h2>
       <h6>
-        ${mailContent.content.instruction}
+        ${
+          mailContent.content.instruction
+            ? mailContent.content.instruction
+            : `Należy go wpisać w okienku weryfikacji
+        <i style="color: rgb(230, 92, 0)">Lingo</i>`
+        }
       </h6>
     </div>
   </body>
@@ -72,34 +88,33 @@ const getDeleteAccount = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   const routeResult = await findRoute("delete-account", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   if (req.login) {
     const userResult = await findOneUserByLogin(req.login);
     if (!userResult) {
       return res.status(500).send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : "Coś poszło nie tak po naszej stronie",
+        message:
+          routeResult && routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : "Coś poszło nie tak po naszej stronie",
       });
     }
 
     if (userResult.deleteAccount.uuid !== deleteId) {
       return res.status(400).send({
-        message: routeResult.alerts.badRequest[0]
-          ? routeResult.alerts.badRequest[0]
-          : "Nieprawidłowy identyfikator usunięcia konta",
+        message:
+          routeResult && routeResult.alerts.badRequest[0]
+            ? routeResult.alerts.badRequest[0]
+            : "Nieprawidłowy identyfikator usunięcia konta",
       });
     }
   }
 
   return res.status(200).send({
-    message: routeResult.alerts.ok[0]
-      ? routeResult.alerts.ok[0]
-      : "Strona została wczytana poprawnie",
+    message:
+      routeResult && routeResult.alerts.ok[0]
+        ? routeResult.alerts.ok[0]
+        : "Strona została wczytana poprawnie",
     languageData: routeResult,
   });
 };
@@ -114,10 +129,6 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   const routeResult = await findRoute("delete-account", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   if (req._id && req.login) {
     const insertResult = await insertDeleteAccountData(
@@ -127,16 +138,20 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
     );
     if (!insertResult) {
       return res.status(500).send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : `Coś poszło nie tak po naszej stronie`,
+        message:
+          routeResult && routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : `Coś poszło nie tak po naszej stronie`,
       });
     }
 
     const user = await findOneUserByLogin(req.login);
 
     if (user) {
-      const htmlMessage = constructDeleteEmail(deletionCode, routeResult.mail);
+      const htmlMessage = constructDeleteEmail(
+        deletionCode,
+        routeResult && routeResult.mail ? routeResult.mail : null
+      );
 
       const transporter = nodemailer.createTransport({
         host: "localhost",
@@ -147,36 +162,41 @@ const postPrepareDelete = async (req: RequestLogin, res: Response) => {
       const mailInfo = await transporter.sendMail({
         from: "noreply@auth.localhost",
         to: user.email,
-        subject: routeResult.mail.subject
-          ? routeResult.mail.subject
-          : "Kod usunięcia konta Lingo",
+        subject:
+          routeResult && routeResult.mail.subject
+            ? routeResult.mail.subject
+            : "Kod usunięcia konta Lingo",
         html: htmlMessage,
       });
       if (!mailInfo)
         return res.status(500).send({
-          message: routeResult.alerts.internalServerError
-            ? routeResult.alerts.internalServerError
-            : "Coś poszło nie tak po naszej stronie",
+          message:
+            routeResult && routeResult.alerts.internalServerError
+              ? routeResult.alerts.internalServerError
+              : "Coś poszło nie tak po naszej stronie",
         });
     } else {
       return res.status(500).send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : `Coś poszło nie tak po naszej stronie`,
+        message:
+          routeResult && routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : `Coś poszło nie tak po naszej stronie`,
       });
     }
   } else {
     return res.status(500).send({
-      message: routeResult.alerts.internalServerError
-        ? routeResult.alerts.internalServerError
-        : `Coś poszło nie tak po naszej stronie`,
+      message:
+        routeResult && routeResult.alerts.internalServerError
+          ? routeResult.alerts.internalServerError
+          : `Coś poszło nie tak po naszej stronie`,
     });
   }
 
   return res.status(200).send({
-    message: routeResult.alerts.ok[1]
-      ? routeResult.alerts.ok[1]
-      : "Rozpoczęto procedurę usunięcia konta",
+    message:
+      routeResult && routeResult.alerts.ok[1]
+        ? routeResult.alerts.ok[1]
+        : "Rozpoczęto procedurę usunięcia konta",
     uuid: uuid,
   });
 };
@@ -193,10 +213,6 @@ const postDeleteAccount = async (req: RequestLogin, res: Response) => {
     return res.status(400).send({ message: "Nieprawidłowe zapytanie" });
 
   const routeResult = await findRoute("delete-account", String(query.language));
-  if (!routeResult)
-    return res
-      .status(500)
-      .send({ message: "Coś poszło nie tak po naszej stronie" });
 
   if (req._id) {
     id = req._id;
@@ -206,25 +222,28 @@ const postDeleteAccount = async (req: RequestLogin, res: Response) => {
     if (!result) {
       console.log("no account ", id);
       return res.status(500).send({
-        message: routeResult.alerts.internalServerError
-          ? routeResult.alerts.internalServerError
-          : `Coś poszło nie tak po naszej stronie`,
+        message:
+          routeResult && routeResult.alerts.internalServerError
+            ? routeResult.alerts.internalServerError
+            : `Coś poszło nie tak po naszej stronie`,
       });
     }
 
     if (result.deleteAccount.deletionCode !== deletionCode) {
       return res.status(400).send({
-        message: routeResult.alerts.badRequest[1]
-          ? routeResult.alerts.badRequest[1]
-          : `Podano nieprawidłowy kod`,
+        message:
+          routeResult && routeResult.alerts.badRequest[1]
+            ? routeResult.alerts.badRequest[1]
+            : `Podano nieprawidłowy kod`,
       });
     }
 
     if (result.deleteAccount.uuid !== deleteId) {
       return res.status(403).send({
-        message: routeResult.alerts.forbidden
-          ? routeResult.alerts.forbidden
-          : `Nieprawidłowa podstrona`,
+        message:
+          routeResult && routeResult.alerts.forbidden
+            ? routeResult.alerts.forbidden
+            : `Nieprawidłowa podstrona`,
       });
     }
 
@@ -235,9 +254,10 @@ const postDeleteAccount = async (req: RequestLogin, res: Response) => {
       const deleteResult = await deleteOneUserById(id);
       if (!deleteResult) {
         return res.status(500).send({
-          message: routeResult.alerts.internalServerError
-            ? routeResult.alerts.internalServerError
-            : `Coś poszło nie tak po naszej stronie`,
+          message:
+            routeResult && routeResult.alerts.internalServerError
+              ? routeResult.alerts.internalServerError
+              : `Coś poszło nie tak po naszej stronie`,
         });
       }
       console.log("deleteResult: ");
@@ -249,9 +269,10 @@ const postDeleteAccount = async (req: RequestLogin, res: Response) => {
   }
 
   return res.status(200).send({
-    message: routeResult.alerts.ok[2]
-      ? routeResult.alerts.ok[2]
-      : "Nastąpiło prawidłowe usunięcie konta",
+    message:
+      routeResult && routeResult.alerts.ok[2]
+        ? routeResult.alerts.ok[2]
+        : "Nastąpiło prawidłowe usunięcie konta",
   });
 };
 

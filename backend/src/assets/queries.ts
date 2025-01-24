@@ -1499,8 +1499,6 @@ export const getFinishedLessonsWords = async (
     console.error(error);
     closeDbConnection();
     return null;
-  } finally {
-    //closeDbConnection();
   }
 };
 
@@ -1526,20 +1524,21 @@ export const findLastFinishedUserLesson = async (
           },
         }
       )
-      .sort("desc")
-      .limit(1)
       .toArray();
 
-    console.log(`findUsersLessonsResult: `);
+    console.log(`findLastFinishedUserLesson: `);
     console.log(findUsersLessonsResult);
 
     if (!findUsersLessonsResult) return null;
 
     if (findUsersLessonsResult.length > 0) {
-      const lessonsCollection = db.collection<Lesson>("lessons");
+      const max = findUsersLessonsResult.reduce((prev, current) => {
+        return prev && prev.lessonId > current.lessonId ? prev : current;
+      });
 
+      const lessonsCollection = db.collection<Lesson>("lessons");
       const findLessonsResult = await lessonsCollection.findOne({
-        lessonId: findUsersLessonsResult[0].lessonId,
+        lessonId: max.lessonId,
       });
 
       if (!findLessonsResult) return null;
