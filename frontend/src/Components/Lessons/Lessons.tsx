@@ -93,8 +93,6 @@ function Lessons() {
         setLinkArray(["/about", `/profile/${res.data.login}`, "/logout"]);
         setFooterLinkArray(["/about", `/profile/${res.data.login}`]);
 
-        console.log(res.data);
-
         if (res.data.languageData) {
           setOptionsArray([
             res.data.languageData.navbar.about,

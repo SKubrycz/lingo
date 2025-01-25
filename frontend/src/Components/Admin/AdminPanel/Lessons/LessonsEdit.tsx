@@ -172,7 +172,7 @@ export default function LessonsEdit({}: LessonsEditProps) {
           })
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
         if (isAxiosError(error)) {
           if (error.status && error.status > 399) {
             dispatch(

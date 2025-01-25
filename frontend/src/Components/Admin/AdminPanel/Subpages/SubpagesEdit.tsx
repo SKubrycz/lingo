@@ -85,10 +85,7 @@ export default function SubpagesEdit() {
   }, []);
 
   const mapData = (data: any, depth = 0, path: string[] = []) => {
-    if (!data) {
-      console.log(data);
-      return;
-    }
+    if (!data) return;
 
     const indent = { marginLeft: `${depth * 20}px` };
 

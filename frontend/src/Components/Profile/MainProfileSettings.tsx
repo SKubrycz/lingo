@@ -52,9 +52,6 @@ export default function MainProfileSettings({
         undefined,
         { withCredentials: true }
       );
-
-      console.log(res);
-
       if (res?.data.uuid) {
         navigate(`/delete-account/${res.data.uuid}`);
       }

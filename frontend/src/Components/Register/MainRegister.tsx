@@ -97,7 +97,7 @@ function MainRegister({ languageData }: MainRegisterProps) {
             content: error.response.data,
           })
         );
-        console.log(error);
+        console.error(error);
       });
   };
 

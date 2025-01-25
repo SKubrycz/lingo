@@ -53,7 +53,7 @@ export default function NewWord({
     );
 
     try {
-      const response = await axios.post(
+      await axios.post(
         route,
         {
           correct: lessonData.correct,
@@ -61,8 +61,6 @@ export default function NewWord({
         },
         { withCredentials: true }
       );
-
-      console.log(response.data);
 
       dispatch(setCorrectData({ correct: [] }));
 

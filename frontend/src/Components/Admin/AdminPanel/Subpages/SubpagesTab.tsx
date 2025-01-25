@@ -85,8 +85,6 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
   };
 
   useEffect(() => {
-    console.log(subpagesData);
-
     const result = extractMetadata(subpagesData);
     setMetadata(result);
   }, [subpagesData]);
@@ -98,13 +96,11 @@ export default function SubpagesTab({ subpagesData }: SubpagesTabProps) {
 
   const handleModalClose = () => {
     setOpen(false);
-    // setModalData(null);
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     setRadioValue(target.value);
-    console.log(`radio value: ${target.value}`);
   };
 
   const submitEdit = (e: React.MouseEvent) => {

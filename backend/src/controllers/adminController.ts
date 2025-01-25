@@ -105,7 +105,7 @@ const getAdminController = async (req: RequestLogin, res: Response) => {
       const mailInfo = await transporter.sendMail({
         from: "noreply@admin.localhost",
         to: userResult?.email,
-        subject: "Kod dostępu do Panel Administratora",
+        subject: "Kod dostępu do Panelu Administratora",
         html: htmlMessage,
       });
       if (!mailInfo)

@@ -15,15 +15,9 @@ export const timeSpentSlice = createSlice({
   initialState: timeSpent,
   reducers: {
     setTimeStart: (state, action: PayloadAction<any>) => {
-      console.log(`received:`);
-      console.log(action.payload);
-
       return { ...state, timeStart: action.payload.timeStart };
     },
     setTimeStop: (state, action: PayloadAction<any>) => {
-      console.log(`received:`);
-      console.log(action.payload);
-
       return { ...state, timeStop: action.payload.timeStop };
     },
   },

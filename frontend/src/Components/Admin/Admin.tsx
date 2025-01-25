@@ -21,12 +21,10 @@ export default function Admin() {
 
   const handleAuth = async () => {
     try {
-      const res = await axios.get(
+      await axios.get(
         `http://localhost:${import.meta.env.VITE_SERVER_PORT}/admin`,
         { withCredentials: true }
       );
-
-      console.log(res.data);
     } catch (error) {
       console.error(error);
       if (isAxiosError(error)) {
@@ -48,8 +46,6 @@ export default function Admin() {
         { code: code },
         { withCredentials: true }
       );
-
-      console.log(res.data);
 
       if (
         alertSnackbarData.severity === "error" ||

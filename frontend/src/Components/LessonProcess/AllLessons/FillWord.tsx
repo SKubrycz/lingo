@@ -61,7 +61,7 @@ export default function FillWord({
     );
 
     try {
-      const response = await axios.post(
+      await axios.post(
         route,
         {
           correct: lessonData.correct,
@@ -69,8 +69,6 @@ export default function FillWord({
         },
         { withCredentials: true }
       );
-
-      console.log(response.data);
 
       dispatch(setCorrectData({ correct: [] }));
 
@@ -124,14 +122,12 @@ export default function FillWord({
       if (res.data.correct) {
         setCorrect(true);
         setDisableNext(false);
-        console.log("correct!");
       } else {
         setCorrect(false);
         setDisableNext(false);
       }
 
       const correctArr = Array.from(lessonData.correct);
-      console.log(correctArr);
       correctArr.push(res.data.correct);
       dispatch(setCorrectData({ correct: correctArr }));
     }

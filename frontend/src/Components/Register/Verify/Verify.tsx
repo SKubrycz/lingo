@@ -40,7 +40,6 @@ export default function Verify() {
     await axios
       .get(route)
       .then((res) => {
-        console.log(res.data);
         if (res.data.languageData) {
           setLanguageData(res.data.languageData);
         }
@@ -93,7 +92,6 @@ export default function Verify() {
         verificationCode: code,
       })
       .then((res) => {
-        console.log(res.data);
         alertSnackbarDataDispatch(
           setAlert({
             severity: "success",

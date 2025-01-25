@@ -1,3 +1,3 @@
-# Language App Prototype
+# Lingo
 
-A prototype for language learning app
+Language learning app

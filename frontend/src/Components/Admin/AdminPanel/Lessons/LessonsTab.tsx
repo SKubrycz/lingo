@@ -247,11 +247,6 @@ export default function LessonsTab({ lessonsData }: LessonsTabProps) {
     const bg = getBackground(document.URL);
     document.body.style.backgroundColor = bg;
   }, []);
-
-  useEffect(() => {
-    console.log(tableData);
-  }, [tableData]);
-
   return (
     <>
       <TableContainer

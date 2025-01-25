@@ -64,8 +64,6 @@ const ChooseExerciseType = forwardRef<
 
     if (lessonId && exerciseId && language) {
       try {
-        console.log(exercise);
-
         const res = await axios.post(
           `http://localhost:${
             import.meta.env.VITE_SERVER_PORT
@@ -99,10 +97,6 @@ const ChooseExerciseType = forwardRef<
       }
     }
   };
-
-  useEffect(() => {
-    console.log(exercise);
-  }, [exercise]);
 
   const formatToArray = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -495,8 +489,6 @@ export default function ExerciseCreator({}: ExerciseCreatorProps) {
         }/admin/panel/lessons/creator/${lessonId}/${exerciseId}?language=${language}`,
         { withCredentials: true }
       );
-
-      console.log(res.data);
 
       if (res.data.result) {
         setResult(res.data.result);

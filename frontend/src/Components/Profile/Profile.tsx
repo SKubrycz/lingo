@@ -108,7 +108,7 @@ function Profile() {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
+        console.error(error);
 
         if (error.request?.status === 404) {
           alertSnackbarDataDispatch(

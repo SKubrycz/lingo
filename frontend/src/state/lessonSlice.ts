@@ -13,8 +13,6 @@ export const lessonSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCorrectData: (state, action: PayloadAction<LessonData>) => {
-      console.log("payload from correct: ");
-      console.log(action.payload);
       return {
         ...state,
         correct: action.payload.correct,

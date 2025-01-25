@@ -45,7 +45,7 @@ function NotFound() {
   useEffect(() => {
     handleNotFound();
 
-    const bg = getBackground(document.URL);
+    const bg = getBackground("/not-found");
     document.body.style.backgroundColor = bg;
   }, []);
 

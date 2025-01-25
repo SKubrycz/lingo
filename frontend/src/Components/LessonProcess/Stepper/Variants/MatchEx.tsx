@@ -54,7 +54,6 @@ export default function MatchEx({ task, words, checkWords }: MatchExProps) {
       const translation = shuffledTranslations[highlighted[1]];
       words.forEach((el) => {
         if (el[0] === word && el[1] === translation) {
-          console.log(`${word}:${translation} ---> correct`);
           const disabledArr = [...disabled];
           disabledArr[0].push(highlighted[0]);
           disabledArr[1].push(highlighted[1]);

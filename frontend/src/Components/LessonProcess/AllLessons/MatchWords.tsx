@@ -50,7 +50,7 @@ export default function MatchWords({
     );
 
     try {
-      const response = await axios.post(
+      await axios.post(
         route,
         {
           correct: lessonData.correct,
@@ -58,8 +58,6 @@ export default function MatchWords({
         },
         { withCredentials: true }
       );
-
-      console.log(response.data);
 
       dispatch(setCorrectData({ correct: [] }));
 
@@ -102,8 +100,6 @@ export default function MatchWords({
         correctArrRef.current.push(res.data.correct);
       }
 
-      console.log(pairsMatched);
-      console.log(lessonInfo?.exercise?.words.length);
       if (pairsMatched === lessonInfo?.exercise?.words.length) {
         let allCorrect = correctArrRef.current.every((el) => el === true);
 
@@ -137,8 +133,6 @@ export default function MatchWords({
       ></MatchEx>
       {isLastExercise ? (
         <Button
-          //to={`/lessons`}
-          //component={RouterLink}
           disabled={disableNext}
           onClick={() => finishLesson()}
           sx={{ color: "primary.contrastText", textDecoration: "none" }}

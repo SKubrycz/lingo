@@ -145,7 +145,6 @@ function MainProfileLearnedWords({
     } else if (userInteracted) {
       timeout.current = setTimeout(() => {
         interval.current = setInterval(() => {
-          console.log(interval.current);
           if (currentWord.current < 5) {
             goToNextWord(false);
           } else {
