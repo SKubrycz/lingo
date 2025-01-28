@@ -82,10 +82,7 @@ function About() {
             setFooterOptionsArray(["O aplikacji", "Lekcje", "Profil"]);
           }
         } else {
-          console.log(res.data);
-
           if (res.data.languageData) {
-            console.log(res.data.languageData);
             const navbar = [
               res.data.languageData.navbar.login,
               res.data.languageData.navbar.register,

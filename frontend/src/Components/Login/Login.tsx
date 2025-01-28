@@ -39,8 +39,6 @@ function Login() {
     const route = handleLanguageURL("/login", lang);
 
     await axios.get(route, { withCredentials: true }).then((res) => {
-      console.log(res.data);
-
       if (res.data.languageData) {
         const { navbar, main, footer } = res.data.languageData;
 

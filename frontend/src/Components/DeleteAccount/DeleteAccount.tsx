@@ -60,10 +60,19 @@ export default function DeleteAccount() {
     );
 
     try {
-      await axios.post(
+      const res = await axios.post(
         route,
         { deletionCode: deletionCode },
         { withCredentials: true }
+      );
+
+      alertSnackbarDataDispatch(
+        setAlert({
+          severity: "success",
+          variant: "standard",
+          title: "",
+          content: res.data.message,
+        })
       );
 
       navigate("/");

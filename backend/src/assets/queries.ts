@@ -929,6 +929,33 @@ export const deleteExercise = async (
     );
     if (!updateResult) return null;
 
+    const findUpdatedResult = await lessonsCollection.findOne({
+      lessonId: lessonId,
+      language: language,
+    });
+    if (!findUpdatedResult) return null;
+    if (exerciseId < 0 || exerciseId - 1 > findUpdatedResult.exercises.length)
+      return null;
+
+    findUpdatedResult.exercises.splice(exerciseId - 1, 1);
+
+    let newWords: string[] = [];
+
+    if (findUpdatedResult && findUpdatedResult.exercises) {
+      findUpdatedResult.exercises.forEach((el: any) => {
+        if (el.type === "card") {
+          newWords.push(el.word);
+        }
+      });
+    }
+    const updateNewWordsResult = await lessonsCollection.updateOne(
+      { lessonId: lessonId, language: language },
+      {
+        $set: { newWords: newWords },
+      }
+    );
+    if (!updateNewWordsResult) return null;
+
     return updateResult;
   } catch (error) {
     console.error(error);
