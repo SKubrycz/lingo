@@ -66,8 +66,8 @@ const getLessonId = async (req: RequestLogin, res: Response) => {
   if (unfinishedLesson)
     return res.status(400).send({
       message:
-        routeResult && routeResult.alerts.badRequest
-          ? routeResult.alerts.badRequest
+        routeResult && routeResult.alerts.badRequest[0]
+          ? routeResult.alerts.badRequest[0]
           : "Należy ukończyć wcześniejsze lekcje",
     });
 
@@ -228,14 +228,12 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     String(query.language)
   );
   if (!exerciseResult)
-    return res
-      .status(500)
-      .send({
-        message:
-          routeResult && routeResult.alerts.internalServerError[1]
-            ? routeResult.alerts.internalServerError[1]
-            : "Nie udało się pobrać danych",
-      });
+    return res.status(500).send({
+      message:
+        routeResult && routeResult.alerts.internalServerError[1]
+          ? routeResult.alerts.internalServerError[1]
+          : "Nie udało się pobrać danych",
+    });
 
   if (exerciseResult.type === "input") {
     if (word.missingWord.toLowerCase() !== exerciseResult.missingWords) {
@@ -256,15 +254,13 @@ const postExerciseAnswer = async (req: RequestLogin, res: Response) => {
     });
   }
 
-  return res
-    .status(200)
-    .send({
-      message:
-        routeResult && routeResult.alerts.ok[1]
-          ? routeResult.alerts.ok[1]
-          : "Odpowiedź zweryfikowana",
-      correct: correct,
-    });
+  return res.status(200).send({
+    message:
+      routeResult && routeResult.alerts.ok[1]
+        ? routeResult.alerts.ok[1]
+        : "Odpowiedź zweryfikowana",
+    correct: correct,
+  });
 };
 
 export { getLessonId, postLessonId, postExerciseAnswer };

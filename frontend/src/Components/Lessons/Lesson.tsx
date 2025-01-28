@@ -25,7 +25,6 @@ function Lesson({ lessonData, finished, buttons }: LessonProps) {
   const dispatch = useDispatch();
 
   const startTimer = () => {
-    console.log("lesson time measurement has been started");
     dispatch(setTimeStart({ timeStart: performance.now() }));
   };
 

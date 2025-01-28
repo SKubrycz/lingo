@@ -860,15 +860,27 @@ export const addExercise = async (
     if (!updateResult) return null;
 
     if (exerciseData.type === "card") {
-      const updateNewWordsResult = await lessonsCollection.aggregate([
-        { $match: { lessonId: lessonId } },
+      const findLesson = await lessonsCollection.findOne({
+        lessonId: lessonId,
+        language: language,
+      });
+      if (!findLesson) return null;
+
+      let newWords: string[] = [];
+
+      if (findLesson && findLesson.exercises) {
+        findLesson.exercises.forEach((el: any) => {
+          if (el.type === "card") {
+            newWords.push(el.word);
+          }
+        });
+      }
+      const updateNewWordsResult = await lessonsCollection.updateOne(
+        { lessonId: lessonId, language: language },
         {
-          $set: {
-            newWords: { $size: "$exercises" },
-          },
-        },
-        { $merge: { into: "lessons", whenMatched: "merge" } },
-      ]);
+          $set: { newWords: newWords },
+        }
+      );
       if (!updateNewWordsResult) return null;
     }
 
@@ -1557,8 +1569,6 @@ export const findLastFinishedUserLesson = async (
     console.error(error);
     closeDbConnection();
     return null;
-  } finally {
-    //closeDbConnection();
   }
 };
 

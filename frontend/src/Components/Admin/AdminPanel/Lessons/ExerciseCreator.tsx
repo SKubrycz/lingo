@@ -133,7 +133,7 @@ const ChooseExerciseType = forwardRef<
         if (exercise && exercise.type === "match") {
           let str = "";
           arr.forEach((el, i) => {
-            if (el && !Array.isArray(el)) {
+            if (el && Array.isArray(el)) {
               if (i !== arr.length - 1) {
                 str += `${el[0]}, ${el[1]}, `;
               } else {
@@ -148,6 +148,12 @@ const ChooseExerciseType = forwardRef<
 
     return "";
   };
+
+  function isStringArray(value: any): value is string[] {
+    return (
+      Array.isArray(value) && value.every((item) => typeof item === "string")
+    );
+  }
 
   useEffect(() => {
     if (result) setExercise(result);
@@ -186,7 +192,10 @@ const ChooseExerciseType = forwardRef<
           type: type,
           task: result && "task" in result ? result.task : "",
           word: result && "word" in result ? result.word : "",
-          words: ["", "", ""],
+          words:
+            result && "words" in result && isStringArray(result.words)
+              ? result.words
+              : ["", "", ""],
           answer: result && "answer" in result ? result.answer : "",
         };
 
@@ -197,14 +206,15 @@ const ChooseExerciseType = forwardRef<
           exerciseId: Number(exerciseId),
           type: type,
           task: result && "task" in result ? result.task : "",
-          words: [],
+          words:
+            result && "words" in result && !isStringArray(result.words)
+              ? result.words
+              : [],
         };
 
         setExercise(matchExercise);
         setMatchWordsString(
-          exercise && "words" in exercise
-            ? formatFromArray((exercise as MatchExercise)?.words)
-            : ""
+          formatFromArray((exercise as MatchExercise)?.words)
         );
       }
     }

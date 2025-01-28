@@ -535,11 +535,7 @@ const postAdminPanelLessonsCreatorController = async (
   if (!lessonResult)
     return res.status(500).send({ message: "Nie udało się pobrać danych" });
 
-  if (
-    lessonResult &&
-    lessonResult.exercises.length !== Number(exerciseId) - 1 &&
-    lessonResult.exercises.length !== Number(exerciseId)
-  ) {
+  if (lessonResult && lessonResult.exercises.length < Number(exerciseId) - 1) {
     return res
       .status(400)
       .send({ message: "Nieprawidłowy identyfikator ćwiczenia" });
