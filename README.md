@@ -28,7 +28,7 @@
     npm run dev
     ```
 
-    Przy kolejnych uruchomieniach, komenda "npm i" nie jest potrzebna
+    After the initial npm package install, it is not necessary to run `npm i` command anymore.
 
 ### Backend
 
