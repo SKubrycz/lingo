@@ -21,7 +21,7 @@
 
     For the initial frontend app installation, it is necessary to install all required NPM packages.
 
-    Będąc w głównym folderze aplikacji, przejść do folderu pt. "frontend", zainstalować pakiety, a następnie uruchomić serwis:
+    While being in the app main directory, head to "frontend" folder, install dependencies and run the service:
     ```console
     cd frontend
     npm i
@@ -36,7 +36,7 @@
     
     *Wymagane uruchomienie serwera SMTP Mailpit*
 
-    Będąc w głównym folderze aplikacji, przejść do folderu pt. "backend", zainstalować pakiety, a następnie uruchomić serwis:
+    While being in the app main directory, head to "backend" folder, install dependencies and run the service:
     ```console
     cd backend
     npm i
